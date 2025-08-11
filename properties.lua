@@ -4,7 +4,7 @@ table.insert(
     Name = "IP Address",
     Type = "string",
     --Value = "192.168.1.1"
-    Value = "10.1.2.84"
+    Value = "192.168.1.30"
   }
 )
 

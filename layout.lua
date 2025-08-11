@@ -46,7 +46,7 @@ if CurrentPage then
         FontSize = 12,
         FontStyle = "Bold",
         HTextAlign = "Right",
-        Color = Colors.hive_yellow,
+        Color = Colors.control_label,
         Position = {0, (0.5 * btn_size[2])},
         Size = {3 * btn_size[1], btn_size[2]}
       }
@@ -60,7 +60,7 @@ if CurrentPage then
         FontSize = 12,
         FontStyle = "Bold",
         HTextAlign = "Right",
-        Color = Colors.hive_yellow,
+        Color = Colors.control_label,
         Position = {0, (1.5 * btn_size[2])},
         Size = {3 * btn_size[1], btn_size[2]}
       }
@@ -74,7 +74,7 @@ if CurrentPage then
         FontSize = 12,
         FontStyle = "Bold",
         HTextAlign = "Right",
-        Color = Colors.hive_yellow,
+        Color = Colors.control_label,
         Position = {0, (2.5 * btn_size[2])},
         Size = {3 * btn_size[1], btn_size[2]}
       }
@@ -104,6 +104,12 @@ if CurrentPage then
       Style = "TextBox",
       Position = {3 * btn_size[1], (2.5 * btn_size[2])},
       Size = {3 * btn_size[1], btn_size[2]}
+    }
+    layout["test"] = {
+      PrettyName = "Test",
+      Style = "Button",
+      Position = {7 * btn_size[1], (2.5 * btn_size[2])},
+      Size = {1 * btn_size[1], btn_size[2]}
     }
 
     for i = 1, layer_count do

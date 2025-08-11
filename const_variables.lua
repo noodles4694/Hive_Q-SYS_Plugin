@@ -10,6 +10,7 @@ local Colors = {
   Red = {255, 0, 0},
   Green = {0, 255, 0},
   transparent = {0, 0, 0, 0},
+  control_label = {0, 0, 0}
 }
 
 local control_list = {

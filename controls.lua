@@ -42,6 +42,17 @@ table.insert(
     UserPin = true
   }
 )
+table.insert(
+  ctrls,
+  {
+    Name = "test",
+    ControlType = "Button",
+    ButtonType = "Momentary",
+    PinStyle = "Input",
+    Count = 1,
+    UserPin = true
+  }
+)
 
 for i = 1, layer_count do
   for k, v in pairs(control_list) do

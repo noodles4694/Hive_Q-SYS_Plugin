@@ -2,10 +2,11 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "0.0",
-  BuildVersion = "0.0.0.3",
+  BuildVersion = "0.0.0.8",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive",
-  Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices"  
+  Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
+  ShowDebug = true 
 }
 
 local udp_port = 8083
@@ -20,6 +21,7 @@ local Colors = {
   Red = {255, 0, 0},
   Green = {0, 255, 0},
   transparent = {0, 0, 0, 0},
+  control_label = {0, 0, 0}
 }
 
 local control_list = {
@@ -408,7 +410,7 @@ function GetProperties()
       Name = "IP Address",
       Type = "string",
       --Value = "192.168.1.1"
-      Value = "10.1.2.84"
+      Value = "192.168.1.30"
     }
   )
   
@@ -505,6 +507,17 @@ function GetControls(props)
       ControlType = "Button",
       ButtonType = "Momentary",
       PinStyle = "Output",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "test",
+      ControlType = "Button",
+      ButtonType = "Momentary",
+      PinStyle = "Input",
       Count = 1,
       UserPin = true
     }
@@ -606,7 +619,7 @@ function GetControlLayout(props)
           FontSize = 12,
           FontStyle = "Bold",
           HTextAlign = "Right",
-          Color = Colors.hive_yellow,
+          Color = Colors.control_label,
           Position = {0, (0.5 * btn_size[2])},
           Size = {3 * btn_size[1], btn_size[2]}
         }
@@ -620,7 +633,7 @@ function GetControlLayout(props)
           FontSize = 12,
           FontStyle = "Bold",
           HTextAlign = "Right",
-          Color = Colors.hive_yellow,
+          Color = Colors.control_label,
           Position = {0, (1.5 * btn_size[2])},
           Size = {3 * btn_size[1], btn_size[2]}
         }
@@ -634,7 +647,7 @@ function GetControlLayout(props)
           FontSize = 12,
           FontStyle = "Bold",
           HTextAlign = "Right",
-          Color = Colors.hive_yellow,
+          Color = Colors.control_label,
           Position = {0, (2.5 * btn_size[2])},
           Size = {3 * btn_size[1], btn_size[2]}
         }
@@ -664,6 +677,12 @@ function GetControlLayout(props)
         Style = "TextBox",
         Position = {3 * btn_size[1], (2.5 * btn_size[2])},
         Size = {3 * btn_size[1], btn_size[2]}
+      }
+      layout["test"] = {
+        PrettyName = "Test",
+        Style = "Button",
+        Position = {7 * btn_size[1], (2.5 * btn_size[2])},
+        Size = {1 * btn_size[1], btn_size[2]}
       }
   
       for i = 1, layer_count do
@@ -910,7 +929,7 @@ if Controls then
     --Timer.CallAfter(cmd_read_play_list, 2)
     --Timer.CallAfter(cmd_read_timecode_cue_list, 3)
     --Timer.CallAfter(cmd_read_output_mapping, 4)
-    Timer.CallAfter(fnPoll, 0.2)
+    -- Timer.CallAfter(fnPoll, 0.2)
   end
   
   function fn_poll_parameters()
@@ -929,7 +948,7 @@ if Controls then
     for i = 1, layer_count do
       fn_get(i, "Transport Control/Media Time")
     end
-    Timer.CallAfter(fn_poll_transport, 1)
+    -- Timer.CallAfter(fn_poll_transport, 1)
   end
   
   function noResponse()
@@ -1083,7 +1102,13 @@ if Controls then
               )
               if Controls["file_select_" .. layer].String ~= "" and not seek_timer_list[tonumber(layer)]:IsRunning() then
                 local pos = tonumber(data) / file_metadata_list[Controls["file_select_" .. layer].String].duration
-                print(string.format("Statement triggered, calcuated position is %s and formatted date is %s", pos, os.date("!%X", math.floor(data))))
+                print(
+                  string.format(
+                    "Statement triggered, calcuated position is %s and formatted date is %s",
+                    pos,
+                    os.date("!%X", math.floor(data))
+                  )
+                )
                 Controls["seek_" .. layer].Position = pos
                 Controls["time_elapsed_" .. layer].String = os.date("!%X", math.floor(data))
               else
@@ -1372,6 +1397,13 @@ if Controls then
   -- Device Settings
   
   -- Define Control EventHandlers
+  Controls["test"].EventHandler = function()
+    if (Controls["test"].Value == 1) then
+      print("Test button pressed!")
+    -- Example of sending a command
+    end
+  end
+  
   for i = 1, layer_count do
     Controls["file_select_" .. i].EventHandler = function()
       cmd_file_select(i, file_list[Controls["file_select_" .. i].String])

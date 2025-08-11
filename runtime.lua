@@ -10,7 +10,7 @@ function fnPoll()
   --Timer.CallAfter(cmd_read_play_list, 2)
   --Timer.CallAfter(cmd_read_timecode_cue_list, 3)
   --Timer.CallAfter(cmd_read_output_mapping, 4)
-  Timer.CallAfter(fnPoll, 0.2)
+  -- Timer.CallAfter(fnPoll, 0.2)
 end
 
 function fn_poll_parameters()
@@ -29,7 +29,7 @@ function fn_poll_transport()
   for i = 1, layer_count do
     fn_get(i, "Transport Control/Media Time")
   end
-  Timer.CallAfter(fn_poll_transport, 1)
+  -- Timer.CallAfter(fn_poll_transport, 1)
 end
 
 function noResponse()
@@ -183,7 +183,13 @@ udp.Data = function(udp, packet)
             )
             if Controls["file_select_" .. layer].String ~= "" and not seek_timer_list[tonumber(layer)]:IsRunning() then
               local pos = tonumber(data) / file_metadata_list[Controls["file_select_" .. layer].String].duration
-              print(string.format("Statement triggered, calcuated position is %s and formatted date is %s", pos, os.date("!%X", math.floor(data))))
+              print(
+                string.format(
+                  "Statement triggered, calcuated position is %s and formatted date is %s",
+                  pos,
+                  os.date("!%X", math.floor(data))
+                )
+              )
               Controls["seek_" .. layer].Position = pos
               Controls["time_elapsed_" .. layer].String = os.date("!%X", math.floor(data))
             else
@@ -472,6 +478,13 @@ end
 -- Device Settings
 
 -- Define Control EventHandlers
+Controls["test"].EventHandler = function()
+  if (Controls["test"].Value == 1) then
+    print("Test button pressed!")
+  -- Example of sending a command
+  end
+end
+
 for i = 1, layer_count do
   Controls["file_select_" .. i].EventHandler = function()
     cmd_file_select(i, file_list[Controls["file_select_" .. i].String])
