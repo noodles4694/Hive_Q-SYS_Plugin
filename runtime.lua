@@ -1,5 +1,3 @@
-rapidjson = require("rapidjson")
-
 -- Set up UDP Port
 local udp = UdpSocket.New()
 
@@ -481,7 +479,8 @@ end
 Controls["test"].EventHandler = function()
   if (Controls["test"].Value == 1) then
     print("Test button pressed!")
-  -- Example of sending a command
+    -- Example of sending a command
+    testSocket()
   end
 end
 

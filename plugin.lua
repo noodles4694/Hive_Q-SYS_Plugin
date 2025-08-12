@@ -1,11 +1,9 @@
 -- Information block for the plugin
 --[[ #include "info.lua" ]]
-
 --[[ #include "const_variables.lua" ]]
-
 -- Define the color of the plugin object in the design
 function GetColor(props)
-  return { 102, 102, 102 }
+  return {102, 102, 102}
 end
 
 -- The name that will initially display when dragged into a design
@@ -14,7 +12,7 @@ function GetPrettyName(props)
 end
 
 -- Optional function used if plugin has multiple pages
-PageNames = { "Setup", "Media List"} 
+PageNames = {"Setup", "Media List"}
 function GetPages(props)
   local pages = {}
   --[[ #include "pages.lua" ]]
@@ -25,7 +23,7 @@ end
 function GetModel(props)
   local model = {}
   --[[ #include "model.lua" ]]
- return model
+  return model
 end
 
 -- Define User configurable Properties of the plugin
@@ -79,6 +77,7 @@ end
 
 --Start event based logic
 if Controls then
-  --[[ #include "runtime_variables.lua"]]
-  --[[ #include "runtime.lua" ]]
+--[[ #include "runtime_variables.lua"]]
+--[[ #include "runtime_hivedevice.lua"]]
+--[[ #include "runtime.lua" ]]
 end
