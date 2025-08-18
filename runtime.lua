@@ -51,6 +51,9 @@ function fn_hive_connect_Status(status)
 end
 
 function fn_watch_parameters()
+  -- Watch for JSON updates
+  watchPatchJSON("/System Settings", processJSONUpdate)
+  watchPatchJSON("/Media List", processJSONUpdate)
   -- Watch for value changes in layer parameters
   for i = 1, layer_count do
     for _, parameter in ipairs(poll_parameter_list) do
@@ -58,10 +61,10 @@ function fn_watch_parameters()
       watchPatchDouble(path, processDoubleUpdate)
     end
   end
-
-  -- Watch for JSON updates
-  watchPatchJSON("/System Settings", processJSONUpdate)
-  watchPatchJSON("/Media List", processJSONUpdate)
+  -- Watch for value changes in transport control parameters
+  for i = 1, layer_count do
+    watchPatchDouble(string.format("/LAYER %s/Transport Control/Media Time/Value", i), processDoubleUpdate)
+  end
 end
 
 function fn_poll_parameters()
@@ -189,33 +192,11 @@ function processDoubleUpdate(path, value)
       local layer, parameter = path:match("/LAYER (%d+)/(%P+)")
       if parameter == "Transport Control" then
         local layer, parameter, sub_parameter = path:match("/LAYER (%d+)/(%P+)/(%P+)")
-        print("Transport Control feedback received!", value)
-        print(string.format("Layer: %s, parameter: %s, sub-parameter: %s", layer, parameter, sub_parameter))
         if sub_parameter == "Media Time" then
-          print(
-            "Check processing criteria:",
-            Controls["file_select_" .. layer].String ~= "",
-            not seek_timer_list[tonumber(layer)]:IsRunning()
-          )
           if Controls["file_select_" .. layer].String ~= "" and not seek_timer_list[tonumber(layer)]:IsRunning() then
             local pos = tonumber(value) / file_metadata_list[Controls["file_select_" .. layer].String].duration
-            print(
-              string.format(
-                "Statement triggered, calcuated position is %s and formatted date is %s",
-                pos,
-                os.date("!%X", math.floor(value))
-              )
-            )
             Controls["seek_" .. layer].Position = pos
             Controls["time_elapsed_" .. layer].String = os.date("!%X", math.floor(value))
-          else
-            print(
-              string.format(
-                "Feedback processing did not trigger. File was %s and seek timer running status was %s",
-                Controls["file_select_" .. layer].String,
-                seek_timer_list[tonumber(layer)]:IsRunning()
-              )
-            )
           end
         end
       end
