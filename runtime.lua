@@ -480,7 +480,7 @@ Controls["test"].EventHandler = function()
   if (Controls["test"].Value == 1) then
     print("Test button pressed!")
     -- Example of sending a command
-    testSocket()
+    Connect("192.168.1.30")
   end
 end
 
