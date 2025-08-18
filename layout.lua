@@ -92,15 +92,8 @@ if CurrentPage then
       Position = {3 * btn_size[1], (1.5 * btn_size[2])},
       Size = {3 * btn_size[1], btn_size[2]}
     }
-    layout["online"] = {
-      PrettyName = "System~Online",
-      Style = "Indicator",
-      Color = {0, 255, 0},
-      Position = {3 * btn_size[1], (0.5 * btn_size[2])},
-      Size = {btn_size[2], btn_size[2]}
-    }
     layout["device_name"] = {
-      PrettyName = "System~IP Address",
+      PrettyName = "System~Device Name",
       Style = "TextBox",
       Position = {3 * btn_size[1], (2.5 * btn_size[2])},
       Size = {3 * btn_size[1], btn_size[2]}

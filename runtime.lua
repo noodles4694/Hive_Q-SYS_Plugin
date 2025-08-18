@@ -1,6 +1,34 @@
 -- Set up UDP Port
 local udp = UdpSocket.New()
 
+---checks if a string represents an ip address
+function isIpAddress(ip)
+  if not ip then
+    return false
+  end
+  local a, b, c, d = ip:match("^(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)$")
+  a = tonumber(a)
+  b = tonumber(b)
+  c = tonumber(c)
+  d = tonumber(d)
+  if not a or not b or not c or not d then
+    return false
+  end
+  if a < 0 or 255 < a then
+    return false
+  end
+  if b < 0 or 255 < b then
+    return false
+  end
+  if c < 0 or 255 < c then
+    return false
+  end
+  if d < 0 or 255 < d then
+    return false
+  end
+  return true
+end
+
 function fnPoll()
   cmd_read_system_settings()
   fn_poll_parameters()
@@ -9,6 +37,31 @@ function fnPoll()
   --Timer.CallAfter(cmd_read_timecode_cue_list, 3)
   --Timer.CallAfter(cmd_read_output_mapping, 4)
   -- Timer.CallAfter(fnPoll, 0.2)
+end
+
+function fn_hive_connect_Status(status)
+  if status == true then
+    print("Connected to Hive player at " .. ip_address)
+    Controls.online.Boolean = false
+    fn_watch_parameters()
+  else
+    print("Failed to connect to Hive player at " .. ip_address)
+    Controls.online.Boolean = false
+  end
+end
+
+function fn_watch_parameters()
+  -- Watch for value changes in layer parameters
+  for i = 1, layer_count do
+    for _, parameter in ipairs(poll_parameter_list) do
+      local path = string.format("/LAYER %s/%s/Value", i, parameter)
+      watchPatchDouble(path, processDoubleUpdate)
+    end
+  end
+
+  -- Watch for JSON updates
+  watchPatchJSON("/System Settings", processJSONUpdate)
+  watchPatchJSON("/Media List", processJSONUpdate)
 end
 
 function fn_poll_parameters()
@@ -68,6 +121,137 @@ function fn_send_json(cmd, val)
   local send_string = 'localSVPatch.UpdatePatchJSON("/' .. cmd .. '", ' .. encoded_val .. ")"
   --print(send_string)
   udp:Send(ip_address, udp_port, send_string)
+end
+
+function processDoubleUpdate(path, value)
+  if path:sub(1, 6) == "/LAYER" then -- Layer parameter response
+    local layer, parameter = path:match("/LAYER (%d+)/(%P+)/Value")
+    if parameter then
+      local control = string.format("%s_%s", parameter:gsub("%s", "_"):lower(), layer)
+      if parameter == "FILE SELECT" then
+        for k, v in pairs(file_list) do
+          if v == value then
+            Controls[control].String = k
+            Controls["duration_" .. control:sub(-1, -1)].String =
+              os.date("!%X", math.floor(file_metadata_list[k].duration))
+            for media = 1, media_item_count do
+              Controls[string.format("media_thumbnail_%s_layer_%s", media, layer)].Boolean =
+                Controls[control].String == Controls[string.format("media_name_%s_layer_%s", media, layer)].String
+            end
+            break
+          end
+        end
+      elseif parameter:sub(-5, -1) == "FRAME" then
+        Controls[control].Value = value
+      elseif parameter == "PLAY MODE" then
+        for k, v in pairs(play_mode_list) do
+          if v == value then
+            Controls[control].String = k
+            break
+          end
+        end
+      elseif parameter == "FRAMING MODE" then
+        for k, v in pairs(framing_mode_list) do
+          if v == value then
+            Controls[control].String = k
+            break
+          end
+        end
+      elseif parameter == "BLEND MODE" then
+        for k, v in pairs(blend_mode_list) do
+          if v == value then
+            Controls[control].String = k
+            break
+          end
+        end
+      elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
+        if value >= 0.5 then
+          Controls[control].Position = (value - 0.4444444444444444) / 0.5555555555555556
+        else
+          Controls[control].Position = value / 5
+        end
+      elseif parameter:sub(1, 3) == "MTC" then
+        Controls[control].Value = value
+      elseif parameter:sub(1, 8) == "POSITION" then
+        Controls[control].Value = (value * 200) - 100
+      elseif parameter:sub(1, 8) == "ROTATION" then
+        Controls[control].Value = (value * 2880) - 1440
+      elseif
+        parameter == "RED" or parameter == "BLUE" or parameter == "GREEN" or parameter == "SATURATION" or
+          parameter == "CONTRAST"
+       then
+        Controls[control].Value = (value * 200) - 100
+      else -- parameters where data directly proportional to position
+        Controls[control].Position = value
+      end
+    else
+      local layer, parameter = path:match("/LAYER (%d+)/(%P+)")
+      if parameter == "Transport Control" then
+        local layer, parameter, sub_parameter = path:match("/LAYER (%d+)/(%P+)/(%P+)")
+        print("Transport Control feedback received!", value)
+        print(string.format("Layer: %s, parameter: %s, sub-parameter: %s", layer, parameter, sub_parameter))
+        if sub_parameter == "Media Time" then
+          print(
+            "Check processing criteria:",
+            Controls["file_select_" .. layer].String ~= "",
+            not seek_timer_list[tonumber(layer)]:IsRunning()
+          )
+          if Controls["file_select_" .. layer].String ~= "" and not seek_timer_list[tonumber(layer)]:IsRunning() then
+            local pos = tonumber(value) / file_metadata_list[Controls["file_select_" .. layer].String].duration
+            print(
+              string.format(
+                "Statement triggered, calcuated position is %s and formatted date is %s",
+                pos,
+                os.date("!%X", math.floor(value))
+              )
+            )
+            Controls["seek_" .. layer].Position = pos
+            Controls["time_elapsed_" .. layer].String = os.date("!%X", math.floor(value))
+          else
+            print(
+              string.format(
+                "Feedback processing did not trigger. File was %s and seek timer running status was %s",
+                Controls["file_select_" .. layer].String,
+                seek_timer_list[tonumber(layer)]:IsRunning()
+              )
+            )
+          end
+        end
+      end
+    end
+  end
+end
+
+function processJSONUpdate(path, value)
+  print("Processing JSON update for path: " .. path)
+  if path == "/System Settings" then
+    Controls.ip_address.String = value.ipAddress
+    Controls.device_name.String = value.deviceName
+  elseif path == "/Media List" then
+    local file_choice_list = {}
+    for _, file in ipairs(value.files) do
+      file_list[file.name] = file.fileIndex - 1
+      table.insert(file_choice_list, file.name)
+      file_metadata_list[file.name] = file
+      for i = 1, layer_count do
+        if Controls[string.format("media_name_%s_layer_%s", file.fileIndex, i)] then
+          Controls[string.format("media_name_%s_layer_%s", file.fileIndex, i)].String = file.name
+        end
+      end
+      get_file_thumbnail(file.fileIndex, file.name)
+    end
+    for i = 1, layer_count do
+      Controls["file_select_" .. i].Choices = file_choice_list
+    end
+  elseif path == "/Output Mapping" then
+  elseif path == "/Play List" then
+    for _, layer in ipairs(value.layers) do
+      --print(layer.label)
+    end
+  elseif path == "/Timecode Cue List" then
+  elseif path == "/Vioso WB Settings" then
+  elseif path == "/Screenberry WB Settings" then
+  end
 end
 
 udp.Data = function(udp, packet)
@@ -480,7 +664,7 @@ Controls["test"].EventHandler = function()
   if (Controls["test"].Value == 1) then
     print("Test button pressed!")
     -- Example of sending a command
-    Connect("192.168.1.30")
+    Connect(Properties["IP Address"].Value)
   end
 end
 
@@ -606,6 +790,13 @@ for i = 1, layer_count do
 end
 
 -- Connect
-udp:Open("", udp_port)
-fnPoll()
-fn_poll_transport()
+if isIpAddress(ip_address) then
+  print("Connecting to Hive player at " .. ip_address)
+  Connect(ip_address, fn_hive_connect_Status)
+else
+  print("Invalid IP address: " .. ip_address)
+end
+
+--udp:Open("", udp_port)
+--fnPoll()
+--fn_poll_transport()

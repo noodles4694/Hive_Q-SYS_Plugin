@@ -3,7 +3,6 @@ table.insert(
   {
     Name = "IP Address",
     Type = "string",
-    --Value = "192.168.1.1"
     Value = "192.168.1.30"
   }
 )

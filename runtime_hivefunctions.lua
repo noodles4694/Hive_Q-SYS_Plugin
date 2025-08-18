@@ -7,16 +7,17 @@ local pendingCallbacks = {}
 local refreshViewMap = {}
 local handlers = {}
 local connectionCallback = nil
-pingTimer = Timer.New()
+local pingTimer = Timer.New()
 local ipTarget = nil
 local shouldConnect = false
+local dataBuffer = "" -- Buffer to hold incoming data
 
 function Connect(ip, statusCallback)
   connectionCallback = statusCallback
   shouldConnect = true
   ipTarget = ip
   if (ipTarget) then
-    print("Connecting to WebSocket at " .. ipTarget)
+    print("Connecting to Hive WebSocket at " .. ipTarget)
     connectSocket(ipTarget)
   else
     print("No IP address provided for WebSocket connection.")
@@ -62,27 +63,34 @@ ws.Closed = function()
 end
 
 ws.Data = function(ws, data)
-  --print("Data received: ", data)
-  local response = rapidjson.decode(data)
-  local callback = nil
-  -- check if we have a local handler that matches the response name
-  if response and response.apiVersion == 1 and response.name and handlers[response.name] then
-    -- check if we have a sequence handler for this data
-    callback = handlers[response.name]
-    if callback then
-      -- Call the handler with the response data
-      callback(response.ret)
-    end
-  elseif response and response.apiVersion == 1 and response.sequence and pendingCallbacks[response.sequence] then
-    callback = pendingCallbacks[response.sequence]
-    if callback then
-      -- Call the callback with the response data
-      callback(response.args.Path, response.ret.Value)
-      -- remove the callback from pendingCallbacks after it's called
-      pendingCallbacks[response.sequence] = nil
-    end
+  -- Check if the data is a complete message or part of a larger message
+  if (string.len(data) == 16384) then
+    dataBuffer = dataBuffer .. data
   else
-    print("No callback / handler found for sequence: " .. (response and response.sequence or "nil"))
+    -- data is complete, let's process it
+    dataBuffer = dataBuffer .. data
+    local response = rapidjson.decode(dataBuffer)
+    local callback = nil
+    -- check if we have a local handler that matches the response name
+    if response and response.apiVersion == 1 and response.name and handlers[response.name] then
+      -- check if we have a defined handler for this data
+      callback = handlers[response.name]
+      if callback then
+        -- Call the handler with the response data
+        callback(response.ret)
+      end
+    elseif response and response.apiVersion == 1 and response.sequence and pendingCallbacks[response.sequence] then
+      callback = pendingCallbacks[response.sequence]
+      if callback then
+        -- Call the callback with the response data
+        callback(response.args.Path, response.ret.Value)
+        -- remove the callback from pendingCallbacks after it's called
+        pendingCallbacks[response.sequence] = nil
+      end
+    else
+      print("No callback / handler found for data: ")
+    end
+    dataBuffer = "" -- Clear the buffer after processing
   end
 end
 

@@ -1,1 +1,1 @@
--- blank
+print("Rectify Properties Called ")

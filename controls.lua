@@ -13,9 +13,9 @@ table.insert(
   ctrls,
   {
     Name = "ip_address",
-    ControlType = "Indicator",
-    IndicatorType = "Text",
-    PinStyle = "Output",
+    ControlType = "Text",
+    --IndicatorType = "Text",
+    PinStyle = "Both",
     Count = 1,
     UserPin = true
   }
@@ -73,7 +73,7 @@ for i = 1, layer_count do
     table.insert(
       ctrls,
       {
-        Name = string.format("media_name_%s_layer_%s", p,i),
+        Name = string.format("media_name_%s_layer_%s", p, i),
         ControlType = "Indicator",
         IndicatorType = "Text",
         PinStyle = "Output",
@@ -83,7 +83,7 @@ for i = 1, layer_count do
     table.insert(
       ctrls,
       {
-        Name = string.format("media_thumbnail_%s_layer_%s", p,i),
+        Name = string.format("media_thumbnail_%s_layer_%s", p, i),
         ControlType = "Button",
         ButtonType = "StateTrigger",
         Min = 0,
@@ -92,6 +92,5 @@ for i = 1, layer_count do
         UserPin = false
       }
     )
-  end  
+  end
 end
-
