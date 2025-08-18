@@ -174,7 +174,6 @@ function getPatchDouble(path, callback)
 end
 
 function setPatchDouble(path, value)
-  
   if (wsConnected) then
     -- Create the request object
     local request = {
@@ -182,7 +181,6 @@ function setPatchDouble(path, value)
       name = "SetPatchDouble",
       args = {Path = path, Value = value}
     }
-    print("Setting patch double for path: " .. path .. " with value: " .. tostring(value))
     -- Send the request over the WebSocket
     ws:Write(rapidjson.encode(request), false)
   end
@@ -324,25 +322,4 @@ function watchPatchJSON(path, callback)
   refreshViewMap[path] = callback
   _WatchPatchJSON(path)
   getPatchJSON(path, callback)
-end
-
--- Handler for double values received from the patch
-function doubleHandler(path, val)
-  print("Double value received for " .. path .. ": " .. val)
-  -- Handle the double value received from the patch
-  -- You can update controls or perform other actions here
-end
-
--- Handler for string values received from the patch
-function stringHandler(path, val)
-  print("Double value received for " .. path .. ": " .. val)
-  -- Handle the s tring value received from the patch
-  -- You can update controls or perform other actions here
-end
-
--- Handler for JSON values received from the patch
-function jsonHandler(path, val)
-  print("JSON value received for " .. path .. ": " .. rapidjson.encode(val))
-  -- Handle the JSON value received from the patch
-  -- You can update controls or perform other actions here
 end
