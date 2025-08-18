@@ -97,9 +97,10 @@ feedbackChecker = Timer.New()
 feedbackChecker.EventHandler = noResponse
 
 function fn_send(layer, cmd, val)
-  local send_string = udp_command_base_string_set .. layer .. "/" .. cmd .. '/Value", ' .. val .. ")" -- please make this neater with string.format()
+  local path = "/LAYER " .. layer .. "/" .. cmd .. "/Value" -- please make this neater with string.format()
   --print(send_string)
-  udp:Send(ip_address, udp_port, send_string)
+  -- udp:Send(ip_address, udp_port, send_string)
+  setPatchDouble(path, val)
 end
 
 function fn_get(layer, cmd)
@@ -245,9 +246,6 @@ function processJSONUpdate(path, value)
     end
   elseif path == "/Output Mapping" then
   elseif path == "/Play List" then
-    for _, layer in ipairs(value.layers) do
-      --print(layer.label)
-    end
   elseif path == "/Timecode Cue List" then
   elseif path == "/Vioso WB Settings" then
   elseif path == "/Screenberry WB Settings" then

@@ -174,6 +174,7 @@ function getPatchDouble(path, callback)
 end
 
 function setPatchDouble(path, value)
+  
   if (wsConnected) then
     -- Create the request object
     local request = {
@@ -181,6 +182,7 @@ function setPatchDouble(path, value)
       name = "SetPatchDouble",
       args = {Path = path, Value = value}
     }
+    print("Setting patch double for path: " .. path .. " with value: " .. tostring(value))
     -- Send the request over the WebSocket
     ws:Write(rapidjson.encode(request), false)
   end
