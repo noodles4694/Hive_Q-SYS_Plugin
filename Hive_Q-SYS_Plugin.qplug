@@ -1297,11 +1297,9 @@ end
 
 function fn_hive_connect_Status(status)
   if status == true then
-    print("Connected to Hive player at " .. ip_address)
-    Controls.online.Boolean = false
+    Controls.online.Boolean = true
     fn_watch_parameters()
   else
-    print("Failed to connect to Hive player at " .. ip_address)
     Controls.online.Boolean = false
   end
 end
@@ -1343,17 +1341,17 @@ function fn_poll_transport()
 end
 
 function noResponse()
-  Controls.online.Boolean = false
+  --Controls.online.Boolean = false
 end
 
 function still_alive()
-  Controls.online.Boolean = true
+  --Controls.online.Boolean = true
   feedbackChecker:Stop()
   feedbackChecker:Start(11)
 end
 
-feedbackChecker = Timer.New()
-feedbackChecker.EventHandler = noResponse
+--feedbackChecker = Timer.New()
+--feedbackChecker.EventHandler = noResponse
 
 function fn_send(layer, cmd, val)
   local path = "/LAYER " .. layer .. "/" .. cmd .. "/Value" -- please make this neater with string.format()
@@ -1822,77 +1820,21 @@ for layer, seek_timer in pairs(seek_timer_list) do
   seek_timer.EventHandler = function(timer)
     if Controls[string.format("seek_%s", layer)].String == seek_last_value[layer] then
       if Controls["file_select_" .. layer].String ~= "" then
-        --[[
-        local second =
-          file_metadata_list[Controls["file_select_" .. layer].String].duration * Controls["seek_" .. layer].Position
-          ]]
         local frame =
           math.floor(
           file_metadata_list[Controls["file_select_" .. layer].String].duration *
             file_metadata_list[Controls["file_select_" .. layer].String].rate *
             Controls["seek_" .. layer].Position
         )
-        udp:Send(
-          ip_address,
-          udp_port,
-          string.format(
-            'localSVPatch.SetPatchDouble("/LAYER %s/Transport Control/MediaClockGenerator/Seek", %s)',
-            layer,
-            frame + 1
-          )
-        )
-        Timer.CallAfter(
-          function()
-            udp:Send(
-              ip_address,
-              udp_port,
-              string.format(
-                'localSVPatch.SetPatchDouble("/LAYER %s/Transport Control/MediaClockGenerator/Seek", %s)',
-                layer,
-                frame
-              )
-            )
-          end,
-          0.1
-        )
+        -- Seek to desired frame
+        local path = string.format("/LAYER %s/Transport Control/MediaClockGenerator/Seek", layer)
+        setPatchDouble(path, frame + 1)
       end
       seek_timer_list[layer]:Stop()
     end
     seek_last_value[layer] = Controls[string.format("seek_%s", layer)].String
   end
 end
-
--- Read Device Settings
-
-function cmd_read_system_settings()
-  fn_read_json_command("System Settings", "UDPMsgReturn")
-end
-
-function cmd_read_media_list()
-  fn_read_json_command("Media List", "UDPMsgReturn")
-end
-
-function cmd_read_output_mapping()
-  fn_read_json_command("Output Mapping", "UDPMsgReturn")
-end
-
-function cmd_read_play_list()
-  fn_read_json_command("Play List", "UDPMsgReturn")
-end
-
-function cmd_read_timecode_cue_list()
-  fn_read_json_command("Timecode Cue List", "UDPMsgReturn")
-end
-
-function cmd_vioso_wb_settings()
-  fn_read_json_command("Vioso WB Settings", "UDPMsgReturn")
-end
-
-function cmd_read_screenberry_wb_settings()
-  fn_read_json_command("Screenberry WB Settings", "UDPMsgReturn")
-end
-
--- Device Settings
 
 -- Define Control EventHandlers
 Controls["test"].EventHandler = function()
