@@ -21,6 +21,13 @@ local control_list = {
     PinStyle = "Both",
     UserPin = true
   },
+  ["Folder Select"] = {
+    Name = "folder_select_",
+    ControlType = "Text",
+    Style = "ComboBox",
+    PinStyle = "Both",
+    UserPin = true
+  },
   ["Time Elapsed"] = {
     Name = "time_elapsed_",
     ControlType = "Indicator",
@@ -311,6 +318,23 @@ local control_list = {
     Max = 100,
     PinStyle = "Both",
     UserPin = true
+  },
+  ["Transition Duration"] = {
+    Name = "transition_duration_",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "Text Field",
+    Min = 0,
+    Max = 65535,
+    PinStyle = "Both",
+    UserPin = true
+  },
+  ["Transition Mode"] = {
+    Name = "transition_mode_",
+    ControlType = "Text",
+    Style = "ComboBox",
+    PinStyle = "Both",
+    UserPin = true
   }
 }
 
@@ -321,6 +345,7 @@ for k,v in pairs(control_list) do
 end
 ]]
 local parameter_list = {
+  "Folder Select",
   "File Select",
   "Time Elapsed",
   "Duration",
@@ -352,5 +377,7 @@ local parameter_list = {
   "Saturation",
   "Contrast",
   "Strobe",
-  "Volume"
+  "Volume",
+  "Transition Duration",
+  "Transition Mode"
 }

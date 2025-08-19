@@ -81,6 +81,13 @@ function processDoubleUpdate(path, value)
             break
           end
         end
+      elseif parameter == "FOLDER SELECT" then
+        for k, v in pairs(folder_list) do
+          if v == value then
+            Controls[control].String = k
+            break
+          end
+        end
       elseif parameter:sub(-5, -1) == "FRAME" then
         Controls[control].Value = value
       elseif parameter == "PLAY MODE" then
@@ -104,6 +111,13 @@ function processDoubleUpdate(path, value)
             break
           end
         end
+      elseif parameter == "TRANSITION MODE" then
+        for k, v in pairs(transition_mode_list) do
+          if v == value then
+            Controls[control].String = k
+            break
+          end
+        end
       elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
         if value >= 0.5 then
           Controls[control].Position = (value - 0.4444444444444444) / 0.5555555555555556
@@ -116,6 +130,8 @@ function processDoubleUpdate(path, value)
         Controls[control].Value = (value * 200) - 100
       elseif parameter:sub(1, 8) == "ROTATION" then
         Controls[control].Value = (value * 2880) - 1440
+      elseif parameter:sub(1, 19) == "TRANSITION DURATION" then
+        Controls[control].Value = value
       elseif
         parameter == "RED" or parameter == "BLUE" or parameter == "GREEN" or parameter == "SATURATION" or
           parameter == "CONTRAST"
@@ -224,6 +240,35 @@ function get_file_thumbnail(index, filename)
   end
 end
 
+function updateMediaFolders()
+  url = string.format("http://%s/api/getMediaFoldersList", ip_address)
+  HttpClient.Post {
+    Url = url,
+    Data = rapidjson.encode({}), -- This can be anything
+    Headers = {
+      ["Content-Type"] = "application/json"
+    },
+    EventHandler = function(tbl, code, data, error, headers)
+      if code == 200 then
+        local folders = rapidjson.decode(data)
+        folder_list = {
+          ["MEDIA"] = 0 -- Default folder
+        }
+        local index = 1
+        for _, folder in pairs(folders.folders) do
+          folder_list[folder] = index
+          index = index + 1
+        end
+        folder_choices = {}
+        for k, v in pairs(folder_list) do
+          table.insert(folder_choices, k)
+        end
+        Controls["folder_select_1"].Choices = folder_choices
+        Controls["folder_select_2"].Choices = folder_choices
+      end
+    end
+  }
+end
 -- Layer Parameters
 
 function cmd_file_select(layer, x) -- 0..65535: File Select
@@ -232,6 +277,10 @@ function cmd_file_select(layer, x) -- 0..65535: File Select
       os.date("!%X", math.floor(file_metadata_list[Controls["file_select_" .. layer].String].duration))
     fn_send(layer, "FILE SELECT", x)
   end
+end
+
+function cmd_folder_select(layer, x) -- 0..65535: File Select
+  fn_send(layer, "FOLDER SELECT", x)
 end
 
 function cmd_intensity(layer, x)
@@ -346,6 +395,14 @@ function cmd_volume(layer, x)
   fn_send(layer, "VOLUME", x)
 end
 
+function cmd_transition_duration(layer, x)
+  fn_send(layer, "TRANSITION DURATION", x)
+end
+
+function cmd_transition_mode(layer, x)
+  fn_send(layer, "TRANSITION MODE", transition_mode_list[x])
+end
+
 for i = 1, 2 do -- NO IDEA IF THIS WORKS! PLEASE TEST!!
   _G["cmd_fx" .. i .. "_select"] = function(layer, x)
     fn_send(layer, "FX" .. i .. " SELECT", x)
@@ -392,6 +449,9 @@ end
 for i = 1, layer_count do
   Controls["file_select_" .. i].EventHandler = function()
     cmd_file_select(i, file_list[Controls["file_select_" .. i].String])
+  end
+  Controls["folder_select_" .. i].EventHandler = function()
+    cmd_folder_select(i, folder_list[Controls["folder_select_" .. i].String])
   end
   Controls["intensity_" .. i].EventHandler = function()
     cmd_intensity(i, Controls["intensity_" .. i].Position)
@@ -493,6 +553,12 @@ for i = 1, layer_count do
   Controls["seek_" .. i].EventHandler = function()
     seek_timer_list[i]:Start(.2)
   end
+  Controls["transition_duration_" .. i].EventHandler = function()
+    cmd_transition_duration(i, Controls["transition_duration_" .. i].Value)
+  end
+  Controls["transition_mode_" .. i].EventHandler = function()
+    cmd_transition_mode(i, Controls["transition_mode_" .. i].String)
+  end
 
   for p = 1, media_item_count do
     Controls[string.format("media_thumbnail_%s_layer_%s", p, i)].EventHandler = function()
@@ -507,8 +573,11 @@ for i = 1, layer_count do
   Controls["play_mode_" .. i].Choices = play_mode_choices
   Controls["framing_mode_" .. i].Choices = framing_mode_choices
   Controls["blend_mode_" .. i].Choices = blend_mode_choices
-  --Controls["fx_m" .. i].Choices = fx_choices
+  Controls["transition_mode_" .. i].Choices = transition_mode_choices
+  --Controls["folder_select_" .. i].Choices = folder_choices
 end
+
+updateMediaFolders()
 
 -- Connect
 if isIpAddress(ip_address) then
