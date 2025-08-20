@@ -39,6 +39,7 @@ function fn_watch_parameters()
   -- Watch for JSON updates
   watchPatchJSON("/System Settings", processJSONUpdate)
   watchPatchJSON("/Media List", processJSONUpdate)
+  watchPatchJSON("/LUT Colour Modes", processJSONUpdate)
   -- Watch for value changes in layer parameters
   for i = 1, layer_count do
     for _, parameter in ipairs(poll_parameter_list) do
@@ -88,6 +89,14 @@ function processDoubleUpdate(path, value)
             break
           end
         end
+      elseif parameter == "LUT" then
+        print("LUT value: " .. value)
+        for k, v in pairs(lut_list) do
+          if v == value then
+            Controls[control].String = k
+            break
+          end
+        end
       elseif parameter:sub(-5, -1) == "FRAME" then
         Controls[control].Value = value
       elseif parameter == "PLAY MODE" then
@@ -130,14 +139,35 @@ function processDoubleUpdate(path, value)
         local layer, parameter, sub_parameter = path:match("/LAYER (%d+)/(%P+)/(%P+)")
         if sub_parameter == "Media Time" then
           if Controls["file_select_" .. layer].String ~= "" and not seek_timer_list[tonumber(layer)]:IsRunning() then
-            local pos = tonumber(value) / file_metadata_list[Controls["file_select_" .. layer].String].duration
-            Controls["seek_" .. layer].Position = pos
-            Controls["time_elapsed_" .. layer].String = os.date("!%X", math.floor(value))
+            if file_metadata_list[Controls["file_select_" .. layer].String].duration == 0 then
+              Controls["seek_" .. layer].Position = 0
+              Controls["time_elapsed_" .. layer].String = os.date("!%X", 0)
+            else
+              local pos = tonumber(value) / file_metadata_list[Controls["file_select_" .. layer].String].duration
+              Controls["seek_" .. layer].Position = pos
+              Controls["time_elapsed_" .. layer].String = os.date("!%X", math.floor(value))
+            end
           end
         end
       end
     end
   end
+end
+---- Helper function to split a string using a seperator
+function stringsplit(inputstr, sep)
+  -- if sep is null, set it as space
+  if sep == nil then
+    sep = "%s"
+  end
+  -- define an array
+  local t = {}
+  -- split string based on sep
+  for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
+    -- insert the substring in table
+    table.insert(t, str)
+  end
+  -- return the array
+  return t
 end
 
 function processJSONUpdate(path, value)
@@ -160,6 +190,26 @@ function processJSONUpdate(path, value)
     for i = 1, layer_count do
       Controls["file_select_" .. i].Choices = file_choice_list
     end
+  elseif path == "/LUT Colour Modes" then
+    lut_list = {
+      ["NONE"] = 0
+    }
+    lut_choices = {}
+    table.insert(lut_choices, "NONE") -- Add "NONE" option
+    local idx = 1
+    local strValue = rapidjson.encode(value):sub(2, -2)
+    -- Remove the brackets
+    local entries = stringsplit(strValue, ",")
+    for _, v in ipairs(entries) do
+      local pair = stringsplit(v, ":")
+      lut_list[pair[1]] = idx -- pair[1] is the LUT name, pair[2] is the LUT colour type (RGB etc..)
+      table.insert(lut_choices, pair[1])
+      idx = idx + 1
+    end
+
+    for i = 1, layer_count do
+      Controls["lut_" .. i].Choices = lut_choices
+    end
   elseif path == "/Output Mapping" then
   elseif path == "/Play List" then
   elseif path == "/Timecode Cue List" then
@@ -167,6 +217,7 @@ function processJSONUpdate(path, value)
   elseif path == "/Screenberry WB Settings" then
   end
 end
+
 --[[
 function get_live_preview()
   HttpClient.Download {
@@ -247,8 +298,9 @@ function updateMediaFolders()
         for k, v in pairs(folder_list) do
           table.insert(folder_choices, k)
         end
-        Controls["folder_select_1"].Choices = folder_choices
-        Controls["folder_select_2"].Choices = folder_choices
+        for i = 1, layer_count do
+          Controls["folder_select_" .. i].Choices = folder_choices
+        end
       end
     end
   }
@@ -458,9 +510,9 @@ for i = 1, layer_count do
     local val = get_table_value(blend_mode_keys, blend_mode_values, Controls["blend_mode_" .. i].String)
     cmd_blend_mode(i, val)
   end
-  --[[Controls["lut_select_" .. i].EventHandler = function() --todo!
-    cmd_lut_select(i, Controls["lut_select_" .. i].String)
-  end]]
+  Controls["lut_" .. i].EventHandler = function()
+    cmd_lut_select(i, lut_list[Controls["lut_" .. i].String])
+  end
   Controls["play_speed_" .. i].EventHandler = function()
     local converted_value = Controls["play_speed_" .. i].Position
     if Controls["play_speed_" .. i].Position >= 0.1 then

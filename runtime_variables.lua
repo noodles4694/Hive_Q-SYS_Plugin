@@ -23,6 +23,17 @@ for k, v in pairs(folder_list) do
   table.insert(folder_choices, k)
 end
 
+local lut_list = {
+  ["NONE"] = 0
+}
+local lut_choices = {}
+for k, v in pairs(lut_list) do
+  table.insert(lut_choices, k)
+end
+
+-- Key and Value arrays to be used with all ENUM based controls, separating the keys and values
+-- is the easiest way to maintain order
+
 local play_mode_keys = {
   "In Frame",
   "Out Frame",

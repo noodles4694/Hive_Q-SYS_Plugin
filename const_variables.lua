@@ -103,13 +103,13 @@ local control_list = {
     PinStyle = "Both",
     UserPin = true
   },
-  --[[["LUT Select"] = {
-    Name = "lut_select_",
+  ["LUT"] = {
+    Name = "lut_",
     ControlType = "Text",
     Style = "ComboBox",
     PinStyle = "Both",
     UserPin = true
-  },]]
+  },
   ["Play Speed"] = {
     Name = "play_speed_",
     ControlType = "Knob",
@@ -356,7 +356,7 @@ local parameter_list = {
   "Play Mode",
   "Framing Mode",
   "Blend Mode",
-  --"LUT Select",
+  "LUT",
   "Play Speed",
   "Move Speed",
   "MTC Hour",
