@@ -91,33 +91,17 @@ function processDoubleUpdate(path, value)
       elseif parameter:sub(-5, -1) == "FRAME" then
         Controls[control].Value = value
       elseif parameter == "PLAY MODE" then
-        for k, v in pairs(play_mode_list) do
-          if v == value then
-            Controls[control].String = k
-            break
-          end
-        end
+        local key = get_table_key(play_mode_keys, play_mode_values, value)
+        Controls[control].String = key
       elseif parameter == "FRAMING MODE" then
-        for k, v in pairs(framing_mode_list) do
-          if v == value then
-            Controls[control].String = k
-            break
-          end
-        end
+        local key = get_table_key(framing_mode_keys, framing_mode_values, value)
+        Controls[control].String = key
       elseif parameter == "BLEND MODE" then
-        for k, v in pairs(blend_mode_list) do
-          if v == value then
-            Controls[control].String = k
-            break
-          end
-        end
+        local key = get_table_key(blend_mode_keys, blend_mode_values, value)
+        Controls[control].String = key
       elseif parameter == "TRANSITION MODE" then
-        for k, v in pairs(transition_mode_list) do
-          if v == value then
-            Controls[control].String = k
-            break
-          end
-        end
+        local key = get_table_key(transition_mode_keys, transition_mode_values, value)
+        Controls[control].String = key
       elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
         if value >= 0.5 then
           Controls[control].Position = (value - 0.4444444444444444) / 0.5555555555555556
@@ -221,7 +205,7 @@ function get_file_thumbnail(index, filename)
       Headers = {},
       Auth = "basic",
       Timeout = 10,
-      EventHandler = function(table, code, data, err, headers)
+      EventHandler = function(tbl, code, data, err, headers)
         if code == 200 then
           local iconStyle = {
             DrawChrome = true,
@@ -296,15 +280,15 @@ function cmd_out_frame(layer, x)
 end
 
 function cmd_play_mode(layer, x)
-  fn_send(layer, "PLAY MODE", play_mode_list[x])
+  fn_send(layer, "PLAY MODE", x)
 end
 
 function cmd_framing(layer, x)
-  fn_send(layer, "FRAMING MODE", framing_mode_list[x])
+  fn_send(layer, "FRAMING MODE", x)
 end
 
 function cmd_blend_mode(layer, x)
-  fn_send(layer, "BLEND MODE", blend_mode_list[x])
+  fn_send(layer, "BLEND MODE", x)
 end
 
 function cmd_lut_select(layer, x)
@@ -400,7 +384,7 @@ function cmd_transition_duration(layer, x)
 end
 
 function cmd_transition_mode(layer, x)
-  fn_send(layer, "TRANSITION MODE", transition_mode_list[x])
+  fn_send(layer, "TRANSITION MODE", x)
 end
 
 for i = 1, 2 do -- NO IDEA IF THIS WORKS! PLEASE TEST!!
@@ -463,13 +447,16 @@ for i = 1, layer_count do
     cmd_out_frame(i, Controls["out_frame_" .. i].Value)
   end
   Controls["play_mode_" .. i].EventHandler = function()
-    cmd_play_mode(i, Controls["play_mode_" .. i].String)
+    local val = get_table_value(play_mode_keys, play_mode_values, Controls["play_mode_" .. i].String)
+    cmd_play_mode(i, val)
   end
   Controls["framing_mode_" .. i].EventHandler = function()
-    cmd_framing(i, Controls["framing_mode_" .. i].String)
+    local val = get_table_value(framing_mode_keys, framing_mode_values, Controls["framing_mode_" .. i].String)
+    cmd_framing(i, val)
   end
   Controls["blend_mode_" .. i].EventHandler = function()
-    cmd_blend_mode(i, Controls["blend_mode_" .. i].String)
+    local val = get_table_value(blend_mode_keys, blend_mode_values, Controls["blend_mode_" .. i].String)
+    cmd_blend_mode(i, val)
   end
   --[[Controls["lut_select_" .. i].EventHandler = function() --todo!
     cmd_lut_select(i, Controls["lut_select_" .. i].String)
@@ -557,7 +544,8 @@ for i = 1, layer_count do
     cmd_transition_duration(i, Controls["transition_duration_" .. i].Value)
   end
   Controls["transition_mode_" .. i].EventHandler = function()
-    cmd_transition_mode(i, Controls["transition_mode_" .. i].String)
+    local val = get_table_value(transition_mode_keys, transition_mode_values, Controls["transition_mode_" .. i].String)
+    cmd_transition_mode(i, val)
   end
 
   for p = 1, media_item_count do
@@ -570,11 +558,10 @@ for i = 1, layer_count do
   --TODO -- FX CONTROLS
 
   -- Choices
-  Controls["play_mode_" .. i].Choices = play_mode_choices
-  Controls["framing_mode_" .. i].Choices = framing_mode_choices
-  Controls["blend_mode_" .. i].Choices = blend_mode_choices
-  Controls["transition_mode_" .. i].Choices = transition_mode_choices
-  --Controls["folder_select_" .. i].Choices = folder_choices
+  Controls["play_mode_" .. i].Choices = play_mode_keys
+  Controls["framing_mode_" .. i].Choices = framing_mode_keys
+  Controls["blend_mode_" .. i].Choices = blend_mode_keys
+  Controls["transition_mode_" .. i].Choices = transition_mode_keys
 end
 
 updateMediaFolders()

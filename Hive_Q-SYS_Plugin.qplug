@@ -850,103 +850,161 @@ for k, v in pairs(folder_list) do
   table.insert(folder_choices, k)
 end
 
-local play_mode_list = {
-  ["In Frame"] = 0,
-  ["Out Frame"] = 1,
-  ["Loop Forward"] = 2,
-  ["Loop Reverse"] = 3,
-  ["Play Once Forward"] = 4,
-  ["Play Once Reverse"] = 5,
-  ["Stop"] = 6,
-  ["Pause"] = 7,
-  ["Bounce (Ping-Pong)"] = 8,
-  ["Take Over Frame"] = 9,
-  ["Loop Forward with pause on zero intensity"] = 10,
-  ["Loop Reverse with pause on zero intensity"] = 11,
-  ["Play Once Forward with pause on zero intensity"] = 12,
-  ["Play Once Reverse with pause on zero intensity"] = 13,
-  ["Bounce (Ping-Pong) with pause on zero intensity"] = 15,
-  ["Synchronise to Time code"] = 20,
-  ["Loop Forward with re-trigger on intensity"] = 40,
-  ["Loop Reverse with re-trigger on intensity"] = 41,
-  ["Play Once Forward with re-trigger on intensity"] = 42,
-  ["Play Once Reverse with re-trigger on intensity"] = 43,
-  ["Bounce with re-trigger on intensity"] = 45
+local play_mode_keys = {
+  "In Frame",
+  "Out Frame",
+  "Loop Forward",
+  "Loop Reverse",
+  "Play Once Forward",
+  "Play Once Reverse",
+  "Stop",
+  "Pause",
+  "Bounce (Ping-Pong)",
+  "Take Over Frame",
+  "Loop Forward with pause on zero intensity",
+  "Loop Reverse with pause on zero intensity",
+  "Play Once Forward with pause on zero intensity",
+  "Play Once Reverse with pause on zero intensity",
+  "Bounce (Ping-Pong) with pause on zero intensity",
+  "Synchronise to Time code",
+  "Loop Forward with re-trigger on intensity",
+  "Loop Reverse with re-trigger on intensity",
+  "Play Once Forward with re-trigger on intensity",
+  "Play Once Reverse with re-trigger on intensity",
+  "Bounce with re-trigger on intensity"
 }
 
-local play_mode_choices = {}
-for k, v in pairs(play_mode_list) do
-  table.insert(play_mode_choices, k)
-end
-
-local transition_mode_list = {
-  ["Alpha"] = 0,
-  ["Additive"] = 1,
-  ["Multiply"] = 2,
-  ["Difference"] = 3,
-  ["Screen"] = 4,
-  ["Preserve Luma"] = 5,
-  ["Rectangle Wipe"] = 6,
-  ["Triangle Wipe"] = 7,
-  ["Minimum"] = 8,
-  ["Maximum"] = 9,
-  ["Subtract"] = 10,
-  ["Darken"] = 11,
-  ["Lighten"] = 12,
-  ["Soft Lighten"] = 13,
-  ["Dark Lighten"] = 14,
-  ["Exclusion"] = 15,
-  ["Random"] = 16,
-  ["Ripple"] = 17,
-  ["Threshold"] = 18,
-  ["Sine"] = 19,
-  ["Invert Mask"] = 20,
-  ["Noise"] = 21,
-  ["Swirl"] = 22,
-  ["Gradient"] = 23,
-  ["Pixel Sort"] = 24,
-  ["Checkerboard"] = 25,
-  ["Pulse"] = 26,
-  ["Hue Shift"] = 27,
-  ["Fractal"] = 28,
-  ["Waveform"] = 29,
-  ["RGB Split"] = 30,
-  ["Glitch"] = 31
+local play_mode_values = {
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  15,
+  20,
+  40,
+  41,
+  42,
+  43,
+  45
 }
 
-local transition_mode_choices = {}
-for k, v in pairs(transition_mode_list) do
-  table.insert(transition_mode_choices, k)
-end
-
-local framing_mode_list = {
-  ["Letterbox"] = 0,
-  ["Crop"] = 1,
-  ["Stretch"] = 2,
-  ["Multi Letterbox"] = 3,
-  ["Centered"] = 4
+local transition_mode_keys = {
+  "Alpha",
+  "Additive",
+  "Multiply",
+  "Difference",
+  "Screen",
+  "Preserve Luma",
+  "Rectangle Wipe",
+  "Triangle Wipe",
+  "Minimum",
+  "Maximum",
+  "Subtract",
+  "Darken",
+  "Lighten",
+  "Soft Lighten",
+  "Dark Lighten",
+  "Exclusion",
+  "Random",
+  "Ripple",
+  "Threshold",
+  "Sine",
+  "Invert Mask",
+  "Noise",
+  "Swirl",
+  "Gradient",
+  "Pixel Sort",
+  "Checkerboard",
+  "Pulse",
+  "Hue Shift",
+  "Fractal",
+  "Waveform",
+  "RGB Split",
+  "Glitch"
 }
 
-local framing_mode_choices = {}
-for k, v in pairs(framing_mode_list) do
-  table.insert(framing_mode_choices, k)
-end
-
-local blend_mode_list = {
-  ["Alpha"] = 0,
-  ["Additive"] = 1,
-  ["Multiply"] = 2,
-  ["Difference"] = 3,
-  ["Screen"] = 4,
-  ["Preserve Luma"] = 5,
-  ["Rectangle Wipe"] = 6,
-  ["Triangle Wipe"] = 7
+local transition_mode_values = {
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  21,
+  22,
+  23,
+  24,
+  25,
+  26,
+  27,
+  28,
+  29,
+  30,
+  31
 }
 
-local blend_mode_choices = {}
-for k, v in pairs(blend_mode_list) do
-  table.insert(blend_mode_choices, k)
-end
+local framing_mode_keys = {
+  "Letterbox",
+  "Crop",
+  "Stretch",
+  "Multi Letterbox",
+  "Centered"
+}
+
+local framing_mode_values = {
+  0,
+  1,
+  2,
+  3,
+  4
+}
+
+local blend_mode_keys = {
+  "Alpha",
+  "Additive",
+  "Multiply",
+  "Difference",
+  "Screen",
+  "Preserve Luma",
+  "Rectangle Wipe",
+  "Triangle Wipe"
+}
+
+local blend_mode_values = {
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7
+}
 
 local fx_list = {
   ["NONE"] = 0,
@@ -1849,6 +1907,24 @@ end
 local ip_address = Properties["IP Address"].Value
 local udp_command_base_string_set = 'localSVPatch.SetPatchDouble("/LAYER '
 local udp_command_base_string_get = 'GetPatchDoubleWithDescriptor("/LAYER '
+
+function get_table_key(tblKeys, tblValues, value)
+  for i = 1, #tblValues do
+    if tblValues[i] == value then
+      return tblKeys[i]
+    end
+  end
+  return nil
+end
+
+function get_table_value(tblKeys, tblValues, key)
+  for i = 1, #tblKeys do
+    if tblKeys[i] == key then
+      return tblValues[i]
+    end
+  end
+  return nil
+end
 rapidjson = require("rapidjson")
 
 ws = WebSocket.New()
@@ -2267,33 +2343,17 @@ function processDoubleUpdate(path, value)
       elseif parameter:sub(-5, -1) == "FRAME" then
         Controls[control].Value = value
       elseif parameter == "PLAY MODE" then
-        for k, v in pairs(play_mode_list) do
-          if v == value then
-            Controls[control].String = k
-            break
-          end
-        end
+        local key = get_table_key(play_mode_keys, play_mode_values, value)
+        Controls[control].String = key
       elseif parameter == "FRAMING MODE" then
-        for k, v in pairs(framing_mode_list) do
-          if v == value then
-            Controls[control].String = k
-            break
-          end
-        end
+        local key = get_table_key(framing_mode_keys, framing_mode_values, value)
+        Controls[control].String = key
       elseif parameter == "BLEND MODE" then
-        for k, v in pairs(blend_mode_list) do
-          if v == value then
-            Controls[control].String = k
-            break
-          end
-        end
+        local key = get_table_key(blend_mode_keys, blend_mode_values, value)
+        Controls[control].String = key
       elseif parameter == "TRANSITION MODE" then
-        for k, v in pairs(transition_mode_list) do
-          if v == value then
-            Controls[control].String = k
-            break
-          end
-        end
+        local key = get_table_key(transition_mode_keys, transition_mode_values, value)
+        Controls[control].String = key
       elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
         if value >= 0.5 then
           Controls[control].Position = (value - 0.4444444444444444) / 0.5555555555555556
@@ -2397,7 +2457,7 @@ function get_file_thumbnail(index, filename)
       Headers = {},
       Auth = "basic",
       Timeout = 10,
-      EventHandler = function(table, code, data, err, headers)
+      EventHandler = function(tbl, code, data, err, headers)
         if code == 200 then
           local iconStyle = {
             DrawChrome = true,
@@ -2472,15 +2532,15 @@ function cmd_out_frame(layer, x)
 end
 
 function cmd_play_mode(layer, x)
-  fn_send(layer, "PLAY MODE", play_mode_list[x])
+  fn_send(layer, "PLAY MODE", x)
 end
 
 function cmd_framing(layer, x)
-  fn_send(layer, "FRAMING MODE", framing_mode_list[x])
+  fn_send(layer, "FRAMING MODE", x)
 end
 
 function cmd_blend_mode(layer, x)
-  fn_send(layer, "BLEND MODE", blend_mode_list[x])
+  fn_send(layer, "BLEND MODE", x)
 end
 
 function cmd_lut_select(layer, x)
@@ -2576,7 +2636,7 @@ function cmd_transition_duration(layer, x)
 end
 
 function cmd_transition_mode(layer, x)
-  fn_send(layer, "TRANSITION MODE", transition_mode_list[x])
+  fn_send(layer, "TRANSITION MODE", x)
 end
 
 for i = 1, 2 do -- NO IDEA IF THIS WORKS! PLEASE TEST!!
@@ -2639,13 +2699,16 @@ for i = 1, layer_count do
     cmd_out_frame(i, Controls["out_frame_" .. i].Value)
   end
   Controls["play_mode_" .. i].EventHandler = function()
-    cmd_play_mode(i, Controls["play_mode_" .. i].String)
+    local val = get_table_value(play_mode_keys, play_mode_values, Controls["play_mode_" .. i].String)
+    cmd_play_mode(i, val)
   end
   Controls["framing_mode_" .. i].EventHandler = function()
-    cmd_framing(i, Controls["framing_mode_" .. i].String)
+    local val = get_table_value(framing_mode_keys, framing_mode_values, Controls["framing_mode_" .. i].String)
+    cmd_framing(i, val)
   end
   Controls["blend_mode_" .. i].EventHandler = function()
-    cmd_blend_mode(i, Controls["blend_mode_" .. i].String)
+    local val = get_table_value(blend_mode_keys, blend_mode_values, Controls["blend_mode_" .. i].String)
+    cmd_blend_mode(i, val)
   end
   --[[Controls["lut_select_" .. i].EventHandler = function() --todo!
     cmd_lut_select(i, Controls["lut_select_" .. i].String)
@@ -2733,7 +2796,8 @@ for i = 1, layer_count do
     cmd_transition_duration(i, Controls["transition_duration_" .. i].Value)
   end
   Controls["transition_mode_" .. i].EventHandler = function()
-    cmd_transition_mode(i, Controls["transition_mode_" .. i].String)
+    local val = get_table_value(transition_mode_keys, transition_mode_values, Controls["transition_mode_" .. i].String)
+    cmd_transition_mode(i, val)
   end
 
   for p = 1, media_item_count do
@@ -2746,11 +2810,10 @@ for i = 1, layer_count do
   --TODO -- FX CONTROLS
 
   -- Choices
-  Controls["play_mode_" .. i].Choices = play_mode_choices
-  Controls["framing_mode_" .. i].Choices = framing_mode_choices
-  Controls["blend_mode_" .. i].Choices = blend_mode_choices
-  Controls["transition_mode_" .. i].Choices = transition_mode_choices
-  --Controls["folder_select_" .. i].Choices = folder_choices
+  Controls["play_mode_" .. i].Choices = play_mode_keys
+  Controls["framing_mode_" .. i].Choices = framing_mode_keys
+  Controls["blend_mode_" .. i].Choices = blend_mode_keys
+  Controls["transition_mode_" .. i].Choices = transition_mode_keys
 end
 
 updateMediaFolders()

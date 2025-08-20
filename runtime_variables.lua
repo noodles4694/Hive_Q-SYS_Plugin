@@ -23,103 +23,161 @@ for k, v in pairs(folder_list) do
   table.insert(folder_choices, k)
 end
 
-local play_mode_list = {
-  ["In Frame"] = 0,
-  ["Out Frame"] = 1,
-  ["Loop Forward"] = 2,
-  ["Loop Reverse"] = 3,
-  ["Play Once Forward"] = 4,
-  ["Play Once Reverse"] = 5,
-  ["Stop"] = 6,
-  ["Pause"] = 7,
-  ["Bounce (Ping-Pong)"] = 8,
-  ["Take Over Frame"] = 9,
-  ["Loop Forward with pause on zero intensity"] = 10,
-  ["Loop Reverse with pause on zero intensity"] = 11,
-  ["Play Once Forward with pause on zero intensity"] = 12,
-  ["Play Once Reverse with pause on zero intensity"] = 13,
-  ["Bounce (Ping-Pong) with pause on zero intensity"] = 15,
-  ["Synchronise to Time code"] = 20,
-  ["Loop Forward with re-trigger on intensity"] = 40,
-  ["Loop Reverse with re-trigger on intensity"] = 41,
-  ["Play Once Forward with re-trigger on intensity"] = 42,
-  ["Play Once Reverse with re-trigger on intensity"] = 43,
-  ["Bounce with re-trigger on intensity"] = 45
+local play_mode_keys = {
+  "In Frame",
+  "Out Frame",
+  "Loop Forward",
+  "Loop Reverse",
+  "Play Once Forward",
+  "Play Once Reverse",
+  "Stop",
+  "Pause",
+  "Bounce (Ping-Pong)",
+  "Take Over Frame",
+  "Loop Forward with pause on zero intensity",
+  "Loop Reverse with pause on zero intensity",
+  "Play Once Forward with pause on zero intensity",
+  "Play Once Reverse with pause on zero intensity",
+  "Bounce (Ping-Pong) with pause on zero intensity",
+  "Synchronise to Time code",
+  "Loop Forward with re-trigger on intensity",
+  "Loop Reverse with re-trigger on intensity",
+  "Play Once Forward with re-trigger on intensity",
+  "Play Once Reverse with re-trigger on intensity",
+  "Bounce with re-trigger on intensity"
 }
 
-local play_mode_choices = {}
-for k, v in pairs(play_mode_list) do
-  table.insert(play_mode_choices, k)
-end
-
-local transition_mode_list = {
-  ["Alpha"] = 0,
-  ["Additive"] = 1,
-  ["Multiply"] = 2,
-  ["Difference"] = 3,
-  ["Screen"] = 4,
-  ["Preserve Luma"] = 5,
-  ["Rectangle Wipe"] = 6,
-  ["Triangle Wipe"] = 7,
-  ["Minimum"] = 8,
-  ["Maximum"] = 9,
-  ["Subtract"] = 10,
-  ["Darken"] = 11,
-  ["Lighten"] = 12,
-  ["Soft Lighten"] = 13,
-  ["Dark Lighten"] = 14,
-  ["Exclusion"] = 15,
-  ["Random"] = 16,
-  ["Ripple"] = 17,
-  ["Threshold"] = 18,
-  ["Sine"] = 19,
-  ["Invert Mask"] = 20,
-  ["Noise"] = 21,
-  ["Swirl"] = 22,
-  ["Gradient"] = 23,
-  ["Pixel Sort"] = 24,
-  ["Checkerboard"] = 25,
-  ["Pulse"] = 26,
-  ["Hue Shift"] = 27,
-  ["Fractal"] = 28,
-  ["Waveform"] = 29,
-  ["RGB Split"] = 30,
-  ["Glitch"] = 31
+local play_mode_values = {
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  15,
+  20,
+  40,
+  41,
+  42,
+  43,
+  45
 }
 
-local transition_mode_choices = {}
-for k, v in pairs(transition_mode_list) do
-  table.insert(transition_mode_choices, k)
-end
-
-local framing_mode_list = {
-  ["Letterbox"] = 0,
-  ["Crop"] = 1,
-  ["Stretch"] = 2,
-  ["Multi Letterbox"] = 3,
-  ["Centered"] = 4
+local transition_mode_keys = {
+  "Alpha",
+  "Additive",
+  "Multiply",
+  "Difference",
+  "Screen",
+  "Preserve Luma",
+  "Rectangle Wipe",
+  "Triangle Wipe",
+  "Minimum",
+  "Maximum",
+  "Subtract",
+  "Darken",
+  "Lighten",
+  "Soft Lighten",
+  "Dark Lighten",
+  "Exclusion",
+  "Random",
+  "Ripple",
+  "Threshold",
+  "Sine",
+  "Invert Mask",
+  "Noise",
+  "Swirl",
+  "Gradient",
+  "Pixel Sort",
+  "Checkerboard",
+  "Pulse",
+  "Hue Shift",
+  "Fractal",
+  "Waveform",
+  "RGB Split",
+  "Glitch"
 }
 
-local framing_mode_choices = {}
-for k, v in pairs(framing_mode_list) do
-  table.insert(framing_mode_choices, k)
-end
-
-local blend_mode_list = {
-  ["Alpha"] = 0,
-  ["Additive"] = 1,
-  ["Multiply"] = 2,
-  ["Difference"] = 3,
-  ["Screen"] = 4,
-  ["Preserve Luma"] = 5,
-  ["Rectangle Wipe"] = 6,
-  ["Triangle Wipe"] = 7
+local transition_mode_values = {
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  21,
+  22,
+  23,
+  24,
+  25,
+  26,
+  27,
+  28,
+  29,
+  30,
+  31
 }
 
-local blend_mode_choices = {}
-for k, v in pairs(blend_mode_list) do
-  table.insert(blend_mode_choices, k)
-end
+local framing_mode_keys = {
+  "Letterbox",
+  "Crop",
+  "Stretch",
+  "Multi Letterbox",
+  "Centered"
+}
+
+local framing_mode_values = {
+  0,
+  1,
+  2,
+  3,
+  4
+}
+
+local blend_mode_keys = {
+  "Alpha",
+  "Additive",
+  "Multiply",
+  "Difference",
+  "Screen",
+  "Preserve Luma",
+  "Rectangle Wipe",
+  "Triangle Wipe"
+}
+
+local blend_mode_values = {
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7
+}
 
 local fx_list = {
   ["NONE"] = 0,
@@ -1022,3 +1080,21 @@ end
 local ip_address = Properties["IP Address"].Value
 local udp_command_base_string_set = 'localSVPatch.SetPatchDouble("/LAYER '
 local udp_command_base_string_get = 'GetPatchDoubleWithDescriptor("/LAYER '
+
+function get_table_key(tblKeys, tblValues, value)
+  for i = 1, #tblValues do
+    if tblValues[i] == value then
+      return tblKeys[i]
+    end
+  end
+  return nil
+end
+
+function get_table_value(tblKeys, tblValues, key)
+  for i = 1, #tblKeys do
+    if tblKeys[i] == key then
+      return tblValues[i]
+    end
+  end
+  return nil
+end
