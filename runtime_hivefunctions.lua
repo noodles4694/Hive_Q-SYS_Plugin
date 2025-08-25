@@ -4,6 +4,7 @@ ws = WebSocket.New()
 local wsConnected = false
 local sequenceNo = 0
 local pendingCallbacks = {}
+local pendingRawCallbacks = {}
 local refreshViewMap = {}
 local handlers = {}
 local connectionCallback = nil
@@ -86,6 +87,14 @@ ws.Data = function(ws, data)
         callback(response.args.Path, response.ret.Value)
         -- remove the callback from pendingCallbacks after it's called
         pendingCallbacks[response.sequence] = nil
+      end
+    elseif response and response.apiVersion == 1 and response.sequence and pendingRawCallbacks[response.sequence] then
+      callback = pendingRawCallbacks[response.sequence]
+      if callback then
+        -- Call the callback with the response data
+        callback(response.args.Path, dataBuffer)
+        -- remove the callback from pendingCallbacks after it's called
+        pendingRawCallbacks[response.sequence] = nil
       end
     else
       print("No callback / handler found for data: ")
@@ -258,7 +267,7 @@ function watchPatchString(path, callback)
   getPatchString(path, callback)
 end
 
-function getPatchJSON(path, callback)
+function getPatchJSON(path, callback, raw)
   if (wsConnected) then
     -- Increment the sequence number for each request
     sequenceNo = sequenceNo + 1
@@ -273,7 +282,11 @@ function getPatchJSON(path, callback)
       sequence = sequenceNo
     }
     -- Store the callback for later use
-    pendingCallbacks[sequenceNo] = callback
+    if raw then
+      pendingRawCallbacks[sequenceNo] = callback
+    else
+      pendingCallbacks[sequenceNo] = callback
+    end
     -- Send the request over the WebSocket
     ws:Write(rapidjson.encode(request), false)
   end

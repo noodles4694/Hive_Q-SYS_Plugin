@@ -39,7 +39,7 @@ function fn_watch_parameters()
   -- Watch for JSON updates
   watchPatchJSON("/System Settings", processJSONUpdate)
   watchPatchJSON("/Media List", processJSONUpdate)
-  watchPatchJSON("/LUT Colour Modes", processJSONUpdate)
+  getPatchJSON("/LUT Colour Modes", processLUTData, true)
   -- Watch for value changes in layer parameters
   for i = 1, layer_count do
     for _, parameter in ipairs(poll_parameter_list) do
@@ -62,6 +62,33 @@ function fn_send_json(cmd, val)
   local encoded_val = json.encode(val)
   local path = "/" .. cmd
   sePatchJSON(path, encoded_val)
+end
+
+function processLUTData(path, data)
+  print("LUT Data Received" .. data)
+  print("Decoding LUT Data", extractMapFromJSON(data, "ret.Value"))
+end
+
+function extractMapFromJSON(jsonStr, key)
+  -- Parse JSON
+  local decoded, err = rapidjson.decode(jsonStr)
+  if not decoded then
+    return nil, "JSON decode error: " .. tostring(err)
+  end
+
+  -- Get map at key
+  local obj = decoded[key]
+  if type(obj) ~= "table" then
+    return nil, "Value at key '" .. key .. "' is not an object"
+  end
+
+  -- RapidJSON keeps insertion order, but we can explicitly collect it
+  local ordered = {}
+  for k, v in rapidjson.pairs(obj) do
+    table.insert(ordered, {k, v})
+  end
+
+  return ordered
 end
 
 function processDoubleUpdate(path, value)
