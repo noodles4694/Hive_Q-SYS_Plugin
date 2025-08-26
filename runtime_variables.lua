@@ -1089,8 +1089,6 @@ for _, v in pairs(parameter_list) do
 end
 
 local ip_address = Properties["IP Address"].Value
-local udp_command_base_string_set = 'localSVPatch.SetPatchDouble("/LAYER '
-local udp_command_base_string_get = 'GetPatchDoubleWithDescriptor("/LAYER '
 
 function get_table_key(tblKeys, tblValues, value)
   for i = 1, #tblValues do

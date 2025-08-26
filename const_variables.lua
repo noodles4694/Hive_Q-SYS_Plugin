@@ -338,12 +338,6 @@ local control_list = {
   }
 }
 
---[[ 
-local parameter_list = {} -- this results in random order indexing
-for k,v in pairs(control_list) do
-  table.insert(parameter_list, k)
-end
-]]
 local parameter_list = {
   "Folder Select",
   "File Select",

@@ -1916,8 +1916,6 @@ for _, v in pairs(parameter_list) do
 end
 
 local ip_address = Properties["IP Address"].Value
-local udp_command_base_string_set = 'localSVPatch.SetPatchDouble("/LAYER '
-local udp_command_base_string_get = 'GetPatchDoubleWithDescriptor("/LAYER '
 
 function get_table_key(tblKeys, tblValues, value)
   for i = 1, #tblValues do
@@ -2316,6 +2314,7 @@ function fn_watch_parameters()
   watchPatchJSON("/System Settings", processJSONUpdate)
   watchPatchJSON("/Media List", processJSONUpdate)
   -- get the LUT options and update controls
+  -- set the RAW mode so we can parse the raw data manually
   getPatchJSON("/LUT Colour Modes", processLUTData, true)
   -- Watch for value changes in layer parameters
   for i = 1, layer_count do
