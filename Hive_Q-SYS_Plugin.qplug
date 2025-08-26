@@ -2315,6 +2315,7 @@ function fn_watch_parameters()
   -- Watch for JSON updates
   watchPatchJSON("/System Settings", processJSONUpdate)
   watchPatchJSON("/Media List", processJSONUpdate)
+  -- get the LUT options and update controls
   getPatchJSON("/LUT Colour Modes", processLUTData, true)
   -- Watch for value changes in layer parameters
   for i = 1, layer_count do
@@ -2341,30 +2342,51 @@ function fn_send_json(cmd, val)
 end
 
 function processLUTData(path, data)
-  print("LUT Data Received" .. data)
-  print("Decoding LUT Data", extractMapFromJSON(data, "ret.Value"))
-end
+  -- The LUT list is inside a JSON object under the "Value" key
+  -- however it is not indexed so we have to extract the string pairs manually
+  -- in order to maintain the ordering
+  -- this is a bit hacky but it works
 
-function extractMapFromJSON(jsonStr, key)
-  -- Parse JSON
-  local decoded, err = rapidjson.decode(jsonStr)
-  if not decoded then
-    return nil, "JSON decode error: " .. tostring(err)
+  -- find the start of the "Value" object
+  local startPos = data:find('"Value"%s*:%s*{')
+  if startPos then
+    -- extract substring from "Value": { ... }
+    local subStr = data:sub(startPos)
+    -- stop at the matching closing brace for Value
+    local braceCount, endPos = 0, nil
+    for i = 1, #subStr do
+      local c = subStr:sub(i, i)
+      if c == "{" then
+        braceCount = braceCount + 1
+      elseif c == "}" then
+        braceCount = braceCount - 1
+        if braceCount == 0 then
+          endPos = i
+          break
+        end
+      end
+    end
+    if endPos then
+      lut_list = {
+        ["NONE"] = 0
+      }
+      lut_choices = {}
+      local idx = 1
+      table.insert(lut_choices, "NONE") -- Add "NONE" option
+      local valueBlock = subStr:sub(1, endPos)
+      -- now extract all keys inside "Value"
+      for k in valueBlock:gmatch('"([^"]+)"%s*:') do
+        if k ~= "Value" then
+          table.insert(lut_choices, k)
+          lut_list[k] = idx
+          idx = idx + 1
+        end
+      end
+      for i = 1, layer_count do
+        Controls["lut_" .. i].Choices = lut_choices
+      end
+    end
   end
-
-  -- Get map at key
-  local obj = decoded[key]
-  if type(obj) ~= "table" then
-    return nil, "Value at key '" .. key .. "' is not an object"
-  end
-
-  -- RapidJSON keeps insertion order, but we can explicitly collect it
-  local ordered = {}
-  for k, v in rapidjson.pairs(obj) do
-    table.insert(ordered, {k, v})
-  end
-
-  return ordered
 end
 
 function processDoubleUpdate(path, value)
@@ -2393,7 +2415,6 @@ function processDoubleUpdate(path, value)
           end
         end
       elseif parameter == "LUT" then
-        print("LUT value: " .. value)
         for k, v in pairs(lut_list) do
           if v == value then
             Controls[control].String = k
@@ -2492,26 +2513,6 @@ function processJSONUpdate(path, value)
     end
     for i = 1, layer_count do
       Controls["file_select_" .. i].Choices = file_choice_list
-    end
-  elseif path == "/LUT Colour Modes" then
-    lut_list = {
-      ["NONE"] = 0
-    }
-    lut_choices = {}
-    table.insert(lut_choices, "NONE") -- Add "NONE" option
-    local idx = 1
-    local strValue = rapidjson.encode(value):sub(2, -2)
-    -- Remove the brackets
-    local entries = stringsplit(strValue, ",")
-    for _, v in ipairs(entries) do
-      local pair = stringsplit(v, ":")
-      lut_list[pair[1]] = idx -- pair[1] is the LUT name, pair[2] is the LUT colour type (RGB etc..)
-      table.insert(lut_choices, pair[1])
-      idx = idx + 1
-    end
-
-    for i = 1, layer_count do
-      Controls["lut_" .. i].Choices = lut_choices
     end
   elseif path == "/Output Mapping" then
   elseif path == "/Play List" then
