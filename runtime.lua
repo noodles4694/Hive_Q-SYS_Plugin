@@ -502,15 +502,6 @@ for layer, seek_timer in pairs(seek_timer_list) do
   end
 end
 
--- Define Control EventHandlers
-Controls["test"].EventHandler = function()
-  if (Controls["test"].Value == 1) then
-    print("Test button pressed!")
-    -- Example of sending a command
-    Connect(Properties["IP Address"].Value)
-  end
-end
-
 for i = 1, layer_count do
   Controls["file_select_" .. i].EventHandler = function()
     cmd_file_select(i, file_list[Controls["file_select_" .. i].String])

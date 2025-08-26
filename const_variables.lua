@@ -1,4 +1,3 @@
-local udp_port = 8083
 local layer_count = 2
 local max_media_items = 120
 

@@ -8,7 +8,6 @@ PluginInfo = {
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
   ShowDebug = true 
 }
-local udp_port = 8083
 local layer_count = 2
 local max_media_items = 120
 
@@ -348,12 +347,6 @@ local control_list = {
   }
 }
 
---[[ 
-local parameter_list = {} -- this results in random order indexing
-for k,v in pairs(control_list) do
-  table.insert(parameter_list, k)
-end
-]]
 local parameter_list = {
   "Folder Select",
   "File Select",
@@ -402,7 +395,7 @@ function GetPrettyName(props)
 end
 
 -- Optional function used if plugin has multiple pages
-PageNames = {"Setup", "Media List"}
+PageNames = {"Info", "Layers", "Media"}
 function GetPages(props)
   local pages = {}
   
@@ -535,17 +528,6 @@ function GetControls(props)
       UserPin = true
     }
   )
-  table.insert(
-    ctrls,
-    {
-      Name = "test",
-      ControlType = "Button",
-      ButtonType = "Momentary",
-      PinStyle = "Input",
-      Count = 1,
-      UserPin = true
-    }
-  )
   
   for i = 1, layer_count do
     for k, v in pairs(control_list) do
@@ -596,12 +578,10 @@ function GetControlLayout(props)
   local graphics = {}
   local CurrentPage = PageNames[props["page_index"].Value]
   local media_item_count = props["Media List Count"].Value
-  
   local column_size = 11
-  
   local btn_size = {32, 24}
   local status_groupbox_size = {9 * btn_size[1], 4 * btn_size[2]}
-  local player_groupbox_position = {0, status_groupbox_size[2] + (0.5 * btn_size[2])}
+  local player_groupbox_position = {0, 0}
   local player_groupbox_size = {
     (((math.floor((#parameter_list / column_size)) + 1) * 6) + 1) * btn_size[1],
     (column_size + 2) * btn_size[2]
@@ -610,7 +590,7 @@ function GetControlLayout(props)
   local media_list_groupbox_size = {3 * preview_size[1], (media_item_count + 1) * preview_size[2]}
   
   if CurrentPage then
-    if CurrentPage == "Setup" then
+    if CurrentPage == "Info" then
       table.insert(
         graphics,
         {
@@ -694,13 +674,7 @@ function GetControlLayout(props)
         Position = {3 * btn_size[1], (2.5 * btn_size[2])},
         Size = {3 * btn_size[1], btn_size[2]}
       }
-      layout["test"] = {
-        PrettyName = "Test",
-        Style = "Button",
-        Position = {7 * btn_size[1], (2.5 * btn_size[2])},
-        Size = {1 * btn_size[1], btn_size[2]}
-      }
-  
+    elseif CurrentPage == "Layers" then
       for i = 1, layer_count do
         table.insert(
           graphics,
@@ -751,7 +725,7 @@ function GetControlLayout(props)
           }
         end
       end
-    elseif CurrentPage == "Media List" then
+    elseif CurrentPage == "Media" then
       table.insert(
         graphics,
         {
@@ -2773,15 +2747,6 @@ for layer, seek_timer in pairs(seek_timer_list) do
       seek_timer_list[layer]:Stop()
     end
     seek_last_value[layer] = Controls[string.format("seek_%s", layer)].String
-  end
-end
-
--- Define Control EventHandlers
-Controls["test"].EventHandler = function()
-  if (Controls["test"].Value == 1) then
-    print("Test button pressed!")
-    -- Example of sending a command
-    Connect(Properties["IP Address"].Value)
   end
 end
 

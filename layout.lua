@@ -1,11 +1,9 @@
 local CurrentPage = PageNames[props["page_index"].Value]
 local media_item_count = props["Media List Count"].Value
-
 local column_size = 11
-
 local btn_size = {32, 24}
 local status_groupbox_size = {9 * btn_size[1], 4 * btn_size[2]}
-local player_groupbox_position = {0, status_groupbox_size[2] + (0.5 * btn_size[2])}
+local player_groupbox_position = {0, 0}
 local player_groupbox_size = {
   (((math.floor((#parameter_list / column_size)) + 1) * 6) + 1) * btn_size[1],
   (column_size + 2) * btn_size[2]
@@ -14,7 +12,7 @@ local preview_size = {3 * btn_size[1], (3 * btn_size[1])}
 local media_list_groupbox_size = {3 * preview_size[1], (media_item_count + 1) * preview_size[2]}
 
 if CurrentPage then
-  if CurrentPage == "Setup" then
+  if CurrentPage == "Info" then
     table.insert(
       graphics,
       {
@@ -98,13 +96,7 @@ if CurrentPage then
       Position = {3 * btn_size[1], (2.5 * btn_size[2])},
       Size = {3 * btn_size[1], btn_size[2]}
     }
-    layout["test"] = {
-      PrettyName = "Test",
-      Style = "Button",
-      Position = {7 * btn_size[1], (2.5 * btn_size[2])},
-      Size = {1 * btn_size[1], btn_size[2]}
-    }
-
+  elseif CurrentPage == "Layers" then
     for i = 1, layer_count do
       table.insert(
         graphics,
@@ -155,7 +147,7 @@ if CurrentPage then
         }
       end
     end
-  elseif CurrentPage == "Media List" then
+  elseif CurrentPage == "Media" then
     table.insert(
       graphics,
       {
