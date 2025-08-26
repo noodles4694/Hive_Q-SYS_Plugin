@@ -395,14 +395,19 @@ function GetPrettyName(props)
 end
 
 -- Optional function used if plugin has multiple pages
-PageNames = {"Info", "Layers", "Media"}
+PageNames = {}
+function CreatePages()
+  PageNames = {"Info"}
+  for i = 1, layer_count do
+    table.insert(PageNames, "Layer " .. i)
+  end
+  table.insert(PageNames, "Media")
+end
+
 function GetPages(props)
   local pages = {}
-  
-  for i=1, layer_count do
-    --table.insert(PageNames, "Layer " .. i .. " Parameters")
-  end
-  for ix,name in ipairs(PageNames) do
+  CreatePages()
+  for ix, name in ipairs(PageNames) do
     table.insert(pages, {name = PageNames[ix]})
   end
   return pages
@@ -484,6 +489,7 @@ end
 -- Defines the Controls used within the plugin
 function GetControls(props)
   local ctrls = {}
+  CreatePages()
   table.insert(
     ctrls,
     {
@@ -576,6 +582,7 @@ end
 function GetControlLayout(props)
   local layout = {}
   local graphics = {}
+  CreatePages()
   local CurrentPage = PageNames[props["page_index"].Value]
   local media_item_count = props["Media List Count"].Value
   local column_size = 11
@@ -674,56 +681,54 @@ function GetControlLayout(props)
         Position = {3 * btn_size[1], (2.5 * btn_size[2])},
         Size = {3 * btn_size[1], btn_size[2]}
       }
-    elseif CurrentPage == "Layers" then
-      for i = 1, layer_count do
+    elseif CurrentPage:sub(1, 6) == "Layer " then
+      local i = tonumber(CurrentPage:match("Layer (%d+)"))
+  
+      table.insert(
+        graphics,
+        {
+          Type = "GroupBox",
+          Text = "Layer " .. i,
+          HTextAlign = "Left",
+          CornerRadius = 8,
+          Fill = Colors.hive_grey,
+          StrokeWidth = 1,
+          Position = {
+            player_groupbox_position[1],
+            player_groupbox_position[2]
+          },
+          Size = player_groupbox_size
+        }
+      )
+      for k, v in pairs(parameter_list) do
+        local column = math.floor((k - 1) / column_size) + 1
+        local row = k - (column - 1) * column_size
         table.insert(
           graphics,
           {
-            Type = "GroupBox",
-            Text = "Layer " .. i,
-            HTextAlign = "Left",
-            CornerRadius = 8,
-            Fill = Colors.hive_grey,
-            StrokeWidth = 1,
+            Type = "Text",
+            Text = v .. ":",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Bold",
+            HTextAlign = "Right",
+            Color = Colors.hive_yellow,
             Position = {
-              player_groupbox_position[1],
-              player_groupbox_position[2] + ((i - 1) * (player_groupbox_size[2] + (0.5 * btn_size[2])))
-            },
-            Size = player_groupbox_size
-          }
-        )
-        for k, v in pairs(parameter_list) do
-          local column = math.floor((k - 1) / column_size) + 1
-          local row = k - (column - 1) * column_size
-          table.insert(
-            graphics,
-            {
-              Type = "Text",
-              Text = v .. ":",
-              Font = "Roboto",
-              FontSize = 12,
-              FontStyle = "Bold",
-              HTextAlign = "Right",
-              Color = Colors.hive_yellow,
-              Position = {
-                player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
-                player_groupbox_position[2] +
-                  ((i - 1) * (player_groupbox_size[2] + (0.5 * btn_size[2])) + (row * btn_size[2]))
-              },
-              Size = {3 * btn_size[1], btn_size[2]}
-            }
-          )
-          layout[control_list[v].Name .. i] = {
-            PrettyName = "Layer " .. i .. "~" .. v,
-            Style = control_list[v].Style,
-            Position = {
-              player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
-              player_groupbox_position[2] +
-                ((i - 1) * (player_groupbox_size[2] + (0.5 * btn_size[2])) + (row * btn_size[2]))
+              player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
+              player_groupbox_position[2] + (row * btn_size[2])
             },
             Size = {3 * btn_size[1], btn_size[2]}
           }
-        end
+        )
+        layout[control_list[v].Name .. i] = {
+          PrettyName = "Layer " .. i .. "~" .. v,
+          Style = control_list[v].Style,
+          Position = {
+            player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
+            player_groupbox_position[2] + (row * btn_size[2])
+          },
+          Size = {3 * btn_size[1], btn_size[2]}
+        }
       end
     elseif CurrentPage == "Media" then
       table.insert(

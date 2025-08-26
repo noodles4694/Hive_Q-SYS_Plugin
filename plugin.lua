@@ -12,7 +12,15 @@ function GetPrettyName(props)
 end
 
 -- Optional function used if plugin has multiple pages
-PageNames = {"Info", "Layers", "Media"}
+PageNames = {}
+function CreatePages()
+  PageNames = {"Info"}
+  for i = 1, layer_count do
+    table.insert(PageNames, "Layer " .. i)
+  end
+  table.insert(PageNames, "Media")
+end
+
 function GetPages(props)
   local pages = {}
   --[[ #include "pages.lua" ]]
