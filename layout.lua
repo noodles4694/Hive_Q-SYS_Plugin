@@ -1,13 +1,18 @@
 CreatePages()
 local CurrentPage = PageNames[props["page_index"].Value]
 local media_item_count = props["Media List Count"].Value
-local column_size = 11
+local column_size = 12
+local fx_column_size = 6
 local btn_size = {32, 24}
 local status_groupbox_size = {9 * btn_size[1], 4 * btn_size[2]}
 local player_groupbox_position = {0, 0}
 local player_groupbox_size = {
   (((math.floor((#parameter_list / column_size)) + 1) * 6) + 1) * btn_size[1],
   (column_size + 2) * btn_size[2]
+}
+local fx_groupbox_size = {
+  (((math.floor((#fx1_list / fx_column_size)) + 1) * 6) + 1) * btn_size[1],
+  (fx_column_size + 2) * btn_size[2]
 }
 local preview_size = {3 * btn_size[1], (3 * btn_size[1])}
 local media_list_groupbox_size = {3 * preview_size[1], (media_item_count + 1) * preview_size[2]}
@@ -104,7 +109,7 @@ if CurrentPage then
       graphics,
       {
         Type = "GroupBox",
-        Text = "Layer " .. i,
+        Text = "Parameters",
         HTextAlign = "Left",
         CornerRadius = 8,
         Fill = Colors.hive_grey,
@@ -114,6 +119,38 @@ if CurrentPage then
           player_groupbox_position[2]
         },
         Size = player_groupbox_size
+      }
+    )
+    table.insert(
+      graphics,
+      {
+        Type = "GroupBox",
+        Text = "FX 1",
+        HTextAlign = "Left",
+        CornerRadius = 8,
+        Fill = Colors.hive_grey,
+        StrokeWidth = 1,
+        Position = {
+          player_groupbox_position[1],
+          player_groupbox_size[2] + 8
+        },
+        Size = fx_groupbox_size
+      }
+    )
+    table.insert(
+      graphics,
+      {
+        Type = "GroupBox",
+        Text = "FX 2",
+        HTextAlign = "Left",
+        CornerRadius = 8,
+        Fill = Colors.hive_grey,
+        StrokeWidth = 1,
+        Position = {
+          player_groupbox_position[1],
+          player_groupbox_size[2] + 16 + fx_groupbox_size[2]
+        },
+        Size = fx_groupbox_size
       }
     )
     for k, v in pairs(parameter_list) do
@@ -142,6 +179,66 @@ if CurrentPage then
         Position = {
           player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
           player_groupbox_position[2] + (row * btn_size[2])
+        },
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    end
+    for k, v in pairs(fx1_list) do
+      local column = math.floor((k - 1) / fx_column_size) + 1
+      local row = k - (column - 1) * fx_column_size
+      table.insert(
+        graphics,
+        {
+          Type = "Text",
+          Text = v .. ":",
+          Font = "Roboto",
+          FontSize = 12,
+          FontStyle = "Bold",
+          HTextAlign = "Right",
+          Color = Colors.hive_yellow,
+          Position = {
+            player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
+            player_groupbox_size[2] + 8 + (row * btn_size[2])
+          },
+          Size = {3 * btn_size[1], btn_size[2]}
+        }
+      )
+      layout[control_list[v].Name .. i] = {
+        PrettyName = "Layer " .. i .. "~" .. v,
+        Style = control_list[v].Style,
+        Position = {
+          player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
+          player_groupbox_size[2] + 8 + (row * btn_size[2])
+        },
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    end
+    for k, v in pairs(fx2_list) do
+      local column = math.floor((k - 1) / fx_column_size) + 1
+      local row = k - (column - 1) * fx_column_size
+      table.insert(
+        graphics,
+        {
+          Type = "Text",
+          Text = v .. ":",
+          Font = "Roboto",
+          FontSize = 12,
+          FontStyle = "Bold",
+          HTextAlign = "Right",
+          Color = Colors.hive_yellow,
+          Position = {
+            player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
+            player_groupbox_size[2] + 16 + fx_groupbox_size[2] + (row * btn_size[2])
+          },
+          Size = {3 * btn_size[1], btn_size[2]}
+        }
+      )
+      layout[control_list[v].Name .. i] = {
+        PrettyName = "Layer " .. i .. "~" .. v,
+        Style = control_list[v].Style,
+        Position = {
+          player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
+          player_groupbox_size[2] + 16 + fx_groupbox_size[2] + (row * btn_size[2])
         },
         Size = {3 * btn_size[1], btn_size[2]}
       }

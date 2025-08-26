@@ -374,3 +374,51 @@ local parameter_list = {
   "Transition Duration",
   "Transition Mode"
 }
+
+local fx1_list = {}
+local fx2_list = {}
+
+control_list["FX 1 Select"] = {
+  Name = "fx_1_select_",
+  ControlType = "Text",
+  Style = "ComboBox",
+  PinStyle = "Both",
+  UserPin = true
+}
+fx1_list[#fx1_list + 1] = "FX 1 Select"
+
+for i = 1, 16 do
+  control_list["FX 1 Param " .. i] = {
+    Name = "fx_1_param_" .. i .. "_",
+    ControlType = "Knob",
+    ControlUnit = "Percent",
+    Style = "Text Field",
+    Min = 0,
+    Max = 100,
+    PinStyle = "Both",
+    UserPin = true
+  }
+  fx1_list[#fx1_list + 1] = "FX 1 Param " .. i
+end
+control_list["FX 2 Select"] = {
+  Name = "fx_2_select_",
+  ControlType = "Text",
+  Style = "ComboBox",
+  PinStyle = "Both",
+  UserPin = true
+}
+fx2_list[#fx2_list + 1] = "FX 2 Select"
+
+for i = 1, 16 do
+  control_list["FX 2 Param " .. i] = {
+    Name = "fx_2_param_" .. i .. "_",
+    ControlType = "Knob",
+    ControlUnit = "Percent",
+    Style = "Text Field",
+    Min = 0,
+    Max = 100,
+    PinStyle = "Both",
+    UserPin = true
+  }
+  fx2_list[#fx2_list + 1] = "FX 2 Param " .. i
+end
