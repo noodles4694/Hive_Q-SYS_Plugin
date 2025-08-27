@@ -16,7 +16,7 @@ table.insert(
     Name = "ip_address",
     ControlType = "Text",
     --IndicatorType = "Text",
-    PinStyle = "Both",
+    PinStyle = "Output",
     Count = 1,
     UserPin = true
   }
@@ -25,6 +25,50 @@ table.insert(
   ctrls,
   {
     Name = "device_name",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "version",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "status",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "output_resolution",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "output_framerate",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",

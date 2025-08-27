@@ -5,7 +5,7 @@ local column_size = 12
 local fx1_column_size = 6
 local fx2_column_size = 6
 local btn_size = {32, 24}
-local status_groupbox_size = {9 * btn_size[1], 4 * btn_size[2]}
+local status_groupbox_size = {12 * btn_size[1], 10 * btn_size[2]}
 local player_groupbox_position = {0, 0}
 local player_groupbox_size = {
   (((math.floor((#parameter_list / column_size)) + 1) * 6) + 1) * btn_size[1],
@@ -88,6 +88,62 @@ if CurrentPage then
         Size = {3 * btn_size[1], btn_size[2]}
       }
     )
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "Version:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Bold",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {0, (3.5 * btn_size[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "Status:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Bold",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {0, (4.5 * btn_size[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "Output Res:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Bold",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {0, (5.5 * btn_size[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "Output Refresh:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Bold",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {0, (6.5 * btn_size[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
     layout["online"] = {
       PrettyName = "System~Online",
       Style = "Indicator",
@@ -105,6 +161,30 @@ if CurrentPage then
       PrettyName = "System~Device Name",
       Style = "TextBox",
       Position = {3 * btn_size[1], (2.5 * btn_size[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
+    }
+    layout["version"] = {
+      PrettyName = "System~Version",
+      Style = "TextBox",
+      Position = {3 * btn_size[1], (3.5 * btn_size[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
+    }
+    layout["status"] = {
+      PrettyName = "System~Status",
+      Style = "TextBox",
+      Position = {3 * btn_size[1], (4.5 * btn_size[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
+    }
+    layout["output_resolution"] = {
+      PrettyName = "System~Output Resolution",
+      Style = "TextBox",
+      Position = {3 * btn_size[1], (5.5 * btn_size[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
+    }
+    layout["output_framerate"] = {
+      PrettyName = "System~Output Framerate",
+      Style = "TextBox",
+      Position = {3 * btn_size[1], (6.5 * btn_size[2])},
       Size = {3 * btn_size[1], btn_size[2]}
     }
   elseif CurrentPage:sub(1, 6) == "Layer " then

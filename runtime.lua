@@ -30,6 +30,7 @@ function fn_hive_connect_Status(status)
   if status == true then
     Controls.online.Boolean = true
     fn_watch_parameters()
+    updateInfo()
   else
     Controls.online.Boolean = false
   end
@@ -218,27 +219,11 @@ function processDoubleUpdate(path, value)
     end
   end
 end
----- Helper function to split a string using a seperator
-function stringsplit(inputstr, sep)
-  -- if sep is null, set it as space
-  if sep == nil then
-    sep = "%s"
-  end
-  -- define an array
-  local t = {}
-  -- split string based on sep
-  for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
-    -- insert the substring in table
-    table.insert(t, str)
-  end
-  -- return the array
-  return t
-end
 
 function processJSONUpdate(path, value)
   if path == "/System Settings" then
-    Controls.ip_address.String = value.ipAddress
-    Controls.device_name.String = value.deviceName
+    -- Controls.ip_address.String = value.ipAddress
+    -- Controls.device_name.String = value.deviceName
   elseif path == "/Media List" then
     local file_choice_list = {}
     for _, file in ipairs(value.files) do
@@ -263,37 +248,56 @@ function processJSONUpdate(path, value)
   end
 end
 
---[[
-function get_live_preview()
-  HttpClient.Download {
-    Url = string.format("http://%s/Honey/status.txt", ip_address),
-    Headers = {},
-    Auth = "basic",
-    Timeout = 10,
-    EventHandler = function(table, code, data, err, headers)
-      print(string.format("http://%s/Honey/outputFrame_%s.jpg", ip_address, data))
-      HttpClient.Download {
-        Url = string.format("http://%s/Honey/outputFrame_%s.jpg", ip_address, data),
-        Headers = {},
-        Auth = "basic",
-        Timeout = 10,
-        EventHandler = function(table, code, data, err, headers)
-          print(base_uri, code, data, err, headers)
-          local iconStyle = {
-            DrawChrome = true,
-            HorizontalAlignment = "Center",
-            Legend = "",
-            Padding = 0,
-            Margin = 0,
-            IconData = Qlib.base64_enc(data)
-          }
-          Controls.thumbnail.Style = rapidjson.encode(iconStyle)
+function updateInfo()
+  local url = string.format("http://%s/api/getTileList", ip_address)
+  HttpClient.Post {
+    Url = url,
+    Data = rapidjson.encode({}), -- This can be anything
+    Headers = {
+      ["Content-Type"] = "application/json"
+    },
+    EventHandler = function(tbl, code, data, error, headers)
+      if code == 200 then
+        print("data: " .. data)
+        local info = rapidjson.decode(data)
+        Controls.version.String = info.hiveVersion
+
+        if info and info.tileList then
+          local device = nil
+          for _, tile in ipairs(info.tileList) do
+            if compareIPs(tile.ipAddress, ip_address) then
+              device = tile
+              break
+            end
+          end
+          if device then
+            Controls.device_name.String = device.deviceName
+            Controls.ip_address.String = device.ipAddress
+            Controls.status.String = device.status
+            Controls.output_framerate.String = device.rate
+            Controls.output_resolution.String = string.format("%s x %s", device.resX, device.resY)
+          end
         end
-      }
+      end
     end
   }
 end
-]]
+
+-- compares two ip addresses, ignoring leading zeros
+function compareIPs(ip1, ip2)
+  local function normalize(ip)
+    local parts = {}
+    if not ip then
+      return ""
+    end
+    for octet in string.gmatch(ip, "%d+") do
+      table.insert(parts, tostring(tonumber(octet))) -- remove leading zeros
+    end
+    return table.concat(parts, ".")
+  end
+  return normalize(ip1) == normalize(ip2)
+end
+
 function get_file_thumbnail(index, filename)
   if index <= media_item_count then
     HttpClient.Download {
