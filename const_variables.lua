@@ -378,18 +378,28 @@ local parameter_list = {
 local fx1_list = {}
 local fx2_list = {}
 
-control_list["FX 1 Select"] = {
-  Name = "fx_1_select_",
+control_list["FX1 Select"] = {
+  Name = "fx1_select_",
   ControlType = "Text",
   Style = "ComboBox",
   PinStyle = "Both",
   UserPin = true
 }
-fx1_list[#fx1_list + 1] = "FX 1 Select"
-
+fx1_list[#fx1_list + 1] = "FX1 Select"
+control_list["FX1 Opacity"] = {
+  Name = "fx1_opacity_",
+  ControlType = "Knob",
+  ControlUnit = "Percent",
+  Style = "Text Field",
+  Min = 0,
+  Max = 100,
+  PinStyle = "Both",
+  UserPin = true
+}
+fx1_list[#fx1_list + 1] = "FX1 Opacity"
 for i = 1, 16 do
-  control_list["FX 1 Param " .. i] = {
-    Name = "fx_1_param_" .. i .. "_",
+  control_list["FX1 Param " .. i] = {
+    Name = "fx1_param_" .. i .. "_",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
@@ -398,20 +408,31 @@ for i = 1, 16 do
     PinStyle = "Both",
     UserPin = true
   }
-  fx1_list[#fx1_list + 1] = "FX 1 Param " .. i
+  fx1_list[#fx1_list + 1] = "FX1 Param " .. i
 end
-control_list["FX 2 Select"] = {
-  Name = "fx_2_select_",
+control_list["FX2 Select"] = {
+  Name = "fx2_select_",
   ControlType = "Text",
   Style = "ComboBox",
   PinStyle = "Both",
   UserPin = true
 }
-fx2_list[#fx2_list + 1] = "FX 2 Select"
+fx2_list[#fx2_list + 1] = "FX2 Select"
+control_list["FX2 Opacity"] = {
+  Name = "fx2_opacity_",
+  ControlType = "Knob",
+  ControlUnit = "Percent",
+  Style = "Text Field",
+  Min = 0,
+  Max = 100,
+  PinStyle = "Both",
+  UserPin = true
+}
+fx2_list[#fx2_list + 1] = "FX2 Opacity"
 
 for i = 1, 16 do
-  control_list["FX 2 Param " .. i] = {
-    Name = "fx_2_param_" .. i .. "_",
+  control_list["FX2 Param " .. i] = {
+    Name = "fx2_param_" .. i .. "_",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
@@ -420,5 +441,5 @@ for i = 1, 16 do
     PinStyle = "Both",
     UserPin = true
   }
-  fx2_list[#fx2_list + 1] = "FX 2 Param " .. i
+  fx2_list[#fx2_list + 1] = "FX2 Param " .. i
 end

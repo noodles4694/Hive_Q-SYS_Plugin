@@ -48,10 +48,18 @@ function fn_watch_parameters()
       local path = string.format("/LAYER %s/%s/Value", i, parameter)
       watchPatchDouble(path, processDoubleUpdate)
     end
+    for _, parameter in ipairs(fx1_list) do
+      local path = string.format("/LAYER %s/%s/Value", i, parameter:upper())
+      watchPatchDouble(path, processDoubleUpdate)
+    end
+    for _, parameter in ipairs(fx2_list) do
+      local path = string.format("/LAYER %s/%s/Value", i, parameter:upper())
+      watchPatchDouble(path, processDoubleUpdate)
+    end
   end
   -- Watch for value changes in transport control parameters
   for i = 1, layer_count do
-    watchPatchDouble(string.format("/LAYER %s/Transport Control/Media Time/Value", i), processDoubleUpdate)
+    watchPatchDouble(string.format("/LAYER %s/Transport Control/Media Time/Value", i), processTransportUpdate)
   end
 end
 
@@ -114,6 +122,25 @@ function processLUTData(path, data)
   end
 end
 
+function processTransportUpdate(path, value)
+  local layer, parameter = path:match("/LAYER (%d+)/(%P+)")
+  if parameter == "Transport Control" then
+    local layer, parameter, sub_parameter = path:match("/LAYER (%d+)/(%P+)/(%P+)")
+    if sub_parameter == "Media Time" then
+      if Controls["file_select_" .. layer].String ~= "" and not seek_timer_list[tonumber(layer)]:IsRunning() then
+        if file_metadata_list[Controls["file_select_" .. layer].String].duration == 0 then
+          Controls["seek_" .. layer].Position = 0
+          Controls["time_elapsed_" .. layer].String = os.date("!%X", 0)
+        else
+          local pos = tonumber(value) / file_metadata_list[Controls["file_select_" .. layer].String].duration
+          Controls["seek_" .. layer].Position = pos
+          Controls["time_elapsed_" .. layer].String = os.date("!%X", math.floor(value))
+        end
+      end
+    end
+  end
+end
+
 function processDoubleUpdate(path, value)
   if path:sub(1, 6) == "/LAYER" then -- Layer parameter response
     local layer, parameter = path:match("/LAYER (%d+)/(%P+)/Value")
@@ -160,6 +187,12 @@ function processDoubleUpdate(path, value)
       elseif parameter == "TRANSITION MODE" then
         local key = get_table_key(transition_mode_keys, transition_mode_values, value)
         Controls[control].String = key
+      elseif parameter == "FX1 SELECT" then
+        local key = get_table_key(fx_keys, fx_values, value)
+        Controls[control].String = key
+      elseif parameter == "FX2 SELECT" then
+        local key = get_table_key(fx_keys, fx_values, value)
+        Controls[control].String = key
       elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
         if value >= 0.5 then
           Controls[control].Position = (value - 0.4444444444444444) / 0.5555555555555556
@@ -181,23 +214,6 @@ function processDoubleUpdate(path, value)
         Controls[control].Value = (value * 200) - 100
       else -- parameters where data directly proportional to position
         Controls[control].Position = value
-      end
-    else
-      local layer, parameter = path:match("/LAYER (%d+)/(%P+)")
-      if parameter == "Transport Control" then
-        local layer, parameter, sub_parameter = path:match("/LAYER (%d+)/(%P+)/(%P+)")
-        if sub_parameter == "Media Time" then
-          if Controls["file_select_" .. layer].String ~= "" and not seek_timer_list[tonumber(layer)]:IsRunning() then
-            if file_metadata_list[Controls["file_select_" .. layer].String].duration == 0 then
-              Controls["seek_" .. layer].Position = 0
-              Controls["time_elapsed_" .. layer].String = os.date("!%X", 0)
-            else
-              local pos = tonumber(value) / file_metadata_list[Controls["file_select_" .. layer].String].duration
-              Controls["seek_" .. layer].Position = pos
-              Controls["time_elapsed_" .. layer].String = os.date("!%X", math.floor(value))
-            end
-          end
-        end
       end
     end
   end
@@ -344,7 +360,7 @@ function cmd_file_select(layer, x) -- 0..65535: File Select
   end
 end
 
-function cmd_folder_select(layer, x) -- 0..65535: File Select
+function cmd_folder_select(layer, x) -- 0..65535: Folder Select
   fn_send(layer, "FOLDER SELECT", x)
 end
 
@@ -380,7 +396,7 @@ function cmd_play_speed(layer, x)
   fn_send(layer, "PLAY SPEED", x)
 end
 
-function cmd_movement_speed(layer, x) -- reserved for future use
+function cmd_movement_speed(layer, x)
   fn_send(layer, "MOVEMENT SPEED", x)
 end
 
@@ -468,7 +484,7 @@ function cmd_transition_mode(layer, x)
   fn_send(layer, "TRANSITION MODE", x)
 end
 
-for i = 1, 2 do -- NO IDEA IF THIS WORKS! PLEASE TEST!!
+for i = 1, 2 do
   _G["cmd_fx" .. i .. "_select"] = function(layer, x)
     fn_send(layer, "FX" .. i .. " SELECT", x)
   end
@@ -476,7 +492,7 @@ for i = 1, 2 do -- NO IDEA IF THIS WORKS! PLEASE TEST!!
     fn_send(layer, "FX" .. i .. " OPACITY", x)
   end
   for p = 1, 16 do
-    _G["cmd_fx" .. i .. "_parameter_" .. p] = function(layer, x)
+    _G["cmd_fx" .. i .. "_param_" .. p] = function(layer, x)
       fn_send(layer, "FX" .. i .. " PARAM " .. p, x)
     end
   end
@@ -529,6 +545,14 @@ for i = 1, layer_count do
   Controls["blend_mode_" .. i].EventHandler = function()
     local val = get_table_value(blend_mode_keys, blend_mode_values, Controls["blend_mode_" .. i].String)
     cmd_blend_mode(i, val)
+  end
+  Controls["fx1_select_" .. i].EventHandler = function()
+    local val = get_table_value(fx_keys, fx_values, Controls["fx1_select_" .. i].String)
+    cmd_fx1_select(i, val)
+  end
+  Controls["fx2_select_" .. i].EventHandler = function()
+    local val = get_table_value(fx_keys, fx_values, Controls["fx2_select_" .. i].String)
+    cmd_fx2_select(i, val)
   end
   Controls["lut_" .. i].EventHandler = function()
     cmd_lut_select(i, lut_list[Controls["lut_" .. i].String])
@@ -619,6 +643,20 @@ for i = 1, layer_count do
     local val = get_table_value(transition_mode_keys, transition_mode_values, Controls["transition_mode_" .. i].String)
     cmd_transition_mode(i, val)
   end
+  Controls["fx1_opacity_" .. i].EventHandler = function()
+    _G["cmd_fx1_opacity"](i, Controls["fx1_opacity_" .. i].Position)
+  end
+  Controls["fx2_opacity_" .. i].EventHandler = function()
+    _G["cmd_fx2_opacity"](i, Controls["fx2_opacity_" .. i].Position)
+  end
+  for p = 1, 16 do
+    Controls[string.format("fx1_param_%s_%s", p, i)].EventHandler = function()
+      _G["cmd_fx1_param_" .. p](i, Controls[string.format("fx1_param_%s_%s", p, i)].Position)
+    end
+    Controls[string.format("fx2_param_%s_%s", p, i)].EventHandler = function()
+      _G["cmd_fx2_param_" .. p](i, Controls[string.format("fx2_param_%s_%s", p, i)].Position)
+    end
+  end
 
   for p = 1, media_item_count do
     Controls[string.format("media_thumbnail_%s_layer_%s", p, i)].EventHandler = function()
@@ -627,13 +665,14 @@ for i = 1, layer_count do
       end
     end
   end
-  --TODO -- FX CONTROLS
 
   -- Choices
   Controls["play_mode_" .. i].Choices = play_mode_keys
   Controls["framing_mode_" .. i].Choices = framing_mode_keys
   Controls["blend_mode_" .. i].Choices = blend_mode_keys
   Controls["transition_mode_" .. i].Choices = transition_mode_keys
+  Controls["fx1_select_" .. i].Choices = fx_keys
+  Controls["fx2_select_" .. i].Choices = fx_keys
 end
 
 updateMediaFolders()

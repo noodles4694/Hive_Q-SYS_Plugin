@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "0.0",
-  BuildVersion = "0.0.0.8",
+  BuildVersion = "0.0.0.9",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -388,18 +388,28 @@ local parameter_list = {
 local fx1_list = {}
 local fx2_list = {}
 
-control_list["FX 1 Select"] = {
-  Name = "fx_1_select_",
+control_list["FX1 Select"] = {
+  Name = "fx1_select_",
   ControlType = "Text",
   Style = "ComboBox",
   PinStyle = "Both",
   UserPin = true
 }
-fx1_list[#fx1_list + 1] = "FX 1 Select"
-
+fx1_list[#fx1_list + 1] = "FX1 Select"
+control_list["FX1 Opacity"] = {
+  Name = "fx1_opacity_",
+  ControlType = "Knob",
+  ControlUnit = "Percent",
+  Style = "Text Field",
+  Min = 0,
+  Max = 100,
+  PinStyle = "Both",
+  UserPin = true
+}
+fx1_list[#fx1_list + 1] = "FX1 Opacity"
 for i = 1, 16 do
-  control_list["FX 1 Param " .. i] = {
-    Name = "fx_1_param_" .. i .. "_",
+  control_list["FX1 Param " .. i] = {
+    Name = "fx1_param_" .. i .. "_",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
@@ -408,20 +418,31 @@ for i = 1, 16 do
     PinStyle = "Both",
     UserPin = true
   }
-  fx1_list[#fx1_list + 1] = "FX 1 Param " .. i
+  fx1_list[#fx1_list + 1] = "FX1 Param " .. i
 end
-control_list["FX 2 Select"] = {
-  Name = "fx_2_select_",
+control_list["FX2 Select"] = {
+  Name = "fx2_select_",
   ControlType = "Text",
   Style = "ComboBox",
   PinStyle = "Both",
   UserPin = true
 }
-fx2_list[#fx2_list + 1] = "FX 2 Select"
+fx2_list[#fx2_list + 1] = "FX2 Select"
+control_list["FX2 Opacity"] = {
+  Name = "fx2_opacity_",
+  ControlType = "Knob",
+  ControlUnit = "Percent",
+  Style = "Text Field",
+  Min = 0,
+  Max = 100,
+  PinStyle = "Both",
+  UserPin = true
+}
+fx2_list[#fx2_list + 1] = "FX2 Opacity"
 
 for i = 1, 16 do
-  control_list["FX 2 Param " .. i] = {
-    Name = "fx_2_param_" .. i .. "_",
+  control_list["FX2 Param " .. i] = {
+    Name = "fx2_param_" .. i .. "_",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
@@ -430,7 +451,7 @@ for i = 1, 16 do
     PinStyle = "Both",
     UserPin = true
   }
-  fx2_list[#fx2_list + 1] = "FX 2 Param " .. i
+  fx2_list[#fx2_list + 1] = "FX2 Param " .. i
 end
 -- Define the color of the plugin object in the design
 function GetColor(props)
@@ -634,7 +655,8 @@ function GetControlLayout(props)
   local CurrentPage = PageNames[props["page_index"].Value]
   local media_item_count = props["Media List Count"].Value
   local column_size = 12
-  local fx_column_size = 6
+  local fx1_column_size = 6
+  local fx2_column_size = 6
   local btn_size = {32, 24}
   local status_groupbox_size = {9 * btn_size[1], 4 * btn_size[2]}
   local player_groupbox_position = {0, 0}
@@ -642,9 +664,13 @@ function GetControlLayout(props)
     (((math.floor((#parameter_list / column_size)) + 1) * 6) + 1) * btn_size[1],
     (column_size + 2) * btn_size[2]
   }
-  local fx_groupbox_size = {
-    (((math.floor((#fx1_list / fx_column_size)) + 1) * 6) + 1) * btn_size[1],
-    (fx_column_size + 2) * btn_size[2]
+  local fx1_groupbox_size = {
+    (((math.floor((#fx1_list / fx1_column_size))) * 6) + 1) * btn_size[1],
+    (fx1_column_size + 2) * btn_size[2]
+  }
+  local fx2_groupbox_size = {
+    (((math.floor((#fx2_list / fx2_column_size))) * 6) + 1) * btn_size[1],
+    (fx2_column_size + 2) * btn_size[2]
   }
   local preview_size = {3 * btn_size[1], (3 * btn_size[1])}
   local media_list_groupbox_size = {3 * preview_size[1], (media_item_count + 1) * preview_size[2]}
@@ -766,7 +792,7 @@ function GetControlLayout(props)
             player_groupbox_position[1],
             player_groupbox_size[2] + 8
           },
-          Size = fx_groupbox_size
+          Size = fx1_groupbox_size
         }
       )
       table.insert(
@@ -780,9 +806,9 @@ function GetControlLayout(props)
           StrokeWidth = 1,
           Position = {
             player_groupbox_position[1],
-            player_groupbox_size[2] + 16 + fx_groupbox_size[2]
+            player_groupbox_size[2] + 16 + fx1_groupbox_size[2]
           },
-          Size = fx_groupbox_size
+          Size = fx2_groupbox_size
         }
       )
       for k, v in pairs(parameter_list) do
@@ -816,8 +842,8 @@ function GetControlLayout(props)
         }
       end
       for k, v in pairs(fx1_list) do
-        local column = math.floor((k - 1) / fx_column_size) + 1
-        local row = k - (column - 1) * fx_column_size
+        local column = math.floor((k - 1) / fx1_column_size) + 1
+        local row = k - (column - 1) * fx1_column_size
         table.insert(
           graphics,
           {
@@ -846,8 +872,8 @@ function GetControlLayout(props)
         }
       end
       for k, v in pairs(fx2_list) do
-        local column = math.floor((k - 1) / fx_column_size) + 1
-        local row = k - (column - 1) * fx_column_size
+        local column = math.floor((k - 1) / fx2_column_size) + 1
+        local row = k - (column - 1) * fx2_column_size
         table.insert(
           graphics,
           {
@@ -860,7 +886,7 @@ function GetControlLayout(props)
             Color = Colors.hive_yellow,
             Position = {
               player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
-              player_groupbox_size[2] + 16 + fx_groupbox_size[2] + (row * btn_size[2])
+              player_groupbox_size[2] + 16 + fx1_groupbox_size[2] + (row * btn_size[2])
             },
             Size = {3 * btn_size[1], btn_size[2]}
           }
@@ -870,7 +896,7 @@ function GetControlLayout(props)
           Style = control_list[v].Style,
           Position = {
             player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
-            player_groupbox_size[2] + 16 + fx_groupbox_size[2] + (row * btn_size[2])
+            player_groupbox_size[2] + 16 + fx1_groupbox_size[2] + (row * btn_size[2])
           },
           Size = {3 * btn_size[1], btn_size[2]}
         }
@@ -1141,895 +1167,93 @@ local blend_mode_values = {
   7
 }
 
-local fx_list = {
-  ["NONE"] = 0,
-  ["OLD TV"] = 1,
-  ["SEPIA"] = 2,
-  ["FEEDBACK"] = 3,
-  ["BLUR"] = 4,
-  ["CRYSTALISE"] = 5,
-  ["FRACTAL SOUP"] = 6,
-  ["RADAR"] = 7,
-  ["PIXELISE"] = 8,
-  ["SOFT EDGE OVAL"] = 9,
-  ["TILE"] = 10,
-  ["INFINITY ZOOM"] = 11,
-  ["DOT GRID"] = 12,
-  ["KALEIDOSCOPE"] = 13,
-  ["MULTI MIRROR"] = 14,
-  ["REBELLE DISTORT"] = 15
+local fx_keys = {
+  "NONE",
+  "OLD TV",
+  "SEPIA",
+  "FEEDBACK",
+  "BLUR",
+  "CRYSTALISE",
+  "FRACTAL SOUP",
+  "RADAR",
+  "PIXELISE",
+  "SOFT EDGE OVAL",
+  "TILE",
+  "INFINITY ZOOM",
+  "DOT GRID",
+  "KALEIDOSCOPE",
+  "MULTI MIRROR",
+  "REBELLE DISTORT",
+  "4 POINT WARP",
+  "HALF TONE",
+  "HALF TONE INV",
+  "HALF TONE COL",
+  "HALF TONE SMP",
+  "SWIRL DISTORT",
+  "GLITCH SPLIT",
+  "BURN MELT NOISE",
+  "SHATTER",
+  "MULTI NOISE",
+  "KALEIDO POP",
+  "PRISM MIRAGE",
+  "BLOCK PRISM",
+  "SQUARE CLOUD",
+  "CIRCLE PARTY",
+  "EQ TUNNEL",
+  "ELECTRO PATTERN",
+  "4 POINT MASK",
+  "8 POINT MASK",
+  "Effect 35",
+  "Effect 36",
+  "Effect 37",
+  "Effect 38",
+  "Effect 39",
+  "Effect 40"
 }
 
-local fXParameters = {
-  fx = {
-    {
-      effectName = "0 - NONE",
-      param = {
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "1 - OLD TV",
-      param = {
-        {paramName = "X POSITION"},
-        {paramName = "Y POSITION"},
-        {paramName = "X SCALE"},
-        {paramName = "Y SCALE"},
-        {paramName = "SATURATION"},
-        {paramName = "CONTRAST"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "2 - SEPIA",
-      param = {
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "3 - FEEDBACK",
-      param = {
-        {paramName = "AMOUNT"},
-        {paramName = "SCALE"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "4 - BLUR",
-      param = {
-        {paramName = "AMOUNT"},
-        {paramName = "QUALITY"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "5 - CRYSTALISE",
-      param = {
-        {paramName = "CRYSTAL SIZE"},
-        {paramName = "SPEED"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "6 - FRACTAL SOUP",
-      param = {
-        {paramName = "HUE"},
-        {paramName = "SATURATION"},
-        {paramName = "BRIGHTNESS"},
-        {paramName = "SPEED"},
-        {paramName = "MODE"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "7 - RADAR",
-      param = {
-        {paramName = "SPEED"},
-        {paramName = "X POSITION"},
-        {paramName = "Y POSITION"},
-        {paramName = "SCALE"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "8 - PIXELISE",
-      param = {
-        {paramName = "PIXELATION"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "9 - SOFT EDGE OVAL",
-      param = {
-        {paramName = "X POSITION"},
-        {paramName = "Y POSITION"},
-        {paramName = "SIZE X"},
-        {paramName = "SIZE Y"},
-        {paramName = "SOFTNESS"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "10 - TILE",
-      param = {
-        {paramName = "HORIZONTAL"},
-        {paramName = "VERTICAL"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "11 - INFINITY ZOOM",
-      param = {
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "12 - DOT GRID",
-      param = {
-        {paramName = "AMOUNT"},
-        {paramName = "DOT SIZE"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "13 - KALEIDOSCOPE",
-      param = {
-        {paramName = "DIVISIONS"},
-        {paramName = "ROTATION"},
-        {paramName = "ZOOM"},
-        {paramName = "X POSITION"},
-        {paramName = "Y POSITION"},
-        {paramName = "IN ANGLE"},
-        {paramName = "ROTATE SPD"},
-        {paramName = "X POS SPD"},
-        {paramName = "Y POS SPD"},
-        {paramName = "IN ANGLE SPD"},
-        {paramName = "X POS QTY"},
-        {paramName = "Y POS QTY"},
-        {paramName = "IN ANGLE QTY"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "14 - MULTI MIRROR",
-      param = {
-        {paramName = "X POSITION"},
-        {paramName = "Y POSITION"},
-        {paramName = "X OFFSET"},
-        {paramName = "Y OFFSET"},
-        {paramName = "X MIRROR"},
-        {paramName = "Y MIRROR"},
-        {paramName = "ROTATE HI"},
-        {paramName = "ROTATE LO"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "15 - REBELLE DISTORT",
-      param = {
-        {paramName = "SCAN LINES"},
-        {paramName = "NOISE"},
-        {paramName = "STATIC"},
-        {paramName = "FUZZ"},
-        {paramName = "RGB"},
-        {paramName = "SCAN OPTION"},
-        {paramName = "JERK"},
-        {paramName = "MOVE"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "16 - 4 POINT WARP",
-      param = {
-        {paramName = "TOP LEFT X"},
-        {paramName = "TOP LEFT Y"},
-        {paramName = "TOP RIGHT X"},
-        {paramName = "TOP RIGHT Y"},
-        {paramName = "BOTTOM RIGHT X"},
-        {paramName = "BOTTOM RIGHT Y"},
-        {paramName = "BOTTOM LEFT X"},
-        {paramName = "BOTTOM LEFT Y"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "17 - HALF TONE",
-      param = {
-        {paramName = "AMOUNT"},
-        {paramName = "ANGLE"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "18 - HALF TONE INV",
-      param = {
-        {paramName = "AMOUNT"},
-        {paramName = "ANGLE"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "19 - HALF TONE COL",
-      param = {
-        {paramName = "AMOUNT"},
-        {paramName = "ANGLE"},
-        {paramName = "OFFSET"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "20 - HALF TONE SMP",
-      param = {
-        {paramName = "AMOUNT"},
-        {paramName = "ANGLE"},
-        {paramName = "OFFSET"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "21 - SWIRL DISTORT",
-      param = {
-        {paramName = "NOISE"},
-        {paramName = "SWIRL"},
-        {paramName = "TONE"},
-        {paramName = "ROTATE SPD"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "22 - GLITCH SPLIT",
-      param = {
-        {paramName = "GLITCH"},
-        {paramName = "SPLIT"},
-        {paramName = "STROBE"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "23 - BURN MELT NOISE",
-      param = {
-        {paramName = "BURN"},
-        {paramName = "MELT"},
-        {paramName = "NOISE"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "24 - SHATTER",
-      param = {
-        {paramName = "CRACK"},
-        {paramName = "SHATTER"},
-        {paramName = "SIZE"},
-        {paramName = "ANIM SPEED"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "25 - MULTI NOISE",
-      param = {
-        {paramName = "NOISE 1"},
-        {paramName = "NOISE 2"},
-        {paramName = "CONTRAST"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "26 - KALEIDO POP",
-      param = {
-        {paramName = "GLOW"},
-        {paramName = "KALEIDOSCOPE"},
-        {paramName = "SPARKLE"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "27 - PRISM MIRAGE",
-      param = {
-        {paramName = "GLOW"},
-        {paramName = "CHROMA"},
-        {paramName = "REFRACT"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "28 - BLOCK PRISM",
-      param = {
-        {paramName = "BLOCK SIZE"},
-        {paramName = "CHROMA"},
-        {paramName = "BLOCK JUMBLE"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "29 - SQUARE CLOUD",
-      param = {
-        {paramName = "SATURATION"},
-        {paramName = "MULTIPLY"},
-        {paramName = "GLOW"},
-        {paramName = "SPEED"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "30 - CIRCLE PARTY",
-      param = {
-        {paramName = "CIRCLE COUNT"},
-        {paramName = "GLOW"},
-        {paramName = "ROT SPEED"},
-        {paramName = "TINT"},
-        {paramName = "CIRCLE SIZE"},
-        {paramName = "RING COUNT"},
-        {paramName = "PHASE"},
-        {paramName = "SPACING"},
-        {paramName = "OFFSET"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "31 - EQ TUNNEL",
-      param = {
-        {paramName = "SPEED"},
-        {paramName = "EQ POINTS"},
-        {paramName = "ROTATE SPEED"},
-        {paramName = "EQ MOTION"},
-        {paramName = "SATURATION"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "32 - ELECTRO PATTERN",
-      param = {
-        {paramName = "SPEED"},
-        {paramName = "ITERATIONS"},
-        {paramName = "ZOOM"},
-        {paramName = "ROTATION SPEED"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "33 - 4 POINT MASK",
-      param = {
-        {paramName = "TOP LEFT X"},
-        {paramName = "TOP LEFT Y"},
-        {paramName = "TOP RIGHT X"},
-        {paramName = "TOP RIGHT Y"},
-        {paramName = "BOTTOM RIGHT X"},
-        {paramName = "BOTTOM RIGHT Y"},
-        {paramName = "BOTTOM LEFT X"},
-        {paramName = "BOTTOM LEFT Y"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "34 - 8 POINT MASK",
-      param = {
-        {paramName = "P1 X"},
-        {paramName = "P1 Y"},
-        {paramName = "P2 X"},
-        {paramName = "P2 Y"},
-        {paramName = "P3 X"},
-        {paramName = "P3 Y"},
-        {paramName = "P4 X"},
-        {paramName = "P4 Y"},
-        {paramName = "P5 X"},
-        {paramName = "P5 Y"},
-        {paramName = "P6 X"},
-        {paramName = "P6 Y"},
-        {paramName = "P7 X"},
-        {paramName = "P7 Y"},
-        {paramName = "P8 X"},
-        {paramName = "P8 Y"}
-      }
-    },
-    {
-      effectName = "35 - Effect 35",
-      param = {
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "36 - Effect 36",
-      param = {
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "37 - Effect 37",
-      param = {
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "38 - Effect 38",
-      param = {
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "39 - Effect 39",
-      param = {
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    },
-    {
-      effectName = "40 - Effect 40",
-      param = {
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"},
-        {paramName = "-"}
-      }
-    }
-  }
+local fx_values = {
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  21,
+  22,
+  23,
+  24,
+  25,
+  26,
+  27,
+  28,
+  29,
+  30,
+  31,
+  32,
+  33,
+  34,
+  35,
+  36,
+  37,
+  38,
+  39,
+  40
 }
-
-local fx_choices = {}
-for k, v in pairs(fx_list) do
-  table.insert(fx_choices, k)
-end
 
 ticker = 1
 poll_parameter_list = {}
@@ -2446,10 +1670,18 @@ function fn_watch_parameters()
       local path = string.format("/LAYER %s/%s/Value", i, parameter)
       watchPatchDouble(path, processDoubleUpdate)
     end
+    for _, parameter in ipairs(fx1_list) do
+      local path = string.format("/LAYER %s/%s/Value", i, parameter:upper())
+      watchPatchDouble(path, processDoubleUpdate)
+    end
+    for _, parameter in ipairs(fx2_list) do
+      local path = string.format("/LAYER %s/%s/Value", i, parameter:upper())
+      watchPatchDouble(path, processDoubleUpdate)
+    end
   end
   -- Watch for value changes in transport control parameters
   for i = 1, layer_count do
-    watchPatchDouble(string.format("/LAYER %s/Transport Control/Media Time/Value", i), processDoubleUpdate)
+    watchPatchDouble(string.format("/LAYER %s/Transport Control/Media Time/Value", i), processTransportUpdate)
   end
 end
 
@@ -2512,6 +1744,25 @@ function processLUTData(path, data)
   end
 end
 
+function processTransportUpdate(path, value)
+  local layer, parameter = path:match("/LAYER (%d+)/(%P+)")
+  if parameter == "Transport Control" then
+    local layer, parameter, sub_parameter = path:match("/LAYER (%d+)/(%P+)/(%P+)")
+    if sub_parameter == "Media Time" then
+      if Controls["file_select_" .. layer].String ~= "" and not seek_timer_list[tonumber(layer)]:IsRunning() then
+        if file_metadata_list[Controls["file_select_" .. layer].String].duration == 0 then
+          Controls["seek_" .. layer].Position = 0
+          Controls["time_elapsed_" .. layer].String = os.date("!%X", 0)
+        else
+          local pos = tonumber(value) / file_metadata_list[Controls["file_select_" .. layer].String].duration
+          Controls["seek_" .. layer].Position = pos
+          Controls["time_elapsed_" .. layer].String = os.date("!%X", math.floor(value))
+        end
+      end
+    end
+  end
+end
+
 function processDoubleUpdate(path, value)
   if path:sub(1, 6) == "/LAYER" then -- Layer parameter response
     local layer, parameter = path:match("/LAYER (%d+)/(%P+)/Value")
@@ -2558,6 +1809,12 @@ function processDoubleUpdate(path, value)
       elseif parameter == "TRANSITION MODE" then
         local key = get_table_key(transition_mode_keys, transition_mode_values, value)
         Controls[control].String = key
+      elseif parameter == "FX1 SELECT" then
+        local key = get_table_key(fx_keys, fx_values, value)
+        Controls[control].String = key
+      elseif parameter == "FX2 SELECT" then
+        local key = get_table_key(fx_keys, fx_values, value)
+        Controls[control].String = key
       elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
         if value >= 0.5 then
           Controls[control].Position = (value - 0.4444444444444444) / 0.5555555555555556
@@ -2579,23 +1836,6 @@ function processDoubleUpdate(path, value)
         Controls[control].Value = (value * 200) - 100
       else -- parameters where data directly proportional to position
         Controls[control].Position = value
-      end
-    else
-      local layer, parameter = path:match("/LAYER (%d+)/(%P+)")
-      if parameter == "Transport Control" then
-        local layer, parameter, sub_parameter = path:match("/LAYER (%d+)/(%P+)/(%P+)")
-        if sub_parameter == "Media Time" then
-          if Controls["file_select_" .. layer].String ~= "" and not seek_timer_list[tonumber(layer)]:IsRunning() then
-            if file_metadata_list[Controls["file_select_" .. layer].String].duration == 0 then
-              Controls["seek_" .. layer].Position = 0
-              Controls["time_elapsed_" .. layer].String = os.date("!%X", 0)
-            else
-              local pos = tonumber(value) / file_metadata_list[Controls["file_select_" .. layer].String].duration
-              Controls["seek_" .. layer].Position = pos
-              Controls["time_elapsed_" .. layer].String = os.date("!%X", math.floor(value))
-            end
-          end
-        end
       end
     end
   end
@@ -2742,7 +1982,7 @@ function cmd_file_select(layer, x) -- 0..65535: File Select
   end
 end
 
-function cmd_folder_select(layer, x) -- 0..65535: File Select
+function cmd_folder_select(layer, x) -- 0..65535: Folder Select
   fn_send(layer, "FOLDER SELECT", x)
 end
 
@@ -2778,7 +2018,7 @@ function cmd_play_speed(layer, x)
   fn_send(layer, "PLAY SPEED", x)
 end
 
-function cmd_movement_speed(layer, x) -- reserved for future use
+function cmd_movement_speed(layer, x)
   fn_send(layer, "MOVEMENT SPEED", x)
 end
 
@@ -2866,7 +2106,7 @@ function cmd_transition_mode(layer, x)
   fn_send(layer, "TRANSITION MODE", x)
 end
 
-for i = 1, 2 do -- NO IDEA IF THIS WORKS! PLEASE TEST!!
+for i = 1, 2 do
   _G["cmd_fx" .. i .. "_select"] = function(layer, x)
     fn_send(layer, "FX" .. i .. " SELECT", x)
   end
@@ -2874,7 +2114,7 @@ for i = 1, 2 do -- NO IDEA IF THIS WORKS! PLEASE TEST!!
     fn_send(layer, "FX" .. i .. " OPACITY", x)
   end
   for p = 1, 16 do
-    _G["cmd_fx" .. i .. "_parameter_" .. p] = function(layer, x)
+    _G["cmd_fx" .. i .. "_param_" .. p] = function(layer, x)
       fn_send(layer, "FX" .. i .. " PARAM " .. p, x)
     end
   end
@@ -2927,6 +2167,14 @@ for i = 1, layer_count do
   Controls["blend_mode_" .. i].EventHandler = function()
     local val = get_table_value(blend_mode_keys, blend_mode_values, Controls["blend_mode_" .. i].String)
     cmd_blend_mode(i, val)
+  end
+  Controls["fx1_select_" .. i].EventHandler = function()
+    local val = get_table_value(fx_keys, fx_values, Controls["fx1_select_" .. i].String)
+    cmd_fx1_select(i, val)
+  end
+  Controls["fx2_select_" .. i].EventHandler = function()
+    local val = get_table_value(fx_keys, fx_values, Controls["fx2_select_" .. i].String)
+    cmd_fx2_select(i, val)
   end
   Controls["lut_" .. i].EventHandler = function()
     cmd_lut_select(i, lut_list[Controls["lut_" .. i].String])
@@ -3017,6 +2265,20 @@ for i = 1, layer_count do
     local val = get_table_value(transition_mode_keys, transition_mode_values, Controls["transition_mode_" .. i].String)
     cmd_transition_mode(i, val)
   end
+  Controls["fx1_opacity_" .. i].EventHandler = function()
+    _G["cmd_fx1_opacity"](i, Controls["fx1_opacity_" .. i].Position)
+  end
+  Controls["fx2_opacity_" .. i].EventHandler = function()
+    _G["cmd_fx2_opacity"](i, Controls["fx2_opacity_" .. i].Position)
+  end
+  for p = 1, 16 do
+    Controls[string.format("fx1_param_%s_%s", p, i)].EventHandler = function()
+      _G["cmd_fx1_param_" .. p](i, Controls[string.format("fx1_param_%s_%s", p, i)].Position)
+    end
+    Controls[string.format("fx2_param_%s_%s", p, i)].EventHandler = function()
+      _G["cmd_fx2_param_" .. p](i, Controls[string.format("fx2_param_%s_%s", p, i)].Position)
+    end
+  end
 
   for p = 1, media_item_count do
     Controls[string.format("media_thumbnail_%s_layer_%s", p, i)].EventHandler = function()
@@ -3025,13 +2287,14 @@ for i = 1, layer_count do
       end
     end
   end
-  --TODO -- FX CONTROLS
 
   -- Choices
   Controls["play_mode_" .. i].Choices = play_mode_keys
   Controls["framing_mode_" .. i].Choices = framing_mode_keys
   Controls["blend_mode_" .. i].Choices = blend_mode_keys
   Controls["transition_mode_" .. i].Choices = transition_mode_keys
+  Controls["fx1_select_" .. i].Choices = fx_keys
+  Controls["fx2_select_" .. i].Choices = fx_keys
 end
 
 updateMediaFolders()
