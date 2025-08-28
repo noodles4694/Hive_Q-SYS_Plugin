@@ -5,6 +5,7 @@ local column_size = 12
 local fx1_column_size = 6
 local fx2_column_size = 6
 local btn_size = {32, 24}
+local btn_gap = {4, 4}
 local status_groupbox_size = {12 * btn_size[1], 10 * btn_size[2]}
 local player_groupbox_position = {0, 0}
 local player_groupbox_size = {
@@ -50,13 +51,13 @@ if CurrentPage then
       graphics,
       {
         Type = "Text",
-        Text = "Online:",
+        Text = "ONLINE:",
         Font = "Roboto",
         FontSize = 12,
-        FontStyle = "Bold",
+        FontStyle = "Regular",
         HTextAlign = "Right",
         Color = Colors.control_label,
-        Position = {0, (0.5 * btn_size[2])},
+        Position = {0, (0.5 * btn_size[2]) + (0 * btn_gap[2])},
         Size = {3 * btn_size[1], btn_size[2]}
       }
     )
@@ -64,13 +65,13 @@ if CurrentPage then
       graphics,
       {
         Type = "Text",
-        Text = "IP Address:",
+        Text = "IP ADDRESS:",
         Font = "Roboto",
         FontSize = 12,
-        FontStyle = "Bold",
+        FontStyle = "Regular",
         HTextAlign = "Right",
         Color = Colors.control_label,
-        Position = {0, (1.5 * btn_size[2])},
+        Position = {0, (1.5 * btn_size[2]) + (1 * btn_gap[2])},
         Size = {3 * btn_size[1], btn_size[2]}
       }
     )
@@ -78,13 +79,13 @@ if CurrentPage then
       graphics,
       {
         Type = "Text",
-        Text = "Device Name:",
+        Text = "DEVICE NAME:",
         Font = "Roboto",
         FontSize = 12,
-        FontStyle = "Bold",
+        FontStyle = "Regular",
         HTextAlign = "Right",
         Color = Colors.control_label,
-        Position = {0, (2.5 * btn_size[2])},
+        Position = {0, (2.5 * btn_size[2]) + (2 * btn_gap[2])},
         Size = {3 * btn_size[1], btn_size[2]}
       }
     )
@@ -92,13 +93,13 @@ if CurrentPage then
       graphics,
       {
         Type = "Text",
-        Text = "Version:",
+        Text = "VERSION:",
         Font = "Roboto",
         FontSize = 12,
-        FontStyle = "Bold",
+        FontStyle = "Regular",
         HTextAlign = "Right",
         Color = Colors.control_label,
-        Position = {0, (3.5 * btn_size[2])},
+        Position = {0, (3.5 * btn_size[2]) + (3 * btn_gap[2])},
         Size = {3 * btn_size[1], btn_size[2]}
       }
     )
@@ -106,13 +107,13 @@ if CurrentPage then
       graphics,
       {
         Type = "Text",
-        Text = "Status:",
+        Text = "STATUS:",
         Font = "Roboto",
         FontSize = 12,
-        FontStyle = "Bold",
+        FontStyle = "Regular",
         HTextAlign = "Right",
         Color = Colors.control_label,
-        Position = {0, (4.5 * btn_size[2])},
+        Position = {0, (4.5 * btn_size[2]) + (4 * btn_gap[2])},
         Size = {3 * btn_size[1], btn_size[2]}
       }
     )
@@ -120,13 +121,13 @@ if CurrentPage then
       graphics,
       {
         Type = "Text",
-        Text = "Output Res:",
+        Text = "OUTPUT RES:",
         Font = "Roboto",
         FontSize = 12,
-        FontStyle = "Bold",
+        FontStyle = "Regular",
         HTextAlign = "Right",
         Color = Colors.control_label,
-        Position = {0, (5.5 * btn_size[2])},
+        Position = {0, (5.5 * btn_size[2]) + (5 * btn_gap[2])},
         Size = {3 * btn_size[1], btn_size[2]}
       }
     )
@@ -134,13 +135,13 @@ if CurrentPage then
       graphics,
       {
         Type = "Text",
-        Text = "Output Refresh:",
+        Text = "OUTPUT Hz:",
         Font = "Roboto",
         FontSize = 12,
-        FontStyle = "Bold",
+        FontStyle = "Regular",
         HTextAlign = "Right",
         Color = Colors.control_label,
-        Position = {0, (6.5 * btn_size[2])},
+        Position = {0, (6.5 * btn_size[2]) + (6 * btn_gap[2])},
         Size = {3 * btn_size[1], btn_size[2]}
       }
     )
@@ -148,43 +149,72 @@ if CurrentPage then
       PrettyName = "System~Online",
       Style = "Indicator",
       Color = {0, 255, 0},
-      Position = {3 * btn_size[1], (0.5 * btn_size[2])},
+      Position = {3 * btn_size[1], (0.5 * btn_size[2]) + (0 * btn_gap[2])},
       Size = {btn_size[2], btn_size[2]}
     }
     layout["ip_address"] = {
       PrettyName = "System~IP Address",
       Style = "TextBox",
-      Position = {3 * btn_size[1], (1.5 * btn_size[2])},
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {3 * btn_size[1], (1.5 * btn_size[2]) + (1 * btn_gap[2])},
       Size = {3 * btn_size[1], btn_size[2]}
     }
     layout["device_name"] = {
       PrettyName = "System~Device Name",
       Style = "TextBox",
-      Position = {3 * btn_size[1], (2.5 * btn_size[2])},
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      StrokeWidth = 1,
+      Position = {3 * btn_size[1], (2.5 * btn_size[2]) + (2 * btn_gap[2])},
       Size = {3 * btn_size[1], btn_size[2]}
     }
     layout["version"] = {
       PrettyName = "System~Version",
       Style = "TextBox",
-      Position = {3 * btn_size[1], (3.5 * btn_size[2])},
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {3 * btn_size[1], (3.5 * btn_size[2]) + (3 * btn_gap[2])},
       Size = {3 * btn_size[1], btn_size[2]}
     }
     layout["status"] = {
       PrettyName = "System~Status",
       Style = "TextBox",
-      Position = {3 * btn_size[1], (4.5 * btn_size[2])},
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {3 * btn_size[1], (4.5 * btn_size[2]) + (4 * btn_gap[2])},
       Size = {3 * btn_size[1], btn_size[2]}
     }
     layout["output_resolution"] = {
       PrettyName = "System~Output Resolution",
       Style = "TextBox",
-      Position = {3 * btn_size[1], (5.5 * btn_size[2])},
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {3 * btn_size[1], (5.5 * btn_size[2]) + (5 * btn_gap[2])},
       Size = {3 * btn_size[1], btn_size[2]}
     }
     layout["output_framerate"] = {
       PrettyName = "System~Output Framerate",
       Style = "TextBox",
-      Position = {3 * btn_size[1], (6.5 * btn_size[2])},
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {3 * btn_size[1], (6.5 * btn_size[2]) + (6 * btn_gap[2])},
       Size = {3 * btn_size[1], btn_size[2]}
     }
   elseif CurrentPage:sub(1, 6) == "Layer " then
@@ -393,7 +423,5 @@ if CurrentPage then
         }
       end
     end
-  --elseif string.find(CurrentPage, "Layer (%d+) Parameters") then
-  --i = string.match(CurrentPage, "Layer (%d+) Parameters")
   end
 end

@@ -3,13 +3,15 @@ local max_media_items = 120
 
 local Colors = {
   hive_yellow = {255, 215, 0},
-  hive_grey = {56, 56, 59},
+  hive_grey = {18, 22, 26},
   White = {255, 255, 255},
   Black = {0, 0, 0},
   Red = {255, 0, 0},
   Green = {0, 255, 0},
   transparent = {0, 0, 0, 0},
-  control_label = {192, 192, 192}
+  control_label = {170, 170, 170},
+  control_background = {18, 22, 26},
+  control_text = {170, 170, 170}
 }
 
 local control_list = {
