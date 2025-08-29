@@ -79,6 +79,72 @@ table.insert(
 table.insert(
   ctrls,
   {
+    Name = "netmask",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "serial",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "bee_type",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "file_count",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "free_space",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "cpu_power",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
     Name = "thumbnail",
     ControlType = "Button",
     ButtonType = "Momentary",

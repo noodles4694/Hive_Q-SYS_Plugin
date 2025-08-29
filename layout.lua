@@ -6,7 +6,7 @@ local fx1_column_size = 6
 local fx2_column_size = 6
 local btn_size = {32, 24}
 local btn_gap = {4, 4}
-local status_groupbox_size = {12 * btn_size[1], 10 * btn_size[2]}
+local status_groupbox_size = {12.5 * btn_size[1], 10 * btn_size[2]}
 local player_groupbox_position = {0, 0}
 local player_groupbox_size = {
   (((math.floor((#parameter_list / column_size)) + 1) * 6) + 1) * btn_size[1],
@@ -148,6 +148,90 @@ if CurrentPage then
         Size = {3 * btn_size[1], btn_size[2]}
       }
     )
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "NETMASK:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Regular",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {6 * btn_size[1], (1.5 * btn_size[2]) + (1 * btn_gap[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "SERIAL NO:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Regular",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {6 * btn_size[1], (2.5 * btn_size[2]) + (2 * btn_gap[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "BEE TYPE:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Regular",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {6 * btn_size[1], (3.5 * btn_size[2]) + (3 * btn_gap[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "FILE COUNT:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Regular",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {6 * btn_size[1], (4.5 * btn_size[2]) + (4 * btn_gap[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "FREE SPACE:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Regular",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {6 * btn_size[1], (5.5 * btn_size[2]) + (5 * btn_gap[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "CPU POWER:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Regular",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {6 * btn_size[1], (6.5 * btn_size[2]) + (6 * btn_gap[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
     layout["online"] = {
       PrettyName = "System~Online",
       Style = "Indicator",
@@ -218,6 +302,72 @@ if CurrentPage then
       FontSize = 12,
       StrokeWidth = 1,
       Position = {3 * btn_size[1], (6.5 * btn_size[2]) + (6 * btn_gap[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
+    }
+    layout["netmask"] = {
+      PrettyName = "System~NetMask",
+      Style = "TextBox",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {9 * btn_size[1], (1.5 * btn_size[2]) + (1 * btn_gap[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
+    }
+    layout["serial"] = {
+      PrettyName = "System~Serial Number",
+      Style = "TextBox",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {9 * btn_size[1], (2.5 * btn_size[2]) + (2 * btn_gap[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
+    }
+    layout["bee_type"] = {
+      PrettyName = "System~Bee Type",
+      Style = "TextBox",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {9 * btn_size[1], (3.5 * btn_size[2]) + (3 * btn_gap[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
+    }
+    layout["file_count"] = {
+      PrettyName = "System~Media File Count",
+      Style = "TextBox",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {9 * btn_size[1], (4.5 * btn_size[2]) + (4 * btn_gap[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
+    }
+    layout["free_space"] = {
+      PrettyName = "System~Free Storage Space",
+      Style = "TextBox",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {9 * btn_size[1], (5.5 * btn_size[2]) + (5 * btn_gap[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
+    }
+    layout["cpu_power"] = {
+      PrettyName = "System~CPU Power",
+      Style = "TextBox",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {9 * btn_size[1], (6.5 * btn_size[2]) + (6 * btn_gap[2])},
       Size = {3 * btn_size[1], btn_size[2]}
     }
   elseif CurrentPage:sub(1, 6) == "Layer " then

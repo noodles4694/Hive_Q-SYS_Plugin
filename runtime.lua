@@ -273,9 +273,15 @@ function updateInfo()
           if device then
             Controls.device_name.String = device.deviceName
             Controls.ip_address.String = device.ipAddress
+            Controls.netmask.String = device.netMask
             Controls.status.String = device.status
             Controls.output_framerate.String = device.rate
             Controls.output_resolution.String = string.format("%s x %s", device.resX, device.resY)
+            Controls.serial.String = device.serial
+            Controls.bee_type.String = (device.beeType == 1) and "Queen" or "Worker"
+            Controls.file_count.String = device.nFiles
+            Controls.cpu_power.String = device.power
+            Controls.free_space.String = string.format("%.2f GB", tonumber(device.space) / (1024 * 1024 * 1024))
           end
         end
       end
