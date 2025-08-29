@@ -311,7 +311,7 @@ function get_file_thumbnail(index, filename)
             DrawChrome = true,
             HorizontalAlignment = "Center",
             Legend = "",
-            Padding = 0,
+            Padding = -12,
             Margin = 0,
             IconData = Qlib.base64_enc(data)
           }

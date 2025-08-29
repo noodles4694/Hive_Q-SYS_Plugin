@@ -20,8 +20,11 @@ local fx2_groupbox_size = {
   (((math.floor((#fx2_list / fx2_column_size))) * 6) + 1) * btn_size[1],
   (fx2_column_size + 2) * btn_size[2]
 }
-local preview_size = {3 * btn_size[1], (3 * btn_size[1])}
-local media_list_groupbox_size = {3 * preview_size[1], (media_item_count + 1) * preview_size[2]}
+local preview_size = {2.4 * btn_size[1], (1.35 * btn_size[1])}
+local media_list_groupbox_size = {
+  (2 * preview_size[1]) + 12 + (3 * btn_size[1]),
+  ((media_item_count + 1) * preview_size[2]) + 8
+}
 
 if CurrentPage then
   if CurrentPage == "Info" then
@@ -278,9 +281,9 @@ if CurrentPage then
           Text = v .. ":",
           Font = "Roboto",
           FontSize = 12,
-          FontStyle = "Bold",
+          FontStyle = "Regular",
           HTextAlign = "Right",
-          Color = Colors.hive_yellow,
+          Color = Colors.control_label,
           Position = {
             player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
             player_groupbox_position[2] + (row * btn_size[2])
@@ -291,6 +294,11 @@ if CurrentPage then
       layout[control_list[v].Name .. i] = {
         PrettyName = "Layer " .. i .. "~" .. v,
         Style = control_list[v].Style,
+        Color = Colors.control_background,
+        TextColor = Colors.control_text,
+        StrokeColor = Colors.control_text,
+        FontSize = (v == "File Select") and 8 or 12,
+        StrokeWidth = 1,
         Position = {
           player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
           player_groupbox_position[2] + (row * btn_size[2])
@@ -308,9 +316,9 @@ if CurrentPage then
           Text = v .. ":",
           Font = "Roboto",
           FontSize = 12,
-          FontStyle = "Bold",
+          FontStyle = "Regular",
           HTextAlign = "Right",
-          Color = Colors.hive_yellow,
+          Color = Colors.control_label,
           Position = {
             player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
             player_groupbox_size[2] + 8 + (row * btn_size[2])
@@ -321,6 +329,11 @@ if CurrentPage then
       layout[control_list[v].Name .. i] = {
         PrettyName = "Layer " .. i .. "~" .. v,
         Style = control_list[v].Style,
+        Color = Colors.control_background,
+        TextColor = Colors.control_text,
+        StrokeColor = Colors.control_text,
+        FontSize = 12,
+        StrokeWidth = 1,
         Position = {
           player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
           player_groupbox_size[2] + 8 + (row * btn_size[2])
@@ -338,9 +351,9 @@ if CurrentPage then
           Text = v .. ":",
           Font = "Roboto",
           FontSize = 12,
-          FontStyle = "Bold",
+          FontStyle = "Regular",
           HTextAlign = "Right",
-          Color = Colors.hive_yellow,
+          Color = Colors.control_label,
           Position = {
             player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
             player_groupbox_size[2] + 16 + fx1_groupbox_size[2] + (row * btn_size[2])
@@ -351,6 +364,11 @@ if CurrentPage then
       layout[control_list[v].Name .. i] = {
         PrettyName = "Layer " .. i .. "~" .. v,
         Style = control_list[v].Style,
+        Color = Colors.control_background,
+        TextColor = Colors.control_text,
+        StrokeColor = Colors.control_text,
+        FontSize = 12,
+        StrokeWidth = 1,
         Position = {
           player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
           player_groupbox_size[2] + 16 + fx1_groupbox_size[2] + (row * btn_size[2])
@@ -379,11 +397,11 @@ if CurrentPage then
         Text = "File Name",
         Font = "Roboto",
         FontSize = 12,
-        FontStyle = "Bold",
+        FontStyle = "Regular",
         HTextAlign = "Right",
-        Color = Colors.hive_yellow,
+        Color = Colors.control_label,
         Position = {0, (1 * btn_size[2])},
-        Size = {3 * btn_size[1], btn_size[2]}
+        Size = {2 * btn_size[1], btn_size[2]}
       }
     )
 
@@ -395,30 +413,42 @@ if CurrentPage then
           Text = string.format("Layer %s\nClip Select", i),
           Font = "Roboto",
           FontSize = 12,
-          FontStyle = "Bold",
+          FontStyle = "Regular",
           HTextAlign = "Centre",
-          Color = Colors.hive_yellow,
-          Position = {i * 3 * btn_size[1], (1 * btn_size[2])},
-          Size = {3 * btn_size[1], btn_size[2]}
+          Color = Colors.control_label,
+          Position = {((i - 1) * preview_size[1]) + (3 * btn_size[1]) + 8, 8},
+          Size = preview_size
         }
       )
       for p = 1, media_item_count do
         layout[string.format("media_name_%s_layer_%s", p, i)] = {
           PrettyName = string.format("Layer %s~Media List~%s~Name", i, p),
           Style = "TextBox",
+          Color = Colors.control_background,
+          TextColor = Colors.control_text,
+          HTextAlign = "Right",
+          VTextAlign = "Centre",
+          FontSize = 8,
+          WordWrap = true,
+          StrokeWidth = 0,
           Position = {
-            0 * btn_size[1],
-            (2 * btn_size[2]) + ((p - 1) * preview_size[2]) + (preview_size[2] / 2) - (btn_size[2] / 2)
+            4,
+            (2 * btn_size[2]) + ((p - 1) * preview_size[2])
           },
-          Size = {3 * btn_size[1], btn_size[2]}
+          Size = {3 * btn_size[1], preview_size[2]}
         }
+
         layout[string.format("media_thumbnail_%s_layer_%s", p, i)] = {
           PrettyName = string.format("Layer %s~Media List~%s~Select", i, p),
           UnlinkOffColor = true,
           OffColor = Colors.transparent,
-          Color = Colors.hive_yellow,
-          StrokeColor = Colors.hive_yellow,
-          Position = {i * 3 * btn_size[1], (2 * btn_size[2]) + ((p - 1) * preview_size[2])},
+          Color = Colors.Red,
+          StrokeColor = Colors.control_text,
+          ButtonVisualStyle = "Flat",
+          Position = {
+            ((i - 1) * preview_size[1]) + (3 * btn_size[1]) + 8,
+            (2 * btn_size[2]) + ((p - 1) * preview_size[2])
+          },
           Size = preview_size
         }
       end
