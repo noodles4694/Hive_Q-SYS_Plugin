@@ -27,7 +27,7 @@ local media_list_groupbox_size = {
 }
 
 if CurrentPage then
-  if CurrentPage == "Info" then
+  if CurrentPage == "Status" then
     table.insert(
       graphics,
       {

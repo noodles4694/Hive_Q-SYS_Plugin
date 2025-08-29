@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "0.0",
-  BuildVersion = "0.0.0.148",
+  BuildVersion = "0.0.0.149",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -473,7 +473,7 @@ end
 -- Optional function used if plugin has multiple pages
 PageNames = {}
 function CreatePages()
-  PageNames = {"Info"}
+  PageNames = {"Status"}
   for i = 1, layer_count do
     table.insert(PageNames, "Layer " .. i)
   end
@@ -830,7 +830,7 @@ function GetControlLayout(props)
   }
   
   if CurrentPage then
-    if CurrentPage == "Info" then
+    if CurrentPage == "Status" then
       table.insert(
         graphics,
         {

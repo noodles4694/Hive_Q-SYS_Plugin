@@ -18,7 +18,7 @@ end
 -- Optional function used if plugin has multiple pages
 PageNames = {}
 function CreatePages()
-  PageNames = {"Info"}
+  PageNames = {"Status"}
   for i = 1, layer_count do
     table.insert(PageNames, "Layer " .. i)
   end
