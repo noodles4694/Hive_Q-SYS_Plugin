@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "0.0",
-  BuildVersion = "0.0.0.117",
+  BuildVersion = "0.0.0.133",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -641,6 +641,28 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
+      Name = "engine_fps",
+      ControlType = "Indicator",
+      IndicatorType = "Text",
+      PinStyle = "Output",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "activity",
+      ControlType = "Indicator",
+      IndicatorType = "Text",
+      PinStyle = "Output",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
       Name = "netmask",
       ControlType = "Indicator",
       IndicatorType = "Text",
@@ -697,6 +719,17 @@ function GetControls(props)
     ctrls,
     {
       Name = "cpu_power",
+      ControlType = "Indicator",
+      IndicatorType = "Text",
+      PinStyle = "Output",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "sync_status",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -771,7 +804,7 @@ function GetControlLayout(props)
   local fx2_column_size = 6
   local btn_size = {32, 24}
   local btn_gap = {4, 4}
-  local status_groupbox_size = {12.5 * btn_size[1], 10 * btn_size[2]}
+  local status_groupbox_size = {12.5 * btn_size[1], 11 * btn_size[2]}
   local player_groupbox_position = {0, 0}
   local player_groupbox_size = {
     (((math.floor((#parameter_list / column_size)) + 1) * 6) + 1) * btn_size[1],
@@ -917,6 +950,34 @@ function GetControlLayout(props)
         graphics,
         {
           Type = "Text",
+          Text = "ENGINE FPS:",
+          Font = "Roboto",
+          FontSize = 12,
+          FontStyle = "Regular",
+          HTextAlign = "Right",
+          Color = Colors.control_label,
+          Position = {0, (7.5 * btn_size[2]) + (7 * btn_gap[2])},
+          Size = {3 * btn_size[1], btn_size[2]}
+        }
+      )
+      table.insert(
+        graphics,
+        {
+          Type = "Text",
+          Text = "ACTIVITY:",
+          Font = "Roboto",
+          FontSize = 12,
+          FontStyle = "Regular",
+          HTextAlign = "Right",
+          Color = Colors.control_label,
+          Position = {0, (8.5 * btn_size[2]) + (8 * btn_gap[2])},
+          Size = {3 * btn_size[1], btn_size[2]}
+        }
+      )
+      table.insert(
+        graphics,
+        {
+          Type = "Text",
           Text = "NETMASK:",
           Font = "Roboto",
           FontSize = 12,
@@ -997,6 +1058,20 @@ function GetControlLayout(props)
           Size = {3 * btn_size[1], btn_size[2]}
         }
       )
+      table.insert(
+        graphics,
+        {
+          Type = "Text",
+          Text = "SYNC STATUS:",
+          Font = "Roboto",
+          FontSize = 12,
+          FontStyle = "Regular",
+          HTextAlign = "Right",
+          Color = Colors.control_label,
+          Position = {6 * btn_size[1], (7.5 * btn_size[2]) + (7 * btn_gap[2])},
+          Size = {3 * btn_size[1], btn_size[2]}
+        }
+      )
       layout["online"] = {
         PrettyName = "System~Online",
         Style = "Indicator",
@@ -1069,6 +1144,28 @@ function GetControlLayout(props)
         Position = {3 * btn_size[1], (6.5 * btn_size[2]) + (6 * btn_gap[2])},
         Size = {3 * btn_size[1], btn_size[2]}
       }
+      layout["engine_fps"] = {
+        PrettyName = "System~Engine FPS",
+        Style = "TextBox",
+        Color = Colors.control_background,
+        TextColor = Colors.control_text,
+        StrokeColor = Colors.control_text,
+        FontSize = 12,
+        StrokeWidth = 1,
+        Position = {3 * btn_size[1], (7.5 * btn_size[2]) + (7 * btn_gap[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+      layout["activity"] = {
+        PrettyName = "System~Engine FPS",
+        Style = "TextBox",
+        Color = Colors.control_background,
+        TextColor = Colors.hive_yellow,
+        StrokeColor = Colors.control_text,
+        FontSize = 8,
+        StrokeWidth = 1,
+        Position = {3 * btn_size[1], (8.5 * btn_size[2]) + (8 * btn_gap[2])},
+        Size = {9 * btn_size[1], btn_size[2]}
+      }
       layout["netmask"] = {
         PrettyName = "System~NetMask",
         Style = "TextBox",
@@ -1133,6 +1230,17 @@ function GetControlLayout(props)
         FontSize = 12,
         StrokeWidth = 1,
         Position = {9 * btn_size[1], (6.5 * btn_size[2]) + (6 * btn_gap[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+      layout["sync_status"] = {
+        PrettyName = "System~Beesync Status",
+        Style = "TextBox",
+        Color = Colors.control_background,
+        TextColor = Colors.control_text,
+        StrokeColor = Colors.control_text,
+        FontSize = 12,
+        StrokeWidth = 1,
+        Position = {9 * btn_size[1], (7.5 * btn_size[2]) + (7 * btn_gap[2])},
         Size = {3 * btn_size[1], btn_size[2]}
       }
     elseif CurrentPage:sub(1, 6) == "Layer " then
@@ -2065,6 +2173,14 @@ function fn_watch_parameters()
   -- get the LUT options and update controls
   -- set the RAW mode so we can parse the raw data manually
   getPatchJSON("/LUT Colour Modes", processLUTData, true)
+
+  watchPatchString(
+    "/Status/Text",
+    function(path, value)
+      Controls.activity.String = value
+    end
+  )
+
   -- Watch for value changes in layer parameters
   for i = 1, layer_count do
     for _, parameter in ipairs(poll_parameter_list) do
@@ -2080,10 +2196,39 @@ function fn_watch_parameters()
       watchPatchDouble(path, processDoubleUpdate)
     end
   end
+
   -- Watch for value changes in transport control parameters
   for i = 1, layer_count do
     watchPatchDouble(string.format("/LAYER %s/Transport Control/Media Time/Value", i), processTransportUpdate)
   end
+end
+
+function pollInfo()
+  getPatchString(
+    "/Mapping/Render Resolution/FPS",
+    function(path, value)
+      Controls.engine_fps.String = value
+    end
+  )
+  updateSyncStatus()
+  Timer.CallAfter(pollInfo, 1)
+end
+
+function updateSyncStatus()
+  local url = string.format("http://%s/api/getBeeSyncStatus", ip_address)
+  HttpClient.Post {
+    Url = url,
+    Data = rapidjson.encode({}), -- This can be anything
+    Headers = {
+      ["Content-Type"] = "application/json"
+    },
+    EventHandler = function(tbl, code, data, error, headers)
+      if code == 200 then
+        local info = rapidjson.decode(data)
+        Controls.sync_status.String = info.status
+      end
+    end
+  }
 end
 
 function fn_send(layer, cmd, val)
@@ -2244,8 +2389,7 @@ end
 
 function processJSONUpdate(path, value)
   if path == "/System Settings" then
-    -- Controls.ip_address.String = value.ipAddress
-    -- Controls.device_name.String = value.deviceName
+    updateInfo()
   elseif path == "/Media List" then
     local file_choice_list = {}
     for _, file in ipairs(value.files) do
@@ -2262,6 +2406,8 @@ function processJSONUpdate(path, value)
     for i = 1, layer_count do
       Controls["file_select_" .. i].Choices = file_choice_list
     end
+    -- let's update the system info as storage and num files might have changed
+    updateInfo()
   elseif path == "/Output Mapping" then
   elseif path == "/Play List" then
   elseif path == "/Timecode Cue List" then
@@ -2280,7 +2426,6 @@ function updateInfo()
     },
     EventHandler = function(tbl, code, data, error, headers)
       if code == 200 then
-        print("data: " .. data)
         local info = rapidjson.decode(data)
         Controls.version.String = info.hiveVersion
 
@@ -2713,6 +2858,7 @@ updateMediaFolders()
 if isIpAddress(ip_address) then
   print("Connecting to Hive player at " .. ip_address)
   Connect(ip_address, fn_hive_connect_Status)
+  pollInfo()
 else
   print("Invalid IP address: " .. ip_address)
 end

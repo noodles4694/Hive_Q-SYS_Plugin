@@ -43,6 +43,14 @@ function fn_watch_parameters()
   -- get the LUT options and update controls
   -- set the RAW mode so we can parse the raw data manually
   getPatchJSON("/LUT Colour Modes", processLUTData, true)
+
+  watchPatchString(
+    "/Status/Text",
+    function(path, value)
+      Controls.activity.String = value
+    end
+  )
+
   -- Watch for value changes in layer parameters
   for i = 1, layer_count do
     for _, parameter in ipairs(poll_parameter_list) do
@@ -58,10 +66,39 @@ function fn_watch_parameters()
       watchPatchDouble(path, processDoubleUpdate)
     end
   end
+
   -- Watch for value changes in transport control parameters
   for i = 1, layer_count do
     watchPatchDouble(string.format("/LAYER %s/Transport Control/Media Time/Value", i), processTransportUpdate)
   end
+end
+
+function pollInfo()
+  getPatchString(
+    "/Mapping/Render Resolution/FPS",
+    function(path, value)
+      Controls.engine_fps.String = value
+    end
+  )
+  updateSyncStatus()
+  Timer.CallAfter(pollInfo, 1)
+end
+
+function updateSyncStatus()
+  local url = string.format("http://%s/api/getBeeSyncStatus", ip_address)
+  HttpClient.Post {
+    Url = url,
+    Data = rapidjson.encode({}), -- This can be anything
+    Headers = {
+      ["Content-Type"] = "application/json"
+    },
+    EventHandler = function(tbl, code, data, error, headers)
+      if code == 200 then
+        local info = rapidjson.decode(data)
+        Controls.sync_status.String = info.status
+      end
+    end
+  }
 end
 
 function fn_send(layer, cmd, val)
@@ -222,8 +259,7 @@ end
 
 function processJSONUpdate(path, value)
   if path == "/System Settings" then
-    -- Controls.ip_address.String = value.ipAddress
-    -- Controls.device_name.String = value.deviceName
+    updateInfo()
   elseif path == "/Media List" then
     local file_choice_list = {}
     for _, file in ipairs(value.files) do
@@ -240,6 +276,8 @@ function processJSONUpdate(path, value)
     for i = 1, layer_count do
       Controls["file_select_" .. i].Choices = file_choice_list
     end
+    -- let's update the system info as storage and num files might have changed
+    updateInfo()
   elseif path == "/Output Mapping" then
   elseif path == "/Play List" then
   elseif path == "/Timecode Cue List" then
@@ -258,7 +296,6 @@ function updateInfo()
     },
     EventHandler = function(tbl, code, data, error, headers)
       if code == 200 then
-        print("data: " .. data)
         local info = rapidjson.decode(data)
         Controls.version.String = info.hiveVersion
 
@@ -691,6 +728,7 @@ updateMediaFolders()
 if isIpAddress(ip_address) then
   print("Connecting to Hive player at " .. ip_address)
   Connect(ip_address, fn_hive_connect_Status)
+  pollInfo()
 else
   print("Invalid IP address: " .. ip_address)
 end

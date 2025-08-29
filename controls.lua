@@ -79,6 +79,28 @@ table.insert(
 table.insert(
   ctrls,
   {
+    Name = "engine_fps",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "activity",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
     Name = "netmask",
     ControlType = "Indicator",
     IndicatorType = "Text",
@@ -135,6 +157,17 @@ table.insert(
   ctrls,
   {
     Name = "cpu_power",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "sync_status",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",

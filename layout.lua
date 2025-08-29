@@ -6,7 +6,7 @@ local fx1_column_size = 6
 local fx2_column_size = 6
 local btn_size = {32, 24}
 local btn_gap = {4, 4}
-local status_groupbox_size = {12.5 * btn_size[1], 10 * btn_size[2]}
+local status_groupbox_size = {12.5 * btn_size[1], 11 * btn_size[2]}
 local player_groupbox_position = {0, 0}
 local player_groupbox_size = {
   (((math.floor((#parameter_list / column_size)) + 1) * 6) + 1) * btn_size[1],
@@ -152,6 +152,34 @@ if CurrentPage then
       graphics,
       {
         Type = "Text",
+        Text = "ENGINE FPS:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Regular",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {0, (7.5 * btn_size[2]) + (7 * btn_gap[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "ACTIVITY:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Regular",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {0, (8.5 * btn_size[2]) + (8 * btn_gap[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
         Text = "NETMASK:",
         Font = "Roboto",
         FontSize = 12,
@@ -232,6 +260,20 @@ if CurrentPage then
         Size = {3 * btn_size[1], btn_size[2]}
       }
     )
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "SYNC STATUS:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Regular",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {6 * btn_size[1], (7.5 * btn_size[2]) + (7 * btn_gap[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
     layout["online"] = {
       PrettyName = "System~Online",
       Style = "Indicator",
@@ -304,6 +346,28 @@ if CurrentPage then
       Position = {3 * btn_size[1], (6.5 * btn_size[2]) + (6 * btn_gap[2])},
       Size = {3 * btn_size[1], btn_size[2]}
     }
+    layout["engine_fps"] = {
+      PrettyName = "System~Engine FPS",
+      Style = "TextBox",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {3 * btn_size[1], (7.5 * btn_size[2]) + (7 * btn_gap[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
+    }
+    layout["activity"] = {
+      PrettyName = "System~Engine FPS",
+      Style = "TextBox",
+      Color = Colors.control_background,
+      TextColor = Colors.hive_yellow,
+      StrokeColor = Colors.control_text,
+      FontSize = 8,
+      StrokeWidth = 1,
+      Position = {3 * btn_size[1], (8.5 * btn_size[2]) + (8 * btn_gap[2])},
+      Size = {9 * btn_size[1], btn_size[2]}
+    }
     layout["netmask"] = {
       PrettyName = "System~NetMask",
       Style = "TextBox",
@@ -368,6 +432,17 @@ if CurrentPage then
       FontSize = 12,
       StrokeWidth = 1,
       Position = {9 * btn_size[1], (6.5 * btn_size[2]) + (6 * btn_gap[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
+    }
+    layout["sync_status"] = {
+      PrettyName = "System~Beesync Status",
+      Style = "TextBox",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {9 * btn_size[1], (7.5 * btn_size[2]) + (7 * btn_gap[2])},
       Size = {3 * btn_size[1], btn_size[2]}
     }
   elseif CurrentPage:sub(1, 6) == "Layer " then
