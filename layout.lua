@@ -516,10 +516,14 @@ if CurrentPage then
           Size = {3 * btn_size[1], btn_size[2]}
         }
       )
+      local controlCol = Colors.control_background
+      if control_list[v].Style == "Text Field" and control_list[v].ControlUnit == "Percent" then
+        controlCol = Colors.control_background_light
+      end
       layout[control_list[v].Name .. i] = {
         PrettyName = "Layer " .. i .. "~" .. v,
         Style = control_list[v].Style,
-        Color = Colors.control_background,
+        Color = controlCol,
         TextColor = Colors.control_text,
         StrokeColor = Colors.control_text,
         FontSize = (v == "File Select") and 8 or 12,
@@ -551,10 +555,14 @@ if CurrentPage then
           Size = {3 * btn_size[1], btn_size[2]}
         }
       )
+      local controlCol = Colors.control_background
+      if control_list[v].Style == "Text Field" and control_list[v].ControlUnit == "Percent" then
+        controlCol = Colors.control_background_light
+      end
       layout[control_list[v].Name .. i] = {
         PrettyName = "Layer " .. i .. "~" .. v,
         Style = control_list[v].Style,
-        Color = Colors.control_background,
+        Color = controlCol,
         TextColor = Colors.control_text,
         StrokeColor = Colors.control_text,
         FontSize = 12,
@@ -586,10 +594,14 @@ if CurrentPage then
           Size = {3 * btn_size[1], btn_size[2]}
         }
       )
+      local controlCol = Colors.control_background
+      if control_list[v].Style == "Text Field" and control_list[v].ControlUnit == "Percent" then
+        controlCol = Colors.control_background_light
+      end
       layout[control_list[v].Name .. i] = {
         PrettyName = "Layer " .. i .. "~" .. v,
         Style = control_list[v].Style,
-        Color = Colors.control_background,
+        Color = controlCol,
         TextColor = Colors.control_text,
         StrokeColor = Colors.control_text,
         FontSize = 12,

@@ -12,8 +12,8 @@ table.insert(
   {
     Name = "Model",
     Type = "enum",
-    Choices = {"PLAYER_1", "PLAYER_2", "PLAYER_3", "PLAYER_4"},
-    Value = "PLAYER_3"
+    Choices = {"PLUTO","OSMIA","MINIMA","NEXUS","PLAYER_1", "PLAYER_2", "PLAYER_3", "PLAYER_4"},
+    Value = "PLUTO"
   }
 )
 

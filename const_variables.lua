@@ -11,7 +11,8 @@ local Colors = {
   transparent = {0, 0, 0, 0},
   control_label = {170, 170, 170},
   control_background = {18, 22, 26},
-  control_text = {170, 170, 170}
+  control_background_light = {64, 64, 64},
+  control_text = {170, 170, 170},
 }
 
 local control_list = {

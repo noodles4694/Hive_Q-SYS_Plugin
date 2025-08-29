@@ -2,9 +2,9 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "0.0",
-  BuildVersion = "0.0.0.133",
+  BuildVersion = "0.0.0.148",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
-  Author = "Carrier Labs & Hive",
+  Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
   ShowDebug = true 
 }
@@ -21,7 +21,8 @@ local Colors = {
   transparent = {0, 0, 0, 0},
   control_label = {170, 170, 170},
   control_background = {18, 22, 26},
-  control_text = {170, 170, 170}
+  control_background_light = {64, 64, 64},
+  control_text = {170, 170, 170},
 }
 
 local control_list = {
@@ -457,12 +458,16 @@ for i = 1, 16 do
 end
 -- Define the color of the plugin object in the design
 function GetColor(props)
-  return {102, 102, 102}
+  return Colors.hive_yellow
 end
 
 -- The name that will initially display when dragged into a design
 function GetPrettyName(props)
-  return "Hive " .. props["Model"].Value .. " " .. PluginInfo.Version
+  if props["Model"] == nil or props["Model"].Value == "PLUTO" or props["Model"].Value == "OSMIA"or props["Model"].Value == "MINIMA"or props["Model"].Value == "NEXUS" then
+    return "Hive Beeblade" .. string.char(10) .. props["Model"].Value .. string.char(10) .. props["IP Address"].Value
+  else
+    return "Hive" .. string.char(10) .. props["Model"].Value .. string.char(10) .. props["IP Address"].Value
+  end
 end
 
 -- Optional function used if plugin has multiple pages
@@ -512,8 +517,8 @@ function GetProperties()
     {
       Name = "Model",
       Type = "enum",
-      Choices = {"PLAYER_1", "PLAYER_2", "PLAYER_3", "PLAYER_4"},
-      Value = "PLAYER_3"
+      Choices = {"PLUTO","OSMIA","MINIMA","NEXUS","PLAYER_1", "PLAYER_2", "PLAYER_3", "PLAYER_4"},
+      Value = "PLUTO"
     }
   )
   
@@ -1314,10 +1319,14 @@ function GetControlLayout(props)
             Size = {3 * btn_size[1], btn_size[2]}
           }
         )
+        local controlCol = Colors.control_background
+        if control_list[v].Style == "Text Field" and control_list[v].ControlUnit == "Percent" then
+          controlCol = Colors.control_background_light
+        end
         layout[control_list[v].Name .. i] = {
           PrettyName = "Layer " .. i .. "~" .. v,
           Style = control_list[v].Style,
-          Color = Colors.control_background,
+          Color = controlCol,
           TextColor = Colors.control_text,
           StrokeColor = Colors.control_text,
           FontSize = (v == "File Select") and 8 or 12,
@@ -1349,10 +1358,14 @@ function GetControlLayout(props)
             Size = {3 * btn_size[1], btn_size[2]}
           }
         )
+        local controlCol = Colors.control_background
+        if control_list[v].Style == "Text Field" and control_list[v].ControlUnit == "Percent" then
+          controlCol = Colors.control_background_light
+        end
         layout[control_list[v].Name .. i] = {
           PrettyName = "Layer " .. i .. "~" .. v,
           Style = control_list[v].Style,
-          Color = Colors.control_background,
+          Color = controlCol,
           TextColor = Colors.control_text,
           StrokeColor = Colors.control_text,
           FontSize = 12,
@@ -1384,10 +1397,14 @@ function GetControlLayout(props)
             Size = {3 * btn_size[1], btn_size[2]}
           }
         )
+        local controlCol = Colors.control_background
+        if control_list[v].Style == "Text Field" and control_list[v].ControlUnit == "Percent" then
+          controlCol = Colors.control_background_light
+        end
         layout[control_list[v].Name .. i] = {
           PrettyName = "Layer " .. i .. "~" .. v,
           Style = control_list[v].Style,
-          Color = Colors.control_background,
+          Color = controlCol,
           TextColor = Colors.control_text,
           StrokeColor = Colors.control_text,
           FontSize = 12,

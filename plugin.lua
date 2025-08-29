@@ -3,12 +3,16 @@
 --[[ #include "const_variables.lua" ]]
 -- Define the color of the plugin object in the design
 function GetColor(props)
-  return {102, 102, 102}
+  return Colors.hive_yellow
 end
 
 -- The name that will initially display when dragged into a design
 function GetPrettyName(props)
-  return "Hive " .. props["Model"].Value .. " " .. PluginInfo.Version
+  if props["Model"] == nil or props["Model"].Value == "PLUTO" or props["Model"].Value == "OSMIA"or props["Model"].Value == "MINIMA"or props["Model"].Value == "NEXUS" then
+    return "Hive Beeblade" .. string.char(10) .. props["Model"].Value .. string.char(10) .. props["IP Address"].Value
+  else
+    return "Hive" .. string.char(10) .. props["Model"].Value .. string.char(10) .. props["IP Address"].Value
+  end
 end
 
 -- Optional function used if plugin has multiple pages
