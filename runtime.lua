@@ -190,7 +190,7 @@ end
 
 function processPlaylistRowUpdate(path, value)
   playlist_active_row = value + 1 -- convert from 0 based to 1 based
-    Controls.playlist_current_row.Value = playlist_active_row
+  Controls.playlist_current_row.Value = playlist_active_row
 end
 
 function processDoubleUpdate(path, value)
@@ -577,23 +577,70 @@ function cmd_transition_mode(layer, x)
 end
 
 function cmd_enable_playlist(x)
-  fn_update_json("Play List", {{ op= 'replace', path= '/usePlayList', value= x }})
+  fn_update_json("Play List", {{op = "replace", path = "/usePlayList", value = x}})
 end
 
 function cmd_enable_timeline(x)
-  fn_update_json("Timeline", {{ op= 'replace', path= '/useTimeline', value= x }})
+  fn_update_json("Timeline", {{op = "replace", path = "/useTimeline", value = x}})
 end
 
 function cmd_enable_schedule(x)
-  fn_update_json("Schedule", {{ op= 'replace', path= '/useSchedule', value= x }})
+  fn_update_json("Schedule", {{op = "replace", path = "/useSchedule", value = x}})
 end
 
 function cmd_enable_tc1(x)
-  fn_update_json("Timecode Cue List", {{ op= 'replace', path= '/layers/0/useCueList', value= x }})
+  fn_update_json("Timecode Cue List", {{op = "replace", path = "/layers/0/useCueList", value = x}})
 end
 
 function cmd_enable_tc2(x)
-  fn_update_json("Timecode Cue List", {{ op= 'replace', path= '/layers/1/useCueList', value= x }})
+  fn_update_json("Timecode Cue List", {{op = "replace", path = "/layers/1/useCueList", value = x}})
+end
+
+function cmd_playlist_play_previous()
+  if playlist_row_count > 0 then
+    local new_row = playlist_active_row - 1
+    if new_row < 1 then
+      new_row = playlist_row_count
+    end
+  setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+  end
+end
+
+function cmd_playlist_play_next()
+  if playlist_row_count > 0 then
+    local new_row = playlist_active_row + 1
+    if new_row > playlist_row_count then
+      new_row = 1
+    end
+  setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+  end
+end
+
+function cmd_playlist_play_first()
+  if playlist_row_count > 0 then
+    local new_row =  1
+  setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+  end
+end
+
+function cmd_playlist_play_last()
+  if playlist_row_count > 0 then
+    local new_row = playlist_row_count
+  setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+  end
+end
+
+function cmd_playlist_play_row(x)
+  if playlist_row_count > 0 then
+    local new_row = x
+    if new_row < 1 then
+      new_row = 1
+    end
+    if new_row > playlist_row_count then
+      new_row = playlist_row_count
+    end
+  setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+  end
 end
 
 for i = 1, 2 do
@@ -801,6 +848,26 @@ Controls["l1_timecode_enable"].EventHandler = function()
 end
 Controls["l2_timecode_enable"].EventHandler = function()
   cmd_enable_tc2(Controls.l2_timecode_enable.Boolean and 1 or 0)
+end
+Controls["playlist_play_previous"].EventHandler = function()
+  cmd_playlist_play_previous()
+end
+Controls["playlist_play_next"].EventHandler = function()
+  cmd_playlist_play_next()
+end
+Controls["playlist_play_first"].EventHandler = function()
+  cmd_playlist_play_first()
+end
+Controls["playlist_play_last"].EventHandler = function()
+  cmd_playlist_play_last()
+end
+Controls["playlist_play_row"].EventHandler = function()
+  if Controls.playlist_play_row_index.String ~= "" then
+    local row = tonumber(Controls.playlist_play_row_index.String)
+    if row then
+      cmd_playlist_play_row(row)
+    end
+  end
 end
 
 updateMediaFolders()

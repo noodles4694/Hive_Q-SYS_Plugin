@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "0.0",
-  BuildVersion = "0.0.0.213",
+  BuildVersion = "0.0.0.250",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -18,7 +18,7 @@ local Colors = {
   Black = {0, 0, 0},
   Red = {255, 0, 0},
   Green = {0, 255, 0},
-  Enabled = {0, 164, 0},
+  enable_green = {0, 164, 0},
   transparent = {0, 0, 0, 0},
   control_label = {170, 170, 170},
   control_background = {18, 22, 26},
@@ -484,7 +484,6 @@ function CreatePages()
   end
   table.insert(PageNames, "Media")
   table.insert(PageNames, "Modules")
-  table.insert(PageNames, "About")
 end
 
 function GetPages(props)
@@ -860,7 +859,7 @@ function GetControls(props)
           Name = "playlist_rows",
           ControlType = "Knob",
           ControlUnit = "Integer",
-          BStyle = "Text Field",
+          Style = "Text Field",
           PinStyle = "Output",
           Min = 0,
           Max = 9999999,
@@ -874,7 +873,7 @@ function GetControls(props)
           Name = "playlist_current_row",
           ControlType = "Knob",
           ControlUnit = "Integer",
-          BStyle = "Text Field",
+          Style = "Text Field",
           PinStyle = "Output",
           Min = 0,
           Max = 9999999,
@@ -888,7 +887,7 @@ function GetControls(props)
           Name = "l1_tc_rows",
           ControlType = "Knob",
           ControlUnit = "Integer",
-          BStyle = "Text Field",
+          Style = "Text Field",
           PinStyle = "Output",
           Min = 0,
           Max = 9999999,
@@ -902,10 +901,80 @@ function GetControls(props)
           Name = "l2_tc_rows",
           ControlType = "Knob",
           ControlUnit = "Integer",
-          BStyle = "Text Field",
+          Style = "Text Field",
           PinStyle = "Output",
           Min = 0,
           Max = 9999999,
+          Count = 1,
+          UserPin = true
+        }
+      )
+      table.insert(
+        ctrls,
+        {
+          Name = "playlist_play_previous",
+          ControlType = "Button",
+          ButtonType = "Trigger",
+          PinStyle = "Both",
+          Count = 1,
+          UserPin = true
+        }
+      )
+      table.insert(
+        ctrls,
+        {
+          Name = "playlist_play_next",
+          ControlType = "Button",
+          ButtonType = "Trigger",
+          PinStyle = "Both",
+          Count = 1,
+          UserPin = true
+        }
+      )
+      table.insert(
+        ctrls,
+        {
+          Name = "playlist_play_first",
+          ControlType = "Button",
+          ButtonType = "Trigger",
+          PinStyle = "Both",
+          Count = 1,
+          UserPin = true
+        }
+      )
+      table.insert(
+        ctrls,
+        {
+          Name = "playlist_play_last",
+          ControlType = "Button",
+          ButtonType = "Trigger",
+          PinStyle = "Both",
+          Count = 1,
+          UserPin = true
+        }
+      )
+      table.insert(
+        ctrls,
+        {
+          Name = "playlist_play_row",
+          ControlType = "Button",
+          ButtonType = "Trigger",
+          PinStyle = "Both",
+          Count = 1,
+          UserPin = true
+        }
+      )
+      table.insert(
+        ctrls,
+        {
+          Name = "playlist_play_row_index",
+          ControlType = "Knob",
+          ControlUnit = "Integer",
+          Style = "Text Field",
+          PinStyle = "Both",
+          Min = 1,
+          Max = 9999999,
+          DefaultValue = 1,
           Count = 1,
           UserPin = true
         }
@@ -946,8 +1015,8 @@ function GetControlLayout(props)
     (2 * preview_size[1]) + 12 + (3 * btn_size[1]),
     ((media_item_count + 1) * preview_size[2]) + 8
   }
-  local module_enable_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (2* btn_size[2]) + (2 * btn_gap[2])}
-  local module_playlist_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (6* btn_size[2]) + (2 * btn_gap[2])}
+  local module_enable_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (2 * btn_size[2]) + (2 * btn_gap[2])}
+  local module_playlist_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (6 * btn_size[2]) + (2 * btn_gap[2])}
   
   if CurrentPage then
     if CurrentPage == "Status" then
@@ -1640,81 +1709,85 @@ function GetControlLayout(props)
           Size = module_playlist_groupbox_size
         }
       )
+  
       layout["playlist_enable"] = {
         PrettyName = "Modules~Playlist Enable",
         ButtonStyle = "Toggle",
         ButtonVisualStyle = "Flat",
-        Color = Colors.Enabled,
+        Color = Colors.enable_green,
         OffColor = Colors.control_background_light,
         UnlinkOffColor = true,
         TextColor = Colors.White,
-        StrokeColor = Colors.contro_text,
+        StrokeColor = Colors.control_text,
         Legend = "Playlist",
         FontSize = 12,
         StrokeWidth = 1,
-        Position = { (2 * btn_gap[1]), btn_size[2]},
-        Size = {3 * btn_size[1],  btn_size[2]}
+        Position = {(2 * btn_gap[1]), btn_size[2]},
+        Size = {3 * btn_size[1], btn_size[2]}
       }
+  
       layout["l1_timecode_enable"] = {
         PrettyName = "Modules~Layer 1 TC Cuelist Enable",
         ButtonStyle = "Toggle",
         ButtonVisualStyle = "Flat",
-        Color = Colors.Enabled,
+        Color = Colors.enable_green,
         OffColor = Colors.control_background_light,
         UnlinkOffColor = true,
         TextColor = Colors.White,
-        StrokeColor = Colors.contro_text,
+        StrokeColor = Colors.control_text,
         Legend = "L1 TC Cuelist",
         FontSize = 12,
         StrokeWidth = 1,
-        Position = {(3 * btn_size[1]) +  (4 * btn_gap[1]), btn_size[2]},
-        Size = {3 * btn_size[1],  btn_size[2]}
+        Position = {(3 * btn_size[1]) + (4 * btn_gap[1]), btn_size[2]},
+        Size = {3 * btn_size[1], btn_size[2]}
       }
+  
       layout["l2_timecode_enable"] = {
         PrettyName = "Modules~Layer 2 TC Cuelist Enable",
         ButtonStyle = "Toggle",
         ButtonVisualStyle = "Flat",
-        Color = Colors.Enabled,
+        Color = Colors.enable_green,
         OffColor = Colors.control_background_light,
         UnlinkOffColor = true,
         TextColor = Colors.White,
-        StrokeColor = Colors.contro_text,
+        StrokeColor = Colors.control_text,
         Legend = "L2 TC Cuelist",
         FontSize = 12,
         StrokeWidth = 1,
-        Position = {(6 * btn_size[1]) +  (6* btn_gap[1]), btn_size[2]},
-        Size = {3 * btn_size[1],  btn_size[2]}
+        Position = {(6 * btn_size[1]) + (6 * btn_gap[1]), btn_size[2]},
+        Size = {3 * btn_size[1], btn_size[2]}
       }
       layout["timeline_enable"] = {
         PrettyName = "Modules~Timeline Enable",
         ButtonStyle = "Toggle",
         ButtonVisualStyle = "Flat",
-        Color = Colors.Enabled,
+        Color = Colors.enable_green,
         OffColor = Colors.control_background_light,
         UnlinkOffColor = true,
         TextColor = Colors.White,
-        StrokeColor = Colors.contro_text,
+        StrokeColor = Colors.control_text,
         Legend = "Timeline",
         FontSize = 12,
         StrokeWidth = 1,
-        Position = {(9 * btn_size[1]) +  (8* btn_gap[1]), btn_size[2]},
-        Size = {3 * btn_size[1],  btn_size[2]}
+        Position = {(9 * btn_size[1]) + (8 * btn_gap[1]), btn_size[2]},
+        Size = {3 * btn_size[1], btn_size[2]}
       }
       layout["schedule_enable"] = {
         PrettyName = "Modules~Schedule Enable",
         ButtonStyle = "Toggle",
         ButtonVisualStyle = "Flat",
-        Color = Colors.Enabled,
+        Color = Colors.enable_green,
         OffColor = Colors.control_background_light,
         UnlinkOffColor = true,
         TextColor = Colors.White,
-        StrokeColor = Colors.contro_text,
+        StrokeColor = Colors.control_text,
         Legend = "Scheduler",
         FontSize = 12,
         StrokeWidth = 1,
-        Position = {(12 * btn_size[1]) +  (10* btn_gap[1]), btn_size[2]},
-        Size = {3 * btn_size[1],  btn_size[2]}
+        Position = {(12 * btn_size[1]) + (10 * btn_gap[1]), btn_size[2]},
+        Size = {3 * btn_size[1], btn_size[2]}
       }
+  
       table.insert(
         graphics,
         {
@@ -1725,7 +1798,10 @@ function GetControlLayout(props)
           FontStyle = "Regular",
           HTextAlign = "Right",
           Color = Colors.control_label,
-          Position = {(0 * btn_size[1]) +  (1* btn_gap[1]), (1 * btn_gap[2]) + module_enable_groupbox_size[2] + (1 * btn_size[2])},
+          Position = {
+            (0 * btn_size[1]) + (1 * btn_gap[1]),
+            (1 * btn_gap[2]) + module_enable_groupbox_size[2] + (1 * btn_size[2])
+          },
           Size = {3 * btn_size[1], btn_size[2]}
         }
       )
@@ -1737,7 +1813,10 @@ function GetControlLayout(props)
         StrokeColor = Colors.control_text,
         FontSize = 12,
         StrokeWidth = 1,
-        Position = {(3 * btn_size[1]) +  (1* btn_gap[1]), (1 * btn_gap[2]) + module_enable_groupbox_size[2] + (1 * btn_size[2])},
+        Position = {
+          (3 * btn_size[1]) + (1 * btn_gap[1]),
+          (1 * btn_gap[2]) + module_enable_groupbox_size[2] + (1 * btn_size[2])
+        },
         Size = {3 * btn_size[1], btn_size[2]}
       }
       table.insert(
@@ -1750,7 +1829,10 @@ function GetControlLayout(props)
           FontStyle = "Regular",
           HTextAlign = "Right",
           Color = Colors.control_label,
-          Position = {(0 * btn_size[1]) +  (1* btn_gap[1]), (2 * btn_gap[2]) + module_enable_groupbox_size[2] + (2 * btn_size[2])},
+          Position = {
+            (0 * btn_size[1]) + (1 * btn_gap[1]),
+            (2 * btn_gap[2]) + module_enable_groupbox_size[2] + (2 * btn_size[2])
+          },
           Size = {3 * btn_size[1], btn_size[2]}
         }
       )
@@ -1762,7 +1844,10 @@ function GetControlLayout(props)
         StrokeColor = Colors.control_text,
         FontSize = 12,
         StrokeWidth = 1,
-        Position = {(3 * btn_size[1]) +  (1* btn_gap[1]), (2 * btn_gap[2]) + module_enable_groupbox_size[2] + (2 * btn_size[2])},
+        Position = {
+          (3 * btn_size[1]) + (1 * btn_gap[1]),
+          (2 * btn_gap[2]) + module_enable_groupbox_size[2] + (2 * btn_size[2])
+        },
         Size = {3 * btn_size[1], btn_size[2]}
       }
       table.insert(
@@ -1775,7 +1860,10 @@ function GetControlLayout(props)
           FontStyle = "Regular",
           HTextAlign = "Right",
           Color = Colors.control_label,
-          Position = {(0 * btn_size[1]) +  (1* btn_gap[1]), (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])},
+          Position = {
+            (0 * btn_size[1]) + (1 * btn_gap[1]),
+            (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])
+          },
           Size = {3 * btn_size[1], btn_size[2]}
         }
       )
@@ -1787,7 +1875,10 @@ function GetControlLayout(props)
         StrokeColor = Colors.control_text,
         FontSize = 12,
         StrokeWidth = 1,
-        Position = {(3 * btn_size[1]) +  (1* btn_gap[1]), (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])},
+        Position = {
+          (3 * btn_size[1]) + (1 * btn_gap[1]),
+          (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])
+        },
         Size = {3 * btn_size[1], btn_size[2]}
       }
       table.insert(
@@ -1800,7 +1891,10 @@ function GetControlLayout(props)
           FontStyle = "Regular",
           HTextAlign = "Right",
           Color = Colors.control_label,
-          Position = {(0 * btn_size[1]) +  (1* btn_gap[1]), (4 * btn_gap[2]) + module_enable_groupbox_size[2] + (4 * btn_size[2])},
+          Position = {
+            (0 * btn_size[1]) + (1 * btn_gap[1]),
+            (4 * btn_gap[2]) + module_enable_groupbox_size[2] + (4 * btn_size[2])
+          },
           Size = {3 * btn_size[1], btn_size[2]}
         }
       )
@@ -1812,11 +1906,122 @@ function GetControlLayout(props)
         StrokeColor = Colors.control_text,
         FontSize = 12,
         StrokeWidth = 1,
-        Position = {(3 * btn_size[1]) +  (1* btn_gap[1]), (4 * btn_gap[2]) + module_enable_groupbox_size[2] + (4 * btn_size[2])},
+        Position = {
+          (3 * btn_size[1]) + (1 * btn_gap[1]),
+          (4 * btn_gap[2]) + module_enable_groupbox_size[2] + (4 * btn_size[2])
+        },
         Size = {3 * btn_size[1], btn_size[2]}
       }
   
-    elseif CurrentPage == "About" then
+      layout["playlist_play_previous"] = {
+        PrettyName = "Modules~Playlist Play Previous",
+        ButtonStyle = "Toggle",
+        ButtonVisualStyle = "Flat",
+        Color = Colors.enable_green,
+        OffColor = Colors.control_background_light,
+        UnlinkOffColor = true,
+        TextColor = Colors.White,
+        StrokeColor = Colors.control_text,
+        Legend = "<< Previous",
+        FontSize = 12,
+        StrokeWidth = 1,
+        Position = {
+          (9 * btn_size[1]) + (3 * btn_gap[1]),
+          (1 * btn_gap[2]) + module_enable_groupbox_size[2] + (1 * btn_size[2])
+        },
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+  
+      layout["playlist_play_next"] = {
+        PrettyName = "Modules~Playlist Play Next",
+        ButtonStyle = "Toggle",
+        ButtonVisualStyle = "Flat",
+        Color = Colors.enable_green,
+        OffColor = Colors.control_background_light,
+        UnlinkOffColor = true,
+        TextColor = Colors.White,
+        StrokeColor = Colors.control_text,
+        Legend = "Next >>",
+        FontSize = 12,
+        StrokeWidth = 1,
+        Position = {
+          (12 * btn_size[1]) + (4 * btn_gap[1]),
+          (1 * btn_gap[2]) + module_enable_groupbox_size[2] + (1 * btn_size[2])
+        },
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+  
+      layout["playlist_play_first"] = {
+        PrettyName = "Modules~Playlist Play First",
+        ButtonStyle = "Toggle",
+        ButtonVisualStyle = "Flat",
+        Color = Colors.enable_green,
+        OffColor = Colors.control_background_light,
+        UnlinkOffColor = true,
+        TextColor = Colors.White,
+        StrokeColor = Colors.control_text,
+        Legend = "<<<< First",
+        FontSize = 12,
+        StrokeWidth = 1,
+        Position = {
+          (9 * btn_size[1]) + (3 * btn_gap[1]),
+          (2 * btn_gap[2]) + module_enable_groupbox_size[2] + (2 * btn_size[2])
+        },
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+  
+      layout["playlist_play_last"] = {
+        PrettyName = "Modules~Playlist Play Last",
+        ButtonStyle = "Toggle",
+        ButtonVisualStyle = "Flat",
+        Color = Colors.enable_green,
+        OffColor = Colors.control_background_light,
+        UnlinkOffColor = true,
+        TextColor = Colors.White,
+        StrokeColor = Colors.control_text,
+        Legend = "Last >>>>",
+        FontSize = 12,
+        StrokeWidth = 1,
+        Position = {
+          (12 * btn_size[1]) + (4 * btn_gap[1]),
+          (2 * btn_gap[2]) + module_enable_groupbox_size[2] + (2 * btn_size[2])
+        },
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+  
+      layout["playlist_play_row"] = {
+        PrettyName = "Modules~Playlist Play Row",
+        ButtonStyle = "Toggle",
+        ButtonVisualStyle = "Flat",
+        Color = Colors.enable_green,
+        OffColor = Colors.control_background_light,
+        UnlinkOffColor = true,
+        TextColor = Colors.White,
+        StrokeColor = Colors.control_text,
+        Legend = "Play Row",
+        FontSize = 12,
+        StrokeWidth = 1,
+        Position = {
+          (9 * btn_size[1]) + (3 * btn_gap[1]),
+          (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])
+        },
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+  
+      layout["playlist_play_row_index"] = {
+        PrettyName = "Modules~Playlist Play Row Index",
+        Style = "TextBox",
+        Color = Colors.control_background,
+        TextColor = Colors.control_text,
+        StrokeColor = Colors.control_text,
+        FontSize = 12,
+        StrokeWidth = 1,
+        Position = {
+          (12 * btn_size[1]) + (4 * btn_gap[1]),
+          (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])
+        },
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
     end
   end
   return layout, graphics
@@ -2663,7 +2868,7 @@ end
 
 function processPlaylistRowUpdate(path, value)
   playlist_active_row = value + 1 -- convert from 0 based to 1 based
-    Controls.playlist_current_row.Value = playlist_active_row
+  Controls.playlist_current_row.Value = playlist_active_row
 end
 
 function processDoubleUpdate(path, value)
@@ -3050,23 +3255,70 @@ function cmd_transition_mode(layer, x)
 end
 
 function cmd_enable_playlist(x)
-  fn_update_json("Play List", {{ op= 'replace', path= '/usePlayList', value= x }})
+  fn_update_json("Play List", {{op = "replace", path = "/usePlayList", value = x}})
 end
 
 function cmd_enable_timeline(x)
-  fn_update_json("Timeline", {{ op= 'replace', path= '/useTimeline', value= x }})
+  fn_update_json("Timeline", {{op = "replace", path = "/useTimeline", value = x}})
 end
 
 function cmd_enable_schedule(x)
-  fn_update_json("Schedule", {{ op= 'replace', path= '/useSchedule', value= x }})
+  fn_update_json("Schedule", {{op = "replace", path = "/useSchedule", value = x}})
 end
 
 function cmd_enable_tc1(x)
-  fn_update_json("Timecode Cue List", {{ op= 'replace', path= '/layers/0/useCueList', value= x }})
+  fn_update_json("Timecode Cue List", {{op = "replace", path = "/layers/0/useCueList", value = x}})
 end
 
 function cmd_enable_tc2(x)
-  fn_update_json("Timecode Cue List", {{ op= 'replace', path= '/layers/1/useCueList', value= x }})
+  fn_update_json("Timecode Cue List", {{op = "replace", path = "/layers/1/useCueList", value = x}})
+end
+
+function cmd_playlist_play_previous()
+  if playlist_row_count > 0 then
+    local new_row = playlist_active_row - 1
+    if new_row < 1 then
+      new_row = playlist_row_count
+    end
+  setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+  end
+end
+
+function cmd_playlist_play_next()
+  if playlist_row_count > 0 then
+    local new_row = playlist_active_row + 1
+    if new_row > playlist_row_count then
+      new_row = 1
+    end
+  setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+  end
+end
+
+function cmd_playlist_play_first()
+  if playlist_row_count > 0 then
+    local new_row =  1
+  setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+  end
+end
+
+function cmd_playlist_play_last()
+  if playlist_row_count > 0 then
+    local new_row = playlist_row_count
+  setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+  end
+end
+
+function cmd_playlist_play_row(x)
+  if playlist_row_count > 0 then
+    local new_row = x
+    if new_row < 1 then
+      new_row = 1
+    end
+    if new_row > playlist_row_count then
+      new_row = playlist_row_count
+    end
+  setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+  end
 end
 
 for i = 1, 2 do
@@ -3274,6 +3526,26 @@ Controls["l1_timecode_enable"].EventHandler = function()
 end
 Controls["l2_timecode_enable"].EventHandler = function()
   cmd_enable_tc2(Controls.l2_timecode_enable.Boolean and 1 or 0)
+end
+Controls["playlist_play_previous"].EventHandler = function()
+  cmd_playlist_play_previous()
+end
+Controls["playlist_play_next"].EventHandler = function()
+  cmd_playlist_play_next()
+end
+Controls["playlist_play_first"].EventHandler = function()
+  cmd_playlist_play_first()
+end
+Controls["playlist_play_last"].EventHandler = function()
+  cmd_playlist_play_last()
+end
+Controls["playlist_play_row"].EventHandler = function()
+  if Controls.playlist_play_row_index.String ~= "" then
+    local row = tonumber(Controls.playlist_play_row_index.String)
+    if row then
+      cmd_playlist_play_row(row)
+    end
+  end
 end
 
 updateMediaFolders()

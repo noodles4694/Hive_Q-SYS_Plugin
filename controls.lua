@@ -286,7 +286,7 @@ for i = 1, layer_count do
         Name = "playlist_rows",
         ControlType = "Knob",
         ControlUnit = "Integer",
-        BStyle = "Text Field",
+        Style = "Text Field",
         PinStyle = "Output",
         Min = 0,
         Max = 9999999,
@@ -300,7 +300,7 @@ for i = 1, layer_count do
         Name = "playlist_current_row",
         ControlType = "Knob",
         ControlUnit = "Integer",
-        BStyle = "Text Field",
+        Style = "Text Field",
         PinStyle = "Output",
         Min = 0,
         Max = 9999999,
@@ -314,7 +314,7 @@ for i = 1, layer_count do
         Name = "l1_tc_rows",
         ControlType = "Knob",
         ControlUnit = "Integer",
-        BStyle = "Text Field",
+        Style = "Text Field",
         PinStyle = "Output",
         Min = 0,
         Max = 9999999,
@@ -328,10 +328,80 @@ for i = 1, layer_count do
         Name = "l2_tc_rows",
         ControlType = "Knob",
         ControlUnit = "Integer",
-        BStyle = "Text Field",
+        Style = "Text Field",
         PinStyle = "Output",
         Min = 0,
         Max = 9999999,
+        Count = 1,
+        UserPin = true
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = "playlist_play_previous",
+        ControlType = "Button",
+        ButtonType = "Trigger",
+        PinStyle = "Both",
+        Count = 1,
+        UserPin = true
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = "playlist_play_next",
+        ControlType = "Button",
+        ButtonType = "Trigger",
+        PinStyle = "Both",
+        Count = 1,
+        UserPin = true
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = "playlist_play_first",
+        ControlType = "Button",
+        ButtonType = "Trigger",
+        PinStyle = "Both",
+        Count = 1,
+        UserPin = true
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = "playlist_play_last",
+        ControlType = "Button",
+        ButtonType = "Trigger",
+        PinStyle = "Both",
+        Count = 1,
+        UserPin = true
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = "playlist_play_row",
+        ControlType = "Button",
+        ButtonType = "Trigger",
+        PinStyle = "Both",
+        Count = 1,
+        UserPin = true
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = "playlist_play_row_index",
+        ControlType = "Knob",
+        ControlUnit = "Integer",
+        Style = "Text Field",
+        PinStyle = "Both",
+        Min = 1,
+        Max = 9999999,
+        DefaultValue = 1,
         Count = 1,
         UserPin = true
       }
