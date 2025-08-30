@@ -40,6 +40,10 @@ function fn_watch_parameters()
   -- Watch for JSON updates
   watchPatchJSON("/System Settings", processJSONUpdate)
   watchPatchJSON("/Media List", processJSONUpdate)
+  watchPatchJSON("/Play List", processJSONUpdate)
+  watchPatchJSON("/Timecode Cue List", processJSONUpdate)
+  watchPatchJSON("/Schedule", processJSONUpdate)
+  watchPatchJSON("/Timeline", processJSONUpdate)
   -- get the LUT options and update controls
   -- set the RAW mode so we can parse the raw data manually
   getPatchJSON("/LUT Colour Modes", processLUTData, true)
@@ -107,9 +111,13 @@ function fn_send(layer, cmd, val)
 end
 
 function fn_send_json(cmd, val)
-  local encoded_val = json.encode(val)
   local path = "/" .. cmd
-  sePatchJSON(path, encoded_val)
+  setPatchJSON(path, val)
+end
+
+function fn_update_json(cmd, val)
+  local path = "/" .. cmd
+  updatePatchJSON(path, val)
 end
 
 function processLUTData(path, data)
@@ -280,7 +288,34 @@ function processJSONUpdate(path, value)
     updateInfo()
   elseif path == "/Output Mapping" then
   elseif path == "/Play List" then
+    if value.usePlayList and value.usePlayList == 1 then
+      Controls.playlist_enable.Boolean = true
+    else
+      Controls.playlist_enable.Boolean = false
+    end
   elseif path == "/Timecode Cue List" then
+    if value.layers[1] and value.layers[1].useCueList == 1 then
+      Controls.l1_timecode_enable.Boolean = true
+    else
+      Controls.l1_timecode_enable.Boolean = false
+    end
+    if value.layers[2] and value.layers[2].useCueList == 1 then
+      Controls.l2_timecode_enable.Boolean = true
+    else
+      Controls.l2_timecode_enable.Boolean = false
+    end
+  elseif path == "/Schedule" then
+    if value.useSchedule and value.useSchedule == 1 then
+      Controls.schedule_enable.Boolean = true
+    else
+      Controls.schedule_enable.Boolean = false
+    end
+  elseif path == "/Timeline" then
+    if value.useTimeline and value.useTimeline == 1 then
+      Controls.timeline_enable.Boolean = true
+    else
+      Controls.timeline_enable.Boolean = false
+    end
   elseif path == "/Vioso WB Settings" then
   elseif path == "/Screenberry WB Settings" then
   end
@@ -531,6 +566,26 @@ function cmd_transition_mode(layer, x)
   fn_send(layer, "TRANSITION MODE", x)
 end
 
+function cmd_enable_playlist(x)
+  fn_update_json("Play List", {{ op= 'replace', path= '/usePlayList', value= x }})
+end
+
+function cmd_enable_timeline(x)
+  fn_update_json("Timeline", {{ op= 'replace', path= '/useTimeline', value= x }})
+end
+
+function cmd_enable_schedule(x)
+  fn_update_json("Schedule", {{ op= 'replace', path= '/useSchedule', value= x }})
+end
+
+function cmd_enable_tc1(x)
+  fn_update_json("Timecode Cue List", {{ op= 'replace', path= '/layers/0/useCueList', value= x }})
+end
+
+function cmd_enable_tc2(x)
+  fn_update_json("Timecode Cue List", {{ op= 'replace', path= '/layers/1/useCueList', value= x }})
+end
+
 for i = 1, 2 do
   _G["cmd_fx" .. i .. "_select"] = function(layer, x)
     fn_send(layer, "FX" .. i .. " SELECT", x)
@@ -720,6 +775,22 @@ for i = 1, layer_count do
   Controls["transition_mode_" .. i].Choices = transition_mode_keys
   Controls["fx1_select_" .. i].Choices = fx_keys
   Controls["fx2_select_" .. i].Choices = fx_keys
+end
+
+Controls["playlist_enable"].EventHandler = function()
+  cmd_enable_playlist(Controls.playlist_enable.Boolean and 1 or 0)
+end
+Controls["timeline_enable"].EventHandler = function()
+  cmd_enable_timeline(Controls.timeline_enable.Boolean and 1 or 0)
+end
+Controls["schedule_enable"].EventHandler = function()
+  cmd_enable_schedule(Controls.schedule_enable.Boolean and 1 or 0)
+end
+Controls["l1_timecode_enable"].EventHandler = function()
+  cmd_enable_tc1(Controls.l1_timecode_enable.Boolean and 1 or 0)
+end
+Controls["l2_timecode_enable"].EventHandler = function()
+  cmd_enable_tc2(Controls.l2_timecode_enable.Boolean and 1 or 0)
 end
 
 updateMediaFolders()

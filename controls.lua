@@ -225,5 +225,60 @@ for i = 1, layer_count do
         UserPin = false
       }
     )
+    table.insert(
+      ctrls,
+      {
+        Name = "playlist_enable",
+        ControlType = "Button",
+        ButtonType = "Toggle",
+        PinStyle = "Both",
+        Count = 1,
+        UserPin = true
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = "l1_timecode_enable",
+        ControlType = "Button",
+        ButtonType = "Toggle",
+        PinStyle = "Both",
+        Count = 1,
+        UserPin = true
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = "l2_timecode_enable",
+        ControlType = "Button",
+        ButtonType = "Toggle",
+        PinStyle = "Both",
+        Count = 1,
+        UserPin = true
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = "timeline_enable",
+        ControlType = "Button",
+        ButtonType = "Toggle",
+        PinStyle = "Both",
+        Count = 1,
+        UserPin = true
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = "schedule_enable",
+        ControlType = "Button",
+        ButtonType = "Toggle",
+        PinStyle = "Both",
+        Count = 1,
+        UserPin = true
+      }
+    )
   end
 end

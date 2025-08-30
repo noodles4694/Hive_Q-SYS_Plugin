@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "0.0",
-  BuildVersion = "0.0.0.149",
+  BuildVersion = "0.0.0.194",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -18,6 +18,7 @@ local Colors = {
   Black = {0, 0, 0},
   Red = {255, 0, 0},
   Green = {0, 255, 0},
+  Enabled = {0, 164, 0},
   transparent = {0, 0, 0, 0},
   control_label = {170, 170, 170},
   control_background = {18, 22, 26},
@@ -463,7 +464,11 @@ end
 
 -- The name that will initially display when dragged into a design
 function GetPrettyName(props)
-  if props["Model"] == nil or props["Model"].Value == "PLUTO" or props["Model"].Value == "OSMIA"or props["Model"].Value == "MINIMA"or props["Model"].Value == "NEXUS" then
+  if
+    props["Model"] == nil or props["Model"].Value == "PLUTO" or props["Model"].Value == "OSMIA" or
+      props["Model"].Value == "MINIMA" or
+      props["Model"].Value == "NEXUS"
+   then
     return "Hive Beeblade" .. string.char(10) .. props["Model"].Value .. string.char(10) .. props["IP Address"].Value
   else
     return "Hive" .. string.char(10) .. props["Model"].Value .. string.char(10) .. props["IP Address"].Value
@@ -478,6 +483,8 @@ function CreatePages()
     table.insert(PageNames, "Layer " .. i)
   end
   table.insert(PageNames, "Media")
+  table.insert(PageNames, "Modules")
+  table.insert(PageNames, "About")
 end
 
 function GetPages(props)
@@ -792,6 +799,61 @@ function GetControls(props)
           UserPin = false
         }
       )
+      table.insert(
+        ctrls,
+        {
+          Name = "playlist_enable",
+          ControlType = "Button",
+          ButtonType = "Toggle",
+          PinStyle = "Both",
+          Count = 1,
+          UserPin = true
+        }
+      )
+      table.insert(
+        ctrls,
+        {
+          Name = "l1_timecode_enable",
+          ControlType = "Button",
+          ButtonType = "Toggle",
+          PinStyle = "Both",
+          Count = 1,
+          UserPin = true
+        }
+      )
+      table.insert(
+        ctrls,
+        {
+          Name = "l2_timecode_enable",
+          ControlType = "Button",
+          ButtonType = "Toggle",
+          PinStyle = "Both",
+          Count = 1,
+          UserPin = true
+        }
+      )
+      table.insert(
+        ctrls,
+        {
+          Name = "timeline_enable",
+          ControlType = "Button",
+          ButtonType = "Toggle",
+          PinStyle = "Both",
+          Count = 1,
+          UserPin = true
+        }
+      )
+      table.insert(
+        ctrls,
+        {
+          Name = "schedule_enable",
+          ControlType = "Button",
+          ButtonType = "Toggle",
+          PinStyle = "Both",
+          Count = 1,
+          UserPin = true
+        }
+      )
     end
   end
   return ctrls
@@ -828,6 +890,8 @@ function GetControlLayout(props)
     (2 * preview_size[1]) + 12 + (3 * btn_size[1]),
     ((media_item_count + 1) * preview_size[2]) + 8
   }
+  local module_enable_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (2* btn_size[2]) + (2 * btn_gap[2])}
+  local module_playlist_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (6* btn_size[2]) + (2 * btn_gap[2])}
   
   if CurrentPage then
     if CurrentPage == "Status" then
@@ -1493,6 +1557,120 @@ function GetControlLayout(props)
           }
         end
       end
+    elseif CurrentPage == "Modules" then
+      table.insert(
+        graphics,
+        {
+          Type = "GroupBox",
+          Text = "Enable Disable",
+          HTextAlign = "Left",
+          CornerRadius = 8,
+          Fill = Colors.hive_grey,
+          StrokeWidth = 1,
+          Position = {0, 0},
+          Size = module_enable_groupbox_size
+        }
+      )
+      table.insert(
+        graphics,
+        {
+          Type = "GroupBox",
+          Text = "Playlist Functions",
+          HTextAlign = "Left",
+          CornerRadius = 8,
+          Fill = Colors.hive_grey,
+          StrokeWidth = 1,
+          Position = {0, module_enable_groupbox_size[2] + 4},
+          Size = module_playlist_groupbox_size
+        }
+      )
+      layout["playlist_enable"] = {
+        PrettyName = "Modules~Playlist Enable",
+        ButtonStyle = "Toggle",
+        ButtonVisualStyle = "Flat",
+        Color = Colors.Enabled,
+        OffColor = Colors.control_background_light,
+        UnlinkOffColor = true,
+        TextColor = Colors.White,
+        StrokeColor = Colors.contro_text,
+        Legend = "Playlist",
+        FontSize = 12,
+        StrokeWidth = 1,
+        Padding = 0,
+        Margin = 0,
+        Position = { (2 * btn_gap[1]), btn_size[2]},
+        Size = {3 * btn_size[1],  btn_size[2]}
+      }
+      layout["l1_timecode_enable"] = {
+        PrettyName = "Modules~Layer 1 TC Cuelist Enable",
+        ButtonStyle = "Toggle",
+        ButtonVisualStyle = "Flat",
+        Color = Colors.Enabled,
+        OffColor = Colors.control_background_light,
+        UnlinkOffColor = true,
+        TextColor = Colors.White,
+        StrokeColor = Colors.contro_text,
+        Legend = "L1 TC Cuelist",
+        FontSize = 12,
+        StrokeWidth = 1,
+        Padding = 0,
+        Margin = 0,
+        Position = {(3 * btn_size[1]) +  (4 * btn_gap[1]), btn_size[2]},
+        Size = {3 * btn_size[1],  btn_size[2]}
+      }
+      layout["l2_timecode_enable"] = {
+        PrettyName = "Modules~Layer 2 TC Cuelist Enable",
+        ButtonStyle = "Toggle",
+        ButtonVisualStyle = "Flat",
+        Color = Colors.Enabled,
+        OffColor = Colors.control_background_light,
+        UnlinkOffColor = true,
+        TextColor = Colors.White,
+        StrokeColor = Colors.contro_text,
+        Legend = "L2 TC Cuelist",
+        FontSize = 12,
+        StrokeWidth = 1,
+        Padding = 0,
+        Margin = 0,
+        Position = {(6 * btn_size[1]) +  (6* btn_gap[1]), btn_size[2]},
+        Size = {3 * btn_size[1],  btn_size[2]}
+      }
+      layout["timeline_enable"] = {
+        PrettyName = "Modules~Timeline Enable",
+        ButtonStyle = "Toggle",
+        ButtonVisualStyle = "Flat",
+        Color = Colors.Enabled,
+        OffColor = Colors.control_background_light,
+        UnlinkOffColor = true,
+        TextColor = Colors.White,
+        StrokeColor = Colors.contro_text,
+        Legend = "Timeline",
+        FontSize = 12,
+        StrokeWidth = 1,
+        Padding = 0,
+        Margin = 0,
+        Position = {(9 * btn_size[1]) +  (8* btn_gap[1]), btn_size[2]},
+        Size = {3 * btn_size[1],  btn_size[2]}
+      }
+      layout["schedule_enable"] = {
+        PrettyName = "Modules~Schedule Enable",
+        ButtonStyle = "Toggle",
+        ButtonVisualStyle = "Flat",
+        Color = Colors.Enabled,
+        OffColor = Colors.control_background_light,
+        UnlinkOffColor = true,
+        TextColor = Colors.White,
+        StrokeColor = Colors.contro_text,
+        Legend = "Scheduler",
+        FontSize = 12,
+        StrokeWidth = 1,
+        Padding = 0,
+        Margin = 0,
+        Position = {(12 * btn_size[1]) +  (10* btn_gap[1]), btn_size[2]},
+        Size = {3 * btn_size[1],  btn_size[2]}
+      }
+  
+    elseif CurrentPage == "About" then
     end
   end
   return layout, graphics
@@ -2106,7 +2284,7 @@ function setPatchJSON(path, value)
     -- Create the request object
     local request = {
       apiVersion = 1,
-      name = "UpdatePatchJSON",
+      name = "SetPatchJSON",
       args = {Path = path, Value = value}
     }
     -- Send the request over the WebSocket
@@ -2119,7 +2297,7 @@ function updatePatchJSON(path, value)
     -- Create the request object
     local request = {
       apiVersion = 1,
-      name = "SetPatchJSON",
+      name = "UpdatePatchJSON",
       args = {Path = path, Value = value}
     }
     -- Send the request over the WebSocket
@@ -2187,6 +2365,10 @@ function fn_watch_parameters()
   -- Watch for JSON updates
   watchPatchJSON("/System Settings", processJSONUpdate)
   watchPatchJSON("/Media List", processJSONUpdate)
+  watchPatchJSON("/Play List", processJSONUpdate)
+  watchPatchJSON("/Timecode Cue List", processJSONUpdate)
+  watchPatchJSON("/Schedule", processJSONUpdate)
+  watchPatchJSON("/Timeline", processJSONUpdate)
   -- get the LUT options and update controls
   -- set the RAW mode so we can parse the raw data manually
   getPatchJSON("/LUT Colour Modes", processLUTData, true)
@@ -2254,9 +2436,13 @@ function fn_send(layer, cmd, val)
 end
 
 function fn_send_json(cmd, val)
-  local encoded_val = json.encode(val)
   local path = "/" .. cmd
-  sePatchJSON(path, encoded_val)
+  setPatchJSON(path, val)
+end
+
+function fn_update_json(cmd, val)
+  local path = "/" .. cmd
+  updatePatchJSON(path, val)
 end
 
 function processLUTData(path, data)
@@ -2427,7 +2613,34 @@ function processJSONUpdate(path, value)
     updateInfo()
   elseif path == "/Output Mapping" then
   elseif path == "/Play List" then
+    if value.usePlayList and value.usePlayList == 1 then
+      Controls.playlist_enable.Boolean = true
+    else
+      Controls.playlist_enable.Boolean = false
+    end
   elseif path == "/Timecode Cue List" then
+    if value.layers[1] and value.layers[1].useCueList == 1 then
+      Controls.l1_timecode_enable.Boolean = true
+    else
+      Controls.l1_timecode_enable.Boolean = false
+    end
+    if value.layers[2] and value.layers[2].useCueList == 1 then
+      Controls.l2_timecode_enable.Boolean = true
+    else
+      Controls.l2_timecode_enable.Boolean = false
+    end
+  elseif path == "/Schedule" then
+    if value.useSchedule and value.useSchedule == 1 then
+      Controls.schedule_enable.Boolean = true
+    else
+      Controls.schedule_enable.Boolean = false
+    end
+  elseif path == "/Timeline" then
+    if value.useTimeline and value.useTimeline == 1 then
+      Controls.timeline_enable.Boolean = true
+    else
+      Controls.timeline_enable.Boolean = false
+    end
   elseif path == "/Vioso WB Settings" then
   elseif path == "/Screenberry WB Settings" then
   end
@@ -2678,6 +2891,26 @@ function cmd_transition_mode(layer, x)
   fn_send(layer, "TRANSITION MODE", x)
 end
 
+function cmd_enable_playlist(x)
+  fn_update_json("Play List", {{ op= 'replace', path= '/usePlayList', value= x }})
+end
+
+function cmd_enable_timeline(x)
+  fn_update_json("Timeline", {{ op= 'replace', path= '/useTimeline', value= x }})
+end
+
+function cmd_enable_schedule(x)
+  fn_update_json("Schedule", {{ op= 'replace', path= '/useSchedule', value= x }})
+end
+
+function cmd_enable_tc1(x)
+  fn_update_json("Timecode Cue List", {{ op= 'replace', path= '/layers/0/useCueList', value= x }})
+end
+
+function cmd_enable_tc2(x)
+  fn_update_json("Timecode Cue List", {{ op= 'replace', path= '/layers/1/useCueList', value= x }})
+end
+
 for i = 1, 2 do
   _G["cmd_fx" .. i .. "_select"] = function(layer, x)
     fn_send(layer, "FX" .. i .. " SELECT", x)
@@ -2867,6 +3100,22 @@ for i = 1, layer_count do
   Controls["transition_mode_" .. i].Choices = transition_mode_keys
   Controls["fx1_select_" .. i].Choices = fx_keys
   Controls["fx2_select_" .. i].Choices = fx_keys
+end
+
+Controls["playlist_enable"].EventHandler = function()
+  cmd_enable_playlist(Controls.playlist_enable.Boolean and 1 or 0)
+end
+Controls["timeline_enable"].EventHandler = function()
+  cmd_enable_timeline(Controls.timeline_enable.Boolean and 1 or 0)
+end
+Controls["schedule_enable"].EventHandler = function()
+  cmd_enable_schedule(Controls.schedule_enable.Boolean and 1 or 0)
+end
+Controls["l1_timecode_enable"].EventHandler = function()
+  cmd_enable_tc1(Controls.l1_timecode_enable.Boolean and 1 or 0)
+end
+Controls["l2_timecode_enable"].EventHandler = function()
+  cmd_enable_tc2(Controls.l2_timecode_enable.Boolean and 1 or 0)
 end
 
 updateMediaFolders()

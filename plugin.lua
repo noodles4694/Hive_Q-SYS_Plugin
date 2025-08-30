@@ -8,7 +8,11 @@ end
 
 -- The name that will initially display when dragged into a design
 function GetPrettyName(props)
-  if props["Model"] == nil or props["Model"].Value == "PLUTO" or props["Model"].Value == "OSMIA"or props["Model"].Value == "MINIMA"or props["Model"].Value == "NEXUS" then
+  if
+    props["Model"] == nil or props["Model"].Value == "PLUTO" or props["Model"].Value == "OSMIA" or
+      props["Model"].Value == "MINIMA" or
+      props["Model"].Value == "NEXUS"
+   then
     return "Hive Beeblade" .. string.char(10) .. props["Model"].Value .. string.char(10) .. props["IP Address"].Value
   else
     return "Hive" .. string.char(10) .. props["Model"].Value .. string.char(10) .. props["IP Address"].Value
@@ -23,6 +27,8 @@ function CreatePages()
     table.insert(PageNames, "Layer " .. i)
   end
   table.insert(PageNames, "Media")
+  table.insert(PageNames, "Modules")
+  table.insert(PageNames, "About")
 end
 
 function GetPages(props)

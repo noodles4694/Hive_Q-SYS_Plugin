@@ -297,7 +297,7 @@ function setPatchJSON(path, value)
     -- Create the request object
     local request = {
       apiVersion = 1,
-      name = "UpdatePatchJSON",
+      name = "SetPatchJSON",
       args = {Path = path, Value = value}
     }
     -- Send the request over the WebSocket
@@ -310,7 +310,7 @@ function updatePatchJSON(path, value)
     -- Create the request object
     local request = {
       apiVersion = 1,
-      name = "SetPatchJSON",
+      name = "UpdatePatchJSON",
       args = {Path = path, Value = value}
     }
     -- Send the request over the WebSocket

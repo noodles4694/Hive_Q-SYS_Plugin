@@ -25,6 +25,8 @@ local media_list_groupbox_size = {
   (2 * preview_size[1]) + 12 + (3 * btn_size[1]),
   ((media_item_count + 1) * preview_size[2]) + 8
 }
+local module_enable_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (2* btn_size[2]) + (2 * btn_gap[2])}
+local module_playlist_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (6* btn_size[2]) + (2 * btn_gap[2])}
 
 if CurrentPage then
   if CurrentPage == "Status" then
@@ -690,5 +692,119 @@ if CurrentPage then
         }
       end
     end
+  elseif CurrentPage == "Modules" then
+    table.insert(
+      graphics,
+      {
+        Type = "GroupBox",
+        Text = "Enable Disable",
+        HTextAlign = "Left",
+        CornerRadius = 8,
+        Fill = Colors.hive_grey,
+        StrokeWidth = 1,
+        Position = {0, 0},
+        Size = module_enable_groupbox_size
+      }
+    )
+    table.insert(
+      graphics,
+      {
+        Type = "GroupBox",
+        Text = "Playlist Functions",
+        HTextAlign = "Left",
+        CornerRadius = 8,
+        Fill = Colors.hive_grey,
+        StrokeWidth = 1,
+        Position = {0, module_enable_groupbox_size[2] + 4},
+        Size = module_playlist_groupbox_size
+      }
+    )
+    layout["playlist_enable"] = {
+      PrettyName = "Modules~Playlist Enable",
+      ButtonStyle = "Toggle",
+      ButtonVisualStyle = "Flat",
+      Color = Colors.Enabled,
+      OffColor = Colors.control_background_light,
+      UnlinkOffColor = true,
+      TextColor = Colors.White,
+      StrokeColor = Colors.contro_text,
+      Legend = "Playlist",
+      FontSize = 12,
+      StrokeWidth = 1,
+      Padding = 0,
+      Margin = 0,
+      Position = { (2 * btn_gap[1]), btn_size[2]},
+      Size = {3 * btn_size[1],  btn_size[2]}
+    }
+    layout["l1_timecode_enable"] = {
+      PrettyName = "Modules~Layer 1 TC Cuelist Enable",
+      ButtonStyle = "Toggle",
+      ButtonVisualStyle = "Flat",
+      Color = Colors.Enabled,
+      OffColor = Colors.control_background_light,
+      UnlinkOffColor = true,
+      TextColor = Colors.White,
+      StrokeColor = Colors.contro_text,
+      Legend = "L1 TC Cuelist",
+      FontSize = 12,
+      StrokeWidth = 1,
+      Padding = 0,
+      Margin = 0,
+      Position = {(3 * btn_size[1]) +  (4 * btn_gap[1]), btn_size[2]},
+      Size = {3 * btn_size[1],  btn_size[2]}
+    }
+    layout["l2_timecode_enable"] = {
+      PrettyName = "Modules~Layer 2 TC Cuelist Enable",
+      ButtonStyle = "Toggle",
+      ButtonVisualStyle = "Flat",
+      Color = Colors.Enabled,
+      OffColor = Colors.control_background_light,
+      UnlinkOffColor = true,
+      TextColor = Colors.White,
+      StrokeColor = Colors.contro_text,
+      Legend = "L2 TC Cuelist",
+      FontSize = 12,
+      StrokeWidth = 1,
+      Padding = 0,
+      Margin = 0,
+      Position = {(6 * btn_size[1]) +  (6* btn_gap[1]), btn_size[2]},
+      Size = {3 * btn_size[1],  btn_size[2]}
+    }
+    layout["timeline_enable"] = {
+      PrettyName = "Modules~Timeline Enable",
+      ButtonStyle = "Toggle",
+      ButtonVisualStyle = "Flat",
+      Color = Colors.Enabled,
+      OffColor = Colors.control_background_light,
+      UnlinkOffColor = true,
+      TextColor = Colors.White,
+      StrokeColor = Colors.contro_text,
+      Legend = "Timeline",
+      FontSize = 12,
+      StrokeWidth = 1,
+      Padding = 0,
+      Margin = 0,
+      Position = {(9 * btn_size[1]) +  (8* btn_gap[1]), btn_size[2]},
+      Size = {3 * btn_size[1],  btn_size[2]}
+    }
+    layout["schedule_enable"] = {
+      PrettyName = "Modules~Schedule Enable",
+      ButtonStyle = "Toggle",
+      ButtonVisualStyle = "Flat",
+      Color = Colors.Enabled,
+      OffColor = Colors.control_background_light,
+      UnlinkOffColor = true,
+      TextColor = Colors.White,
+      StrokeColor = Colors.contro_text,
+      Legend = "Scheduler",
+      FontSize = 12,
+      StrokeWidth = 1,
+      Padding = 0,
+      Margin = 0,
+      Position = {(12 * btn_size[1]) +  (10* btn_gap[1]), btn_size[2]},
+      Size = {3 * btn_size[1],  btn_size[2]}
+    }
+
+  elseif CurrentPage == "About" then
   end
 end
