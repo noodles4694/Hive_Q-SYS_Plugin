@@ -280,5 +280,61 @@ for i = 1, layer_count do
         UserPin = true
       }
     )
+    table.insert(
+      ctrls,
+      {
+        Name = "playlist_rows",
+        ControlType = "Knob",
+        ControlUnit = "Integer",
+        BStyle = "Text Field",
+        PinStyle = "Output",
+        Min = 0,
+        Max = 9999999,
+        Count = 1,
+        UserPin = true
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = "playlist_current_row",
+        ControlType = "Knob",
+        ControlUnit = "Integer",
+        BStyle = "Text Field",
+        PinStyle = "Output",
+        Min = 0,
+        Max = 9999999,
+        Count = 1,
+        UserPin = true
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = "l1_tc_rows",
+        ControlType = "Knob",
+        ControlUnit = "Integer",
+        BStyle = "Text Field",
+        PinStyle = "Output",
+        Min = 0,
+        Max = 9999999,
+        Count = 1,
+        UserPin = true
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = "l2_tc_rows",
+        ControlType = "Knob",
+        ControlUnit = "Integer",
+        BStyle = "Text Field",
+        PinStyle = "Output",
+        Min = 0,
+        Max = 9999999,
+        Count = 1,
+        UserPin = true
+      }
+    )
   end
 end

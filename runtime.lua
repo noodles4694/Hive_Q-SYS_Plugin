@@ -44,6 +44,7 @@ function fn_watch_parameters()
   watchPatchJSON("/Timecode Cue List", processJSONUpdate)
   watchPatchJSON("/Schedule", processJSONUpdate)
   watchPatchJSON("/Timeline", processJSONUpdate)
+  watchPatchDouble("/Playlist Control/Playlist Controller 1/Row Index", processPlaylistRowUpdate)
   -- get the LUT options and update controls
   -- set the RAW mode so we can parse the raw data manually
   getPatchJSON("/LUT Colour Modes", processLUTData, true)
@@ -187,6 +188,11 @@ function processTransportUpdate(path, value)
   end
 end
 
+function processPlaylistRowUpdate(path, value)
+  playlist_active_row = value + 1 -- convert from 0 based to 1 based
+    Controls.playlist_current_row.Value = playlist_active_row
+end
+
 function processDoubleUpdate(path, value)
   if path:sub(1, 6) == "/LAYER" then -- Layer parameter response
     local layer, parameter = path:match("/LAYER (%d+)/(%P+)/Value")
@@ -293,6 +299,8 @@ function processJSONUpdate(path, value)
     else
       Controls.playlist_enable.Boolean = false
     end
+    playlist_row_count = value.list and #value.list or 0
+    Controls.playlist_rows.Value = playlist_row_count
   elseif path == "/Timecode Cue List" then
     if value.layers[1] and value.layers[1].useCueList == 1 then
       Controls.l1_timecode_enable.Boolean = true
@@ -304,6 +312,8 @@ function processJSONUpdate(path, value)
     else
       Controls.l2_timecode_enable.Boolean = false
     end
+    Controls.l1_tc_rows.Value = value.layers[1] and #(value.layers[1].list) or 0
+    Controls.l2_tc_rows.Value = value.layers[2] and #(value.layers[2].list) or 0
   elseif path == "/Schedule" then
     if value.useSchedule and value.useSchedule == 1 then
       Controls.schedule_enable.Boolean = true

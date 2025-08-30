@@ -4,6 +4,8 @@ local file_metadata_list = {}
 local play_mode = {}
 local seek_timer_list = {}
 local seek_last_value = {}
+local playlist_row_count = 0
+local playlist_active_row = 1
 
 for i = 1, layer_count do
   play_mode[i] = "In Frame"

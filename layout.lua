@@ -731,8 +731,6 @@ if CurrentPage then
       Legend = "Playlist",
       FontSize = 12,
       StrokeWidth = 1,
-      Padding = 0,
-      Margin = 0,
       Position = { (2 * btn_gap[1]), btn_size[2]},
       Size = {3 * btn_size[1],  btn_size[2]}
     }
@@ -748,8 +746,6 @@ if CurrentPage then
       Legend = "L1 TC Cuelist",
       FontSize = 12,
       StrokeWidth = 1,
-      Padding = 0,
-      Margin = 0,
       Position = {(3 * btn_size[1]) +  (4 * btn_gap[1]), btn_size[2]},
       Size = {3 * btn_size[1],  btn_size[2]}
     }
@@ -765,8 +761,6 @@ if CurrentPage then
       Legend = "L2 TC Cuelist",
       FontSize = 12,
       StrokeWidth = 1,
-      Padding = 0,
-      Margin = 0,
       Position = {(6 * btn_size[1]) +  (6* btn_gap[1]), btn_size[2]},
       Size = {3 * btn_size[1],  btn_size[2]}
     }
@@ -782,8 +776,6 @@ if CurrentPage then
       Legend = "Timeline",
       FontSize = 12,
       StrokeWidth = 1,
-      Padding = 0,
-      Margin = 0,
       Position = {(9 * btn_size[1]) +  (8* btn_gap[1]), btn_size[2]},
       Size = {3 * btn_size[1],  btn_size[2]}
     }
@@ -799,10 +791,108 @@ if CurrentPage then
       Legend = "Scheduler",
       FontSize = 12,
       StrokeWidth = 1,
-      Padding = 0,
-      Margin = 0,
       Position = {(12 * btn_size[1]) +  (10* btn_gap[1]), btn_size[2]},
       Size = {3 * btn_size[1],  btn_size[2]}
+    }
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "Playlist Rows:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Regular",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {(0 * btn_size[1]) +  (1* btn_gap[1]), (1 * btn_gap[2]) + module_enable_groupbox_size[2] + (1 * btn_size[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
+    layout["playlist_rows"] = {
+      PrettyName = "Modules~Playlist Rows",
+      Style = "TextBox",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {(3 * btn_size[1]) +  (1* btn_gap[1]), (1 * btn_gap[2]) + module_enable_groupbox_size[2] + (1 * btn_size[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
+    }
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "Current Row:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Regular",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {(0 * btn_size[1]) +  (1* btn_gap[1]), (2 * btn_gap[2]) + module_enable_groupbox_size[2] + (2 * btn_size[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
+    layout["playlist_current_row"] = {
+      PrettyName = "Modules~Playlist Current Row",
+      Style = "TextBox",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {(3 * btn_size[1]) +  (1* btn_gap[1]), (2 * btn_gap[2]) + module_enable_groupbox_size[2] + (2 * btn_size[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
+    }
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "L1 TC Rows:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Regular",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {(0 * btn_size[1]) +  (1* btn_gap[1]), (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
+    layout["l1_tc_rows"] = {
+      PrettyName = "Modules~Layer 1 Cue List Rows",
+      Style = "TextBox",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {(3 * btn_size[1]) +  (1* btn_gap[1]), (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
+    }
+    table.insert(
+      graphics,
+      {
+        Type = "Text",
+        Text = "L2 TC Rows:",
+        Font = "Roboto",
+        FontSize = 12,
+        FontStyle = "Regular",
+        HTextAlign = "Right",
+        Color = Colors.control_label,
+        Position = {(0 * btn_size[1]) +  (1* btn_gap[1]), (4 * btn_gap[2]) + module_enable_groupbox_size[2] + (4 * btn_size[2])},
+        Size = {3 * btn_size[1], btn_size[2]}
+      }
+    )
+    layout["l2_tc_rows"] = {
+      PrettyName = "Modules~Layer 2 Cue List Rows",
+      Style = "TextBox",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {(3 * btn_size[1]) +  (1* btn_gap[1]), (4 * btn_gap[2]) + module_enable_groupbox_size[2] + (4 * btn_size[2])},
+      Size = {3 * btn_size[1], btn_size[2]}
     }
 
   elseif CurrentPage == "About" then
