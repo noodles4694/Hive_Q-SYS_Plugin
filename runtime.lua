@@ -867,13 +867,7 @@ for i = 1, layer_count do
     end
   end
 
-  -- Choices
-  Controls["play_mode_" .. i].Choices = play_mode_keys
-  Controls["framing_mode_" .. i].Choices = framing_mode_keys
-  Controls["blend_mode_" .. i].Choices = blend_mode_keys
-  Controls["transition_mode_" .. i].Choices = transition_mode_keys
-  Controls["fx1_select_" .. i].Choices = fx_keys
-  Controls["fx2_select_" .. i].Choices = fx_keys
+
 end
 
 Controls["playlist_enable"].EventHandler = function()
@@ -916,6 +910,16 @@ Controls["system_shutdown"].EventHandler = function()
 end
 Controls["system_restart"].EventHandler = function()
   cmd_restart()
+end
+
+-- Initialize combobox choices
+for i = 1, layer_count do
+  Controls["play_mode_" .. i].Choices = play_mode_keys
+  Controls["framing_mode_" .. i].Choices = framing_mode_keys
+  Controls["blend_mode_" .. i].Choices = blend_mode_keys
+  Controls["transition_mode_" .. i].Choices = transition_mode_keys
+  Controls["fx1_select_" .. i].Choices = fx_keys
+  Controls["fx2_select_" .. i].Choices = fx_keys
 end
 
 updateMediaFolders()
