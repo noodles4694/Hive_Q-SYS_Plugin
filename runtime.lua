@@ -1,5 +1,5 @@
 ---checks if a string represents an ip address
-function isIpAddress(ip)
+function fn_check_valid_ip(ip)
   if not ip then
     return false
   end
@@ -30,7 +30,7 @@ function fn_hive_connect_Status(status)
   if status == true then
     Controls.online.Boolean = true
     fn_watch_parameters()
-    updateInfo()
+    fn_update_info()
   else
     Controls.online.Boolean = false
   end
@@ -38,16 +38,16 @@ end
 
 function fn_watch_parameters()
   -- Watch for JSON updates
-  watchPatchJSON("/System Settings", processJSONUpdate)
-  watchPatchJSON("/Media List", processJSONUpdate)
-  watchPatchJSON("/Play List", processJSONUpdate)
-  watchPatchJSON("/Timecode Cue List", processJSONUpdate)
-  watchPatchJSON("/Schedule", processJSONUpdate)
-  watchPatchJSON("/Timeline", processJSONUpdate)
-  watchPatchDouble("/Playlist Control/Playlist Controller 1/Row Index", processPlaylistRowUpdate)
+  watchPatchJSON("/System Settings", fn_process_JSON_update)
+  watchPatchJSON("/Media List", fn_process_JSON_update)
+  watchPatchJSON("/Play List", fn_process_JSON_update)
+  watchPatchJSON("/Timecode Cue List", fn_process_JSON_update)
+  watchPatchJSON("/Schedule", fn_process_JSON_update)
+  watchPatchJSON("/Timeline", fn_process_JSON_update)
+  watchPatchDouble("/Playlist Control/Playlist Controller 1/Row Index", fn_process_playlist_row_update)
   -- get the LUT options and update controls
   -- set the RAW mode so we can parse the raw data manually
-  getPatchJSON("/LUT Colour Modes", processLUTData, true)
+  getPatchJSON("/LUT Colour Modes", fn_process_LUT_data, true)
 
   watchPatchString(
     "/Status/Text",
@@ -60,36 +60,36 @@ function fn_watch_parameters()
   for i = 1, layer_count do
     for _, parameter in ipairs(poll_parameter_list) do
       local path = string.format("/LAYER %s/%s/Value", i, parameter)
-      watchPatchDouble(path, processDoubleUpdate)
+      watchPatchDouble(path, fn_process_double_update)
     end
     for _, parameter in ipairs(fx1_list) do
       local path = string.format("/LAYER %s/%s/Value", i, parameter:upper())
-      watchPatchDouble(path, processDoubleUpdate)
+      watchPatchDouble(path, fn_process_double_update)
     end
     for _, parameter in ipairs(fx2_list) do
       local path = string.format("/LAYER %s/%s/Value", i, parameter:upper())
-      watchPatchDouble(path, processDoubleUpdate)
+      watchPatchDouble(path, fn_process_double_update)
     end
   end
 
   -- Watch for value changes in transport control parameters
   for i = 1, layer_count do
-    watchPatchDouble(string.format("/LAYER %s/Transport Control/Media Time/Value", i), processTransportUpdate)
+    watchPatchDouble(string.format("/LAYER %s/Transport Control/Media Time/Value", i), fn_process_transport_update)
   end
 end
 
-function pollInfo()
+function fn_poll_info()
   getPatchString(
     "/Mapping/Render Resolution/FPS",
     function(path, value)
       Controls.engine_fps.String = value
     end
   )
-  updateSyncStatus()
-  Timer.CallAfter(pollInfo, 1)
+  fn_update_sync_status()
+  Timer.CallAfter(fn_poll_info, 1)
 end
 
-function updateSyncStatus()
+function fn_update_sync_status()
   local url = string.format("http://%s/api/getBeeSyncStatus", ip_address)
   HttpClient.Post {
     Url = url,
@@ -121,7 +121,7 @@ function fn_update_json(cmd, val)
   updatePatchJSON(path, val)
 end
 
-function processLUTData(path, data)
+function fn_process_LUT_data(path, data)
   -- The LUT list is inside a JSON object under the "Value" key
   -- however it is not indexed so we have to extract the string pairs manually
   -- in order to maintain the ordering
@@ -169,7 +169,7 @@ function processLUTData(path, data)
   end
 end
 
-function processTransportUpdate(path, value)
+function fn_process_transport_update(path, value)
   local layer, parameter = path:match("/LAYER (%d+)/(%P+)")
   if parameter == "Transport Control" then
     local layer, parameter, sub_parameter = path:match("/LAYER (%d+)/(%P+)/(%P+)")
@@ -188,12 +188,12 @@ function processTransportUpdate(path, value)
   end
 end
 
-function processPlaylistRowUpdate(path, value)
+function fn_process_playlist_row_update(path, value)
   playlist_active_row = value + 1 -- convert from 0 based to 1 based
   Controls.playlist_current_row.Value = playlist_active_row
 end
 
-function processDoubleUpdate(path, value)
+function fn_process_double_update(path, value)
   if path:sub(1, 6) == "/LAYER" then -- Layer parameter response
     local layer, parameter = path:match("/LAYER (%d+)/(%P+)/Value")
     if parameter then
@@ -271,9 +271,9 @@ function processDoubleUpdate(path, value)
   end
 end
 
-function processJSONUpdate(path, value)
+function fn_process_JSON_update(path, value)
   if path == "/System Settings" then
-    updateInfo()
+    fn_update_info()
   elseif path == "/Media List" then
     local file_choice_list = {}
     for _, file in ipairs(value.files) do
@@ -285,13 +285,13 @@ function processJSONUpdate(path, value)
           Controls[string.format("media_name_%s_layer_%s", file.fileIndex, i)].String = file.name
         end
       end
-      get_file_thumbnail(file.fileIndex, file.name)
+      fn_get_file_thumbnail(file.fileIndex, file.name)
     end
     for i = 1, layer_count do
       Controls["file_select_" .. i].Choices = file_choice_list
     end
     -- let's update the system info as storage and num files might have changed
-    updateInfo()
+    fn_update_info()
   elseif path == "/Output Mapping" then
   elseif path == "/Play List" then
     if value.usePlayList and value.usePlayList == 1 then
@@ -331,7 +331,7 @@ function processJSONUpdate(path, value)
   end
 end
 
-function updateInfo()
+function fn_update_info()
   local url = string.format("http://%s/api/getTileList", ip_address)
   HttpClient.Post {
     Url = url,
@@ -347,7 +347,7 @@ function updateInfo()
         if info and info.tileList then
           local device = nil
           for _, tile in ipairs(info.tileList) do
-            if compareIPs(tile.ipAddress, ip_address) then
+            if fn_compare_ips(tile.ipAddress, ip_address) then
               device = tile
               break
             end
@@ -372,7 +372,7 @@ function updateInfo()
 end
 
 -- compares two ip addresses, ignoring leading zeros
-function compareIPs(ip1, ip2)
+function fn_compare_ips(ip1, ip2)
   local function normalize(ip)
     local parts = {}
     if not ip then
@@ -386,7 +386,7 @@ function compareIPs(ip1, ip2)
   return normalize(ip1) == normalize(ip2)
 end
 
-function get_file_thumbnail(index, filename)
+function fn_get_file_thumbnail(index, filename)
   if index <= media_item_count then
     HttpClient.Download {
       Url = string.format("http://%s/Thumbs/%s", ip_address, filename:gsub("%.%w+", ".jpg")),
@@ -412,7 +412,7 @@ function get_file_thumbnail(index, filename)
   end
 end
 
-function updateMediaFolders()
+function fn_update_media_folders()
   url = string.format("http://%s/api/getMediaFoldersList", ip_address)
   HttpClient.Post {
     Url = url,
@@ -442,7 +442,6 @@ function updateMediaFolders()
     end
   }
 end
--- Layer Parameters
 
 function cmd_file_select(layer, x) -- 0..65535: File Select
   if file_metadata_list[Controls["file_select_" .. layer].String] then
@@ -866,8 +865,6 @@ for i = 1, layer_count do
       end
     end
   end
-
-
 end
 
 Controls["playlist_enable"].EventHandler = function()
@@ -922,13 +919,13 @@ for i = 1, layer_count do
   Controls["fx2_select_" .. i].Choices = fx_keys
 end
 
-updateMediaFolders()
+fn_update_media_folders()
 
 -- Connect
-if isIpAddress(ip_address) then
+if fn_check_valid_ip(ip_address) then
   print("Connecting to Hive player at " .. ip_address)
   Connect(ip_address, fn_hive_connect_Status)
-  pollInfo()
+  fn_poll_info()
 else
   print("Invalid IP address: " .. ip_address)
 end
