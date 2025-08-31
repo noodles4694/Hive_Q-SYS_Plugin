@@ -602,7 +602,7 @@ function cmd_playlist_play_previous()
     if new_row < 1 then
       new_row = playlist_row_count
     end
-  setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+    setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
   end
 end
 
@@ -612,21 +612,21 @@ function cmd_playlist_play_next()
     if new_row > playlist_row_count then
       new_row = 1
     end
-  setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+    setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
   end
 end
 
 function cmd_playlist_play_first()
   if playlist_row_count > 0 then
-    local new_row =  1
-  setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+    local new_row = 1
+    setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
   end
 end
 
 function cmd_playlist_play_last()
   if playlist_row_count > 0 then
     local new_row = playlist_row_count
-  setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+    setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
   end
 end
 
@@ -639,8 +639,50 @@ function cmd_playlist_play_row(x)
     if new_row > playlist_row_count then
       new_row = playlist_row_count
     end
-  setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+    setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
   end
+end
+
+function cmd_restart()
+  local url = string.format("http://%s/api/runSystemCommand", ip_address)
+  HttpClient.Post {
+    Url = url,
+    Data = rapidjson.encode(
+      {
+        method = "Nectar_run_command",
+        cmd = "sudo reboot"
+      }
+    ), -- This can be anything
+    Headers = {
+      ["Content-Type"] = "application/json"
+    },
+    EventHandler = function(tbl, code, data, error, headers)
+      if code == 200 then
+        print("Restart command sent")
+      end
+    end
+  }
+end
+
+function cmd_shutdown()
+  local url = string.format("http://%s/api/runSystemCommand", ip_address)
+  HttpClient.Post {
+    Url = url,
+    Data = rapidjson.encode(
+      {
+        method = "Nectar_run_command",
+        cmd = "sudo shutdown -h now"
+      }
+    ), -- This can be anything
+    Headers = {
+      ["Content-Type"] = "application/json"
+    },
+    EventHandler = function(tbl, code, data, error, headers)
+      if code == 200 then
+        print("Shutdown command sent")
+      end
+    end
+  }
 end
 
 for i = 1, 2 do
@@ -868,6 +910,12 @@ Controls["playlist_play_row"].EventHandler = function()
       cmd_playlist_play_row(row)
     end
   end
+end
+Controls["system_shutdown"].EventHandler = function()
+  cmd_shutdown()
+end
+Controls["system_restart"].EventHandler = function()
+  cmd_restart()
 end
 
 updateMediaFolders()

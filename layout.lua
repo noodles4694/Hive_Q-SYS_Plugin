@@ -27,6 +27,7 @@ local media_list_groupbox_size = {
 }
 local module_enable_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (2 * btn_size[2]) + (2 * btn_gap[2])}
 local module_playlist_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (6 * btn_size[2]) + (2 * btn_gap[2])}
+local module_system_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (2 * btn_size[2]) + (2 * btn_gap[2])}
 
 if CurrentPage then
   if CurrentPage == "Status" then
@@ -720,6 +721,20 @@ if CurrentPage then
       }
     )
 
+    table.insert(
+      graphics,
+      {
+        Type = "GroupBox",
+        Text = "System",
+        HTextAlign = "Left",
+        CornerRadius = 8,
+        Fill = Colors.hive_grey,
+        StrokeWidth = 1,
+        Position = {0, module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] + 8},
+        Size = module_system_groupbox_size
+      }
+    )
+
     layout["playlist_enable"] = {
       PrettyName = "Modules~Playlist Enable",
       ButtonStyle = "Toggle",
@@ -1031,6 +1046,41 @@ if CurrentPage then
         (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])
       },
       Size = {3 * btn_size[1], btn_size[2]}
+    }
+
+    layout["system_restart"] = {
+      PrettyName = "System~Restart Device",
+      ButtonVisualStyle = "Flat",
+      Color = Colors.enable_green,
+      OffColor = Colors.control_background_light,
+      UnlinkOffColor = true,
+      TextColor = Colors.White,
+      StrokeColor = Colors.control_text,
+      Legend = "REBOOT DEVICE",
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {
+        (3 * btn_size[1]) + (4 * btn_gap[1]),
+        (6 * btn_gap[2]) + module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] 
+      },
+      Size = {4 * btn_size[1], btn_size[2]}
+    }
+    layout["system_shutdown"] = {
+      PrettyName = "System~Shutdown Device",
+      ButtonVisualStyle = "Flat",
+      Color = Colors.enable_green,
+      OffColor = Colors.control_background_light,
+      UnlinkOffColor = true,
+      TextColor = Colors.White,
+      StrokeColor = Colors.control_text,
+      Legend = "SHUTDOWN DEVICE",
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {
+        (9 * btn_size[1]) + (8 * btn_gap[1]),
+        (6 * btn_gap[2]) + module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] 
+      },
+      Size = {4 * btn_size[1], btn_size[2]}
     }
   end
 end

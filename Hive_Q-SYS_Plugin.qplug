@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "0.0",
-  BuildVersion = "0.0.0.250",
+  BuildVersion = "0.0.0.267",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -915,7 +915,7 @@ function GetControls(props)
           Name = "playlist_play_previous",
           ControlType = "Button",
           ButtonType = "Trigger",
-          PinStyle = "Both",
+          PinStyle = "Input",
           Count = 1,
           UserPin = true
         }
@@ -926,7 +926,7 @@ function GetControls(props)
           Name = "playlist_play_next",
           ControlType = "Button",
           ButtonType = "Trigger",
-          PinStyle = "Both",
+          PinStyle = "Input",
           Count = 1,
           UserPin = true
         }
@@ -937,7 +937,7 @@ function GetControls(props)
           Name = "playlist_play_first",
           ControlType = "Button",
           ButtonType = "Trigger",
-          PinStyle = "Both",
+          PinStyle = "Input",
           Count = 1,
           UserPin = true
         }
@@ -948,7 +948,7 @@ function GetControls(props)
           Name = "playlist_play_last",
           ControlType = "Button",
           ButtonType = "Trigger",
-          PinStyle = "Both",
+          PinStyle = "Input",
           Count = 1,
           UserPin = true
         }
@@ -959,7 +959,7 @@ function GetControls(props)
           Name = "playlist_play_row",
           ControlType = "Button",
           ButtonType = "Trigger",
-          PinStyle = "Both",
+          PinStyle = "Input",
           Count = 1,
           UserPin = true
         }
@@ -975,6 +975,28 @@ function GetControls(props)
           Min = 1,
           Max = 9999999,
           DefaultValue = 1,
+          Count = 1,
+          UserPin = true
+        }
+      )
+      table.insert(
+        ctrls,
+        {
+          Name = "system_restart",
+          ControlType = "Button",
+          ButtonType = "Trigger",
+          PinStyle = "Input",
+          Count = 1,
+          UserPin = true
+        }
+      )
+      table.insert(
+        ctrls,
+        {
+          Name = "system_shutdown",
+          ControlType = "Button",
+          ButtonType = "Trigger",
+          PinStyle = "Input",
           Count = 1,
           UserPin = true
         }
@@ -1017,6 +1039,7 @@ function GetControlLayout(props)
   }
   local module_enable_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (2 * btn_size[2]) + (2 * btn_gap[2])}
   local module_playlist_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (6 * btn_size[2]) + (2 * btn_gap[2])}
+  local module_system_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (2 * btn_size[2]) + (2 * btn_gap[2])}
   
   if CurrentPage then
     if CurrentPage == "Status" then
@@ -1710,6 +1733,20 @@ function GetControlLayout(props)
         }
       )
   
+      table.insert(
+        graphics,
+        {
+          Type = "GroupBox",
+          Text = "System",
+          HTextAlign = "Left",
+          CornerRadius = 8,
+          Fill = Colors.hive_grey,
+          StrokeWidth = 1,
+          Position = {0, module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] + 8},
+          Size = module_system_groupbox_size
+        }
+      )
+  
       layout["playlist_enable"] = {
         PrettyName = "Modules~Playlist Enable",
         ButtonStyle = "Toggle",
@@ -2021,6 +2058,41 @@ function GetControlLayout(props)
           (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])
         },
         Size = {3 * btn_size[1], btn_size[2]}
+      }
+  
+      layout["system_restart"] = {
+        PrettyName = "System~Restart Device",
+        ButtonVisualStyle = "Flat",
+        Color = Colors.enable_green,
+        OffColor = Colors.control_background_light,
+        UnlinkOffColor = true,
+        TextColor = Colors.White,
+        StrokeColor = Colors.control_text,
+        Legend = "REBOOT DEVICE",
+        FontSize = 12,
+        StrokeWidth = 1,
+        Position = {
+          (3 * btn_size[1]) + (4 * btn_gap[1]),
+          (6 * btn_gap[2]) + module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] 
+        },
+        Size = {4 * btn_size[1], btn_size[2]}
+      }
+      layout["system_shutdown"] = {
+        PrettyName = "System~Shutdown Device",
+        ButtonVisualStyle = "Flat",
+        Color = Colors.enable_green,
+        OffColor = Colors.control_background_light,
+        UnlinkOffColor = true,
+        TextColor = Colors.White,
+        StrokeColor = Colors.control_text,
+        Legend = "SHUTDOWN DEVICE",
+        FontSize = 12,
+        StrokeWidth = 1,
+        Position = {
+          (9 * btn_size[1]) + (8 * btn_gap[1]),
+          (6 * btn_gap[2]) + module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] 
+        },
+        Size = {4 * btn_size[1], btn_size[2]}
       }
     end
   end
@@ -3321,6 +3393,44 @@ function cmd_playlist_play_row(x)
   end
 end
 
+function cmd_restart()
+  local url = string.format("http://%s/api/runSystemCommand", ip_address)
+  HttpClient.Post {
+    Url = url,
+    Data = rapidjson.encode({
+      method = "Nectar_run_command",
+      cmd = "sudo reboot"
+    }), -- This can be anything
+    Headers = {
+      ["Content-Type"] = "application/json"
+    },
+    EventHandler = function(tbl, code, data, error, headers)
+      if code == 200 then
+        -- do nothing, just wait for the system to restart
+      end
+    end
+  }
+end
+
+function cmd_shutdown()
+  local url = string.format("http://%s/api/runSystemCommand", ip_address)
+  HttpClient.Post {
+    Url = url,
+    Data = rapidjson.encode({
+      method = "Nectar_run_command",
+      cmd = "sudo shutdown -h now"
+    }), -- This can be anything
+    Headers = {
+      ["Content-Type"] = "application/json"
+    },
+    EventHandler = function(tbl, code, data, error, headers)
+      if code == 200 then
+        -- do nothing, just wait for the system to restart
+      end
+    end
+  }
+end
+
 for i = 1, 2 do
   _G["cmd_fx" .. i .. "_select"] = function(layer, x)
     fn_send(layer, "FX" .. i .. " SELECT", x)
@@ -3546,6 +3656,12 @@ Controls["playlist_play_row"].EventHandler = function()
       cmd_playlist_play_row(row)
     end
   end
+end
+Controls["system_shutdown"].EventHandler = function()
+  cmd_shutdown()
+end
+Controls["system_restart"].EventHandler = function()
+  cmd_restart()
 end
 
 updateMediaFolders()

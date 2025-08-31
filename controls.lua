@@ -342,7 +342,7 @@ for i = 1, layer_count do
         Name = "playlist_play_previous",
         ControlType = "Button",
         ButtonType = "Trigger",
-        PinStyle = "Both",
+        PinStyle = "Input",
         Count = 1,
         UserPin = true
       }
@@ -353,7 +353,7 @@ for i = 1, layer_count do
         Name = "playlist_play_next",
         ControlType = "Button",
         ButtonType = "Trigger",
-        PinStyle = "Both",
+        PinStyle = "Input",
         Count = 1,
         UserPin = true
       }
@@ -364,7 +364,7 @@ for i = 1, layer_count do
         Name = "playlist_play_first",
         ControlType = "Button",
         ButtonType = "Trigger",
-        PinStyle = "Both",
+        PinStyle = "Input",
         Count = 1,
         UserPin = true
       }
@@ -375,7 +375,7 @@ for i = 1, layer_count do
         Name = "playlist_play_last",
         ControlType = "Button",
         ButtonType = "Trigger",
-        PinStyle = "Both",
+        PinStyle = "Input",
         Count = 1,
         UserPin = true
       }
@@ -386,7 +386,7 @@ for i = 1, layer_count do
         Name = "playlist_play_row",
         ControlType = "Button",
         ButtonType = "Trigger",
-        PinStyle = "Both",
+        PinStyle = "Input",
         Count = 1,
         UserPin = true
       }
@@ -402,6 +402,28 @@ for i = 1, layer_count do
         Min = 1,
         Max = 9999999,
         DefaultValue = 1,
+        Count = 1,
+        UserPin = true
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = "system_restart",
+        ControlType = "Button",
+        ButtonType = "Trigger",
+        PinStyle = "Input",
+        Count = 1,
+        UserPin = true
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = "system_shutdown",
+        ControlType = "Button",
+        ButtonType = "Trigger",
+        PinStyle = "Input",
         Count = 1,
         UserPin = true
       }
