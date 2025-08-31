@@ -1,4 +1,5 @@
 CreatePages()
+-- Controls for Status Page
 table.insert(
   ctrls,
   {
@@ -187,6 +188,7 @@ table.insert(
   }
 )
 
+-- Controls for Media and Layers Pages
 for i = 1, layer_count do
   for k, v in pairs(control_list) do
     table.insert(
@@ -225,6 +227,8 @@ for i = 1, layer_count do
         UserPin = false
       }
     )
+
+    -- Controls for Modules Page
     table.insert(
       ctrls,
       {

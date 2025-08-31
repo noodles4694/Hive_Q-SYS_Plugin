@@ -22,8 +22,8 @@ table.insert(
   {
     Name = "Media List Count",
     Type = "integer",
-    Value = 10,
+    Value = 20,
     Min = 1,
-    Max = 120
+    Max = 128
   }
 )

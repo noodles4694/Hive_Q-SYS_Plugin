@@ -1,6 +1,9 @@
+-- This file contains constant variables used throughout the project
+-- These variables should not be changed during runtime
 local layer_count = 2
 local max_media_items = 120
 
+--create a table of colors to be used in the UI
 local Colors = {
   hive_yellow = {255, 215, 0},
   hive_grey = {18, 22, 26},
@@ -16,6 +19,7 @@ local Colors = {
   control_text = {170, 170, 170},
 }
 
+-- Define a list of controls with their properties
 local control_list = {
   ["File Select"] = {
     Name = "file_select_",
@@ -340,7 +344,7 @@ local control_list = {
     UserPin = true
   }
 }
-
+-- Create a list of parameter names for easy reference
 local parameter_list = {
   "Folder Select",
   "File Select",
@@ -381,7 +385,7 @@ local parameter_list = {
 
 local fx1_list = {}
 local fx2_list = {}
-
+-- Add FX1 and FX2 parameters to fx1_list, fx2_list
 control_list["FX1 Select"] = {
   Name = "fx1_select_",
   ControlType = "Text",

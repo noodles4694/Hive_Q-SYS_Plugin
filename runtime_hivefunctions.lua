@@ -1,6 +1,12 @@
+-- Description: Functions to interact with Hive via WebSocket
+
+-- Load the RapidJSON library for JSON encoding/decoding
 rapidjson = require("rapidjson")
 
+-- Load the WebSocket library
 ws = WebSocket.New()
+
+-- Variables to manage WebSocket connection and callbacks
 local wsConnected = false
 local sequenceNo = 0
 local pendingCallbacks = {}
@@ -13,6 +19,7 @@ local ipTarget = nil
 local shouldConnect = false
 local dataBuffer = "" -- Buffer to hold incoming data
 
+-- Connect to the Hive WebSocket server
 function Connect(ip, statusCallback)
   connectionCallback = statusCallback
   shouldConnect = true
@@ -25,6 +32,7 @@ function Connect(ip, statusCallback)
   end
 end
 
+-- Disconnect from the Hive WebSocket server
 function Disconnect()
   shouldConnect = false
   ws:Close()
@@ -47,6 +55,7 @@ ws.Connected = function()
   pingTimer:Start(10)
 end
 
+-- Handle WebSocket closure and attempt to reconnect if needed
 ws.Closed = function()
   wsConnected = false
   print("WebSocket connection closed")
@@ -63,6 +72,7 @@ ws.Closed = function()
   end
 end
 
+-- Handle incoming data from the WebSocket
 ws.Data = function(ws, data)
   -- Check if the data is a complete message or part of a larger message
   if (string.len(data) == 16384) then
@@ -103,6 +113,7 @@ ws.Data = function(ws, data)
   end
 end
 
+-- Handle WebSocket errors
 ws.Error = function(socket, err)
   print("Hive WebSocket error: " .. err)
   pingTimer:Stop()
@@ -119,6 +130,7 @@ pingTimer.EventHandler = function()
   ws:Ping()
 end
 
+-- Function to connect to the WebSocket server
 function connectSocket(ip)
   -- Check if the WebSocket is already connected
   if (wsConnected) then
@@ -129,6 +141,7 @@ function connectSocket(ip)
   ws:Connect("ws", ip, "", 9002)
 end
 
+-- Handler for Watched Patch updates
 function refreshView(refreshViewMessage)
   local callback = refreshViewMap[refreshViewMessage.Path]
   if callback then
@@ -138,8 +151,10 @@ function refreshView(refreshViewMessage)
   end
 end
 
+-- Register the refreshView handler
 handlers["RefreshView"] = refreshView
 
+-- Function to remove a watch on a specific path
 function _RemoveWatch(path)
   if (wsConnected) then
     -- Create the request object
@@ -153,6 +168,7 @@ function _RemoveWatch(path)
   end
 end
 
+-- Public function to remove a watch and its associated callback
 function removeWatch(path)
   if path then
     refreshViewMap[path] = nil
@@ -161,6 +177,7 @@ function removeWatch(path)
   end
 end
 
+-- Functions to get patch numerical values
 function getPatchDouble(path, callback)
   if (wsConnected) then
     -- Increment the sequence number for each request
@@ -181,7 +198,7 @@ function getPatchDouble(path, callback)
     ws:Write(rapidjson.encode(request), false)
   end
 end
-
+-- Functions to set patch numerical values
 function setPatchDouble(path, value)
   if (wsConnected) then
     -- Create the request object
@@ -195,6 +212,7 @@ function setPatchDouble(path, value)
   end
 end
 
+-- Functions to watch for changes to patch numerical values
 function _WatchPatchDouble(path)
   if (wsConnected) then
     -- Create the request object
@@ -208,12 +226,14 @@ function _WatchPatchDouble(path)
   end
 end
 
+-- Public function to watch a patch numerical value and set up its callback
 function watchPatchDouble(path, callback)
   refreshViewMap[path] = callback
   _WatchPatchDouble(path)
   getPatchDouble(path, callback)
 end
 
+-- Public function to get patch string values
 function getPatchString(path, callback)
   if (wsConnected) then
     -- Increment the sequence number for each request
@@ -235,6 +255,7 @@ function getPatchString(path, callback)
   end
 end
 
+-- Public function to set patch string values
 function setPatchString(path, value)
   if (wsConnected) then
     -- Create the request object
@@ -248,6 +269,7 @@ function setPatchString(path, value)
   end
 end
 
+-- Function to watch changes to patch string values
 function _WatchPatchString(path)
   if (wsConnected) then
     -- Create the request object
@@ -261,12 +283,14 @@ function _WatchPatchString(path)
   end
 end
 
+-- Public function to watch a patch string value and set up its callback
 function watchPatchString(path, callback)
   refreshViewMap[path] = callback
   _WatchPatchString(path)
   getPatchString(path, callback)
 end
 
+-- Public function to get patch JSON values
 function getPatchJSON(path, callback, raw)
   if (wsConnected) then
     -- Increment the sequence number for each request
@@ -292,6 +316,7 @@ function getPatchJSON(path, callback, raw)
   end
 end
 
+-- Public function to set patch JSON values
 function setPatchJSON(path, value)
   if (wsConnected) then
     -- Create the request object
@@ -305,6 +330,7 @@ function setPatchJSON(path, value)
   end
 end
 
+-- Public function to update patch JSON values
 function updatePatchJSON(path, value)
   if (wsConnected) then
     -- Create the request object
@@ -318,6 +344,7 @@ function updatePatchJSON(path, value)
   end
 end
 
+-- Function to watch changes to patch JSON values
 function _WatchPatchJSON(path)
   if (wsConnected) then
     -- Create the request object
@@ -331,6 +358,7 @@ function _WatchPatchJSON(path)
   end
 end
 
+-- Public function to watch a patch JSON value and set up its callback
 function watchPatchJSON(path, callback)
   refreshViewMap[path] = callback
   _WatchPatchJSON(path)

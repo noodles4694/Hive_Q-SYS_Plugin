@@ -1,3 +1,6 @@
+-- This script is automatically loaded by the main script to define and initialize runtime variables
+
+---- These variables can be changed during runtime
 local file_list = {}
 local selected_file = {}
 local file_metadata_list = {}
@@ -34,8 +37,9 @@ for k, v in pairs(lut_list) do
 end
 
 -- Key and Value arrays to be used with all ENUM based controls, separating the keys and values
--- is the easiest way to maintain order
+-- is the easiest way to maintain order but still allow them to be edited if required
 
+-- Play Mode
 local play_mode_keys = {
   "In Frame",
   "Out Frame",
@@ -84,6 +88,7 @@ local play_mode_values = {
   45
 }
 
+-- Transition Mode
 local transition_mode_keys = {
   "Alpha",
   "Additive",
@@ -154,6 +159,7 @@ local transition_mode_values = {
   31
 }
 
+-- Framing Mode
 local framing_mode_keys = {
   "Letterbox",
   "Crop",
@@ -170,6 +176,7 @@ local framing_mode_values = {
   4
 }
 
+-- Blend Mode
 local blend_mode_keys = {
   "Alpha",
   "Additive",
@@ -192,6 +199,7 @@ local blend_mode_values = {
   7
 }
 
+-- FX
 local fx_keys = {
   "NONE",
   "OLD TV",
@@ -290,6 +298,7 @@ end
 
 local ip_address = Properties["IP Address"].Value
 
+-- Utility functions to get key from value and vice versa in the ENUM tables
 function get_table_key(tblKeys, tblValues, value)
   for i = 1, #tblValues do
     if tblValues[i] == value then
