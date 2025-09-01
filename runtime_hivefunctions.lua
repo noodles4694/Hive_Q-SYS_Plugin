@@ -25,10 +25,10 @@ function Connect(ip, statusCallback)
   shouldConnect = true
   ipTarget = ip
   if (ipTarget) then
-    print("Connecting to Hive WebSocket at " .. ipTarget)
+    fn_log_message("Connecting to Hive Device at " .. ipTarget)
     connectSocket(ipTarget)
   else
-    print("No IP address provided for WebSocket connection.")
+    fn_log_error("No IP address provided for Device connection.")
   end
 end
 
@@ -37,7 +37,7 @@ function Disconnect()
   shouldConnect = false
   ws:Close()
   wsConnected = false
-  print("WebSocket connection closed")
+  fn_log_message("Hive connection closed")
   if connectionCallback then
     connectionCallback(false) -- Call the status callback with false to indicate disconnection
   end
@@ -47,7 +47,7 @@ end
 -- WebSocket event handlers
 ws.Connected = function()
   wsConnected = true
-  print("WebSocket connection established")
+  fn_log_message("Hive connection established")
   if connectionCallback then
     connectionCallback(true) -- Call the status callback with true to indicate success
   end
@@ -58,16 +58,17 @@ end
 -- Handle WebSocket closure and attempt to reconnect if needed
 ws.Closed = function()
   wsConnected = false
-  print("WebSocket connection closed")
+  fn_log_message("Hive connection closed")
   if connectionCallback then
     connectionCallback(false) -- Call the status callback with false to indicate disconnection
   end
   pingTimer:Stop()
   if shouldConnect then
     if ipTarget then
+      fn_log_message("Attempting to reconnect to Hive Device at " .. ipTarget)
       connectSocket(ipTarget) -- Attempt to reconnect
     else
-      print("No IP address provided for reconnection.")
+      fn_log_error("No IP address provided for reconnection.")
     end
   end
 end
@@ -107,7 +108,7 @@ ws.Data = function(ws, data)
         pendingRawCallbacks[response.sequence] = nil
       end
     else
-      print("No callback / handler found for data: ")
+      fn_log_error("No callback / handler found for data: ")
     end
     dataBuffer = "" -- Clear the buffer after processing
   end
@@ -115,11 +116,12 @@ end
 
 -- Handle WebSocket errors
 ws.Error = function(socket, err)
-  print("Hive WebSocket error: " .. err)
+  fn_log_error("Hive connection error: " .. err)
   pingTimer:Stop()
   -- Attempt to reconnect if the connection is lost
   if wsConnected == false and shouldConnect == true then
     if ipTarget then
+      fn_log_message("Attempting to reconnect to Hive Device at " .. ipTarget)
       connectSocket(ipTarget) -- Attempt to reconnect
     end
   end
@@ -127,6 +129,7 @@ end
 
 -- Timer to send ping messages to keep the WebSocket connection alive
 pingTimer.EventHandler = function()
+  fn_log_debug("Sending ping to Hive")
   ws:Ping()
 end
 
@@ -134,10 +137,11 @@ end
 function connectSocket(ip)
   -- Check if the WebSocket is already connected
   if (wsConnected) then
-    print("WebSocket is already connected.")
+    fn_log_message("WebSocket is already connected.")
     ws:Close()
   end
   -- Connect to the Hive WebSocket server
+  fn_log_debug("Connecting to Hive WebSocket at " .. ip)
   ws:Connect("ws", ip, "", 9002)
 end
 
@@ -147,7 +151,7 @@ function refreshView(refreshViewMessage)
   if callback then
     callback(refreshViewMessage.Path, refreshViewMessage.Value)
   else
-    print("No callback found for refresh view message: " .. refreshViewMessage)
+    fn_log_error("No callback found for refresh view message: " .. refreshViewMessage)
   end
 end
 
@@ -157,6 +161,7 @@ handlers["RefreshView"] = refreshView
 -- Function to remove a watch on a specific path
 function _RemoveWatch(path)
   if (wsConnected) then
+    fn_log_debug("Removing watch for path: " .. path)
     -- Create the request object
     local request = {
       apiVersion = 1,

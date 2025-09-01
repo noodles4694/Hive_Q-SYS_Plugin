@@ -95,6 +95,7 @@ end
 --Start event based logic
 if Controls then
 --[[ #include "runtime_variables.lua"]]
+--[[ #include "runtime_utility_functions.lua"]]
 --[[ #include "runtime_hivefunctions.lua"]]
 --[[ #include "runtime.lua" ]]
 end

@@ -12,7 +12,7 @@ table.insert(
   {
     Name = "Model",
     Type = "enum",
-    Choices = {"PLUTO","OSMIA","MINIMA","NEXUS","PLAYER_1", "PLAYER_2", "PLAYER_3", "PLAYER_4"},
+    Choices = {"PLUTO", "OSMIA", "MINIMA", "NEXUS", "PLAYER_1", "PLAYER_2", "PLAYER_3", "PLAYER_4"},
     Value = "PLUTO"
   }
 )
@@ -25,5 +25,15 @@ table.insert(
     Value = 20,
     Min = 1,
     Max = 128
+  }
+)
+
+table.insert(
+  props,
+  {
+    Name = "Logging Level",
+    Type = "enum",
+    Choices = {"Normal", "Errors Only", "Debug"},
+    Value = "Normal"
   }
 )

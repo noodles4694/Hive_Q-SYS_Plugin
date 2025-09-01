@@ -1,32 +1,6 @@
----checks if a string represents an ip address
-function fn_check_valid_ip(ip)
-  if not ip then
-    return false
-  end
-  local a, b, c, d = ip:match("^(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)%.(%d%d?%d?)$")
-  a = tonumber(a)
-  b = tonumber(b)
-  c = tonumber(c)
-  d = tonumber(d)
-  if not a or not b or not c or not d then
-    return false
-  end
-  if a < 0 or 255 < a then
-    return false
-  end
-  if b < 0 or 255 < b then
-    return false
-  end
-  if c < 0 or 255 < c then
-    return false
-  end
-  if d < 0 or 255 < d then
-    return false
-  end
-  return true
-end
 
 function fn_hive_connect_Status(status)
+  fn_log_debug("Setting connected status to " .. tostring(status))
   if status == true then
     Controls.online.Boolean = true
     fn_watch_parameters()
@@ -38,6 +12,7 @@ end
 
 function fn_watch_parameters()
   -- Watch for JSON updates
+  fn_log_debug("Setting up JSON watchers")
   watchPatchJSON("/System Settings", fn_process_JSON_update)
   watchPatchJSON("/Media List", fn_process_JSON_update)
   watchPatchJSON("/Play List", fn_process_JSON_update)
@@ -48,7 +23,7 @@ function fn_watch_parameters()
   -- get the LUT options and update controls
   -- set the RAW mode so we can parse the raw data manually
   getPatchJSON("/LUT Colour Modes", fn_process_LUT_data, true)
-
+  fn_log_debug("LUT options requested")
   watchPatchString(
     "/Status/Text",
     function(path, value)
@@ -57,6 +32,7 @@ function fn_watch_parameters()
   )
 
   -- Watch for value changes in layer parameters
+  fn_log_debug("Setting up layer parameter watchers")
   for i = 1, layer_count do
     for _, parameter in ipairs(poll_parameter_list) do
       local path = string.format("/LAYER %s/%s/Value", i, parameter)
@@ -73,23 +49,32 @@ function fn_watch_parameters()
   end
 
   -- Watch for value changes in transport control parameters
+  fn_log_debug("Setting up transport control watchers")
   for i = 1, layer_count do
     watchPatchDouble(string.format("/LAYER %s/Transport Control/Media Time/Value", i), fn_process_transport_update)
   end
 end
 
 function fn_poll_info()
+  if wsConnected == true then
+  fn_log_debug("Polling engine FPS")
   getPatchString(
     "/Mapping/Render Resolution/FPS",
     function(path, value)
+      fn_log_debug("Engine FPS: " .. value)
       Controls.engine_fps.String = value
     end
   )
   fn_update_sync_status()
+end
   Timer.CallAfter(fn_poll_info, 1)
 end
 
 function fn_update_sync_status()
+  if wsConnected ~= true then
+    return
+  end
+  fn_log_debug("Polling BeeSync status")
   local url = string.format("http://%s/api/getBeeSyncStatus", ip_address)
   HttpClient.Post {
     Url = url,
@@ -100,23 +85,29 @@ function fn_update_sync_status()
     EventHandler = function(tbl, code, data, error, headers)
       if code == 200 then
         local info = rapidjson.decode(data)
+        fn_log_debug("BeeSync status: " .. info.status)
         Controls.sync_status.String = info.status
+      else
+        fn_log_error("Failed to get BeeSync status: HTTP " .. tostring(code))
       end
     end
   }
 end
 
 function fn_send(layer, cmd, val)
+  fn_log_debug(string.format("Sending command to layer %s: %s = %s", layer, cmd, tostring(val)))
   local path = "/LAYER " .. layer .. "/" .. cmd .. "/Value" -- please make this neater with string.format()
   setPatchDouble(path, val)
 end
 
 function fn_send_json(cmd, val)
+  fn_log_debug(string.format("Sending JSON command: %s = %s", cmd, rapidjson.encode(val)))
   local path = "/" .. cmd
   setPatchJSON(path, val)
 end
 
 function fn_update_json(cmd, val)
+  fn_log_debug(string.format("Updating JSON command: %s = %s", cmd, rapidjson.encode(val)))
   local path = "/" .. cmd
   updatePatchJSON(path, val)
 end
@@ -126,7 +117,7 @@ function fn_process_LUT_data(path, data)
   -- however it is not indexed so we have to extract the string pairs manually
   -- in order to maintain the ordering
   -- this is a bit hacky but it works
-
+fn_log_debug("Processing LUT data")
   -- find the start of the "Value" object
   local startPos = data:find('"Value"%s*:%s*{')
   if startPos then
@@ -166,6 +157,8 @@ function fn_process_LUT_data(path, data)
         Controls["lut_" .. i].Choices = lut_choices
       end
     end
+  else
+    fn_log_error("Failed to find LUT Value block in JSON data")
   end
 end
 
@@ -185,15 +178,19 @@ function fn_process_transport_update(path, value)
         end
       end
     end
+  else
+    fn_log_error("Unknown transport parameter: " .. parameter)
   end
 end
 
 function fn_process_playlist_row_update(path, value)
+  fn_log_debug("Playlist active row updated to " .. tostring(value + 1))
   playlist_active_row = value + 1 -- convert from 0 based to 1 based
   Controls.playlist_current_row.Value = playlist_active_row
 end
 
 function fn_process_double_update(path, value)
+  fn_log_debug("Processing double update: " .. path .. " = " .. tostring(value))
   if path:sub(1, 6) == "/LAYER" then -- Layer parameter response
     local layer, parameter = path:match("/LAYER (%d+)/(%P+)/Value")
     if parameter then
@@ -267,11 +264,14 @@ function fn_process_double_update(path, value)
       else -- parameters where data directly proportional to position
         Controls[control].Position = value
       end
+    else
+      fn_log_error("Unknown layer parameter: " .. path)
     end
   end
 end
 
 function fn_process_JSON_update(path, value)
+  fn_log_debug("Processing JSON update: " .. path)
   if path == "/System Settings" then
     fn_update_info()
   elseif path == "/Media List" then
@@ -294,6 +294,7 @@ function fn_process_JSON_update(path, value)
     fn_update_info()
   elseif path == "/Output Mapping" then
   elseif path == "/Play List" then
+    fn_log_debug("Playlist updated, total items: " .. tostring(value.list and #value.list or 0) .. ", enabled: " .. tostring(value.usePlayList))
     if value.usePlayList and value.usePlayList == 1 then
       Controls.playlist_enable.Boolean = true
     else
@@ -302,6 +303,7 @@ function fn_process_JSON_update(path, value)
     playlist_row_count = value.list and #value.list or 0
     Controls.playlist_rows.Value = playlist_row_count
   elseif path == "/Timecode Cue List" then
+    fn_log_debug("Timecode Cue List updated, layer 1 items: " .. tostring(value.layers[1] and #(value.layers[1].list) or 0) .. ", layer 2 items: " .. tostring(value.layers[2] and #(value.layers[2].list) or 0) .. ", layer 1 enabled: " .. tostring(value.layers[1] and value.layers[1].useCueList == 1) .. ", layer 2 enabled: " .. tostring(value.layers[2] and value.layers[2].useCueList == 1))
     if value.layers[1] and value.layers[1].useCueList == 1 then
       Controls.l1_timecode_enable.Boolean = true
     else
@@ -315,12 +317,14 @@ function fn_process_JSON_update(path, value)
     Controls.l1_tc_rows.Value = value.layers[1] and #(value.layers[1].list) or 0
     Controls.l2_tc_rows.Value = value.layers[2] and #(value.layers[2].list) or 0
   elseif path == "/Schedule" then
+    fn_log_debug("Schedule updated, enabled: " .. tostring(value.useSchedule))
     if value.useSchedule and value.useSchedule == 1 then
       Controls.schedule_enable.Boolean = true
     else
       Controls.schedule_enable.Boolean = false
     end
   elseif path == "/Timeline" then
+    fn_log_debug("Timeline updated, enabled: " .. tostring(value.useTimeline))
     if value.useTimeline and value.useTimeline == 1 then
       Controls.timeline_enable.Boolean = true
     else
@@ -332,6 +336,10 @@ function fn_process_JSON_update(path, value)
 end
 
 function fn_update_info()
+  if wsConnected ~= true then
+    return
+  end
+  fn_log_debug("Updating device info")
   local url = string.format("http://%s/api/getTileList", ip_address)
   HttpClient.Post {
     Url = url,
@@ -342,6 +350,7 @@ function fn_update_info()
     EventHandler = function(tbl, code, data, error, headers)
       if code == 200 then
         local info = rapidjson.decode(data)
+        fn_log_debug("Device info received")
         Controls.version.String = info.hiveVersion
 
         if info and info.tileList then
@@ -366,28 +375,19 @@ function fn_update_info()
             Controls.free_space.String = string.format("%.2f GB", tonumber(device.space) / (1024 * 1024 * 1024))
           end
         end
+      else
+        fn_log_error("Failed to get device info: HTTP " .. tostring(code))
       end
     end
   }
 end
 
--- compares two ip addresses, ignoring leading zeros
-function fn_compare_ips(ip1, ip2)
-  local function normalize(ip)
-    local parts = {}
-    if not ip then
-      return ""
-    end
-    for octet in string.gmatch(ip, "%d+") do
-      table.insert(parts, tostring(tonumber(octet))) -- remove leading zeros
-    end
-    return table.concat(parts, ".")
-  end
-  return normalize(ip1) == normalize(ip2)
-end
-
 function fn_get_file_thumbnail(index, filename)
+  if wsConnected ~= true then
+    return
+  end
   if index <= media_item_count then
+    fn_log_debug("Requesting thumbnail for media index " .. tostring(index) .. ", file: " .. filename)
     HttpClient.Download {
       Url = string.format("http://%s/Thumbs/%s", ip_address, filename:gsub("%.%w+", ".jpg")),
       Headers = {},
@@ -409,10 +409,16 @@ function fn_get_file_thumbnail(index, filename)
         end
       end
     }
+  else
+    fn_log_error("Thumbnail index " .. tostring(index) .. " exceeds media item count of " .. tostring(media_item_count))
   end
 end
 
 function fn_update_media_folders()
+  if wsConnected ~= true then
+    return
+  end
+  fn_log_debug("Updating media folder list")
   url = string.format("http://%s/api/getMediaFoldersList", ip_address)
   HttpClient.Post {
     Url = url,
@@ -422,6 +428,7 @@ function fn_update_media_folders()
     },
     EventHandler = function(tbl, code, data, error, headers)
       if code == 200 then
+        fn_log_debug("Media folder list received")
         local folders = rapidjson.decode(data)
         folder_list = {
           ["MEDIA"] = 0 -- Default folder
@@ -438,6 +445,8 @@ function fn_update_media_folders()
         for i = 1, layer_count do
           Controls["folder_select_" .. i].Choices = folder_choices
         end
+      else
+        fn_log_error("Failed to get media folder list: HTTP " .. tostring(code))
       end
     end
   }
@@ -643,6 +652,10 @@ function cmd_playlist_play_row(x)
 end
 
 function cmd_restart()
+  if wsConnected ~= true then
+    return
+  end
+  fn_log_message("Sending restart command to device")
   local url = string.format("http://%s/api/runSystemCommand", ip_address)
   HttpClient.Post {
     Url = url,
@@ -657,13 +670,19 @@ function cmd_restart()
     },
     EventHandler = function(tbl, code, data, error, headers)
       if code == 200 then
-        print("Restart command sent")
+        fn_log_message("Restart command sent")
+      else
+        fn_log_error("Failed to send restart command: HTTP " .. tostring(code))
       end
     end
   }
 end
 
 function cmd_shutdown()
+  if wsConnected ~= true then
+    return
+  end
+  fn_log_message("Sending shutdown command to device")
   local url = string.format("http://%s/api/runSystemCommand", ip_address)
   HttpClient.Post {
     Url = url,
@@ -678,7 +697,9 @@ function cmd_shutdown()
     },
     EventHandler = function(tbl, code, data, error, headers)
       if code == 200 then
-        print("Shutdown command sent")
+        fn_log_message("Shutdown command sent")
+      else
+        fn_log_error("Failed to send shutdown command: HTTP " .. tostring(code))
       end
     end
   }
@@ -698,6 +719,7 @@ for i = 1, 2 do
   end
 end
 
+-- Set up seek timers and last value trackers
 for layer, seek_timer in pairs(seek_timer_list) do
   seek_timer.EventHandler = function(timer)
     if Controls[string.format("seek_%s", layer)].String == seek_last_value[layer] then
@@ -718,6 +740,8 @@ for layer, seek_timer in pairs(seek_timer_list) do
   end
 end
 
+-- Set up event handlers for controls
+fn_log_debug("Setting up control event handlers")
 for i = 1, layer_count do
   Controls["file_select_" .. i].EventHandler = function()
     cmd_file_select(i, file_list[Controls["file_select_" .. i].String])
@@ -923,9 +947,9 @@ fn_update_media_folders()
 
 -- Connect
 if fn_check_valid_ip(ip_address) then
-  print("Connecting to Hive player at " .. ip_address)
+  fn_log_message("Connecting to Hive player at " .. ip_address)
   Connect(ip_address, fn_hive_connect_Status)
   fn_poll_info()
 else
-  print("Invalid IP address: " .. ip_address)
+  fn_log_error("Invalid IP address: " .. ip_address)
 end

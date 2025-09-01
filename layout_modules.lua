@@ -41,6 +41,7 @@ table.insert(
 
 layout["playlist_enable"] = {
   PrettyName = "Modules~Playlist Enable",
+  Style = "Button",
   ButtonStyle = "Toggle",
   ButtonVisualStyle = "Flat",
   Color = Colors.enable_green,
@@ -57,6 +58,7 @@ layout["playlist_enable"] = {
 
 layout["l1_timecode_enable"] = {
   PrettyName = "Modules~Layer 1 TC Cuelist Enable",
+  Style = "Button",
   ButtonStyle = "Toggle",
   ButtonVisualStyle = "Flat",
   Color = Colors.enable_green,
@@ -73,6 +75,7 @@ layout["l1_timecode_enable"] = {
 
 layout["l2_timecode_enable"] = {
   PrettyName = "Modules~Layer 2 TC Cuelist Enable",
+  Style = "Button",
   ButtonStyle = "Toggle",
   ButtonVisualStyle = "Flat",
   Color = Colors.enable_green,
@@ -88,6 +91,7 @@ layout["l2_timecode_enable"] = {
 }
 layout["timeline_enable"] = {
   PrettyName = "Modules~Timeline Enable",
+  Style = "Button",
   ButtonStyle = "Toggle",
   ButtonVisualStyle = "Flat",
   Color = Colors.enable_green,
@@ -103,6 +107,7 @@ layout["timeline_enable"] = {
 }
 layout["schedule_enable"] = {
   PrettyName = "Modules~Schedule Enable",
+  Style = "Button",
   ButtonStyle = "Toggle",
   ButtonVisualStyle = "Flat",
   Color = Colors.enable_green,
@@ -116,6 +121,7 @@ layout["schedule_enable"] = {
   Position = {(12 * btn_size[1]) + (10 * btn_gap[1]), btn_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
+
 
 table.insert(
   graphics,
@@ -134,20 +140,6 @@ table.insert(
     Size = {3 * btn_size[1], btn_size[2]}
   }
 )
-layout["playlist_rows"] = {
-  PrettyName = "Modules~Playlist Rows",
-  Style = "TextBox",
-  Color = Colors.control_background,
-  TextColor = Colors.control_text,
-  StrokeColor = Colors.control_text,
-  FontSize = 12,
-  StrokeWidth = 1,
-  Position = {
-    (3 * btn_size[1]) + (1 * btn_gap[1]),
-    (1 * btn_gap[2]) + module_enable_groupbox_size[2] + (1 * btn_size[2])
-  },
-  Size = {3 * btn_size[1], btn_size[2]}
-}
 table.insert(
   graphics,
   {
@@ -165,20 +157,6 @@ table.insert(
     Size = {3 * btn_size[1], btn_size[2]}
   }
 )
-layout["playlist_current_row"] = {
-  PrettyName = "Modules~Playlist Current Row",
-  Style = "TextBox",
-  Color = Colors.control_background,
-  TextColor = Colors.control_text,
-  StrokeColor = Colors.control_text,
-  FontSize = 12,
-  StrokeWidth = 1,
-  Position = {
-    (3 * btn_size[1]) + (1 * btn_gap[1]),
-    (2 * btn_gap[2]) + module_enable_groupbox_size[2] + (2 * btn_size[2])
-  },
-  Size = {3 * btn_size[1], btn_size[2]}
-}
 table.insert(
   graphics,
   {
@@ -196,20 +174,6 @@ table.insert(
     Size = {3 * btn_size[1], btn_size[2]}
   }
 )
-layout["l1_tc_rows"] = {
-  PrettyName = "Modules~Layer 1 Cue List Rows",
-  Style = "TextBox",
-  Color = Colors.control_background,
-  TextColor = Colors.control_text,
-  StrokeColor = Colors.control_text,
-  FontSize = 12,
-  StrokeWidth = 1,
-  Position = {
-    (3 * btn_size[1]) + (1 * btn_gap[1]),
-    (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])
-  },
-  Size = {3 * btn_size[1], btn_size[2]}
-}
 table.insert(
   graphics,
   {
@@ -227,6 +191,54 @@ table.insert(
     Size = {3 * btn_size[1], btn_size[2]}
   }
 )
+
+layout["playlist_rows"] = {
+  PrettyName = "Modules~Playlist Rows",
+  Style = "TextBox",
+  Color = Colors.control_background,
+  TextColor = Colors.control_text,
+  StrokeColor = Colors.control_text,
+  FontSize = 12,
+  StrokeWidth = 1,
+  Position = {
+    (3 * btn_size[1]) + (1 * btn_gap[1]),
+    (1 * btn_gap[2]) + module_enable_groupbox_size[2] + (1 * btn_size[2])
+  },
+  Size = {3 * btn_size[1], btn_size[2]}
+}
+
+layout["playlist_current_row"] = {
+  PrettyName = "Modules~Playlist Current Row",
+  Style = "TextBox",
+  Color = Colors.control_background,
+  TextColor = Colors.control_text,
+  StrokeColor = Colors.control_text,
+  FontSize = 12,
+  StrokeWidth = 1,
+  Position = {
+    (3 * btn_size[1]) + (1 * btn_gap[1]),
+    (2 * btn_gap[2]) + module_enable_groupbox_size[2] + (2 * btn_size[2])
+  },
+  Size = {3 * btn_size[1], btn_size[2]}
+}
+
+layout["l1_tc_rows"] = {
+  PrettyName = "Modules~Layer 1 Cue List Rows",
+  Style = "TextBox",
+  Color = Colors.control_background,
+  TextColor = Colors.control_text,
+  StrokeColor = Colors.control_text,
+  FontSize = 12,
+  StrokeWidth = 1,
+  Position = {
+    (3 * btn_size[1]) + (1 * btn_gap[1]),
+    (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])
+  },
+  Size = {3 * btn_size[1], btn_size[2]}
+}
+
+
+
 layout["l2_tc_rows"] = {
   PrettyName = "Modules~Layer 2 Cue List Rows",
   Style = "TextBox",
@@ -241,6 +253,7 @@ layout["l2_tc_rows"] = {
   },
   Size = {3 * btn_size[1], btn_size[2]}
 }
+
 
 layout["playlist_play_previous"] = {
   PrettyName = "Modules~Playlist Play Previous",
@@ -352,8 +365,10 @@ layout["playlist_play_row_index"] = {
   Size = {3 * btn_size[1], btn_size[2]}
 }
 
+
 layout["system_restart"] = {
   PrettyName = "System~Restart Device",
+  Style = "Button",
   ButtonVisualStyle = "Flat",
   Color = Colors.enable_green,
   OffColor = Colors.control_background_light,
@@ -371,6 +386,7 @@ layout["system_restart"] = {
 }
 layout["system_shutdown"] = {
   PrettyName = "System~Shutdown Device",
+  Style = "Button",
   ButtonVisualStyle = "Flat",
   Color = Colors.enable_green,
   OffColor = Colors.control_background_light,
