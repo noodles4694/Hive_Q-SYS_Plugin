@@ -1,4 +1,5 @@
 CreatePages()
+
 local CurrentPage = PageNames[props["page_index"].Value]
 local media_item_count = props["Media List Count"].Value
 local column_size = 12
@@ -6,6 +7,7 @@ local fx1_column_size = 6
 local fx2_column_size = 6
 local btn_size = {32, 24}
 local btn_gap = {4, 4}
+local status_header_size = {12.5 * btn_size[1], 120}
 local status_groupbox_size = {12.5 * btn_size[1], 11 * btn_size[2]}
 local player_groupbox_position = {0, 0}
 local player_groupbox_size = {
