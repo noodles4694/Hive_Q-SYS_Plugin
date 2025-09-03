@@ -1,4 +1,3 @@
-
 function fn_hive_connect_Status(status)
   fn_log_debug("Setting connected status to " .. tostring(status))
   if status == true then
@@ -57,16 +56,16 @@ end
 
 function fn_poll_info()
   if wsConnected == true then
-  fn_log_debug("Polling engine FPS")
-  getPatchString(
-    "/Mapping/Render Resolution/FPS",
-    function(path, value)
-      fn_log_debug("Engine FPS: " .. value)
-      Controls.engine_fps.String = value
-    end
-  )
-  fn_update_sync_status()
-end
+    fn_log_debug("Polling engine FPS")
+    getPatchString(
+      "/Mapping/Render Resolution/FPS",
+      function(path, value)
+        fn_log_debug("Engine FPS: " .. value)
+        Controls.engine_fps.String = value
+      end
+    )
+    fn_update_sync_status()
+  end
   Timer.CallAfter(fn_poll_info, 1)
 end
 
@@ -96,7 +95,7 @@ end
 
 function fn_send(layer, cmd, val)
   fn_log_debug(string.format("Sending command to layer %s: %s = %s", layer, cmd, tostring(val)))
-  local path = "/LAYER " .. layer .. "/" .. cmd .. "/Value" -- please make this neater with string.format()
+  local path = "/LAYER " .. layer .. "/" .. cmd .. "/Value"
   setPatchDouble(path, val)
 end
 
@@ -117,7 +116,7 @@ function fn_process_LUT_data(path, data)
   -- however it is not indexed so we have to extract the string pairs manually
   -- in order to maintain the ordering
   -- this is a bit hacky but it works
-fn_log_debug("Processing LUT data")
+  fn_log_debug("Processing LUT data")
   -- find the start of the "Value" object
   local startPos = data:find('"Value"%s*:%s*{')
   if startPos then
@@ -294,7 +293,10 @@ function fn_process_JSON_update(path, value)
     fn_update_info()
   elseif path == "/Output Mapping" then
   elseif path == "/Play List" then
-    fn_log_debug("Playlist updated, total items: " .. tostring(value.list and #value.list or 0) .. ", enabled: " .. tostring(value.usePlayList))
+    fn_log_debug(
+      "Playlist updated, total items: " ..
+        tostring(value.list and #value.list or 0) .. ", enabled: " .. tostring(value.usePlayList)
+    )
     if value.usePlayList and value.usePlayList == 1 then
       Controls.playlist_enable.Boolean = true
     else
@@ -303,7 +305,15 @@ function fn_process_JSON_update(path, value)
     playlist_row_count = value.list and #value.list or 0
     Controls.playlist_rows.Value = playlist_row_count
   elseif path == "/Timecode Cue List" then
-    fn_log_debug("Timecode Cue List updated, layer 1 items: " .. tostring(value.layers[1] and #(value.layers[1].list) or 0) .. ", layer 2 items: " .. tostring(value.layers[2] and #(value.layers[2].list) or 0) .. ", layer 1 enabled: " .. tostring(value.layers[1] and value.layers[1].useCueList == 1) .. ", layer 2 enabled: " .. tostring(value.layers[2] and value.layers[2].useCueList == 1))
+    fn_log_debug(
+      "Timecode Cue List updated, layer 1 items: " ..
+        tostring(value.layers[1] and #(value.layers[1].list) or 0) ..
+          ", layer 2 items: " ..
+            tostring(value.layers[2] and #(value.layers[2].list) or 0) ..
+              ", layer 1 enabled: " ..
+                tostring(value.layers[1] and value.layers[1].useCueList == 1) ..
+                  ", layer 2 enabled: " .. tostring(value.layers[2] and value.layers[2].useCueList == 1)
+    )
     if value.layers[1] and value.layers[1].useCueList == 1 then
       Controls.l1_timecode_enable.Boolean = true
     else
