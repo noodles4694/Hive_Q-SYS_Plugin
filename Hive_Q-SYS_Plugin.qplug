@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.314",
+  BuildVersion = "0.0.0.315",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -814,213 +814,212 @@ function GetControls(props)
           UserPin = false
         }
       )
-  
-      -- Controls for Modules Page
-      table.insert(
-        ctrls,
-        {
-          Name = "playlist_enable",
-          ControlType = "Button",
-          ButtonType = "Toggle",
-          PinStyle = "Both",
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "l1_timecode_enable",
-          ControlType = "Button",
-          ButtonType = "Toggle",
-          PinStyle = "Both",
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "l2_timecode_enable",
-          ControlType = "Button",
-          ButtonType = "Toggle",
-          PinStyle = "Both",
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "timeline_enable",
-          ControlType = "Button",
-          ButtonType = "Toggle",
-          PinStyle = "Both",
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "schedule_enable",
-          ControlType = "Button",
-          ButtonType = "Toggle",
-          PinStyle = "Both",
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "playlist_rows",
-          ControlType = "Knob",
-          ControlUnit = "Integer",
-          Style = "Text Field",
-          PinStyle = "Output",
-          Min = 0,
-          Max = 9999999,
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "playlist_current_row",
-          ControlType = "Knob",
-          ControlUnit = "Integer",
-          Style = "Text Field",
-          PinStyle = "Output",
-          Min = 0,
-          Max = 9999999,
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "l1_tc_rows",
-          ControlType = "Knob",
-          ControlUnit = "Integer",
-          Style = "Text Field",
-          PinStyle = "Output",
-          Min = 0,
-          Max = 9999999,
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "l2_tc_rows",
-          ControlType = "Knob",
-          ControlUnit = "Integer",
-          Style = "Text Field",
-          PinStyle = "Output",
-          Min = 0,
-          Max = 9999999,
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "playlist_play_previous",
-          ControlType = "Button",
-          ButtonType = "Trigger",
-          PinStyle = "Input",
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "playlist_play_next",
-          ControlType = "Button",
-          ButtonType = "Trigger",
-          PinStyle = "Input",
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "playlist_play_first",
-          ControlType = "Button",
-          ButtonType = "Trigger",
-          PinStyle = "Input",
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "playlist_play_last",
-          ControlType = "Button",
-          ButtonType = "Trigger",
-          PinStyle = "Input",
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "playlist_play_row",
-          ControlType = "Button",
-          ButtonType = "Trigger",
-          PinStyle = "Input",
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "playlist_play_row_index",
-          ControlType = "Knob",
-          ControlUnit = "Integer",
-          Style = "Text Field",
-          PinStyle = "Both",
-          Min = 1,
-          Max = 9999999,
-          DefaultValue = 1,
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "system_restart",
-          ControlType = "Button",
-          ButtonType = "Trigger",
-          PinStyle = "Input",
-          Count = 1,
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = "system_shutdown",
-          ControlType = "Button",
-          ButtonType = "Trigger",
-          PinStyle = "Input",
-          Count = 1,
-          UserPin = true
-        }
-      )
     end
   end
+  -- Controls for Modules Page
+  table.insert(
+    ctrls,
+    {
+      Name = "playlist_enable",
+      ControlType = "Button",
+      ButtonType = "Toggle",
+      PinStyle = "Both",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "l1_timecode_enable",
+      ControlType = "Button",
+      ButtonType = "Toggle",
+      PinStyle = "Both",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "l2_timecode_enable",
+      ControlType = "Button",
+      ButtonType = "Toggle",
+      PinStyle = "Both",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "timeline_enable",
+      ControlType = "Button",
+      ButtonType = "Toggle",
+      PinStyle = "Both",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "schedule_enable",
+      ControlType = "Button",
+      ButtonType = "Toggle",
+      PinStyle = "Both",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "playlist_rows",
+      ControlType = "Knob",
+      ControlUnit = "Integer",
+      Style = "Text Field",
+      PinStyle = "Output",
+      Min = 0,
+      Max = 9999999,
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "playlist_current_row",
+      ControlType = "Knob",
+      ControlUnit = "Integer",
+      Style = "Text Field",
+      PinStyle = "Output",
+      Min = 0,
+      Max = 9999999,
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "l1_tc_rows",
+      ControlType = "Knob",
+      ControlUnit = "Integer",
+      Style = "Text Field",
+      PinStyle = "Output",
+      Min = 0,
+      Max = 9999999,
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "l2_tc_rows",
+      ControlType = "Knob",
+      ControlUnit = "Integer",
+      Style = "Text Field",
+      PinStyle = "Output",
+      Min = 0,
+      Max = 9999999,
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "playlist_play_previous",
+      ControlType = "Button",
+      ButtonType = "Trigger",
+      PinStyle = "Input",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "playlist_play_next",
+      ControlType = "Button",
+      ButtonType = "Trigger",
+      PinStyle = "Input",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "playlist_play_first",
+      ControlType = "Button",
+      ButtonType = "Trigger",
+      PinStyle = "Input",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "playlist_play_last",
+      ControlType = "Button",
+      ButtonType = "Trigger",
+      PinStyle = "Input",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "playlist_play_row",
+      ControlType = "Button",
+      ButtonType = "Trigger",
+      PinStyle = "Input",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "playlist_play_row_index",
+      ControlType = "Knob",
+      ControlUnit = "Integer",
+      Style = "Text Field",
+      PinStyle = "Both",
+      Min = 1,
+      Max = 9999999,
+      DefaultValue = 1,
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "system_restart",
+      ControlType = "Button",
+      ButtonType = "Trigger",
+      PinStyle = "Input",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "system_shutdown",
+      ControlType = "Button",
+      ButtonType = "Trigger",
+      PinStyle = "Input",
+      Count = 1,
+      UserPin = true
+    }
+  )
   return ctrls
 end
 
@@ -2901,7 +2900,6 @@ function watchPatchJSON(path, callback)
   _WatchPatchJSON(path)
   getPatchJSON(path, callback)
 end
-
 function fn_hive_connect_Status(status)
   fn_log_debug("Setting connected status to " .. tostring(status))
   if status == true then
@@ -2960,16 +2958,16 @@ end
 
 function fn_poll_info()
   if wsConnected == true then
-  fn_log_debug("Polling engine FPS")
-  getPatchString(
-    "/Mapping/Render Resolution/FPS",
-    function(path, value)
-      fn_log_debug("Engine FPS: " .. value)
-      Controls.engine_fps.String = value
-    end
-  )
-  fn_update_sync_status()
-end
+    fn_log_debug("Polling engine FPS")
+    getPatchString(
+      "/Mapping/Render Resolution/FPS",
+      function(path, value)
+        fn_log_debug("Engine FPS: " .. value)
+        Controls.engine_fps.String = value
+      end
+    )
+    fn_update_sync_status()
+  end
   Timer.CallAfter(fn_poll_info, 1)
 end
 
@@ -2999,7 +2997,7 @@ end
 
 function fn_send(layer, cmd, val)
   fn_log_debug(string.format("Sending command to layer %s: %s = %s", layer, cmd, tostring(val)))
-  local path = "/LAYER " .. layer .. "/" .. cmd .. "/Value" -- please make this neater with string.format()
+  local path = "/LAYER " .. layer .. "/" .. cmd .. "/Value"
   setPatchDouble(path, val)
 end
 
@@ -3020,7 +3018,7 @@ function fn_process_LUT_data(path, data)
   -- however it is not indexed so we have to extract the string pairs manually
   -- in order to maintain the ordering
   -- this is a bit hacky but it works
-fn_log_debug("Processing LUT data")
+  fn_log_debug("Processing LUT data")
   -- find the start of the "Value" object
   local startPos = data:find('"Value"%s*:%s*{')
   if startPos then
@@ -3197,7 +3195,10 @@ function fn_process_JSON_update(path, value)
     fn_update_info()
   elseif path == "/Output Mapping" then
   elseif path == "/Play List" then
-    fn_log_debug("Playlist updated, total items: " .. tostring(value.list and #value.list or 0) .. ", enabled: " .. tostring(value.usePlayList))
+    fn_log_debug(
+      "Playlist updated, total items: " ..
+        tostring(value.list and #value.list or 0) .. ", enabled: " .. tostring(value.usePlayList)
+    )
     if value.usePlayList and value.usePlayList == 1 then
       Controls.playlist_enable.Boolean = true
     else
@@ -3206,7 +3207,15 @@ function fn_process_JSON_update(path, value)
     playlist_row_count = value.list and #value.list or 0
     Controls.playlist_rows.Value = playlist_row_count
   elseif path == "/Timecode Cue List" then
-    fn_log_debug("Timecode Cue List updated, layer 1 items: " .. tostring(value.layers[1] and #(value.layers[1].list) or 0) .. ", layer 2 items: " .. tostring(value.layers[2] and #(value.layers[2].list) or 0) .. ", layer 1 enabled: " .. tostring(value.layers[1] and value.layers[1].useCueList == 1) .. ", layer 2 enabled: " .. tostring(value.layers[2] and value.layers[2].useCueList == 1))
+    fn_log_debug(
+      "Timecode Cue List updated, layer 1 items: " ..
+        tostring(value.layers[1] and #(value.layers[1].list) or 0) ..
+          ", layer 2 items: " ..
+            tostring(value.layers[2] and #(value.layers[2].list) or 0) ..
+              ", layer 1 enabled: " ..
+                tostring(value.layers[1] and value.layers[1].useCueList == 1) ..
+                  ", layer 2 enabled: " .. tostring(value.layers[2] and value.layers[2].useCueList == 1)
+    )
     if value.layers[1] and value.layers[1].useCueList == 1 then
       Controls.l1_timecode_enable.Boolean = true
     else
