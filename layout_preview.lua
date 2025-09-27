@@ -12,6 +12,34 @@ table.insert(
   }
 )
 
+table.insert(
+  graphics,
+  {
+    Type = "Text",
+    Text = "Output Preview",
+    Font = "Roboto",
+    FontSize = 12,
+    FontStyle = "Regular",
+    HTextAlign = "Centre",
+    Color = Colors.control_label,
+    Position = {8, 8},
+    Size = preview_size
+  }
+)
+
+layout["output_preview"] = {
+  PrettyName = "System~Preview",
+  UnlinkOffColor = true,
+  OffColor = Colors.transparent,
+  Color = Colors.Red,
+  StrokeColor = Colors.control_text,
+  ButtonVisualStyle = "Flat",
+  Position = {
+     8,(2 * btn_size[2])
+  },
+  Size = preview_size
+}
+
 for i = 1, layer_count do
   table.insert(
     graphics,

@@ -241,6 +241,19 @@ for i = 1, layer_count do
     }
   )
 end
+
+table.insert(
+  ctrls,
+  {
+    Name = "output_preview",
+    ControlType = "Button",
+    ButtonType = "Momentary",
+    Min = 0,
+    Max = 1,
+    PinStyle = "None",
+    UserPin = false
+  }
+)
 -- Controls for Modules Page
 table.insert(
   ctrls,

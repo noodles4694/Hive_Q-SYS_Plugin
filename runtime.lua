@@ -196,7 +196,13 @@ function fn_process_double_update(path, value)
       local control = string.format("%s_%s", parameter:gsub("%s", "_"):lower(), layer)
       if parameter == "FILE SELECT" then
         for k, v in pairs(file_list) do
-          if v == value then
+          if v == value then 
+                  
+            if Properties["Preview Type"].Value == "Thumbnail" then
+              print("Updating preview thumbnail for layer " .. layer .. " with file " .. k)
+              fn_update_preview_thumbnail(layer,k)
+            end
+            
             Controls[control].String = k
             Controls["duration_" .. control:sub(-1, -1)].String =
               os.date("!%X", math.floor(file_metadata_list[k].duration))
@@ -422,6 +428,35 @@ function fn_get_file_thumbnail(index, filename)
   else
     fn_log_error("Thumbnail index " .. tostring(index) .. " exceeds media item count of " .. tostring(media_item_count))
   end
+end
+
+function fn_update_preview_thumbnail(layer,filename)
+  if wsConnected ~= true or tonumber(layer) > layer_count then
+    return
+  end
+    fn_log_debug("Requesting preview for media  " .. filename)
+    HttpClient.Download {
+      Url = string.format("http://%s/Thumbs/%s", ip_address, filename:gsub("%.%w+", ".jpg")),
+      Headers = {},
+      Auth = "basic",
+      Timeout = 10,
+      EventHandler = function(tbl, code, data, err, headers)
+        if code == 200 then
+          local iconStyle = {
+            DrawChrome = true,
+            HorizontalAlignment = "Center",
+            Legend = "",
+            Padding = -12,
+            Margin = 0,
+            IconData = Qlib.base64_enc(data)
+          }
+            Controls[string.format("layer_%s_preview",layer)].Style = rapidjson.encode(iconStyle)
+            if tonumber(layer) == 1 then
+              Controls["output_preview"].Style = rapidjson.encode(iconStyle)
+            end
+        end
+      end
+    }
 end
 
 function fn_update_media_folders()
