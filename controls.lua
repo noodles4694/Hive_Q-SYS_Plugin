@@ -188,7 +188,7 @@ table.insert(
   }
 )
 
--- Controls for Media and Layers Pages
+-- Controls for Media, Preview and Layers Pages
 for i = 1, layer_count do
   for k, v in pairs(control_list) do
     table.insert(
@@ -228,6 +228,18 @@ for i = 1, layer_count do
       }
     )
   end
+  table.insert(
+    ctrls,
+    {
+      Name = string.format("layer_%s_preview", i),
+      ControlType = "Button",
+      ButtonType = "Momentary",
+      Min = 0,
+      Max = 1,
+      PinStyle = "None",
+      UserPin = false
+    }
+  )
 end
 -- Controls for Modules Page
 table.insert(

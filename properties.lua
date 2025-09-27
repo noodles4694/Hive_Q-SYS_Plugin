@@ -31,6 +31,16 @@ table.insert(
 table.insert(
   props,
   {
+    Name = "Preview Type",
+    Type = "enum",
+    Choices = {"Thumbnail", "Video"},
+    Value = "Thumbnail"
+  }
+)
+
+table.insert(
+  props,
+  {
     Name = "Logging Level",
     Type = "enum",
     Choices = {"Normal", "Errors Only", "Debug"},

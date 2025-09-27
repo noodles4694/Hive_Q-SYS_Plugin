@@ -28,6 +28,7 @@ function CreatePages()
   end
   table.insert(PageNames, "Media")
   table.insert(PageNames, "Modules")
+  table.insert(PageNames, "Preview")
 end
 
 function GetPages(props)

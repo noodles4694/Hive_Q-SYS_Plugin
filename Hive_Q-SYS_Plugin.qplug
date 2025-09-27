@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.315",
+  BuildVersion = "0.0.0.326",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -488,6 +488,7 @@ function CreatePages()
   end
   table.insert(PageNames, "Media")
   table.insert(PageNames, "Modules")
+  table.insert(PageNames, "Preview")
 end
 
 function GetPages(props)
@@ -540,6 +541,16 @@ function GetProperties()
       Value = 20,
       Min = 1,
       Max = 128
+    }
+  )
+  
+  table.insert(
+    props,
+    {
+      Name = "Preview Type",
+      Type = "enum",
+      Choices = {"Thumbnail", "Video"},
+      Value = "Thumbnail"
     }
   )
   
@@ -775,7 +786,7 @@ function GetControls(props)
     }
   )
   
-  -- Controls for Media and Layers Pages
+  -- Controls for Media, Preview and Layers Pages
   for i = 1, layer_count do
     for k, v in pairs(control_list) do
       table.insert(
@@ -815,6 +826,18 @@ function GetControls(props)
         }
       )
     end
+    table.insert(
+      ctrls,
+      {
+        Name = string.format("layer_%s_preview", i),
+        ControlType = "Button",
+        ButtonType = "Momentary",
+        Min = 0,
+        Max = 1,
+        PinStyle = "None",
+        UserPin = false
+      }
+    )
   end
   -- Controls for Modules Page
   table.insert(
@@ -1052,8 +1075,12 @@ function GetControlLayout(props)
     (fx2_column_size + 2) * btn_size[2]
   }
   local preview_size = {2.4 * btn_size[1], (1.35 * btn_size[1])}
+  local preview_groupbox_size = {
+    (layer_count * preview_size[1]) + (4 * layer_count) + 8 + (3 * btn_size[1]),
+    (2 * preview_size[2]) + 8
+  }
   local media_list_groupbox_size = {
-    (2 * preview_size[1]) + 12 + (3 * btn_size[1]),
+    (layer_count * preview_size[1]) + (4 * layer_count) + 8 + (3 * btn_size[1]),
     ((media_item_count + 1) * preview_size[2]) + 8
   }
   local module_enable_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (2 * btn_size[2]) + (2 * btn_gap[2])}
@@ -2142,6 +2169,52 @@ function GetControlLayout(props)
       },
       Size = {4 * btn_size[1], btn_size[2]}
     }
+  elseif CurrentPage == "Preview" then
+      table.insert(
+        graphics,
+        {
+          Type = "GroupBox",
+          Text = "Previews",
+          HTextAlign = "Left",
+          CornerRadius = 8,
+          Fill = Colors.hive_grey,
+          StrokeWidth = 1,
+          Position = {0, 0},
+          Size = preview_groupbox_size
+        }
+      )
+      
+      for i = 1, layer_count do
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = string.format("Layer %s\nPreview", i),
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Centre",
+            Color = Colors.control_label,
+            Position = {((i - 1) * preview_size[1]) + (3 * btn_size[1]) + 8, 8},
+            Size = preview_size
+          }
+        )
+      
+          layout[string.format("layer_%s_preview",i)] = {
+            PrettyName = string.format("Layer %s~Preview", i),
+            UnlinkOffColor = true,
+            OffColor = Colors.transparent,
+            Color = Colors.Red,
+            StrokeColor = Colors.control_text,
+            ButtonVisualStyle = "Flat",
+            Position = {
+              ((i - 1) * preview_size[1]) + (3 * btn_size[1]) + 8,
+              (2 * btn_size[2])
+            },
+            Size = preview_size
+          }
+      
+      end
     end
   end
   return layout, graphics

@@ -23,8 +23,12 @@ local fx2_groupbox_size = {
   (fx2_column_size + 2) * btn_size[2]
 }
 local preview_size = {2.4 * btn_size[1], (1.35 * btn_size[1])}
+local preview_groupbox_size = {
+  (layer_count * preview_size[1]) + (4 * layer_count) + 8 + (3 * btn_size[1]),
+  (2 * preview_size[2]) + 8
+}
 local media_list_groupbox_size = {
-  (2 * preview_size[1]) + 12 + (3 * btn_size[1]),
+  (layer_count * preview_size[1]) + (4 * layer_count) + 8 + (3 * btn_size[1]),
   ((media_item_count + 1) * preview_size[2]) + 8
 }
 local module_enable_groupbox_size = {(16 * btn_size[1]) + (4 * btn_gap[1]), (2 * btn_size[2]) + (2 * btn_gap[2])}
@@ -40,5 +44,7 @@ if CurrentPage then
 --[[ #include "layout_media.lua" ]]
   elseif CurrentPage == "Modules" then
 --[[ #include "layout_modules.lua" ]]
+elseif CurrentPage == "Preview" then
+  --[[ #include "layout_preview.lua" ]]
   end
 end
