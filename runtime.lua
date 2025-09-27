@@ -4,6 +4,8 @@ function fn_hive_connect_Status(status)
     Controls.online.Boolean = true
     fn_watch_parameters()
     fn_update_info()
+    fn_poll_info()
+    fn_fetch_video_previews()
   else
     Controls.online.Boolean = false
   end
@@ -66,7 +68,9 @@ function fn_poll_info()
     )
     fn_update_sync_status()
   end
-  Timer.CallAfter(fn_poll_info, 1)
+  if wsConnected then
+    Timer.CallAfter(fn_poll_info, 1)
+  end
 end
 
 function fn_update_sync_status()
@@ -196,13 +200,8 @@ function fn_process_double_update(path, value)
       local control = string.format("%s_%s", parameter:gsub("%s", "_"):lower(), layer)
       if parameter == "FILE SELECT" then
         for k, v in pairs(file_list) do
-          if v == value then 
-                  
-            if Properties["Preview Type"].Value == "Thumbnail" then
-              print("Updating preview thumbnail for layer " .. layer .. " with file " .. k)
-              fn_update_preview_thumbnail(layer,k)
-            end
-            
+          if v == value then
+              fn_update_preview_thumbnail(layer, k)
             Controls[control].String = k
             Controls["duration_" .. control:sub(-1, -1)].String =
               os.date("!%X", math.floor(file_metadata_list[k].duration))
@@ -430,33 +429,78 @@ function fn_get_file_thumbnail(index, filename)
   end
 end
 
-function fn_update_preview_thumbnail(layer,filename)
+function fn_update_preview_thumbnail(layer, filename)
   if wsConnected ~= true or tonumber(layer) > layer_count then
     return
   end
-    fn_log_debug("Requesting preview for media  " .. filename)
-    HttpClient.Download {
-      Url = string.format("http://%s/Thumbs/%s", ip_address, filename:gsub("%.%w+", ".jpg")),
-      Headers = {},
-      Auth = "basic",
-      Timeout = 10,
-      EventHandler = function(tbl, code, data, err, headers)
-        if code == 200 then
-          local iconStyle = {
-            DrawChrome = true,
-            HorizontalAlignment = "Center",
-            Legend = "",
-            Padding = -12,
-            Margin = 0,
-            IconData = Qlib.base64_enc(data)
-          }
-            Controls[string.format("layer_%s_preview",layer)].Style = rapidjson.encode(iconStyle)
-            if tonumber(layer) == 1 then
-              Controls["output_preview"].Style = rapidjson.encode(iconStyle)
-            end
+  fn_log_debug("Requesting preview for media  " .. filename)
+  HttpClient.Download {
+    Url = string.format("http://%s/Thumbs/%s", ip_address, filename:gsub("%.%w+", ".jpg")),
+    Headers = {},
+    Auth = "basic",
+    Timeout = 10,
+    EventHandler = function(tbl, code, data, err, headers)
+      if code == 200 then
+        local iconStyle = {
+          DrawChrome = true,
+          HorizontalAlignment = "Center",
+          Legend = "",
+          Padding = -14,
+          Margin = 0,
+          IconData = Qlib.base64_enc(data)
+        }
+        Controls[string.format("layer_%s_preview", layer)].Style = rapidjson.encode(iconStyle)
+        if tonumber(layer) == 1 and Properties["Output Video Preview"].Value == "Disabled" then
+          Controls["output_preview"].Style = rapidjson.encode(iconStyle)
         end
       end
-    }
+    end
+  }
+end
+
+local refresh_period = 1 / string.gsub(Properties["Preview Refresh"].Value, " fps", "")
+
+function fn_fetch_video_previews()
+  fn_update_output_video_preview()
+  if wsConnected then
+    Timer.CallAfter(fn_fetch_video_previews, refresh_period)
+  end
+end
+
+function fn_update_output_video_preview()
+  if Properties["Output Video Preview"].Value == "Disabled" then
+    return
+  end
+  fn_log_debug("Requesting output preview frame")
+  local url = string.format("http://%s/api/getOutputFrame", ip_address)
+  HttpClient.Post {
+    Url = url,
+    Data = rapidjson.encode(
+      {
+        includeImageData = true,
+        dualFramesRequest = false
+      }
+    ), -- This can be anything
+    Headers = {
+      ["Content-Type"] = "application/json"
+    },
+    EventHandler = function(tbl, code, data, error, headers)
+      if code == 200 then
+        local frameData = rapidjson.decode(data)
+        local iconStyle = {
+          DrawChrome = true,
+          HorizontalAlignment = "Center",
+          Legend = "",
+          Padding = -14,
+          Margin = 0,
+          IconData = frameData.imgDataMapped
+        }
+        Controls["output_preview"].Style = rapidjson.encode(iconStyle)
+      else
+        fn_log_error("Failed to get output frame data ")
+      end
+    end
+  }
 end
 
 function fn_update_media_folders()
@@ -994,7 +1038,6 @@ fn_update_media_folders()
 if fn_check_valid_ip(ip_address) then
   fn_log_message("Connecting to Hive player at " .. ip_address)
   Connect(ip_address, fn_hive_connect_Status)
-  fn_poll_info()
 else
   fn_log_error("Invalid IP address: " .. ip_address)
 end

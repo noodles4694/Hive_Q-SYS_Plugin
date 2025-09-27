@@ -2,7 +2,7 @@ table.insert(
   graphics,
   {
     Type = "GroupBox",
-    Text = "Previews",
+    Text = "",
     HTextAlign = "Left",
     CornerRadius = 8,
     Fill = Colors.hive_grey,

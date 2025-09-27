@@ -31,10 +31,20 @@ table.insert(
 table.insert(
   props,
   {
-    Name = "Preview Type",
+    Name = "Output Video Preview",
     Type = "enum",
-    Choices = {"Thumbnail", "Video"},
-    Value = "Thumbnail"
+    Choices = {"Disabled", "Enabled"},
+    Value = "Disabled"
+  }
+)
+
+table.insert(
+  props,
+  {
+    Name = "Preview Refresh",
+    Type = "enum",
+    Choices = {"0.1 fps", "0.5 fps", "1 fps", "2 fps", "5 fps", "10 fps", "15 fps"},
+    Value = "1 fps"
   }
 )
 
