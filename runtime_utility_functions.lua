@@ -1,16 +1,20 @@
 -- Description: Utility functions for runtime scripts
 
 -- Logging functions
+
+-- Logs a message to both the Log and the console
 function fn_log_message(message)
   Log.Message(message)
   print(message)
 end
+-- Logs an error message to both the Log and the console, but only if logging level is set to Errors Only or Debug
 function fn_log_error(message)
   if Properties["Logging Level"].Value == "Errors Only" or Properties["Logging Level"].Value == "Debug" then
     Log.Error(message)
     print("Error: " .. message)
   end
 end
+-- Logs a debug message to both the Log and the console, but only if logging level is set to Debug
 function fn_log_debug(message)
   if Properties["Logging Level"].Value == "Debug" then
     Log.Message("Debug: " .. message)

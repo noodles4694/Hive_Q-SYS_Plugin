@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.366",
+  BuildVersion = "0.0.0.375",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -11,7 +11,7 @@ PluginInfo = {
 -- This file contains constant variables used throughout the project
 -- These variables should not be changed during runtime
 local layer_count = 2
-local max_media_items = 120
+local max_media_items = 255
 
 --create a table of colors to be used in the UI
 local Colors = {
@@ -540,7 +540,7 @@ function GetProperties()
       Type = "integer",
       Value = 20,
       Min = 1,
-      Max = 128
+      Max = 255
     }
   )
   
@@ -1073,8 +1073,10 @@ end
 function GetControlLayout(props)
   local layout = {}
   local graphics = {}
+  -- we need to re-create the page list as it is nullified when entering this call
   CreatePages()
   
+  -- common variables used by each page layout
   local CurrentPage = PageNames[props["page_index"].Value]
   local media_item_count = props["Media List Count"].Value
   local column_size = 12
@@ -2593,16 +2595,20 @@ end
 -- Description: Utility functions for runtime scripts
 
 -- Logging functions
+
+-- Logs a message to both the Log and the console
 function fn_log_message(message)
   Log.Message(message)
   print(message)
 end
+-- Logs an error message to both the Log and the console, but only if logging level is set to Errors Only or Debug
 function fn_log_error(message)
   if Properties["Logging Level"].Value == "Errors Only" or Properties["Logging Level"].Value == "Debug" then
     Log.Error(message)
     print("Error: " .. message)
   end
 end
+-- Logs a debug message to both the Log and the console, but only if logging level is set to Debug
 function fn_log_debug(message)
   if Properties["Logging Level"].Value == "Debug" then
     Log.Message("Debug: " .. message)
@@ -3023,19 +3029,23 @@ function watchPatchJSON(path, callback)
   _WatchPatchJSON(path)
   getPatchJSON(path, callback)
 end
+-- Logic to deal with connection and disconnection of the Hive player
 function fn_hive_connect_Status(status)
   fn_log_debug("Setting connected status to " .. tostring(status))
   if status == true then
     Controls.online.Boolean = true
+
     fn_watch_parameters()
     fn_update_info()
     fn_poll_info()
     fn_fetch_video_previews()
   else
     Controls.online.Boolean = false
+    Controls.status.String = "Offline"
   end
 end
 
+-- Watch for parameter changes from the Hive player
 function fn_watch_parameters()
   -- Watch for JSON updates
   fn_log_debug("Setting up JSON watchers")
@@ -3081,6 +3091,7 @@ function fn_watch_parameters()
   end
 end
 
+-- Poll and update the engine FPS and BeeSync status every second
 function fn_poll_info()
   if wsConnected == true then
     fn_log_debug("Polling engine FPS")
@@ -3098,6 +3109,7 @@ function fn_poll_info()
   end
 end
 
+-- Poll and update the BeeSync status
 function fn_update_sync_status()
   if wsConnected ~= true then
     return
@@ -3122,24 +3134,28 @@ function fn_update_sync_status()
   }
 end
 
+-- Set the value of a layer parameter
 function fn_send(layer, cmd, val)
   fn_log_debug(string.format("Sending command to layer %s: %s = %s", layer, cmd, tostring(val)))
   local path = "/LAYER " .. layer .. "/" .. cmd .. "/Value"
   setPatchDouble(path, val)
 end
 
+-- Set a JSON data value in full
 function fn_send_json(cmd, val)
   fn_log_debug(string.format("Sending JSON command: %s = %s", cmd, rapidjson.encode(val)))
   local path = "/" .. cmd
   setPatchJSON(path, val)
 end
 
+-- Update a section of JSON data value
 function fn_update_json(cmd, val)
   fn_log_debug(string.format("Updating JSON command: %s = %s", cmd, rapidjson.encode(val)))
   local path = "/" .. cmd
   updatePatchJSON(path, val)
 end
 
+-- Process the LUT data received from the Hive player
 function fn_process_LUT_data(path, data)
   -- The LUT list is inside a JSON object under the "Value" key
   -- however it is not indexed so we have to extract the string pairs manually
@@ -3190,6 +3206,7 @@ function fn_process_LUT_data(path, data)
   end
 end
 
+-- Handle transport control updates from the Hive player
 function fn_process_transport_update(path, value)
   local layer, parameter = path:match("/LAYER (%d+)/(%P+)")
   if parameter == "Transport Control" then
@@ -3211,12 +3228,14 @@ function fn_process_transport_update(path, value)
   end
 end
 
+-- Handle playlist row updates from the Hive player
 function fn_process_playlist_row_update(path, value)
   fn_log_debug("Playlist active row updated to " .. tostring(value + 1))
   playlist_active_row = value + 1 -- convert from 0 based to 1 based
   Controls.playlist_current_row.Value = playlist_active_row
 end
 
+-- Handle double updates from the Hive player
 function fn_process_double_update(path, value)
   fn_log_debug("Processing double update: " .. path .. " = " .. tostring(value))
   if path:sub(1, 6) == "/LAYER" then -- Layer parameter response
@@ -3299,6 +3318,7 @@ function fn_process_double_update(path, value)
   end
 end
 
+-- Handle JSON updates from the Hive player
 function fn_process_JSON_update(path, value)
   fn_log_debug("Processing JSON update: " .. path)
   if path == "/System Settings" then
@@ -3375,6 +3395,7 @@ function fn_process_JSON_update(path, value)
   end
 end
 
+-- Request and update the device information from the Hive player
 function fn_update_info()
   if wsConnected ~= true then
     return
@@ -3422,6 +3443,7 @@ function fn_update_info()
   }
 end
 
+-- Request and update the thumbnail for a specific media index and filename
 function fn_get_file_thumbnail(index, filename)
   if wsConnected ~= true then
     return
@@ -3454,6 +3476,7 @@ function fn_get_file_thumbnail(index, filename)
   end
 end
 
+-- Request and update the preview thumbnail for a specific layer and filename
 function fn_update_preview_thumbnail(layer, filename)
   if wsConnected ~= true or tonumber(layer) > layer_count then
     return
@@ -3483,15 +3506,16 @@ function fn_update_preview_thumbnail(layer, filename)
   }
 end
 
-local refresh_period = 1 / string.gsub(Properties["Preview Refresh"].Value, " fps", "")
-
+-- Periodically fetch and update the output video preview
 function fn_fetch_video_previews()
   fn_update_output_video_preview()
   if wsConnected then
+    local refresh_period = 1 / string.gsub(Properties["Preview Refresh"].Value, " fps", "")
     Timer.CallAfter(fn_fetch_video_previews, refresh_period)
   end
 end
 
+-- Request and update the output video preview
 function fn_update_output_video_preview()
   if Properties["Output Video Preview"].Value == "Disabled" then
     return
@@ -3528,6 +3552,7 @@ function fn_update_output_video_preview()
   }
 end
 
+-- retrieve the list of availiable media fiolders and update the options in he comboboxes
 function fn_update_media_folders()
   if wsConnected ~= true then
     return
@@ -3566,6 +3591,48 @@ function fn_update_media_folders()
   }
 end
 
+-- Set up seek timers and last value trackers
+for layer, seek_timer in pairs(seek_timer_list) do
+  seek_timer.EventHandler = function(timer)
+    if Controls[string.format("seek_%s", layer)].String == seek_last_value[layer] then
+      if Controls["file_select_" .. layer].String ~= "" then
+        local frame =
+          math.floor(
+          file_metadata_list[Controls["file_select_" .. layer].String].duration *
+            file_metadata_list[Controls["file_select_" .. layer].String].rate *
+            Controls["seek_" .. layer].Position
+        )
+        -- Seek to desired frame
+        local path = string.format("/LAYER %s/Transport Control/MediaClockGenerator/Seek", layer)
+        setPatchDouble(path, frame)
+      end
+      seek_timer_list[layer]:Stop()
+    end
+    seek_last_value[layer] = Controls[string.format("seek_%s", layer)].String
+  end
+end
+
+
+-- Initialize combobox choices
+for i = 1, layer_count do
+  Controls["play_mode_" .. i].Choices = play_mode_keys
+  Controls["framing_mode_" .. i].Choices = framing_mode_keys
+  Controls["blend_mode_" .. i].Choices = blend_mode_keys
+  Controls["transition_mode_" .. i].Choices = transition_mode_keys
+  Controls["fx1_select_" .. i].Choices = fx_keys
+  Controls["fx2_select_" .. i].Choices = fx_keys
+end
+
+fn_update_media_folders()
+
+-- Connect
+if fn_check_valid_ip(ip_address) then
+  fn_log_message("Connecting to Hive player at " .. ip_address)
+  Connect(ip_address, fn_hive_connect_Status)
+else
+  fn_log_error("Invalid IP address: " .. ip_address)
+end
+-- Command functions called by control callbacks
 function cmd_file_select(layer, x) -- 0..65535: File Select
   if file_metadata_list[Controls["file_select_" .. layer].String] then
     Controls["duration_" .. layer].String =
@@ -3832,28 +3899,6 @@ for i = 1, 2 do
     end
   end
 end
-
--- Set up seek timers and last value trackers
-for layer, seek_timer in pairs(seek_timer_list) do
-  seek_timer.EventHandler = function(timer)
-    if Controls[string.format("seek_%s", layer)].String == seek_last_value[layer] then
-      if Controls["file_select_" .. layer].String ~= "" then
-        local frame =
-          math.floor(
-          file_metadata_list[Controls["file_select_" .. layer].String].duration *
-            file_metadata_list[Controls["file_select_" .. layer].String].rate *
-            Controls["seek_" .. layer].Position
-        )
-        -- Seek to desired frame
-        local path = string.format("/LAYER %s/Transport Control/MediaClockGenerator/Seek", layer)
-        setPatchDouble(path, frame)
-      end
-      seek_timer_list[layer]:Stop()
-    end
-    seek_last_value[layer] = Controls[string.format("seek_%s", layer)].String
-  end
-end
-
 -- Set up event handlers for controls
 fn_log_debug("Setting up control event handlers")
 for i = 1, layer_count do
@@ -3905,7 +3950,6 @@ for i = 1, layer_count do
     cmd_play_speed(i, converted_value)
   end
   Controls["move_speed_" .. i].EventHandler = function()
-    -- reserved for future use
     cmd_movement_speed(i, Controls["movement_speed_" .. i].Position)
   end
   Controls["mtc_hour_" .. i].EventHandler = function()
@@ -4045,25 +4089,5 @@ Controls["system_shutdown"].EventHandler = function()
 end
 Controls["system_restart"].EventHandler = function()
   cmd_restart()
-end
-
--- Initialize combobox choices
-for i = 1, layer_count do
-  Controls["play_mode_" .. i].Choices = play_mode_keys
-  Controls["framing_mode_" .. i].Choices = framing_mode_keys
-  Controls["blend_mode_" .. i].Choices = blend_mode_keys
-  Controls["transition_mode_" .. i].Choices = transition_mode_keys
-  Controls["fx1_select_" .. i].Choices = fx_keys
-  Controls["fx2_select_" .. i].Choices = fx_keys
-end
-
-fn_update_media_folders()
-
--- Connect
-if fn_check_valid_ip(ip_address) then
-  fn_log_message("Connecting to Hive player at " .. ip_address)
-  Connect(ip_address, fn_hive_connect_Status)
-else
-  fn_log_error("Invalid IP address: " .. ip_address)
 end
 end

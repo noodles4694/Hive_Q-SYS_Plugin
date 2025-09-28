@@ -99,4 +99,6 @@ if Controls then
 --[[ #include "runtime_utility_functions.lua"]]
 --[[ #include "runtime_hivefunctions.lua"]]
 --[[ #include "runtime.lua" ]]
+--[[ #include "runtime_commandfunctions.lua"]]
+--[[ #include "runtime_event_handlers.lua"]]
 end

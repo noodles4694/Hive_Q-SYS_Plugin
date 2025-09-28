@@ -1,5 +1,7 @@
+-- we need to re-create the page list as it is nullified when entering this call
 CreatePages()
 
+-- common variables used by each page layout
 local CurrentPage = PageNames[props["page_index"].Value]
 local media_item_count = props["Media List Count"].Value
 local column_size = 12

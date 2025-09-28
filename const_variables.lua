@@ -1,7 +1,7 @@
 -- This file contains constant variables used throughout the project
 -- These variables should not be changed during runtime
 local layer_count = 2
-local max_media_items = 120
+local max_media_items = 255
 
 --create a table of colors to be used in the UI
 local Colors = {

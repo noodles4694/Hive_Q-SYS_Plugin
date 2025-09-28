@@ -24,7 +24,7 @@ table.insert(
     Type = "integer",
     Value = 20,
     Min = 1,
-    Max = 128
+    Max = 255
   }
 )
 

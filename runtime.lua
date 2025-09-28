@@ -1,16 +1,20 @@
+-- Logic to deal with connection and disconnection of the Hive player
 function fn_hive_connect_Status(status)
   fn_log_debug("Setting connected status to " .. tostring(status))
   if status == true then
     Controls.online.Boolean = true
+
     fn_watch_parameters()
     fn_update_info()
     fn_poll_info()
     fn_fetch_video_previews()
   else
     Controls.online.Boolean = false
+    Controls.status.String = "Offline"
   end
 end
 
+-- Watch for parameter changes from the Hive player
 function fn_watch_parameters()
   -- Watch for JSON updates
   fn_log_debug("Setting up JSON watchers")
@@ -56,6 +60,7 @@ function fn_watch_parameters()
   end
 end
 
+-- Poll and update the engine FPS and BeeSync status every second
 function fn_poll_info()
   if wsConnected == true then
     fn_log_debug("Polling engine FPS")
@@ -73,6 +78,7 @@ function fn_poll_info()
   end
 end
 
+-- Poll and update the BeeSync status
 function fn_update_sync_status()
   if wsConnected ~= true then
     return
@@ -97,24 +103,28 @@ function fn_update_sync_status()
   }
 end
 
+-- Set the value of a layer parameter
 function fn_send(layer, cmd, val)
   fn_log_debug(string.format("Sending command to layer %s: %s = %s", layer, cmd, tostring(val)))
   local path = "/LAYER " .. layer .. "/" .. cmd .. "/Value"
   setPatchDouble(path, val)
 end
 
+-- Set a JSON data value in full
 function fn_send_json(cmd, val)
   fn_log_debug(string.format("Sending JSON command: %s = %s", cmd, rapidjson.encode(val)))
   local path = "/" .. cmd
   setPatchJSON(path, val)
 end
 
+-- Update a section of JSON data value
 function fn_update_json(cmd, val)
   fn_log_debug(string.format("Updating JSON command: %s = %s", cmd, rapidjson.encode(val)))
   local path = "/" .. cmd
   updatePatchJSON(path, val)
 end
 
+-- Process the LUT data received from the Hive player
 function fn_process_LUT_data(path, data)
   -- The LUT list is inside a JSON object under the "Value" key
   -- however it is not indexed so we have to extract the string pairs manually
@@ -165,6 +175,7 @@ function fn_process_LUT_data(path, data)
   end
 end
 
+-- Handle transport control updates from the Hive player
 function fn_process_transport_update(path, value)
   local layer, parameter = path:match("/LAYER (%d+)/(%P+)")
   if parameter == "Transport Control" then
@@ -186,12 +197,14 @@ function fn_process_transport_update(path, value)
   end
 end
 
+-- Handle playlist row updates from the Hive player
 function fn_process_playlist_row_update(path, value)
   fn_log_debug("Playlist active row updated to " .. tostring(value + 1))
   playlist_active_row = value + 1 -- convert from 0 based to 1 based
   Controls.playlist_current_row.Value = playlist_active_row
 end
 
+-- Handle double updates from the Hive player
 function fn_process_double_update(path, value)
   fn_log_debug("Processing double update: " .. path .. " = " .. tostring(value))
   if path:sub(1, 6) == "/LAYER" then -- Layer parameter response
@@ -274,6 +287,7 @@ function fn_process_double_update(path, value)
   end
 end
 
+-- Handle JSON updates from the Hive player
 function fn_process_JSON_update(path, value)
   fn_log_debug("Processing JSON update: " .. path)
   if path == "/System Settings" then
@@ -350,6 +364,7 @@ function fn_process_JSON_update(path, value)
   end
 end
 
+-- Request and update the device information from the Hive player
 function fn_update_info()
   if wsConnected ~= true then
     return
@@ -397,6 +412,7 @@ function fn_update_info()
   }
 end
 
+-- Request and update the thumbnail for a specific media index and filename
 function fn_get_file_thumbnail(index, filename)
   if wsConnected ~= true then
     return
@@ -429,6 +445,7 @@ function fn_get_file_thumbnail(index, filename)
   end
 end
 
+-- Request and update the preview thumbnail for a specific layer and filename
 function fn_update_preview_thumbnail(layer, filename)
   if wsConnected ~= true or tonumber(layer) > layer_count then
     return
@@ -458,15 +475,16 @@ function fn_update_preview_thumbnail(layer, filename)
   }
 end
 
-local refresh_period = 1 / string.gsub(Properties["Preview Refresh"].Value, " fps", "")
-
+-- Periodically fetch and update the output video preview
 function fn_fetch_video_previews()
   fn_update_output_video_preview()
   if wsConnected then
+    local refresh_period = 1 / string.gsub(Properties["Preview Refresh"].Value, " fps", "")
     Timer.CallAfter(fn_fetch_video_previews, refresh_period)
   end
 end
 
+-- Request and update the output video preview
 function fn_update_output_video_preview()
   if Properties["Output Video Preview"].Value == "Disabled" then
     return
@@ -503,6 +521,7 @@ function fn_update_output_video_preview()
   }
 end
 
+-- retrieve the list of availiable media fiolders and update the options in he comboboxes
 function fn_update_media_folders()
   if wsConnected ~= true then
     return
@@ -541,273 +560,6 @@ function fn_update_media_folders()
   }
 end
 
-function cmd_file_select(layer, x) -- 0..65535: File Select
-  if file_metadata_list[Controls["file_select_" .. layer].String] then
-    Controls["duration_" .. layer].String =
-      os.date("!%X", math.floor(file_metadata_list[Controls["file_select_" .. layer].String].duration))
-    fn_send(layer, "FILE SELECT", x)
-  end
-end
-
-function cmd_folder_select(layer, x) -- 0..65535: Folder Select
-  fn_send(layer, "FOLDER SELECT", x)
-end
-
-function cmd_intensity(layer, x)
-  fn_send(layer, "INTENSITY", x)
-end
-
-function cmd_in_frame(layer, x)
-  fn_send(layer, "IN FRAME", x)
-end
-
-function cmd_out_frame(layer, x)
-  fn_send(layer, "OUT FRAME", x)
-end
-
-function cmd_play_mode(layer, x)
-  fn_send(layer, "PLAY MODE", x)
-end
-
-function cmd_framing(layer, x)
-  fn_send(layer, "FRAMING MODE", x)
-end
-
-function cmd_blend_mode(layer, x)
-  fn_send(layer, "BLEND MODE", x)
-end
-
-function cmd_lut_select(layer, x)
-  fn_send(layer, "LUT", x)
-end
-
-function cmd_play_speed(layer, x)
-  fn_send(layer, "PLAY SPEED", x)
-end
-
-function cmd_movement_speed(layer, x)
-  fn_send(layer, "MOVEMENT SPEED", x)
-end
-
-function cmd_tc_hour(layer, x)
-  fn_send(layer, "MTC HOUR", x)
-end
-
-function cmd_tc_minute(layer, x)
-  fn_send(layer, "MTC MINUTE", x)
-end
-
-function cmd_tc_second(layer, x)
-  fn_send(layer, "MTC SECOND", x)
-end
-
-function cmd_tc_frame(layer, x)
-  fn_send(layer, "MTC FRAME", x)
-end
-
-function cmd_scale(layer, x)
-  fn_send(layer, "SCALE", x)
-end
-
-function cmd_aspect_ratio(layer, x)
-  fn_send(layer, "ASPECT RATIO", x)
-end
-
-function cmd_position_x(layer, x)
-  fn_send(layer, "POSITION X", x)
-end
-
-function cmd_position_y(layer, x)
-  fn_send(layer, "POSITION Y", x)
-end
-
-function cmd_rotation_x(layer, x)
-  fn_send(layer, "ROTATION X", x)
-end
-
-function cmd_rotation_y(layer, x)
-  fn_send(layer, "ROTATION Y", x)
-end
-
-function cmd_rotation_z(layer, x)
-  fn_send(layer, "ROTATION Z", x)
-end
-
-function cmd_red(layer, x)
-  fn_send(layer, "RED", x)
-end
-
-function cmd_green(layer, x)
-  fn_send(layer, "GREEN", x)
-end
-
-function cmd_blue(layer, x)
-  fn_send(layer, "BLUE", x)
-end
-
-function cmd_hue(layer, x)
-  fn_send(layer, "HUE", x)
-end
-
-function cmd_saturation(layer, x)
-  fn_send(layer, "SATURATION", x)
-end
-
-function cmd_contrast(layer, x)
-  fn_send(layer, "CONTRAST", x)
-end
-
-function cmd_strobe(layer, x)
-  fn_send(layer, "STROBE", x)
-end
-
-function cmd_volume(layer, x)
-  fn_send(layer, "VOLUME", x)
-end
-
-function cmd_transition_duration(layer, x)
-  fn_send(layer, "TRANSITION DURATION", x)
-end
-
-function cmd_transition_mode(layer, x)
-  fn_send(layer, "TRANSITION MODE", x)
-end
-
-function cmd_enable_playlist(x)
-  fn_update_json("Play List", {{op = "replace", path = "/usePlayList", value = x}})
-end
-
-function cmd_enable_timeline(x)
-  fn_update_json("Timeline", {{op = "replace", path = "/useTimeline", value = x}})
-end
-
-function cmd_enable_schedule(x)
-  fn_update_json("Schedule", {{op = "replace", path = "/useSchedule", value = x}})
-end
-
-function cmd_enable_tc1(x)
-  fn_update_json("Timecode Cue List", {{op = "replace", path = "/layers/0/useCueList", value = x}})
-end
-
-function cmd_enable_tc2(x)
-  fn_update_json("Timecode Cue List", {{op = "replace", path = "/layers/1/useCueList", value = x}})
-end
-
-function cmd_playlist_play_previous()
-  if playlist_row_count > 0 then
-    local new_row = playlist_active_row - 1
-    if new_row < 1 then
-      new_row = playlist_row_count
-    end
-    setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
-  end
-end
-
-function cmd_playlist_play_next()
-  if playlist_row_count > 0 then
-    local new_row = playlist_active_row + 1
-    if new_row > playlist_row_count then
-      new_row = 1
-    end
-    setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
-  end
-end
-
-function cmd_playlist_play_first()
-  if playlist_row_count > 0 then
-    local new_row = 1
-    setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
-  end
-end
-
-function cmd_playlist_play_last()
-  if playlist_row_count > 0 then
-    local new_row = playlist_row_count
-    setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
-  end
-end
-
-function cmd_playlist_play_row(x)
-  if playlist_row_count > 0 then
-    local new_row = x
-    if new_row < 1 then
-      new_row = 1
-    end
-    if new_row > playlist_row_count then
-      new_row = playlist_row_count
-    end
-    setPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
-  end
-end
-
-function cmd_restart()
-  if wsConnected ~= true then
-    return
-  end
-  fn_log_message("Sending restart command to device")
-  local url = string.format("http://%s/api/runSystemCommand", ip_address)
-  HttpClient.Post {
-    Url = url,
-    Data = rapidjson.encode(
-      {
-        method = "Nectar_run_command",
-        cmd = "sudo reboot"
-      }
-    ), -- This can be anything
-    Headers = {
-      ["Content-Type"] = "application/json"
-    },
-    EventHandler = function(tbl, code, data, error, headers)
-      if code == 200 then
-        fn_log_message("Restart command sent")
-      else
-        fn_log_error("Failed to send restart command: HTTP " .. tostring(code))
-      end
-    end
-  }
-end
-
-function cmd_shutdown()
-  if wsConnected ~= true then
-    return
-  end
-  fn_log_message("Sending shutdown command to device")
-  local url = string.format("http://%s/api/runSystemCommand", ip_address)
-  HttpClient.Post {
-    Url = url,
-    Data = rapidjson.encode(
-      {
-        method = "Nectar_run_command",
-        cmd = "sudo shutdown -h now"
-      }
-    ), -- This can be anything
-    Headers = {
-      ["Content-Type"] = "application/json"
-    },
-    EventHandler = function(tbl, code, data, error, headers)
-      if code == 200 then
-        fn_log_message("Shutdown command sent")
-      else
-        fn_log_error("Failed to send shutdown command: HTTP " .. tostring(code))
-      end
-    end
-  }
-end
-
-for i = 1, 2 do
-  _G["cmd_fx" .. i .. "_select"] = function(layer, x)
-    fn_send(layer, "FX" .. i .. " SELECT", x)
-  end
-  _G["cmd_fx" .. i .. "_opacity"] = function(layer, x)
-    fn_send(layer, "FX" .. i .. " OPACITY", x)
-  end
-  for p = 1, 16 do
-    _G["cmd_fx" .. i .. "_param_" .. p] = function(layer, x)
-      fn_send(layer, "FX" .. i .. " PARAM " .. p, x)
-    end
-  end
-end
-
 -- Set up seek timers and last value trackers
 for layer, seek_timer in pairs(seek_timer_list) do
   seek_timer.EventHandler = function(timer)
@@ -829,198 +581,6 @@ for layer, seek_timer in pairs(seek_timer_list) do
   end
 end
 
--- Set up event handlers for controls
-fn_log_debug("Setting up control event handlers")
-for i = 1, layer_count do
-  Controls["file_select_" .. i].EventHandler = function()
-    cmd_file_select(i, file_list[Controls["file_select_" .. i].String])
-  end
-  Controls["folder_select_" .. i].EventHandler = function()
-    cmd_folder_select(i, folder_list[Controls["folder_select_" .. i].String])
-  end
-  Controls["intensity_" .. i].EventHandler = function()
-    cmd_intensity(i, Controls["intensity_" .. i].Position)
-  end
-  Controls["in_frame_" .. i].EventHandler = function()
-    cmd_in_frame(i, Controls["in_frame_" .. i].Value)
-  end
-  Controls["out_frame_" .. i].EventHandler = function()
-    cmd_out_frame(i, Controls["out_frame_" .. i].Value)
-  end
-  Controls["play_mode_" .. i].EventHandler = function()
-    local val = get_table_value(play_mode_keys, play_mode_values, Controls["play_mode_" .. i].String)
-    cmd_play_mode(i, val)
-  end
-  Controls["framing_mode_" .. i].EventHandler = function()
-    local val = get_table_value(framing_mode_keys, framing_mode_values, Controls["framing_mode_" .. i].String)
-    cmd_framing(i, val)
-  end
-  Controls["blend_mode_" .. i].EventHandler = function()
-    local val = get_table_value(blend_mode_keys, blend_mode_values, Controls["blend_mode_" .. i].String)
-    cmd_blend_mode(i, val)
-  end
-  Controls["fx1_select_" .. i].EventHandler = function()
-    local val = get_table_value(fx_keys, fx_values, Controls["fx1_select_" .. i].String)
-    cmd_fx1_select(i, val)
-  end
-  Controls["fx2_select_" .. i].EventHandler = function()
-    local val = get_table_value(fx_keys, fx_values, Controls["fx2_select_" .. i].String)
-    cmd_fx2_select(i, val)
-  end
-  Controls["lut_" .. i].EventHandler = function()
-    cmd_lut_select(i, lut_list[Controls["lut_" .. i].String])
-  end
-  Controls["play_speed_" .. i].EventHandler = function()
-    local converted_value = Controls["play_speed_" .. i].Position
-    if Controls["play_speed_" .. i].Position >= 0.1 then
-      converted_value = 0.5555555555555556 * Controls["play_speed_" .. i].Position + 0.4444444444444444
-    else
-      converted_value = 5 * Controls["play_speed_" .. i].Position
-    end
-    cmd_play_speed(i, converted_value)
-  end
-  Controls["move_speed_" .. i].EventHandler = function()
-    -- reserved for future use
-    cmd_movement_speed(i, Controls["movement_speed_" .. i].Position)
-  end
-  Controls["mtc_hour_" .. i].EventHandler = function()
-    cmd_tc_hour(i, Controls["mtc_hour_" .. i].Value)
-  end
-  Controls["mtc_minute_" .. i].EventHandler = function()
-    cmd_tc_minute(i, Controls["mtc_minute_" .. i].Value)
-  end
-  Controls["mtc_second_" .. i].EventHandler = function()
-    cmd_tc_second(i, Controls["mtc_second_" .. i].Value)
-  end
-  Controls["mtc_frame_" .. i].EventHandler = function()
-    cmd_tc_frame(i, Controls["mtc_frame_" .. i].Value)
-  end
-  Controls["scale_" .. i].EventHandler = function()
-    local converted_value = Controls["scale_" .. i].Position
-    if Controls["scale_" .. i].Position >= 0.1 then
-      converted_value = 0.5555555555555556 * Controls["scale_" .. i].Position + 0.4444444444444444
-    else
-      converted_value = 5 * Controls["scale_" .. i].Position
-    end
-    cmd_scale(i, converted_value)
-  end
-  Controls["aspect_ratio_" .. i].EventHandler = function()
-    cmd_aspect_ratio(i, Controls["aspect_ratio_" .. i].Position)
-  end
-  Controls["position_x_" .. i].EventHandler = function()
-    cmd_position_x(i, (Controls["position_x_" .. i].Value + 100) / 200)
-  end
-  Controls["position_y_" .. i].EventHandler = function()
-    cmd_position_y(i, (Controls["position_y_" .. i].Value + 100) / 200)
-  end
-  Controls["rotation_x_" .. i].EventHandler = function()
-    cmd_rotation_x(i, (Controls["rotation_x_" .. i].Value + 1440) / 2880)
-  end
-  Controls["rotation_y_" .. i].EventHandler = function()
-    cmd_rotation_y(i, (Controls["rotation_y_" .. i].Value + 1440) / 2880)
-  end
-  Controls["rotation_z_" .. i].EventHandler = function()
-    cmd_rotation_z(i, (Controls["rotation_z_" .. i].Value + 1440) / 2880)
-  end
-  Controls["red_" .. i].EventHandler = function()
-    cmd_red(i, (Controls["red_" .. i].Value + 100) / 200)
-  end
-  Controls["green_" .. i].EventHandler = function()
-    cmd_green(i, (Controls["green_" .. i].Value + 100) / 200)
-  end
-  Controls["blue_" .. i].EventHandler = function()
-    cmd_blue(i, (Controls["blue_" .. i].Value + 100) / 200)
-  end
-  Controls["hue_" .. i].EventHandler = function()
-    cmd_hue(i, Controls["hue_" .. i].Position)
-  end
-  Controls["saturation_" .. i].EventHandler = function()
-    cmd_saturation(i, (Controls["saturation_" .. i].Value + 100) / 200)
-  end
-  Controls["contrast_" .. i].EventHandler = function()
-    cmd_contrast(i, (Controls["contrast_" .. i].Value + 100) / 200)
-  end
-  Controls["strobe_" .. i].EventHandler = function()
-    cmd_strobe(i, Controls["strobe_" .. i].Position)
-  end
-  Controls["volume_" .. i].EventHandler = function()
-    cmd_volume(i, Controls["volume_" .. i].Position)
-  end
-  Controls["seek_" .. i].EventHandler = function()
-    seek_timer_list[i]:Start(.2)
-  end
-  Controls["transition_duration_" .. i].EventHandler = function()
-    cmd_transition_duration(i, Controls["transition_duration_" .. i].Value)
-  end
-  Controls["transition_mode_" .. i].EventHandler = function()
-    local val = get_table_value(transition_mode_keys, transition_mode_values, Controls["transition_mode_" .. i].String)
-    cmd_transition_mode(i, val)
-  end
-  Controls["fx1_opacity_" .. i].EventHandler = function()
-    _G["cmd_fx1_opacity"](i, Controls["fx1_opacity_" .. i].Position)
-  end
-  Controls["fx2_opacity_" .. i].EventHandler = function()
-    _G["cmd_fx2_opacity"](i, Controls["fx2_opacity_" .. i].Position)
-  end
-  for p = 1, 16 do
-    Controls[string.format("fx1_param_%s_%s", p, i)].EventHandler = function()
-      _G["cmd_fx1_param_" .. p](i, Controls[string.format("fx1_param_%s_%s", p, i)].Position)
-    end
-    Controls[string.format("fx2_param_%s_%s", p, i)].EventHandler = function()
-      _G["cmd_fx2_param_" .. p](i, Controls[string.format("fx2_param_%s_%s", p, i)].Position)
-    end
-  end
-
-  for p = 1, media_item_count do
-    Controls[string.format("media_thumbnail_%s_layer_%s", p, i)].EventHandler = function()
-      if Controls[string.format("media_name_%s_layer_%s", p, i)].String ~= nil then
-        cmd_file_select(i, file_list[Controls[string.format("media_name_%s_layer_%s", p, i)].String])
-      end
-    end
-  end
-end
-
-Controls["playlist_enable"].EventHandler = function()
-  cmd_enable_playlist(Controls.playlist_enable.Boolean and 1 or 0)
-end
-Controls["timeline_enable"].EventHandler = function()
-  cmd_enable_timeline(Controls.timeline_enable.Boolean and 1 or 0)
-end
-Controls["schedule_enable"].EventHandler = function()
-  cmd_enable_schedule(Controls.schedule_enable.Boolean and 1 or 0)
-end
-Controls["l1_timecode_enable"].EventHandler = function()
-  cmd_enable_tc1(Controls.l1_timecode_enable.Boolean and 1 or 0)
-end
-Controls["l2_timecode_enable"].EventHandler = function()
-  cmd_enable_tc2(Controls.l2_timecode_enable.Boolean and 1 or 0)
-end
-Controls["playlist_play_previous"].EventHandler = function()
-  cmd_playlist_play_previous()
-end
-Controls["playlist_play_next"].EventHandler = function()
-  cmd_playlist_play_next()
-end
-Controls["playlist_play_first"].EventHandler = function()
-  cmd_playlist_play_first()
-end
-Controls["playlist_play_last"].EventHandler = function()
-  cmd_playlist_play_last()
-end
-Controls["playlist_play_row"].EventHandler = function()
-  if Controls.playlist_play_row_index.String ~= "" then
-    local row = tonumber(Controls.playlist_play_row_index.String)
-    if row then
-      cmd_playlist_play_row(row)
-    end
-  end
-end
-Controls["system_shutdown"].EventHandler = function()
-  cmd_shutdown()
-end
-Controls["system_restart"].EventHandler = function()
-  cmd_restart()
-end
 
 -- Initialize combobox choices
 for i = 1, layer_count do
