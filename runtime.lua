@@ -7,6 +7,7 @@ function fn_hive_connect_Status(status)
     fn_watch_parameters()
     fn_update_info()
     fn_poll_info()
+    fn_update_media_folders()
     fn_fetch_video_previews()
   else
     Controls.online.Boolean = false
@@ -523,6 +524,7 @@ end
 
 -- retrieve the list of availiable media fiolders and update the options in he comboboxes
 function fn_update_media_folders()
+  print("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
   if wsConnected ~= true then
     return
   end
@@ -592,7 +594,7 @@ for i = 1, layer_count do
   Controls["fx2_select_" .. i].Choices = fx_keys
 end
 
-fn_update_media_folders()
+
 
 -- Connect
 if fn_check_valid_ip(ip_address) then
