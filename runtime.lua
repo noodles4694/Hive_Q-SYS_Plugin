@@ -317,6 +317,7 @@ function fn_process_JSON_update(path, value)
   fn_log_debug("Processing JSON update: " .. path)
   if path == "/System Settings" then
     fn_update_info()
+  elseif path == "/Media List" then
     local file_choice_list = {}
     file_list = {}
     file_list_names = {}
