@@ -214,7 +214,6 @@ function fn_process_double_update(path, value)
     if parameter then
       local control = string.format("%s_%s", parameter:gsub("%s", "_"):lower(), layer)
       if parameter == "FILE SELECT" then
-        print("FIIIIILEEEEE")
         selected_file[tonumber(layer)] = value
         fn_update_selected_file_info(value, layer)
       elseif parameter == "FOLDER SELECT" then
@@ -318,8 +317,6 @@ function fn_process_JSON_update(path, value)
   fn_log_debug("Processing JSON update: " .. path)
   if path == "/System Settings" then
     fn_update_info()
-  elseif path == "/Media List" then
-    print("MEDIA LIST UPDATE")
     local file_choice_list = {}
     file_list = {}
     file_list_names = {}
