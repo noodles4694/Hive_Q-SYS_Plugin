@@ -489,8 +489,8 @@ function fn_update_preview_thumbnail(layer, filename)
       DrawChrome = true,
       HorizontalAlignment = "Center",
       Legend = "",
-      Padding = -12,
-      Margin = 0,
+      --Padding = -16,
+      --Margin = 0,
       IconData = ""
     }
     local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
@@ -507,11 +507,11 @@ function fn_update_preview_thumbnail(layer, filename)
     EventHandler = function(tbl, code, data, err, headers)
       if code == 200 then
         local iconStyle = {
-          DrawChrome = true,
-          HorizontalAlignment = "Center",
+          DrawChrome = false,
+          --HorizontalAlignment = "Center",
           Legend = "",
-          Padding = -14,
-          Margin = 0,
+         -- Padding = -16,
+          --Margin = 0,
           IconData = Qlib.base64_enc(data)
         }
         Controls[string.format("layer_%s_preview", layer)].Style = rapidjson.encode(iconStyle)
@@ -555,11 +555,11 @@ function fn_update_output_video_preview()
       if code == 200 then
         local frameData = rapidjson.decode(data)
         local iconStyle = {
-          DrawChrome = true,
-          HorizontalAlignment = "Center",
+          DrawChrome = false,
+         -- HorizontalAlignment = "Center",
           Legend = "",
-          Padding = -14,
-          Margin = 0,
+         -- Padding = -16,
+         -- Margin = 0,
           IconData = frameData.imgDataMapped
         }
         Controls["output_preview"].Style = rapidjson.encode(iconStyle)

@@ -29,15 +29,19 @@ table.insert(
 
 layout["output_preview"] = {
   PrettyName = "System~Preview",
+  Style="Button",
   UnlinkOffColor = true,
   OffColor = Colors.transparent,
-  Color = Colors.Red,
+  Color = Colors.Black,
   StrokeColor = Colors.control_text,
   ButtonVisualStyle = "Flat",
   Position = {
      8,(2 * btn_size[2])
   },
-  Size = preview_size
+  Size = preview_size,
+  CornerRadius = 0,
+  Margin = 0,
+  Padding = 0
 }
 
 for i = 1, layer_count do
@@ -60,13 +64,16 @@ for i = 1, layer_count do
     PrettyName = string.format("Layer %s~Preview", i),
     UnlinkOffColor = true,
     OffColor = Colors.transparent,
-    Color = Colors.Red,
+    Color = Colors.Black,
     StrokeColor = Colors.control_text,
     ButtonVisualStyle = "Flat",
     Position = {
       ((i - 1) * preview_size[1]) + (3 * btn_size[1]) + 8,
       (2 * btn_size[2])
     },
-    Size = preview_size
+    Size = preview_size,
+    CornerRadius = 0,
+    Margin = 0,
+    Padding = 0
   }
 end

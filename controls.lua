@@ -233,10 +233,7 @@ for i = 1, layer_count do
     {
       Name = string.format("layer_%s_preview", i),
       ControlType = "Button",
-      ButtonType = "Momentary",
-      Min = 0,
-      Max = 1,
-      PinStyle = "None",
+      ButtonType = "Trigger",
       UserPin = false
     }
   )
@@ -247,10 +244,7 @@ table.insert(
   {
     Name = "output_preview",
     ControlType = "Button",
-    ButtonType = "Momentary",
-    Min = 0,
-    Max = 1,
-    PinStyle = "None",
+    ButtonType = "Trigger",
     UserPin = false
   }
 )
