@@ -214,6 +214,7 @@ function fn_process_double_update(path, value)
     if parameter then
       local control = string.format("%s_%s", parameter:gsub("%s", "_"):lower(), layer)
       if parameter == "FILE SELECT" then
+        print("FIIIIILEEEEE")
         selected_file[tonumber(layer)] = value
         fn_update_selected_file_info(value, layer)
       elseif parameter == "FOLDER SELECT" then
@@ -283,7 +284,7 @@ function fn_update_selected_file_info(value, layer)
   for media = 1, media_item_count do
     Controls[string.format("media_thumbnail_%s_layer_%s", media, layer)].Boolean = media == (value + 1)
   end
-  local currentFileName = file_list_names[value] or ""
+  local currentFileName = file_list_names[tonumber(value)] or ""
       fn_update_preview_thumbnail(layer, currentFileName)
       Controls[string.format("file_select_%s", layer)].String = currentFileName
       if file_metadata_list[currentFileName] then
@@ -318,6 +319,7 @@ function fn_process_JSON_update(path, value)
   if path == "/System Settings" then
     fn_update_info()
   elseif path == "/Media List" then
+    print("MEDIA LIST UPDATE")
     local file_choice_list = {}
     file_list = {}
     file_list_names = {}
@@ -489,8 +491,6 @@ function fn_update_preview_thumbnail(layer, filename)
       DrawChrome = true,
       HorizontalAlignment = "Center",
       Legend = "",
-      --Padding = -16,
-      --Margin = 0,
       IconData = ""
     }
     local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
@@ -508,10 +508,7 @@ function fn_update_preview_thumbnail(layer, filename)
       if code == 200 then
         local iconStyle = {
           DrawChrome = false,
-          --HorizontalAlignment = "Center",
           Legend = "",
-         -- Padding = -16,
-          --Margin = 0,
           IconData = Qlib.base64_enc(data)
         }
         Controls[string.format("layer_%s_preview", layer)].Style = rapidjson.encode(iconStyle)
@@ -556,10 +553,7 @@ function fn_update_output_video_preview()
         local frameData = rapidjson.decode(data)
         local iconStyle = {
           DrawChrome = false,
-         -- HorizontalAlignment = "Center",
           Legend = "",
-         -- Padding = -16,
-         -- Margin = 0,
           IconData = frameData.imgDataMapped
         }
         Controls["output_preview"].Style = rapidjson.encode(iconStyle)
