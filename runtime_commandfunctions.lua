@@ -1,8 +1,8 @@
 -- Command functions called by control callbacks
 function cmd_file_select(layer, x) -- 0..65535: File Select
-  if file_metadata_list[Controls["file_select_" .. layer].String] then
-    Controls["duration_" .. layer].String =
-      os.date("!%X", math.floor(file_metadata_list[Controls["file_select_" .. layer].String].duration))
+  local currentFileName = file_list_names[selected_file[layer] + 1] or "None"
+  if file_metadata_list[currentFileName] then
+    Controls["duration_" .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
     fn_send(layer, "FILE SELECT", x)
   end
 end

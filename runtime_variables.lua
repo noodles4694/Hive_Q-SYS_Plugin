@@ -2,6 +2,7 @@
 
 ---- These variables can be changed during runtime
 local file_list = {}
+local file_list_names = {}
 local selected_file = {}
 local file_metadata_list = {}
 local play_mode = {}
@@ -12,7 +13,7 @@ local playlist_active_row = 1
 
 for i = 1, layer_count do
   play_mode[i] = "In Frame"
-  selected_file[i] = ""
+  selected_file[i] = 0
   saved_play_mode = {}
   seek_timer_list[i] = Timer.New()
 end

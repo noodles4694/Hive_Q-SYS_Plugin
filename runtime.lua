@@ -181,13 +181,14 @@ function fn_process_transport_update(path, value)
   local layer, parameter = path:match("/LAYER (%d+)/(%P+)")
   if parameter == "Transport Control" then
     local layer, parameter, sub_parameter = path:match("/LAYER (%d+)/(%P+)/(%P+)")
+    local currentFileName = file_list_names[selected_file[tonumber(layer)]] or ""
     if sub_parameter == "Media Time" then
-      if Controls["file_select_" .. layer].String ~= "" and not seek_timer_list[tonumber(layer)]:IsRunning() then
-        if file_metadata_list[Controls["file_select_" .. layer].String].duration == 0 then
+      if not seek_timer_list[tonumber(layer)]:IsRunning() then
+        if currentFileName == "" or file_metadata_list[currentFileName] == nil or file_metadata_list[currentFileName].duration == 0 then
           Controls["seek_" .. layer].Position = 0
           Controls["time_elapsed_" .. layer].String = os.date("!%X", 0)
         else
-          local pos = tonumber(value) / file_metadata_list[Controls["file_select_" .. layer].String].duration
+          local pos = tonumber(value) / file_metadata_list[currentFileName].duration
           Controls["seek_" .. layer].Position = pos
           Controls["time_elapsed_" .. layer].String = os.date("!%X", math.floor(value))
         end
@@ -213,19 +214,8 @@ function fn_process_double_update(path, value)
     if parameter then
       local control = string.format("%s_%s", parameter:gsub("%s", "_"):lower(), layer)
       if parameter == "FILE SELECT" then
-        for k, v in pairs(file_list) do
-          if v == value then
-              fn_update_preview_thumbnail(layer, k)
-            Controls[control].String = k
-            Controls["duration_" .. control:sub(-1, -1)].String =
-              os.date("!%X", math.floor(file_metadata_list[k].duration))
-            for media = 1, media_item_count do
-              Controls[string.format("media_thumbnail_%s_layer_%s", media, layer)].Boolean =
-                Controls[control].String == Controls[string.format("media_name_%s_layer_%s", media, layer)].String
-            end
-            break
-          end
-        end
+        selected_file[tonumber(layer)] = value
+        fn_update_selected_file_info(value, layer)
       elseif parameter == "FOLDER SELECT" then
         for k, v in pairs(folder_list) do
           if v == value then
@@ -288,6 +278,40 @@ function fn_process_double_update(path, value)
   end
 end
 
+function fn_update_selected_file_info(value, layer)
+  local found = false
+  for media = 1, media_item_count do
+    Controls[string.format("media_thumbnail_%s_layer_%s", media, layer)].Boolean = media == (value + 1)
+  end
+  local currentFileName = file_list_names[value] or ""
+      fn_update_preview_thumbnail(layer, currentFileName)
+      Controls[string.format("file_select_%s", layer)].String = currentFileName
+      if file_metadata_list[currentFileName] then
+        Controls["duration_" .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration)) 
+      else
+        Controls["duration_" .. layer].String = os.date("!%X", 0)
+      end
+end
+
+-- Clear the media list thumbnails and names
+function fn_clear_media_thumbs()
+  local iconStyleBlank = {
+    DrawChrome = true,
+    HorizontalAlignment = "Center",
+    Legend = "",
+    Padding = -12,
+    Margin = 0,
+    IconData = ""
+  }
+  local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
+  for i = 1, layer_count do
+    for m = 1, media_item_count do
+      Controls[string.format("media_name_%s_layer_%s", m, i)].String = ""
+      Controls[string.format("media_thumbnail_%s_layer_%s", m, i)].Style = iconStyleBlankString
+    end
+  end
+end
+
 -- Handle JSON updates from the Hive player
 function fn_process_JSON_update(path, value)
   fn_log_debug("Processing JSON update: " .. path)
@@ -295,8 +319,13 @@ function fn_process_JSON_update(path, value)
     fn_update_info()
   elseif path == "/Media List" then
     local file_choice_list = {}
+    file_list = {}
+    file_list_names = {}
+    file_metadata_list = {}
+    fn_clear_media_thumbs()
     for _, file in ipairs(value.files) do
       file_list[file.name] = file.fileIndex - 1
+      file_list_names[file.fileIndex - 1] = file.name
       table.insert(file_choice_list, file.name)
       file_metadata_list[file.name] = file
       for i = 1, layer_count do
@@ -308,6 +337,7 @@ function fn_process_JSON_update(path, value)
     end
     for i = 1, layer_count do
       Controls["file_select_" .. i].Choices = file_choice_list
+       fn_update_selected_file_info(selected_file[i],i)
     end
     -- let's update the system info as storage and num files might have changed
     fn_update_info()
@@ -452,6 +482,23 @@ function fn_update_preview_thumbnail(layer, filename)
     return
   end
   fn_log_debug("Requesting preview for media  " .. filename)
+  if file_list[filename] == nil then
+    fn_log_error("Filename " .. filename .. " not found in file list")
+  
+    local iconStyleBlank = {
+      DrawChrome = true,
+      HorizontalAlignment = "Center",
+      Legend = "",
+      Padding = -12,
+      Margin = 0,
+      IconData = ""
+    }
+    local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
+    Controls[string.format("layer_%s_preview", layer)].Style = iconStyleBlankString
+    if tonumber(layer) == 1 and Properties["Output Video Preview"].Value == "Disabled" then
+      Controls["output_preview"].Style = iconStyleBlankString
+    end
+  else
   HttpClient.Download {
     Url = string.format("http://%s/Thumbs/%s", ip_address, filename:gsub("%.%w+", ".jpg")),
     Headers = {},
@@ -474,6 +521,7 @@ function fn_update_preview_thumbnail(layer, filename)
       end
     end
   }
+end
 end
 
 -- Periodically fetch and update the output video preview
@@ -524,7 +572,6 @@ end
 
 -- retrieve the list of availiable media fiolders and update the options in he comboboxes
 function fn_update_media_folders()
-  print("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
   if wsConnected ~= true then
     return
   end
@@ -583,7 +630,6 @@ for layer, seek_timer in pairs(seek_timer_list) do
   end
 end
 
-
 -- Initialize combobox choices
 for i = 1, layer_count do
   Controls["play_mode_" .. i].Choices = play_mode_keys
@@ -593,8 +639,6 @@ for i = 1, layer_count do
   Controls["fx1_select_" .. i].Choices = fx_keys
   Controls["fx2_select_" .. i].Choices = fx_keys
 end
-
-
 
 -- Connect
 if fn_check_valid_ip(ip_address) then
