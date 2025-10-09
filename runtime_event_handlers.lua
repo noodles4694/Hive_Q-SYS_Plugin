@@ -7,6 +7,12 @@ for i = 1, layer_count do
   Controls["folder_select_" .. i].EventHandler = function()
     cmd_folder_select(i, folder_list[Controls["folder_select_" .. i].String])
   end
+  Controls["file_select_index_" .. i].EventHandler = function()
+    cmd_file_select(i, Controls["file_select_index_" .. i].Value)
+  end
+  Controls["folder_select_index_" .. i].EventHandler = function()
+    cmd_folder_select(i, Controls["folder_select_index_" .. i].Value)
+  end
   Controls["intensity_" .. i].EventHandler = function()
     cmd_intensity(i, Controls["intensity_" .. i].Position)
   end

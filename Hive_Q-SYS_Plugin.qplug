@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.431",
+  BuildVersion = "0.0.0.440",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -38,10 +38,30 @@ local control_list = {
     PinStyle = "Both",
     UserPin = true
   },
+  ["File Select Index"] = {
+    Name = "file_select_index_",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
+    PinStyle = "Both",
+    UserPin = true
+  },
   ["Folder Select"] = {
     Name = "folder_select_",
     ControlType = "Text",
     Style = "ComboBox",
+    PinStyle = "Both",
+    UserPin = true
+  },
+  ["Folder Select Index"] = {
+    Name = "folder_select_index_",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
     PinStyle = "Both",
     UserPin = true
   },
@@ -391,6 +411,11 @@ local parameter_list = {
   "Volume",
   "Transition Duration",
   "Transition Mode"
+}
+
+local pinonly_list = {
+"File Select Index",
+"Folder Select Index"
 }
 
 local fx1_list = {}
@@ -1626,6 +1651,22 @@ function GetControlLayout(props)
           player_groupbox_position[2] + (row * btn_size[2])
         },
         Size = {3 * btn_size[1], btn_size[2]}
+      }
+    end
+    -- add the controls that are only there for the pins
+    for k, v in pairs(pinonly_list) do
+      layout[control_list[v].Name .. i] = {
+        PrettyName = "Layer " .. i .. "~" .. v,
+        Style = control_list[v].Style,
+        Color = Colors.control_background,
+        TextColor = Colors.control_text,
+        StrokeColor = Colors.control_text,
+        FontSize = (v == "File Select") and 8 or 12,
+        StrokeWidth = 1,
+        Position = {
+          0,0
+        },
+        Size = {5,5}
       }
     end
     for k, v in pairs(fx1_list) do
@@ -3250,6 +3291,7 @@ function fn_process_double_update(path, value)
         selected_file[tonumber(layer)] = value
         fn_update_selected_file_info(value, layer)
       elseif parameter == "FOLDER SELECT" then
+        Controls[string.format("folder_select_index_%s", layer)].Value = value
         for k, v in pairs(folder_list) do
           if v == value then
             Controls[control].String = k
@@ -3319,6 +3361,7 @@ function fn_update_selected_file_info(value, layer)
   local currentFileName = file_list_names[tonumber(value)] or ""
       fn_update_preview_thumbnail(layer, currentFileName)
       Controls[string.format("file_select_%s", layer)].String = currentFileName
+      Controls[string.format("file_select_index_%s", layer)].Value = tonumber(value)
       if file_metadata_list[currentFileName] then
         Controls["duration_" .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration)) 
       else
@@ -3676,9 +3719,11 @@ end
 function cmd_file_select(layer, x) -- 0..65535: File Select
   local currentFileName = file_list_names[selected_file[layer] + 1] or "None"
   if file_metadata_list[currentFileName] then
-    Controls["duration_" .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
-    fn_send(layer, "FILE SELECT", x)
+    Controls["duration_" .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration)) 
+  else
+    Controls["duration_" .. layer].String = os.date("!%X", 0) 
   end
+  fn_send(layer, "FILE SELECT", x)
 end
 
 function cmd_folder_select(layer, x) -- 0..65535: Folder Select
@@ -3947,6 +3992,12 @@ for i = 1, layer_count do
   end
   Controls["folder_select_" .. i].EventHandler = function()
     cmd_folder_select(i, folder_list[Controls["folder_select_" .. i].String])
+  end
+  Controls["file_select_index_" .. i].EventHandler = function()
+    cmd_file_select(i, Controls["file_select_index_" .. i].Value)
+  end
+  Controls["folder_select_index_" .. i].EventHandler = function()
+    cmd_folder_select(i, Controls["folder_select_index_" .. i].Value)
   end
   Controls["intensity_" .. i].EventHandler = function()
     cmd_intensity(i, Controls["intensity_" .. i].Position)

@@ -217,6 +217,7 @@ function fn_process_double_update(path, value)
         selected_file[tonumber(layer)] = value
         fn_update_selected_file_info(value, layer)
       elseif parameter == "FOLDER SELECT" then
+        Controls[string.format("folder_select_index_%s", layer)].Value = value
         for k, v in pairs(folder_list) do
           if v == value then
             Controls[control].String = k
@@ -286,6 +287,7 @@ function fn_update_selected_file_info(value, layer)
   local currentFileName = file_list_names[tonumber(value)] or ""
       fn_update_preview_thumbnail(layer, currentFileName)
       Controls[string.format("file_select_%s", layer)].String = currentFileName
+      Controls[string.format("file_select_index_%s", layer)].Value = tonumber(value)
       if file_metadata_list[currentFileName] then
         Controls["duration_" .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration)) 
       else

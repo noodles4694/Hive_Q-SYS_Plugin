@@ -28,10 +28,30 @@ local control_list = {
     PinStyle = "Both",
     UserPin = true
   },
+  ["File Select Index"] = {
+    Name = "file_select_index_",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
+    PinStyle = "Both",
+    UserPin = true
+  },
   ["Folder Select"] = {
     Name = "folder_select_",
     ControlType = "Text",
     Style = "ComboBox",
+    PinStyle = "Both",
+    UserPin = true
+  },
+  ["Folder Select Index"] = {
+    Name = "folder_select_index_",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
     PinStyle = "Both",
     UserPin = true
   },
@@ -381,6 +401,11 @@ local parameter_list = {
   "Volume",
   "Transition Duration",
   "Transition Mode"
+}
+
+local pinonly_list = {
+"File Select Index",
+"Folder Select Index"
 }
 
 local fx1_list = {}
