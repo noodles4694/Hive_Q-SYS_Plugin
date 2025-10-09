@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.444",
+  BuildVersion = "0.0.0.448",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -470,7 +470,9 @@ local pinonly_list = {
 "Framing Mode Index",
 "Blend Mode Index",
 "LUT Index",
-"Transition Mode Index"
+"Transition Mode Index",
+"FX1 Select Index",
+"FX2 Select Index"
 }
 
 local fx1_list = {}
@@ -480,6 +482,16 @@ control_list["FX1 Select"] = {
   Name = "fx1_select_",
   ControlType = "Text",
   Style = "ComboBox",
+  PinStyle = "Both",
+  UserPin = true
+}
+control_list["FX1 Select Index"] = {
+  Name = "fx1_select_index_",
+  ControlType = "Knob",
+  ControlUnit = "Integer",
+  Style = "None",
+  Min = 0,
+  Max = 65535,
   PinStyle = "Both",
   UserPin = true
 }
@@ -523,6 +535,16 @@ control_list["FX2 Opacity"] = {
   Style = "Text Field",
   Min = 0,
   Max = 100,
+  PinStyle = "Both",
+  UserPin = true
+}
+control_list["FX2 Select Index"] = {
+  Name = "fx2_select_index_",
+  ControlType = "Knob",
+  ControlUnit = "Integer",
+  Style = "None",
+  Min = 0,
+  Max = 65535,
   PinStyle = "Both",
   UserPin = true
 }
@@ -3382,9 +3404,11 @@ function fn_process_double_update(path, value)
       elseif parameter == "FX1 SELECT" then
         local key = get_table_key(fx_keys, fx_values, value)
         Controls[control].String = key
+        Controls[string.format("fx1_select_index_%s", layer)].Value = value
       elseif parameter == "FX2 SELECT" then
         local key = get_table_key(fx_keys, fx_values, value)
         Controls[control].String = key
+        Controls[string.format("fx2_select_index_%s", layer)].Value = value
       elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
         if value >= 0.5 then
           Controls[control].Position = (value - 0.4444444444444444) / 0.5555555555555556
@@ -4093,9 +4117,15 @@ for i = 1, layer_count do
     local val = get_table_value(fx_keys, fx_values, Controls["fx1_select_" .. i].String)
     cmd_fx1_select(i, val)
   end
+  Controls["fx1_select_index_" .. i].EventHandler = function()
+    cmd_fx1_select(i, Controls["fx1_select_index_" .. i].Value)
+  end
   Controls["fx2_select_" .. i].EventHandler = function()
     local val = get_table_value(fx_keys, fx_values, Controls["fx2_select_" .. i].String)
     cmd_fx2_select(i, val)
+  end
+  Controls["fx2_select_index_" .. i].EventHandler = function()
+    cmd_fx2_select(i, Controls["fx2_select_index_" .. i].Value)
   end
   Controls["lut_" .. i].EventHandler = function()
     cmd_lut_select(i, lut_list[Controls["lut_" .. i].String])

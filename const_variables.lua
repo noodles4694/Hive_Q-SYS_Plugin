@@ -460,7 +460,9 @@ local pinonly_list = {
 "Framing Mode Index",
 "Blend Mode Index",
 "LUT Index",
-"Transition Mode Index"
+"Transition Mode Index",
+"FX1 Select Index",
+"FX2 Select Index"
 }
 
 local fx1_list = {}
@@ -470,6 +472,16 @@ control_list["FX1 Select"] = {
   Name = "fx1_select_",
   ControlType = "Text",
   Style = "ComboBox",
+  PinStyle = "Both",
+  UserPin = true
+}
+control_list["FX1 Select Index"] = {
+  Name = "fx1_select_index_",
+  ControlType = "Knob",
+  ControlUnit = "Integer",
+  Style = "None",
+  Min = 0,
+  Max = 65535,
   PinStyle = "Both",
   UserPin = true
 }
@@ -513,6 +525,16 @@ control_list["FX2 Opacity"] = {
   Style = "Text Field",
   Min = 0,
   Max = 100,
+  PinStyle = "Both",
+  UserPin = true
+}
+control_list["FX2 Select Index"] = {
+  Name = "fx2_select_index_",
+  ControlType = "Knob",
+  ControlUnit = "Integer",
+  Style = "None",
+  Min = 0,
+  Max = 65535,
   PinStyle = "Both",
   UserPin = true
 }

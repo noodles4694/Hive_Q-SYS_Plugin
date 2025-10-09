@@ -47,9 +47,15 @@ for i = 1, layer_count do
     local val = get_table_value(fx_keys, fx_values, Controls["fx1_select_" .. i].String)
     cmd_fx1_select(i, val)
   end
+  Controls["fx1_select_index_" .. i].EventHandler = function()
+    cmd_fx1_select(i, Controls["fx1_select_index_" .. i].Value)
+  end
   Controls["fx2_select_" .. i].EventHandler = function()
     local val = get_table_value(fx_keys, fx_values, Controls["fx2_select_" .. i].String)
     cmd_fx2_select(i, val)
+  end
+  Controls["fx2_select_index_" .. i].EventHandler = function()
+    cmd_fx2_select(i, Controls["fx2_select_index_" .. i].Value)
   end
   Controls["lut_" .. i].EventHandler = function()
     cmd_lut_select(i, lut_list[Controls["lut_" .. i].String])

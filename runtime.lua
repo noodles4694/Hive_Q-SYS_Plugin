@@ -253,9 +253,11 @@ function fn_process_double_update(path, value)
       elseif parameter == "FX1 SELECT" then
         local key = get_table_key(fx_keys, fx_values, value)
         Controls[control].String = key
+        Controls[string.format("fx1_select_index_%s", layer)].Value = value
       elseif parameter == "FX2 SELECT" then
         local key = get_table_key(fx_keys, fx_values, value)
         Controls[control].String = key
+        Controls[string.format("fx2_select_index_%s", layer)].Value = value
       elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
         if value >= 0.5 then
           Controls[control].Position = (value - 0.4444444444444444) / 0.5555555555555556
