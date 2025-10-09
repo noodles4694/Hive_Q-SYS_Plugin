@@ -225,6 +225,7 @@ function fn_process_double_update(path, value)
           end
         end
       elseif parameter == "LUT" then
+        Controls[string.format("lut_index_%s", layer)].Value = value
         for k, v in pairs(lut_list) do
           if v == value then
             Controls[control].String = k
@@ -236,15 +237,19 @@ function fn_process_double_update(path, value)
       elseif parameter == "PLAY MODE" then
         local key = get_table_key(play_mode_keys, play_mode_values, value)
         Controls[control].String = key
+        Controls[string.format("play_mode_index_%s", layer)].Value = value
       elseif parameter == "FRAMING MODE" then
         local key = get_table_key(framing_mode_keys, framing_mode_values, value)
         Controls[control].String = key
+        Controls[string.format("framing_mode_index_%s", layer)].Value = value
       elseif parameter == "BLEND MODE" then
         local key = get_table_key(blend_mode_keys, blend_mode_values, value)
         Controls[control].String = key
+        Controls[string.format("blend_mode_index_%s", layer)].Value = value
       elseif parameter == "TRANSITION MODE" then
         local key = get_table_key(transition_mode_keys, transition_mode_values, value)
         Controls[control].String = key
+        Controls[string.format("transition_mode_index_%s", layer)].Value = value
       elseif parameter == "FX1 SELECT" then
         local key = get_table_key(fx_keys, fx_values, value)
         Controls[control].String = key

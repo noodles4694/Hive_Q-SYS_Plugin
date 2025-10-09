@@ -116,10 +116,30 @@ local control_list = {
     PinStyle = "Both",
     UserPin = true
   },
+  ["Play Mode Index"] = {
+    Name = "play_mode_index_",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
+    PinStyle = "Both",
+    UserPin = true
+  },
   ["Framing Mode"] = {
     Name = "framing_mode_",
     ControlType = "Text",
     Style = "ComboBox",
+    PinStyle = "Both",
+    UserPin = true
+  },
+  ["Framing Mode Index"] = {
+    Name = "framing_mode_index_",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
     PinStyle = "Both",
     UserPin = true
   },
@@ -130,10 +150,30 @@ local control_list = {
     PinStyle = "Both",
     UserPin = true
   },
+  ["Blend Mode Index"] = {
+    Name = "blend_mode_index_",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
+    PinStyle = "Both",
+    UserPin = true
+  },
   ["LUT"] = {
     Name = "lut_",
     ControlType = "Text",
     Style = "ComboBox",
+    PinStyle = "Both",
+    UserPin = true
+  },
+  ["LUT Index"] = {
+    Name = "lut_index_",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
     PinStyle = "Both",
     UserPin = true
   },
@@ -362,7 +402,17 @@ local control_list = {
     Style = "ComboBox",
     PinStyle = "Both",
     UserPin = true
-  }
+  },
+  ["Transition Mode Index"] = {
+    Name = "transition_mode_index_",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
+    PinStyle = "Both",
+    UserPin = true
+  },
 }
 -- Create a list of parameter names for easy reference
 local parameter_list = {
@@ -405,7 +455,12 @@ local parameter_list = {
 
 local pinonly_list = {
 "File Select Index",
-"Folder Select Index"
+"Folder Select Index",
+"Play Mode Index",
+"Framing Mode Index",
+"Blend Mode Index",
+"LUT Index",
+"Transition Mode Index"
 }
 
 local fx1_list = {}

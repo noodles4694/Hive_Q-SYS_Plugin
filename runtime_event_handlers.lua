@@ -26,13 +26,22 @@ for i = 1, layer_count do
     local val = get_table_value(play_mode_keys, play_mode_values, Controls["play_mode_" .. i].String)
     cmd_play_mode(i, val)
   end
+  Controls["play_mode_index_" .. i].EventHandler = function()
+    cmd_play_mode(i, Controls["play_mode_index_" .. i].Value)
+  end
   Controls["framing_mode_" .. i].EventHandler = function()
     local val = get_table_value(framing_mode_keys, framing_mode_values, Controls["framing_mode_" .. i].String)
     cmd_framing(i, val)
   end
+  Controls["framing_mode_index_" .. i].EventHandler = function()
+    cmd_framing(i, Controls["framing_mode_index_" .. i].Value)
+  end
   Controls["blend_mode_" .. i].EventHandler = function()
     local val = get_table_value(blend_mode_keys, blend_mode_values, Controls["blend_mode_" .. i].String)
     cmd_blend_mode(i, val)
+  end
+  Controls["blend_mode_index_" .. i].EventHandler = function()
+    cmd_blend_mode(i, Controls["blend_mode_index_" .. i].Value)
   end
   Controls["fx1_select_" .. i].EventHandler = function()
     local val = get_table_value(fx_keys, fx_values, Controls["fx1_select_" .. i].String)
@@ -44,6 +53,9 @@ for i = 1, layer_count do
   end
   Controls["lut_" .. i].EventHandler = function()
     cmd_lut_select(i, lut_list[Controls["lut_" .. i].String])
+  end
+  Controls["lut_index_" .. i].EventHandler = function()
+    cmd_lut_select(i, Controls["lut_index_" .. i].Value)
   end
   Controls["play_speed_" .. i].EventHandler = function()
     local converted_value = Controls["play_speed_" .. i].Position
@@ -129,6 +141,9 @@ for i = 1, layer_count do
   Controls["transition_mode_" .. i].EventHandler = function()
     local val = get_table_value(transition_mode_keys, transition_mode_values, Controls["transition_mode_" .. i].String)
     cmd_transition_mode(i, val)
+  end
+  Controls["transition_mode_index_" .. i].EventHandler = function()
+    cmd_transition_mode(i, Controls["transition_mode_index_" .. i].Value)
   end
   Controls["fx1_opacity_" .. i].EventHandler = function()
     _G["cmd_fx1_opacity"](i, Controls["fx1_opacity_" .. i].Position)

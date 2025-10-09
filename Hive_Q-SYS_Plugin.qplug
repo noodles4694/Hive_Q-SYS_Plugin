@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.440",
+  BuildVersion = "0.0.0.444",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -126,10 +126,30 @@ local control_list = {
     PinStyle = "Both",
     UserPin = true
   },
+  ["Play Mode Index"] = {
+    Name = "play_mode_index_",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
+    PinStyle = "Both",
+    UserPin = true
+  },
   ["Framing Mode"] = {
     Name = "framing_mode_",
     ControlType = "Text",
     Style = "ComboBox",
+    PinStyle = "Both",
+    UserPin = true
+  },
+  ["Framing Mode Index"] = {
+    Name = "framing_mode_index_",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
     PinStyle = "Both",
     UserPin = true
   },
@@ -140,10 +160,30 @@ local control_list = {
     PinStyle = "Both",
     UserPin = true
   },
+  ["Blend Mode Index"] = {
+    Name = "blend_mode_index_",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
+    PinStyle = "Both",
+    UserPin = true
+  },
   ["LUT"] = {
     Name = "lut_",
     ControlType = "Text",
     Style = "ComboBox",
+    PinStyle = "Both",
+    UserPin = true
+  },
+  ["LUT Index"] = {
+    Name = "lut_index_",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
     PinStyle = "Both",
     UserPin = true
   },
@@ -372,7 +412,17 @@ local control_list = {
     Style = "ComboBox",
     PinStyle = "Both",
     UserPin = true
-  }
+  },
+  ["Transition Mode Index"] = {
+    Name = "transition_mode_index_",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
+    PinStyle = "Both",
+    UserPin = true
+  },
 }
 -- Create a list of parameter names for easy reference
 local parameter_list = {
@@ -415,7 +465,12 @@ local parameter_list = {
 
 local pinonly_list = {
 "File Select Index",
-"Folder Select Index"
+"Folder Select Index",
+"Play Mode Index",
+"Framing Mode Index",
+"Blend Mode Index",
+"LUT Index",
+"Transition Mode Index"
 }
 
 local fx1_list = {}
@@ -3299,6 +3354,7 @@ function fn_process_double_update(path, value)
           end
         end
       elseif parameter == "LUT" then
+        Controls[string.format("lut_index_%s", layer)].Value = value
         for k, v in pairs(lut_list) do
           if v == value then
             Controls[control].String = k
@@ -3310,15 +3366,19 @@ function fn_process_double_update(path, value)
       elseif parameter == "PLAY MODE" then
         local key = get_table_key(play_mode_keys, play_mode_values, value)
         Controls[control].String = key
+        Controls[string.format("play_mode_index_%s", layer)].Value = value
       elseif parameter == "FRAMING MODE" then
         local key = get_table_key(framing_mode_keys, framing_mode_values, value)
         Controls[control].String = key
+        Controls[string.format("framing_mode_index_%s", layer)].Value = value
       elseif parameter == "BLEND MODE" then
         local key = get_table_key(blend_mode_keys, blend_mode_values, value)
         Controls[control].String = key
+        Controls[string.format("blend_mode_index_%s", layer)].Value = value
       elseif parameter == "TRANSITION MODE" then
         local key = get_table_key(transition_mode_keys, transition_mode_values, value)
         Controls[control].String = key
+        Controls[string.format("transition_mode_index_%s", layer)].Value = value
       elseif parameter == "FX1 SELECT" then
         local key = get_table_key(fx_keys, fx_values, value)
         Controls[control].String = key
@@ -4012,13 +4072,22 @@ for i = 1, layer_count do
     local val = get_table_value(play_mode_keys, play_mode_values, Controls["play_mode_" .. i].String)
     cmd_play_mode(i, val)
   end
+  Controls["play_mode_index_" .. i].EventHandler = function()
+    cmd_play_mode(i, Controls["play_mode_index_" .. i].Value)
+  end
   Controls["framing_mode_" .. i].EventHandler = function()
     local val = get_table_value(framing_mode_keys, framing_mode_values, Controls["framing_mode_" .. i].String)
     cmd_framing(i, val)
   end
+  Controls["framing_mode_index_" .. i].EventHandler = function()
+    cmd_framing(i, Controls["framing_mode_index_" .. i].Value)
+  end
   Controls["blend_mode_" .. i].EventHandler = function()
     local val = get_table_value(blend_mode_keys, blend_mode_values, Controls["blend_mode_" .. i].String)
     cmd_blend_mode(i, val)
+  end
+  Controls["blend_mode_index_" .. i].EventHandler = function()
+    cmd_blend_mode(i, Controls["blend_mode_index_" .. i].Value)
   end
   Controls["fx1_select_" .. i].EventHandler = function()
     local val = get_table_value(fx_keys, fx_values, Controls["fx1_select_" .. i].String)
@@ -4030,6 +4099,9 @@ for i = 1, layer_count do
   end
   Controls["lut_" .. i].EventHandler = function()
     cmd_lut_select(i, lut_list[Controls["lut_" .. i].String])
+  end
+  Controls["lut_index_" .. i].EventHandler = function()
+    cmd_lut_select(i, Controls["lut_index_" .. i].Value)
   end
   Controls["play_speed_" .. i].EventHandler = function()
     local converted_value = Controls["play_speed_" .. i].Position
@@ -4115,6 +4187,9 @@ for i = 1, layer_count do
   Controls["transition_mode_" .. i].EventHandler = function()
     local val = get_table_value(transition_mode_keys, transition_mode_values, Controls["transition_mode_" .. i].String)
     cmd_transition_mode(i, val)
+  end
+  Controls["transition_mode_index_" .. i].EventHandler = function()
+    cmd_transition_mode(i, Controls["transition_mode_index_" .. i].Value)
   end
   Controls["fx1_opacity_" .. i].EventHandler = function()
     _G["cmd_fx1_opacity"](i, Controls["fx1_opacity_" .. i].Position)
