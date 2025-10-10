@@ -49,4 +49,20 @@ if CurrentPage then
 elseif CurrentPage == "Preview" then
   --[[ #include "layout_preview.lua" ]]
   end
+
+  -- pin only controls - not displayed
+  layout["preview_enable"] = {
+    PrettyName = "System~Preview Enable",
+    Style = "None",
+    Color = Colors.control_background,
+    TextColor = Colors.control_text,
+    StrokeColor = Colors.control_text,
+    FontSize = 8,
+    StrokeWidth = 1,
+    Position = {
+      0,0
+    },
+    Size = {5,5}
+  }
+
 end

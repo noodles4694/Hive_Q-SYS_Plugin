@@ -502,7 +502,7 @@ function fn_update_preview_thumbnail(layer, filename)
     }
     local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
     Controls[string.format("layer_%s_preview", layer)].Style = iconStyleBlankString
-    if tonumber(layer) == 1 and Properties["Output Video Preview"].Value == "Disabled" then
+    if tonumber(layer) == 1 and (Properties["Output Video Preview"].Value == "Disabled" or not Controls["preview_enable"].Boolean) then
       Controls["output_preview"].Style = iconStyleBlankString
     end
   else
@@ -519,7 +519,7 @@ function fn_update_preview_thumbnail(layer, filename)
           IconData = Qlib.base64_enc(data)
         }
         Controls[string.format("layer_%s_preview", layer)].Style = rapidjson.encode(iconStyle)
-        if tonumber(layer) == 1 and Properties["Output Video Preview"].Value == "Disabled" then
+        if tonumber(layer) == 1 and (Properties["Output Video Preview"].Value == "Disabled" or not Controls["preview_enable"].Boolean) then
           Controls["output_preview"].Style = rapidjson.encode(iconStyle)
         end
       end
@@ -539,7 +539,7 @@ end
 
 -- Request and update the output video preview
 function fn_update_output_video_preview()
-  if Properties["Output Video Preview"].Value == "Disabled" then
+  if Properties["Output Video Preview"].Value == "Disabled" or not Controls["preview_enable"].Boolean then
     return
   end
   fn_log_debug("Requesting output preview frame")

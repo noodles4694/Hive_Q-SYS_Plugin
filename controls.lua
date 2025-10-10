@@ -452,3 +452,18 @@ table.insert(
     UserPin = true
   }
 )
+
+-- Controls for pin only - not to be displayed
+
+table.insert(
+  ctrls,
+  {
+    Name = "preview_enable",
+    ControlType = "Button",
+    ButtonType = "Toggle",
+    PinStyle = "Both",
+    Count = 1,
+    DefaultValue = 1,
+    UserPin = true
+  }
+)
