@@ -260,7 +260,7 @@ table.insert(
 layout["online"] = {
   PrettyName = "System~Online",
   Style = "Indicator",
-  Color = {0, 255, 0},
+  Color = {0,0,0},
   Position = {3 * btn_size[1], (0.5 * btn_size[2]) + (1 * btn_gap[2]) + status_header_size[2]},
   Size = {btn_size[2], btn_size[2]}
 }

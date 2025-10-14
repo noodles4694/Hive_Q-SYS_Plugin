@@ -3,7 +3,7 @@ function fn_hive_connect_Status(status)
   fn_log_debug("Setting connected status to " .. tostring(status))
   if status == true then
     Controls.online.Boolean = true
-
+    Controls.online.Color = "Green"
     fn_watch_parameters()
     fn_update_info()
     fn_poll_info()
@@ -11,7 +11,9 @@ function fn_hive_connect_Status(status)
     fn_fetch_video_previews()
   else
     Controls.online.Boolean = false
+    Controls.online.Color = "Black"
     Controls.status.String = "Offline"
+    fn_blank_previews()
   end
 end
 
@@ -528,6 +530,20 @@ function fn_update_preview_thumbnail(layer, filename)
 end
 end
 
+function fn_blank_previews()
+  local iconStyleBlank = {
+    DrawChrome = true,
+    HorizontalAlignment = "Center",
+    Legend = "",
+    IconData = ""
+  }
+  local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
+  for i = 1, layer_count do
+    Controls[string.format("layer_%s_preview", i)].Style = iconStyleBlankString
+  end
+  Controls["output_preview"].Style = iconStyleBlankString
+end
+
 -- Periodically fetch and update the output video preview
 function fn_fetch_video_previews()
   fn_update_output_video_preview()
@@ -563,7 +579,9 @@ function fn_update_output_video_preview()
           Legend = "",
           IconData = frameData.imgDataMapped
         }
+        if Controls.online.Boolean then
         Controls["output_preview"].Style = rapidjson.encode(iconStyle)
+        end
       else
         fn_log_error("Failed to get output frame data ")
       end
