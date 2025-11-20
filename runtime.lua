@@ -27,6 +27,7 @@ function fn_watch_parameters()
   watchPatchJSON("/Timecode Cue List", fn_process_JSON_update)
   watchPatchJSON("/Schedule", fn_process_JSON_update)
   watchPatchJSON("/Timeline", fn_process_JSON_update)
+  watchPatchJSON("/Output Mapping", fn_process_JSON_update)
   watchPatchDouble("/Playlist Control/Playlist Controller 1/Row Index", fn_process_playlist_row_update)
   -- get the LUT options and update controls
   -- set the RAW mode so we can parse the raw data manually
@@ -327,6 +328,9 @@ end
 function fn_process_JSON_update(path, value)
   fn_log_debug("Processing JSON update: " .. path)
   if path == "/System Settings" then
+    if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+      Controls["settings_json"].String = rapidjson.encode(value)
+    end
     fn_update_info()
   elseif path == "/Media List" then
     local file_choice_list = {}
@@ -353,11 +357,17 @@ function fn_process_JSON_update(path, value)
     -- let's update the system info as storage and num files might have changed
     fn_update_info()
   elseif path == "/Output Mapping" then
+        if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+      Controls["mapping_json"].String = rapidjson.encode(value)
+    end
   elseif path == "/Play List" then
     fn_log_debug(
       "Playlist updated, total items: " ..
         tostring(value.list and #value.list or 0) .. ", enabled: " .. tostring(value.usePlayList)
     )
+        if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+      Controls["playlist_json"].String = rapidjson.encode(value)
+    end
     if value.usePlayList and value.usePlayList == 1 then
       Controls.playlist_enable.Boolean = true
     else
@@ -375,6 +385,9 @@ function fn_process_JSON_update(path, value)
                 tostring(value.layers[1] and value.layers[1].useCueList == 1) ..
                   ", layer 2 enabled: " .. tostring(value.layers[2] and value.layers[2].useCueList == 1)
     )
+        if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+      Controls["timecode_json"].String = rapidjson.encode(value)
+    end
     if value.layers[1] and value.layers[1].useCueList == 1 then
       Controls.l1_timecode_enable.Boolean = true
     else
@@ -389,6 +402,9 @@ function fn_process_JSON_update(path, value)
     Controls.l2_tc_rows.Value = value.layers[2] and #(value.layers[2].list) or 0
   elseif path == "/Schedule" then
     fn_log_debug("Schedule updated, enabled: " .. tostring(value.useSchedule))
+        if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+      Controls["scheduler_json"].String = rapidjson.encode(value)
+    end
     if value.useSchedule and value.useSchedule == 1 then
       Controls.schedule_enable.Boolean = true
     else
@@ -396,6 +412,9 @@ function fn_process_JSON_update(path, value)
     end
   elseif path == "/Timeline" then
     fn_log_debug("Timeline updated, enabled: " .. tostring(value.useTimeline))
+        if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+      Controls["timeline_json"].String = rapidjson.encode(value)
+    end
     if value.useTimeline and value.useTimeline == 1 then
       Controls.timeline_enable.Boolean = true
     else

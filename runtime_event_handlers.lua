@@ -216,3 +216,52 @@ end
 Controls["system_restart"].EventHandler = function()
   cmd_restart()
 end
+
+Controls["settings_json"].EventHandler = function()
+  if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
+    fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    return
+  end
+  cmd_update_settings_data(Controls["settings_json"].String)
+end
+
+Controls["timeline_json"].EventHandler = function()
+    if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
+    fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    return
+  end
+  cmd_update_timeline_data(Controls["timeline_json"].String)
+end
+
+Controls["scheduler_json"].EventHandler = function()
+  if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
+    fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    return
+  end
+  cmd_update_scheduler_data(Controls["scheduler_json"].String)
+end
+
+Controls["timecode_json"].EventHandler = function()
+  if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
+    fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    return
+  end
+  cmd_update_timecode_data(Controls["timecode_json"].String)
+end
+
+Controls["playlist_json"].EventHandler = function()
+  if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
+    fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    return
+  end
+  cmd_update_playlist_data(Controls["playlist_json"].String)
+end
+Controls["mapping_json"].EventHandler = function()
+  if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
+    fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    return
+  end
+  cmd_update_mapping_data(Controls["mapping_json"].String)
+end
+
+fn_log_debug("Control event handlers set up complete")

@@ -51,6 +51,16 @@ table.insert(
 table.insert(
   props,
   {
+    Name = "Enable JSON Data Pins (WARNING)",
+    Type = "enum",
+    Choices = {"Disabled", "Enabled"},
+    Value = "Disabled"
+  }
+)
+
+table.insert(
+  props,
+  {
     Name = "Logging Level",
     Type = "enum",
     Choices = {"Normal", "Errors Only", "Debug"},

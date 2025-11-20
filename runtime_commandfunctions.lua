@@ -2,9 +2,9 @@
 function cmd_file_select(layer, x) -- 0..65535: File Select
   local currentFileName = file_list_names[selected_file[layer] + 1] or "None"
   if file_metadata_list[currentFileName] then
-    Controls["duration_" .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration)) 
+    Controls["duration_" .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
   else
-    Controls["duration_" .. layer].String = os.date("!%X", 0) 
+    Controls["duration_" .. layer].String = os.date("!%X", 0)
   end
   fn_send(layer, "FILE SELECT", x)
 end
@@ -151,6 +151,77 @@ end
 
 function cmd_enable_tc2(x)
   fn_update_json("Timecode Cue List", {{op = "replace", path = "/layers/1/useCueList", value = x}})
+end
+
+function cmd_update_settings_data(x)
+      fn_log_debug("Updating System Settings JSON data")
+  if check_hive_json_data_validity(x, "hive buzz settings list") == false then
+    fn_log_error("Not sending invalid System Settings JSON data")
+    return
+  end
+  fn_send_json("System Settings", rapidjson.decode(x))
+end
+
+function cmd_update_timeline_data(x)
+    fn_log_debug("Updating Timeline JSON data")
+  if check_hive_json_data_validity(x, "hive buzz timeline") == false then
+    fn_log_error("Not sending invalid Timeline JSON data")
+    return
+  end
+  fn_send_json("Timeline", rapidjson.decode(x))
+end
+
+function cmd_update_scheduler_data(x)
+  fn_log_debug("Updating Scheduler JSON data")
+  if check_hive_json_data_validity(x, "hive buzz schedule") == false then
+    fn_log_error("Not sending invalid Scheduler JSON data")
+    return
+  end
+  fn_send_json("Schedule", rapidjson.decode(x))
+end
+
+function cmd_update_timecode_data(x)
+  fn_log_debug("Updating Timecode Cue List JSON data")
+  if check_hive_json_data_validity(x, "hive buzz cue list") == false then
+    fn_log_error("Not sending invalid Timecode Cue List JSON data")
+    return
+  end
+  fn_send_json("Timecode Cue List", rapidjson.decode(x))
+end
+
+function cmd_update_playlist_data(x)
+  fn_log_debug("Updating Output Playlist JSON data")
+  if check_hive_json_data_validity(x, "hive buzz play list") == false then
+    fn_log_error("Not sending invalid Playlist JSON data")
+    return
+  end
+  fn_send_json("Play List", rapidjson.decode(x))
+end
+
+function cmd_update_mapping_data(x)
+  fn_log_debug("Updating Output Mapping JSON data")
+  if check_hive_json_data_validity(x, "hive buzz mapping region list") == false then
+    fn_log_error("Not sending invalid Output Mapping JSON data")
+    return
+  end
+  fn_send_json("Output Mapping", rapidjson.decode(x))
+end
+
+function check_hive_json_data_validity(json_string, description)
+  -- check it can be encoded as JSON and matches expected description
+  local status, result = pcall(rapidjson.decode, json_string)
+  if status then
+    if result and result.description == description then
+      print("Valid " .. description .. " JSON data")
+      return true
+    else
+      print("Invalid " .. description .. " JSON data")
+      return false
+    end
+  else
+    print("Invalid " .. description .. " JSON data")
+    return false
+  end
 end
 
 function cmd_playlist_play_previous()

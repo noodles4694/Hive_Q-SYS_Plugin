@@ -467,3 +467,82 @@ table.insert(
     UserPin = true
   }
 )
+
+table.insert(
+  ctrls,
+  {
+    Name = "settings_json",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Both",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "settings_json",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Both",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "mapping_json",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Both",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "playlist_json",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Both",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "timecode_json",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Both",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "timeline_json",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Both",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "scheduler_json",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Both",
+    Count = 1,
+    UserPin = true
+  }
+)
+  

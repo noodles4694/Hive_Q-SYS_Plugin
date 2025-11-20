@@ -65,4 +65,87 @@ elseif CurrentPage == "Preview" then
     Size = {5,5}
   }
 
+  -- add the JSON Data pins only if they are enabled in properties
+if(props["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+    layout["settings_json"] = {
+    PrettyName = "JSON Data~Settings",
+    Style = "None",
+    Color = Colors.control_background,
+    TextColor = Colors.control_text,
+    StrokeColor = Colors.control_text,
+    FontSize = 8,
+    StrokeWidth = 1,
+    Position = {
+      0,0
+    },
+    Size = {5,5}
+  }
+      layout["mapping_json"] = {
+    PrettyName = "JSON Data~Mapping",
+    Style = "None",
+    Color = Colors.control_background,
+    TextColor = Colors.control_text,
+    StrokeColor = Colors.control_text,
+    FontSize = 8,
+    StrokeWidth = 1,
+    Position = {
+      0,0
+    },
+    Size = {5,5}
+  }
+      layout["playlist_json"] = {
+    PrettyName = "JSON Data~Playlist",
+    Style = "None",
+    Color = Colors.control_background,
+    TextColor = Colors.control_text,
+    StrokeColor = Colors.control_text,
+    FontSize = 8,
+    StrokeWidth = 1,
+    Position = {
+      0,0
+    },
+    Size = {5,5}
+  }
+      layout["timecode_json"] = {
+    PrettyName = "JSON Data~Timecode",
+    Style = "None",
+    Color = Colors.control_background,
+    TextColor = Colors.control_text,
+    StrokeColor = Colors.control_text,
+    FontSize = 8,
+    StrokeWidth = 1,
+    Position = {
+      0,0
+    },
+    Size = {5,5}
+  }
+      layout["timeline_json"] = {
+    PrettyName = "JSON Data~Timeline",
+    Style = "None",
+    Color = Colors.control_background,
+    TextColor = Colors.control_text,
+    StrokeColor = Colors.control_text,
+    FontSize = 8,
+    StrokeWidth = 1,
+    Position = {
+      0,0
+    },
+    Size = {5,5}
+  }
+      layout["scheduler_json"] = {
+    PrettyName = "JSON Data~Scheduler",
+    Style = "None",
+    Color = Colors.control_background,
+    TextColor = Colors.control_text,
+    StrokeColor = Colors.control_text,
+    FontSize = 8,
+    StrokeWidth = 1,
+    Position = {
+      0,0
+    },
+    Size = {5,5}
+  }
+end
+  
+
 end

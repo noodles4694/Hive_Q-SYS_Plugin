@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.460",
+  BuildVersion = "0.0.0.501",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -669,6 +669,16 @@ function GetProperties()
   table.insert(
     props,
     {
+      Name = "Enable JSON Data Pins (WARNING)",
+      Type = "enum",
+      Choices = {"Disabled", "Enabled"},
+      Value = "Disabled"
+    }
+  )
+  
+  table.insert(
+    props,
+    {
       Name = "Logging Level",
       Type = "enum",
       Choices = {"Normal", "Errors Only", "Debug"},
@@ -1177,6 +1187,85 @@ function GetControls(props)
       UserPin = true
     }
   )
+  
+  table.insert(
+    ctrls,
+    {
+      Name = "settings_json",
+      ControlType = "Indicator",
+      IndicatorType = "Text",
+      PinStyle = "Both",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "settings_json",
+      ControlType = "Indicator",
+      IndicatorType = "Text",
+      PinStyle = "Both",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "mapping_json",
+      ControlType = "Indicator",
+      IndicatorType = "Text",
+      PinStyle = "Both",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "playlist_json",
+      ControlType = "Indicator",
+      IndicatorType = "Text",
+      PinStyle = "Both",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "timecode_json",
+      ControlType = "Indicator",
+      IndicatorType = "Text",
+      PinStyle = "Both",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "timeline_json",
+      ControlType = "Indicator",
+      IndicatorType = "Text",
+      PinStyle = "Both",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "scheduler_json",
+      ControlType = "Indicator",
+      IndicatorType = "Text",
+      PinStyle = "Both",
+      Count = 1,
+      UserPin = true
+    }
+  )
+    
   return ctrls
 end
 
@@ -2418,6 +2507,89 @@ function GetControlLayout(props)
       Size = {5,5}
     }
   
+    -- add the JSON Data pins only if they are enabled in properties
+  if(props["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+      layout["settings_json"] = {
+      PrettyName = "JSON Data~Settings",
+      Style = "None",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 8,
+      StrokeWidth = 1,
+      Position = {
+        0,0
+      },
+      Size = {5,5}
+    }
+        layout["mapping_json"] = {
+      PrettyName = "JSON Data~Mapping",
+      Style = "None",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 8,
+      StrokeWidth = 1,
+      Position = {
+        0,0
+      },
+      Size = {5,5}
+    }
+        layout["playlist_json"] = {
+      PrettyName = "JSON Data~Playlist",
+      Style = "None",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 8,
+      StrokeWidth = 1,
+      Position = {
+        0,0
+      },
+      Size = {5,5}
+    }
+        layout["timecode_json"] = {
+      PrettyName = "JSON Data~Timecode",
+      Style = "None",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 8,
+      StrokeWidth = 1,
+      Position = {
+        0,0
+      },
+      Size = {5,5}
+    }
+        layout["timeline_json"] = {
+      PrettyName = "JSON Data~Timeline",
+      Style = "None",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 8,
+      StrokeWidth = 1,
+      Position = {
+        0,0
+      },
+      Size = {5,5}
+    }
+        layout["scheduler_json"] = {
+      PrettyName = "JSON Data~Scheduler",
+      Style = "None",
+      Color = Colors.control_background,
+      TextColor = Colors.control_text,
+      StrokeColor = Colors.control_text,
+      FontSize = 8,
+      StrokeWidth = 1,
+      Position = {
+        0,0
+      },
+      Size = {5,5}
+    }
+  end
+    
+  
   end
   return layout, graphics
 end
@@ -3209,6 +3381,7 @@ function fn_watch_parameters()
   watchPatchJSON("/Timecode Cue List", fn_process_JSON_update)
   watchPatchJSON("/Schedule", fn_process_JSON_update)
   watchPatchJSON("/Timeline", fn_process_JSON_update)
+  watchPatchJSON("/Output Mapping", fn_process_JSON_update)
   watchPatchDouble("/Playlist Control/Playlist Controller 1/Row Index", fn_process_playlist_row_update)
   -- get the LUT options and update controls
   -- set the RAW mode so we can parse the raw data manually
@@ -3509,6 +3682,9 @@ end
 function fn_process_JSON_update(path, value)
   fn_log_debug("Processing JSON update: " .. path)
   if path == "/System Settings" then
+    if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+      Controls["settings_json"].String = rapidjson.encode(value)
+    end
     fn_update_info()
   elseif path == "/Media List" then
     local file_choice_list = {}
@@ -3535,11 +3711,17 @@ function fn_process_JSON_update(path, value)
     -- let's update the system info as storage and num files might have changed
     fn_update_info()
   elseif path == "/Output Mapping" then
+        if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+      Controls["mapping_json"].String = rapidjson.encode(value)
+    end
   elseif path == "/Play List" then
     fn_log_debug(
       "Playlist updated, total items: " ..
         tostring(value.list and #value.list or 0) .. ", enabled: " .. tostring(value.usePlayList)
     )
+        if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+      Controls["playlist_json"].String = rapidjson.encode(value)
+    end
     if value.usePlayList and value.usePlayList == 1 then
       Controls.playlist_enable.Boolean = true
     else
@@ -3557,6 +3739,9 @@ function fn_process_JSON_update(path, value)
                 tostring(value.layers[1] and value.layers[1].useCueList == 1) ..
                   ", layer 2 enabled: " .. tostring(value.layers[2] and value.layers[2].useCueList == 1)
     )
+        if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+      Controls["timecode_json"].String = rapidjson.encode(value)
+    end
     if value.layers[1] and value.layers[1].useCueList == 1 then
       Controls.l1_timecode_enable.Boolean = true
     else
@@ -3571,6 +3756,9 @@ function fn_process_JSON_update(path, value)
     Controls.l2_tc_rows.Value = value.layers[2] and #(value.layers[2].list) or 0
   elseif path == "/Schedule" then
     fn_log_debug("Schedule updated, enabled: " .. tostring(value.useSchedule))
+        if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+      Controls["scheduler_json"].String = rapidjson.encode(value)
+    end
     if value.useSchedule and value.useSchedule == 1 then
       Controls.schedule_enable.Boolean = true
     else
@@ -3578,6 +3766,9 @@ function fn_process_JSON_update(path, value)
     end
   elseif path == "/Timeline" then
     fn_log_debug("Timeline updated, enabled: " .. tostring(value.useTimeline))
+        if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+      Controls["timeline_json"].String = rapidjson.encode(value)
+    end
     if value.useTimeline and value.useTimeline == 1 then
       Controls.timeline_enable.Boolean = true
     else
@@ -3852,9 +4043,9 @@ end
 function cmd_file_select(layer, x) -- 0..65535: File Select
   local currentFileName = file_list_names[selected_file[layer] + 1] or "None"
   if file_metadata_list[currentFileName] then
-    Controls["duration_" .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration)) 
+    Controls["duration_" .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
   else
-    Controls["duration_" .. layer].String = os.date("!%X", 0) 
+    Controls["duration_" .. layer].String = os.date("!%X", 0)
   end
   fn_send(layer, "FILE SELECT", x)
 end
@@ -4001,6 +4192,77 @@ end
 
 function cmd_enable_tc2(x)
   fn_update_json("Timecode Cue List", {{op = "replace", path = "/layers/1/useCueList", value = x}})
+end
+
+function cmd_update_settings_data(x)
+      fn_log_debug("Updating System Settings JSON data")
+  if check_hive_json_data_validity(x, "hive buzz settings list") == false then
+    fn_log_error("Not sending invalid System Settings JSON data")
+    return
+  end
+  fn_send_json("System Settings", rapidjson.decode(x))
+end
+
+function cmd_update_timeline_data(x)
+    fn_log_debug("Updating Timeline JSON data")
+  if check_hive_json_data_validity(x, "hive buzz timeline") == false then
+    fn_log_error("Not sending invalid Timeline JSON data")
+    return
+  end
+  fn_send_json("Timeline", rapidjson.decode(x))
+end
+
+function cmd_update_scheduler_data(x)
+  fn_log_debug("Updating Scheduler JSON data")
+  if check_hive_json_data_validity(x, "hive buzz schedule") == false then
+    fn_log_error("Not sending invalid Scheduler JSON data")
+    return
+  end
+  fn_send_json("Schedule", rapidjson.decode(x))
+end
+
+function cmd_update_timecode_data(x)
+  fn_log_debug("Updating Timecode Cue List JSON data")
+  if check_hive_json_data_validity(x, "hive buzz cue list") == false then
+    fn_log_error("Not sending invalid Timecode Cue List JSON data")
+    return
+  end
+  fn_send_json("Timecode Cue List", rapidjson.decode(x))
+end
+
+function cmd_update_playlist_data(x)
+  fn_log_debug("Updating Output Playlist JSON data")
+  if check_hive_json_data_validity(x, "hive buzz play list") == false then
+    fn_log_error("Not sending invalid Playlist JSON data")
+    return
+  end
+  fn_send_json("Play List", rapidjson.decode(x))
+end
+
+function cmd_update_mapping_data(x)
+  fn_log_debug("Updating Output Mapping JSON data")
+  if check_hive_json_data_validity(x, "hive buzz mapping region list") == false then
+    fn_log_error("Not sending invalid Output Mapping JSON data")
+    return
+  end
+  fn_send_json("Output Mapping", rapidjson.decode(x))
+end
+
+function check_hive_json_data_validity(json_string, description)
+  -- check it can be encoded as JSON and matches expected description
+  local status, result = pcall(rapidjson.decode, json_string)
+  if status then
+    if result and result.description == description then
+      print("Valid " .. description .. " JSON data")
+      return true
+    else
+      print("Invalid " .. description .. " JSON data")
+      return false
+    end
+  else
+    print("Invalid " .. description .. " JSON data")
+    return false
+  end
 end
 
 function cmd_playlist_play_previous()
@@ -4335,4 +4597,53 @@ end
 Controls["system_restart"].EventHandler = function()
   cmd_restart()
 end
+
+Controls["settings_json"].EventHandler = function()
+  if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
+    fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    return
+  end
+  cmd_update_settings_data(Controls["settings_json"].String)
+end
+
+Controls["timeline_json"].EventHandler = function()
+    if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
+    fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    return
+  end
+  cmd_update_timeline_data(Controls["timeline_json"].String)
+end
+
+Controls["scheduler_json"].EventHandler = function()
+  if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
+    fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    return
+  end
+  cmd_update_scheduler_data(Controls["scheduler_json"].String)
+end
+
+Controls["timecode_json"].EventHandler = function()
+  if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
+    fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    return
+  end
+  cmd_update_timecode_data(Controls["timecode_json"].String)
+end
+
+Controls["playlist_json"].EventHandler = function()
+  if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
+    fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    return
+  end
+  cmd_update_playlist_data(Controls["playlist_json"].String)
+end
+Controls["mapping_json"].EventHandler = function()
+  if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
+    fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    return
+  end
+  cmd_update_mapping_data(Controls["mapping_json"].String)
+end
+
+fn_log_debug("Control event handlers set up complete")
 end
