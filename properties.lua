@@ -3,7 +3,16 @@ table.insert(
   {
     Name = "IP Address",
     Type = "string",
-    Value = "192.168.1.30"
+    Value = "192.168.1.51"
+  }
+)
+
+table.insert(
+  props,
+  {
+    Name = "MAC Address",
+    Type = "string",
+    Value = "24:1C:04:1C:7D:AB"
   }
 )
 

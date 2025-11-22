@@ -325,6 +325,16 @@ function cmd_shutdown()
   }
 end
 
+function cmd_wake()
+  fn_log_message("Sending wake command to device")
+  local ok, err = wake_on_lan(Properties["MAC Address"].Value)
+  if not ok then
+    fn_log_error("Failed to send wake command: " .. tostring(err))
+  else
+    fn_log_message("Wake command sent")
+  end
+end
+
 for i = 1, 2 do
   _G["cmd_fx" .. i .. "_select"] = function(layer, x)
     fn_send(layer, "FX" .. i .. " SELECT", x)

@@ -367,7 +367,7 @@ layout["playlist_play_row_index"] = {
 
 
 layout["system_restart"] = {
-  PrettyName = "System~Restart Device",
+  PrettyName = "System~Reboot Device",
   Style = "Button",
   ButtonVisualStyle = "Flat",
   Color = Colors.enable_green,
@@ -379,7 +379,7 @@ layout["system_restart"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (3 * btn_size[1]) + (4 * btn_gap[1]),
+    (2 * btn_size[1]) + (4 * btn_gap[1]),
     (6 * btn_gap[2]) + module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] 
   },
   Size = {4 * btn_size[1], btn_size[2]}
@@ -397,7 +397,26 @@ layout["system_shutdown"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (9 * btn_size[1]) + (8 * btn_gap[1]),
+    (6 * btn_size[1]) + (8 * btn_gap[1]),
+    (6 * btn_gap[2]) + module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] 
+  },
+  Size = {4 * btn_size[1], btn_size[2]}
+}
+
+layout["system_wake"] = {
+  PrettyName = "System~Wake Device",
+  Style = "Button",
+  ButtonVisualStyle = "Flat",
+  Color = Colors.enable_green,
+  OffColor = Colors.control_background_light,
+  UnlinkOffColor = true,
+  TextColor = Colors.White,
+  StrokeColor = Colors.control_text,
+  Legend = "WAKE DEVICE",
+  FontSize = 12,
+  StrokeWidth = 1,
+  Position = {
+    (10 * btn_size[1]) + (12 * btn_gap[1]),
     (6 * btn_gap[2]) + module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] 
   },
   Size = {4 * btn_size[1], btn_size[2]}

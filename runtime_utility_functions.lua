@@ -64,3 +64,50 @@ function fn_compare_ips(ip1, ip2)
   end
   return normalize(ip1) == normalize(ip2)
 end
+
+--- Send Wake-on-LAN magic packet to a given MAC address.
+-- @param mac           string  MAC like "AA:BB:CC:DD:EE:FF" or "AABBCCDDEEFF"
+-- @return boolean|string       true on success, or nil + error message
+function wake_on_lan(mac)
+  local broadcast_ip = "255.255.255.255"
+  local port = 9
+
+  -- Strip separators like ":" or "-" etc.
+  local hex = mac:gsub("[^0-9A-Fa-f]", "")
+  if #hex ~= 12 then
+    return nil, "Invalid MAC address format"
+  end
+
+  -- Convert MAC string to 6 raw bytes
+  local mac_bytes = {}
+  for i = 1, 12, 2 do
+    local byte = tonumber(hex:sub(i, i + 1), 16)
+    if not byte then
+      return nil, "Invalid MAC address hex"
+    end
+    mac_bytes[#mac_bytes + 1] = string.char(byte)
+  end
+  local mac_raw = table.concat(mac_bytes)
+
+  -- Build magic packet: 6 x 0xFF followed by MAC repeated 16 times
+  local magic_packet = string.rep(string.char(0xFF), 6) .. string.rep(mac_raw, 16)
+
+  local udp = UdpSocket.New()
+
+  -- Send via UDP broadcast
+  if not udp then
+    return nil, "Failed to create UDP socket: " .. tostring(err)
+  end
+  udp:Open()
+  udp:Send(broadcast_ip, port, magic_packet)
+
+  -- close the port after 500ms
+  Timer.CallAfter(
+    function()
+      udp:Close()
+    end,
+    0.5
+  )
+
+  return true
+end

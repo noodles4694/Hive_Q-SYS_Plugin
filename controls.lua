@@ -453,6 +453,18 @@ table.insert(
   }
 )
 
+table.insert(
+  ctrls,
+  {
+    Name = "system_wake",
+    ControlType = "Button",
+    ButtonType = "Trigger",
+    PinStyle = "Input",
+    Count = 1,
+    UserPin = true
+  }
+)
+
 -- Controls for pin only - not to be displayed
 
 table.insert(

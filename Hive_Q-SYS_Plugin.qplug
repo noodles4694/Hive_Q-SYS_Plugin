@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.501",
+  BuildVersion = "0.0.0.514",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -621,7 +621,16 @@ function GetProperties()
     {
       Name = "IP Address",
       Type = "string",
-      Value = "192.168.1.30"
+      Value = "192.168.1.51"
+    }
+  )
+  
+  table.insert(
+    props,
+    {
+      Name = "MAC Address",
+      Type = "string",
+      Value = "24:1C:04:1C:7D:AB"
     }
   )
   
@@ -1165,6 +1174,18 @@ function GetControls(props)
     ctrls,
     {
       Name = "system_shutdown",
+      ControlType = "Button",
+      ButtonType = "Trigger",
+      PinStyle = "Input",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  
+  table.insert(
+    ctrls,
+    {
+      Name = "system_wake",
       ControlType = "Button",
       ButtonType = "Trigger",
       PinStyle = "Input",
@@ -2375,7 +2396,7 @@ function GetControlLayout(props)
     
     
     layout["system_restart"] = {
-      PrettyName = "System~Restart Device",
+      PrettyName = "System~Reboot Device",
       Style = "Button",
       ButtonVisualStyle = "Flat",
       Color = Colors.enable_green,
@@ -2387,7 +2408,7 @@ function GetControlLayout(props)
       FontSize = 12,
       StrokeWidth = 1,
       Position = {
-        (3 * btn_size[1]) + (4 * btn_gap[1]),
+        (2 * btn_size[1]) + (4 * btn_gap[1]),
         (6 * btn_gap[2]) + module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] 
       },
       Size = {4 * btn_size[1], btn_size[2]}
@@ -2405,7 +2426,26 @@ function GetControlLayout(props)
       FontSize = 12,
       StrokeWidth = 1,
       Position = {
-        (9 * btn_size[1]) + (8 * btn_gap[1]),
+        (6 * btn_size[1]) + (8 * btn_gap[1]),
+        (6 * btn_gap[2]) + module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] 
+      },
+      Size = {4 * btn_size[1], btn_size[2]}
+    }
+    
+    layout["system_wake"] = {
+      PrettyName = "System~Wake Device",
+      Style = "Button",
+      ButtonVisualStyle = "Flat",
+      Color = Colors.enable_green,
+      OffColor = Colors.control_background_light,
+      UnlinkOffColor = true,
+      TextColor = Colors.White,
+      StrokeColor = Colors.control_text,
+      Legend = "WAKE DEVICE",
+      FontSize = 12,
+      StrokeWidth = 1,
+      Position = {
+        (10 * btn_size[1]) + (12 * btn_gap[1]),
         (6 * btn_gap[2]) + module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] 
       },
       Size = {4 * btn_size[1], btn_size[2]}
@@ -2980,6 +3020,50 @@ function fn_compare_ips(ip1, ip2)
     return table.concat(parts, ".")
   end
   return normalize(ip1) == normalize(ip2)
+end
+
+--- Send Wake-on-LAN magic packet to a given MAC address.
+-- @param mac           string  MAC like "AA:BB:CC:DD:EE:FF" or "AABBCCDDEEFF"
+-- @return boolean|string       true on success, or nil + error message
+function wake_on_lan(mac)
+    local broadcast_ip =  "255.255.255.255"
+    local port         =  9
+
+    -- Strip separators like ":" or "-" etc.
+    local hex = mac:gsub("[^0-9A-Fa-f]", "")
+    if #hex ~= 12 then
+        return nil, "Invalid MAC address format"
+    end
+
+    -- Convert MAC string to 6 raw bytes
+    local mac_bytes = {}
+    for i = 1, 12, 2 do
+        local byte = tonumber(hex:sub(i, i + 1), 16)
+        if not byte then
+            return nil, "Invalid MAC address hex"
+        end
+        mac_bytes[#mac_bytes + 1] = string.char(byte)
+    end
+    local mac_raw = table.concat(mac_bytes)
+
+    -- Build magic packet: 6 x 0xFF followed by MAC repeated 16 times
+    local magic_packet = string.rep(string.char(0xFF), 6) ..
+                         string.rep(mac_raw, 16)
+
+    local udp = UdpSocket.New()
+
+    -- Send via UDP broadcast
+    if not udp then
+        return nil, "Failed to create UDP socket: " .. tostring(err)
+    end
+
+    udp:Open()
+    udp:Send(broadcast_ip, port, magic_packet)
+
+    -- close the port after 500ms
+    Timer.CallAfter(function() udp:Close() end, 0.5)
+
+    return true
 end
 -- Description: Functions to interact with Hive via WebSocket
 
@@ -4366,6 +4450,16 @@ function cmd_shutdown()
   }
 end
 
+function cmd_wake()
+  fn_log_message("Sending wake command to device")
+  local ok, err = wake_on_lan(Properties["MAC Address"].Value)
+  if not ok then
+    fn_log_error("Failed to send wake command: " .. tostring(err))
+  else
+    fn_log_message("Wake command sent")
+  end
+end
+
 for i = 1, 2 do
   _G["cmd_fx" .. i .. "_select"] = function(layer, x)
     fn_send(layer, "FX" .. i .. " SELECT", x)
@@ -4596,6 +4690,9 @@ Controls["system_shutdown"].EventHandler = function()
 end
 Controls["system_restart"].EventHandler = function()
   cmd_restart()
+end
+Controls["system_wake"].EventHandler = function()
+  cmd_wake()
 end
 
 Controls["settings_json"].EventHandler = function()

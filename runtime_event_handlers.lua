@@ -216,6 +216,9 @@ end
 Controls["system_restart"].EventHandler = function()
   cmd_restart()
 end
+Controls["system_wake"].EventHandler = function()
+  cmd_wake()
+end
 
 Controls["settings_json"].EventHandler = function()
   if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
