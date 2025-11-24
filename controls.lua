@@ -3,7 +3,7 @@ CreatePages()
 table.insert(
   ctrls,
   {
-    Name = "ip_address",
+    Name = "IPAddress",
     ControlType = "Text",
     --IndicatorType = "Text",
     PinStyle = "Output",
@@ -14,7 +14,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "device_name",
+    Name = "DeviceName",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
@@ -102,7 +102,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "serial",
+    Name = "SerialNumber",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
@@ -125,6 +125,17 @@ table.insert(
   ctrls,
   {
     Name = "file_count",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "universe",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",

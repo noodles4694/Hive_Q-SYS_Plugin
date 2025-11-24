@@ -475,15 +475,16 @@ function fn_update_info()
             end
           end
           if device_info then
-            Controls.device_name.String = device_info.deviceName
-            Controls.ip_address.String = device_info.ipAddress
+            Controls.DeviceName.String = device_info.deviceName
+            Controls.IPAddress.String = device_info.ipAddress
             Controls.netmask.String = device_info.netMask
             Controls.output_framerate.String = device_info.rate
             Controls.output_resolution.String = string.format("%s x %s", device_info.resX, device_info.resY)
-            Controls.serial.String = device_info.serial
+            Controls.SerialNumber.String = device_info.serial
             Controls.bee_type.String = (device_info.beeType == 1) and "Queen" or "Worker"
             Controls.file_count.String = device_info.nFiles
             Controls.cpu_power.String = device_info.power
+            Controls.universe.String = device_settings.dmxUniverse
             Controls.free_space.String = string.format("%.2f GB", tonumber(device_info.space) / (1024 * 1024 * 1024))
           end
         end

@@ -93,7 +93,7 @@ table.insert(
   graphics,
   {
     Type = "Text",
-    Text = "STATUS:",
+    Text = "UNIVERSE:",
     Font = "Roboto",
     FontSize = 12,
     FontStyle = "Regular",
@@ -265,7 +265,7 @@ layout["Status"] = {
   Size = {9 * btn_size[1], btn_size[2]}
 }
 
-layout["ip_address"] = {
+layout["IPAddress"] = {
   PrettyName = "System~IP Address",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -276,7 +276,7 @@ layout["ip_address"] = {
   Position = {3 * btn_size[1], (1.5 * btn_size[2]) + (2 * btn_gap[2]) + status_header_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["device_name"] = {
+layout["DeviceName"] = {
   PrettyName = "System~Device Name",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -284,6 +284,17 @@ layout["device_name"] = {
   StrokeColor = Colors.control_text,
   StrokeWidth = 1,
   Position = {3 * btn_size[1], (2.5 * btn_size[2]) + (3 * btn_gap[2]) + status_header_size[2]},
+  Size = {3 * btn_size[1], btn_size[2]}
+}
+layout["universe"] = {
+  PrettyName = "System~Universe",
+  Style = "TextBox",
+  Color = Colors.control_background,
+  TextColor = Colors.control_text,
+  StrokeColor = Colors.control_text,
+  FontSize = 12,
+  StrokeWidth = 1,
+  Position = {3 * btn_size[1], (4.5 * btn_size[2]) + (5 * btn_gap[2]) + status_header_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
 layout["version"] = {
@@ -353,7 +364,7 @@ layout["netmask"] = {
   Position = {9 * btn_size[1], (1.5 * btn_size[2]) + (2 * btn_gap[2]) + status_header_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["serial"] = {
+layout["SerialNumber"] = {
   PrettyName = "System~Serial Number",
   Style = "TextBox",
   Color = Colors.control_background,

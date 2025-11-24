@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.553",
+  BuildVersion = "0.0.0.561",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -732,7 +732,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "ip_address",
+      Name = "IPAddress",
       ControlType = "Text",
       --IndicatorType = "Text",
       PinStyle = "Output",
@@ -743,7 +743,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "device_name",
+      Name = "DeviceName",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -831,7 +831,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "serial",
+      Name = "SerialNumber",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -854,6 +854,17 @@ function GetControls(props)
     ctrls,
     {
       Name = "file_count",
+      ControlType = "Indicator",
+      IndicatorType = "Text",
+      PinStyle = "Output",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "universe",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -1429,7 +1440,7 @@ function GetControlLayout(props)
           graphics,
           {
             Type = "Text",
-            Text = "STATUS:",
+            Text = "UNIVERSE:",
             Font = "Roboto",
             FontSize = 12,
             FontStyle = "Regular",
@@ -1601,7 +1612,7 @@ function GetControlLayout(props)
           Size = {9 * btn_size[1], btn_size[2]}
         }
         
-        layout["ip_address"] = {
+        layout["IPAddress"] = {
           PrettyName = "System~IP Address",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -1612,7 +1623,7 @@ function GetControlLayout(props)
           Position = {3 * btn_size[1], (1.5 * btn_size[2]) + (2 * btn_gap[2]) + status_header_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
-        layout["device_name"] = {
+        layout["DeviceName"] = {
           PrettyName = "System~Device Name",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -1620,6 +1631,17 @@ function GetControlLayout(props)
           StrokeColor = Colors.control_text,
           StrokeWidth = 1,
           Position = {3 * btn_size[1], (2.5 * btn_size[2]) + (3 * btn_gap[2]) + status_header_size[2]},
+          Size = {3 * btn_size[1], btn_size[2]}
+        }
+        layout["universe"] = {
+          PrettyName = "System~Universe",
+          Style = "TextBox",
+          Color = Colors.control_background,
+          TextColor = Colors.control_text,
+          StrokeColor = Colors.control_text,
+          FontSize = 12,
+          StrokeWidth = 1,
+          Position = {3 * btn_size[1], (4.5 * btn_size[2]) + (5 * btn_gap[2]) + status_header_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
         layout["version"] = {
@@ -1689,7 +1711,7 @@ function GetControlLayout(props)
           Position = {9 * btn_size[1], (1.5 * btn_size[2]) + (2 * btn_gap[2]) + status_header_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
-        layout["serial"] = {
+        layout["SerialNumber"] = {
           PrettyName = "System~Serial Number",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -3994,15 +4016,16 @@ function fn_update_info()
             end
           end
           if device_info then
-            Controls.device_name.String = device_info.deviceName
-            Controls.ip_address.String = device_info.ipAddress
+            Controls.DeviceName.String = device_info.deviceName
+            Controls.IPAddress.String = device_info.ipAddress
             Controls.netmask.String = device_info.netMask
             Controls.output_framerate.String = device_info.rate
             Controls.output_resolution.String = string.format("%s x %s", device_info.resX, device_info.resY)
-            Controls.serial.String = device_info.serial
+            Controls.SerialNumber.String = device_info.serial
             Controls.bee_type.String = (device_info.beeType == 1) and "Queen" or "Worker"
             Controls.file_count.String = device_info.nFiles
             Controls.cpu_power.String = device_info.power
+            Controls.universe.String = device_settings.dmxUniverse
             Controls.free_space.String = string.format("%.2f GB", tonumber(device_info.space) / (1024 * 1024 * 1024))
           end
         end
