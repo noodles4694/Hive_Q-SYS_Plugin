@@ -3,17 +3,6 @@ CreatePages()
 table.insert(
   ctrls,
   {
-    Name = "online",
-    ControlType = "Indicator",
-    IndicatorType = "Led",
-    PinStyle = "Output",
-    Count = 1,
-    UserPin = true
-  }
-)
-table.insert(
-  ctrls,
-  {
     Name = "ip_address",
     ControlType = "Text",
     --IndicatorType = "Text",

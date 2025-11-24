@@ -1,9 +1,7 @@
 -- Logic to deal with connection and disconnection of the Hive player
-function fn_hive_connect_Status(status,message)
+function fn_hive_connect_Status(status, message)
   fn_log_debug("Setting connected status to " .. tostring(status))
   if status == true then
-    Controls.online.Boolean = true
-    Controls.online.Color = "Green"
     setOnline()
     fn_watch_parameters()
     fn_update_info()
@@ -12,9 +10,6 @@ function fn_hive_connect_Status(status,message)
     fn_fetch_video_previews()
   else
     setMissing(message or "Offline")
-    Controls.online.Boolean = false
-    Controls.online.Color = "Black"
-    Controls.Status.String = "Offline"
     fn_blank_previews()
   end
 end
@@ -74,13 +69,34 @@ function fn_poll_info()
       "/Mapping/Render Resolution/FPS",
       function(path, value)
         fn_log_debug("Engine FPS: " .. value)
+        engine_fps = tonumber(value) or 0
         Controls.engine_fps.String = value
       end
     )
     fn_update_sync_status()
+    fn_update_status()
   end
   if wsConnected then
     Timer.CallAfter(fn_poll_info, 1)
+  end
+end
+
+function fn_update_status()
+  if device_info and wsConnected then
+    -- OK status ("" or "OK")
+    if device_info.status == "OK" then
+      -- warn if less than 50Gb free
+      if device_info.space < (1024 * 1024 * 1024 * 50) then
+        -- check is fps has dropped to below 80% of output rate
+        setCompromised("Low Disk Space")
+      elseif engine_fps < (device_info.rate * 0.8) then
+        setCompromised("Low FPS")
+      else
+        setOnline()
+      end
+    else
+      setFault(device_info.status)
+    end
   end
 end
 
@@ -135,7 +151,7 @@ function fn_process_LUT_data(path, data)
   -- The LUT list is inside a JSON object under the "Value" key
   -- however it is not indexed so we have to extract the string pairs manually
   -- in order to maintain the ordering
-  -- this is a bit hacky but it works
+  -- this is not ideal but it works
   fn_log_debug("Processing LUT data")
   -- find the start of the "Value" object
   local startPos = data:find('"Value"%s*:%s*{')
@@ -333,6 +349,7 @@ end
 function fn_process_JSON_update(path, value)
   fn_log_debug("Processing JSON update: " .. path)
   if path == "/System Settings" then
+    device_settings = value
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
       Controls["settings_json"].String = rapidjson.encode(value)
     end
@@ -450,34 +467,24 @@ function fn_update_info()
         Controls.version.String = info.hiveVersion
 
         if info and info.tileList then
-          local device = nil
+          device_info = nil
           for _, tile in ipairs(info.tileList) do
             if fn_compare_ips(tile.ipAddress, ip_address) then
-              device = tile
+              device_info = tile
               break
             end
           end
-          if device then
-            if (device.status == "OK") then
-              -- warn if less than 50Gb free
-              if device.space < (1024 * 1024 * 1024 * 50) then
-                setCompromised("Low Storage Space")
-              else
-              setOnline()
-              end
-            else
-              setFault(device.status)
-            end
-            Controls.device_name.String = device.deviceName
-            Controls.ip_address.String = device.ipAddress
-            Controls.netmask.String = device.netMask
-            Controls.output_framerate.String = device.rate
-            Controls.output_resolution.String = string.format("%s x %s", device.resX, device.resY)
-            Controls.serial.String = device.serial
-            Controls.bee_type.String = (device.beeType == 1) and "Queen" or "Worker"
-            Controls.file_count.String = device.nFiles
-            Controls.cpu_power.String = device.power
-            Controls.free_space.String = string.format("%.2f GB", tonumber(device.space) / (1024 * 1024 * 1024))
+          if device_info then
+            Controls.device_name.String = device_info.deviceName
+            Controls.ip_address.String = device_info.ipAddress
+            Controls.netmask.String = device_info.netMask
+            Controls.output_framerate.String = device_info.rate
+            Controls.output_resolution.String = string.format("%s x %s", device_info.resX, device_info.resY)
+            Controls.serial.String = device_info.serial
+            Controls.bee_type.String = (device_info.beeType == 1) and "Queen" or "Worker"
+            Controls.file_count.String = device_info.nFiles
+            Controls.cpu_power.String = device_info.power
+            Controls.free_space.String = string.format("%.2f GB", tonumber(device_info.space) / (1024 * 1024 * 1024))
           end
         end
       else
@@ -618,7 +625,7 @@ function fn_update_output_video_preview()
           Legend = "",
           IconData = frameData.imgDataMapped
         }
-        if Controls.online.Boolean then
+        if wsConnected then
           Controls["output_preview"].Style = rapidjson.encode(iconStyle)
         end
       else

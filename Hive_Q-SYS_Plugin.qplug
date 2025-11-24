@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.532",
+  BuildVersion = "0.0.0.553",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -732,17 +732,6 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "online",
-      ControlType = "Indicator",
-      IndicatorType = "Led",
-      PinStyle = "Output",
-      Count = 1,
-      UserPin = true
-    }
-  )
-  table.insert(
-    ctrls,
-    {
       Name = "ip_address",
       ControlType = "Text",
       --IndicatorType = "Text",
@@ -1384,7 +1373,7 @@ function GetControlLayout(props)
           graphics,
           {
             Type = "Text",
-            Text = "ONLINE:",
+            Text = "STATUS:",
             Font = "Roboto",
             FontSize = 12,
             FontStyle = "Regular",
@@ -1604,13 +1593,14 @@ function GetControlLayout(props)
             Size = {3 * btn_size[1], btn_size[2]}
           }
         )
-        layout["online"] = {
-          PrettyName = "System~Online",
-          Style = "Indicator",
-          Color = {0,0,0},
+        
+        layout["Status"] = {
+          PrettyName = "System~Status",
+          Style = "TextBox",
           Position = {3 * btn_size[1], (0.5 * btn_size[2]) + (1 * btn_gap[2]) + status_header_size[2]},
-          Size = {btn_size[2], btn_size[2]}
+          Size = {9 * btn_size[1], btn_size[2]}
         }
+        
         layout["ip_address"] = {
           PrettyName = "System~IP Address",
           Style = "TextBox",
@@ -1643,17 +1633,7 @@ function GetControlLayout(props)
           Position = {3 * btn_size[1], (3.5 * btn_size[2]) + (4 * btn_gap[2]) + status_header_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
-        layout["Status"] = {
-          PrettyName = "System~Status",
-          Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
-          FontSize = 12,
-          StrokeWidth = 1,
-          Position = {3 * btn_size[1], (4.5 * btn_size[2]) + (5 * btn_gap[2]) + status_header_size[2]},
-          Size = {3 * btn_size[1], btn_size[2]}
-        }
+        
         layout["output_resolution"] = {
           PrettyName = "System~Output Resolution",
           Style = "TextBox",
@@ -2673,6 +2653,9 @@ local seek_timer_list = {}
 local seek_last_value = {}
 local playlist_row_count = 0
 local playlist_active_row = 1
+local deice_settings = nil
+local engine_fps = 0
+local device_info = nil
 
 for i = 1, layer_count do
   play_mode[i] = "In Frame"
@@ -2952,15 +2935,15 @@ local fx_values = {
   40
 }
 
-  -- Q-SYS standard status states
-  local StatusState = {
-    OK          = 0,
-    COMPROMISED = 1,
-    FAULT       = 2,
-    NOTPRESENT  = 3,
-    MISSING     = 4,
-    INITIALIZING= 5
-  }
+-- Q-SYS standard status states
+local StatusState = {
+  OK = 0,
+  COMPROMISED = 1,
+  FAULT = 2,
+  NOTPRESENT = 3,
+  MISSING = 4,
+  INITIALIZING = 5
+}
 
 ticker = 1
 poll_parameter_list = {}
@@ -3198,7 +3181,7 @@ function Disconnect()
   wsConnected = false
   fn_log_message("Hive connection closed")
   if connectionCallback then
-    connectionCallback(false,"Connection Closed") -- Call the status callback with false to indicate disconnection
+    connectionCallback(false, "Connection Closed") -- Call the status callback with false to indicate disconnection
   end
   pingTimer:Stop()
 end
@@ -3208,7 +3191,7 @@ ws.Connected = function()
   wsConnected = true
   fn_log_message("Hive connection established")
   if connectionCallback then
-    connectionCallback(true,"Online") -- Call the status callback with true to indicate success
+    connectionCallback(true, "Online") -- Call the status callback with true to indicate success
   end
   -- send ping every 10 seconds to keep connection alive
   pingTimer:Start(10)
@@ -3219,12 +3202,15 @@ ws.Closed = function()
   wsConnected = false
   fn_log_message("Hive connection closed")
   if connectionCallback then
-    connectionCallback(false,"Connection Closed") -- Call the status callback with false to indicate disconnection
+    connectionCallback(false, "Connection Closed") -- Call the status callback with false to indicate disconnection
   end
   pingTimer:Stop()
   if shouldConnect then
     if ipTarget then
       fn_log_message("Attempting to reconnect to Hive Device at " .. ipTarget)
+      if connectionCallback then
+        connectionCallback(false, "Offline - Attempting to reconnect") -- Call the status callback with false to indicate disconnection
+      end
       connectSocket(ipTarget) -- Attempt to reconnect
     else
       fn_log_error("No IP address provided for reconnection.")
@@ -3281,6 +3267,9 @@ ws.Error = function(socket, err)
   if wsConnected == false and shouldConnect == true then
     if ipTarget then
       fn_log_message("Attempting to reconnect to Hive Device at " .. ipTarget)
+      if connectionCallback then
+        connectionCallback(false, "Offline - Attempting to reconnect") -- Call the status callback with false to indicate disconnection
+      end
       connectSocket(ipTarget) -- Attempt to reconnect
     end
   end
@@ -3529,11 +3518,9 @@ function watchPatchJSON(path, callback)
   getPatchJSON(path, callback)
 end
 -- Logic to deal with connection and disconnection of the Hive player
-function fn_hive_connect_Status(status,message)
+function fn_hive_connect_Status(status, message)
   fn_log_debug("Setting connected status to " .. tostring(status))
   if status == true then
-    Controls.online.Boolean = true
-    Controls.online.Color = "Green"
     setOnline()
     fn_watch_parameters()
     fn_update_info()
@@ -3542,9 +3529,6 @@ function fn_hive_connect_Status(status,message)
     fn_fetch_video_previews()
   else
     setMissing(message or "Offline")
-    Controls.online.Boolean = false
-    Controls.online.Color = "Black"
-    Controls.Status.String = "Offline"
     fn_blank_previews()
   end
 end
@@ -3604,13 +3588,34 @@ function fn_poll_info()
       "/Mapping/Render Resolution/FPS",
       function(path, value)
         fn_log_debug("Engine FPS: " .. value)
+        engine_fps = tonumber(value) or 0
         Controls.engine_fps.String = value
       end
     )
     fn_update_sync_status()
+    fn_update_status()
   end
   if wsConnected then
     Timer.CallAfter(fn_poll_info, 1)
+  end
+end
+
+function fn_update_status()
+  if device_info and wsConnected then
+    -- OK status ("" or "OK")
+    if device_info.status == "OK" then
+      -- warn if less than 50Gb free
+      if device_info.space < (1024 * 1024 * 1024 * 50) then
+        -- check is fps has dropped to below 80% of output rate
+        setCompromised("Low Disk Space")
+      elseif engine_fps < (device_info.rate * 0.8) then
+        setCompromised("Low FPS")
+      else
+        setOnline()
+      end
+    else
+      setFault(device_info.status)
+    end
   end
 end
 
@@ -3665,7 +3670,7 @@ function fn_process_LUT_data(path, data)
   -- The LUT list is inside a JSON object under the "Value" key
   -- however it is not indexed so we have to extract the string pairs manually
   -- in order to maintain the ordering
-  -- this is a bit hacky but it works
+  -- this is not ideal but it works
   fn_log_debug("Processing LUT data")
   -- find the start of the "Value" object
   local startPos = data:find('"Value"%s*:%s*{')
@@ -3863,6 +3868,7 @@ end
 function fn_process_JSON_update(path, value)
   fn_log_debug("Processing JSON update: " .. path)
   if path == "/System Settings" then
+    device_settings = value
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
       Controls["settings_json"].String = rapidjson.encode(value)
     end
@@ -3980,34 +3986,24 @@ function fn_update_info()
         Controls.version.String = info.hiveVersion
 
         if info and info.tileList then
-          local device = nil
+          device_info = nil
           for _, tile in ipairs(info.tileList) do
             if fn_compare_ips(tile.ipAddress, ip_address) then
-              device = tile
+              device_info = tile
               break
             end
           end
-          if device then
-            if (device.status == "OK") then
-              -- warn if less than 50Gb free
-              if device.space < (1024 * 1024 * 1024 * 50) then
-                setCompromised("Low Storage Space")
-              else
-              setOnline()
-              end
-            else
-              setFault(device.status)
-            end
-            Controls.device_name.String = device.deviceName
-            Controls.ip_address.String = device.ipAddress
-            Controls.netmask.String = device.netMask
-            Controls.output_framerate.String = device.rate
-            Controls.output_resolution.String = string.format("%s x %s", device.resX, device.resY)
-            Controls.serial.String = device.serial
-            Controls.bee_type.String = (device.beeType == 1) and "Queen" or "Worker"
-            Controls.file_count.String = device.nFiles
-            Controls.cpu_power.String = device.power
-            Controls.free_space.String = string.format("%.2f GB", tonumber(device.space) / (1024 * 1024 * 1024))
+          if device_info then
+            Controls.device_name.String = device_info.deviceName
+            Controls.ip_address.String = device_info.ipAddress
+            Controls.netmask.String = device_info.netMask
+            Controls.output_framerate.String = device_info.rate
+            Controls.output_resolution.String = string.format("%s x %s", device_info.resX, device_info.resY)
+            Controls.serial.String = device_info.serial
+            Controls.bee_type.String = (device_info.beeType == 1) and "Queen" or "Worker"
+            Controls.file_count.String = device_info.nFiles
+            Controls.cpu_power.String = device_info.power
+            Controls.free_space.String = string.format("%.2f GB", tonumber(device_info.space) / (1024 * 1024 * 1024))
           end
         end
       else
@@ -4148,7 +4144,7 @@ function fn_update_output_video_preview()
           Legend = "",
           IconData = frameData.imgDataMapped
         }
-        if Controls.online.Boolean then
+        if wsConnected then
           Controls["output_preview"].Style = rapidjson.encode(iconStyle)
         end
       else

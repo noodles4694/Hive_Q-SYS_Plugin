@@ -39,7 +39,7 @@ function Disconnect()
   wsConnected = false
   fn_log_message("Hive connection closed")
   if connectionCallback then
-    connectionCallback(false,"Connection Closed") -- Call the status callback with false to indicate disconnection
+    connectionCallback(false, "Connection Closed") -- Call the status callback with false to indicate disconnection
   end
   pingTimer:Stop()
 end
@@ -49,7 +49,7 @@ ws.Connected = function()
   wsConnected = true
   fn_log_message("Hive connection established")
   if connectionCallback then
-    connectionCallback(true,"Online") -- Call the status callback with true to indicate success
+    connectionCallback(true, "Online") -- Call the status callback with true to indicate success
   end
   -- send ping every 10 seconds to keep connection alive
   pingTimer:Start(10)
@@ -60,12 +60,15 @@ ws.Closed = function()
   wsConnected = false
   fn_log_message("Hive connection closed")
   if connectionCallback then
-    connectionCallback(false,"Connection Closed") -- Call the status callback with false to indicate disconnection
+    connectionCallback(false, "Connection Closed") -- Call the status callback with false to indicate disconnection
   end
   pingTimer:Stop()
   if shouldConnect then
     if ipTarget then
       fn_log_message("Attempting to reconnect to Hive Device at " .. ipTarget)
+      if connectionCallback then
+        connectionCallback(false, "Offline - Attempting to reconnect") -- Call the status callback with false to indicate disconnection
+      end
       connectSocket(ipTarget) -- Attempt to reconnect
     else
       fn_log_error("No IP address provided for reconnection.")
@@ -122,6 +125,9 @@ ws.Error = function(socket, err)
   if wsConnected == false and shouldConnect == true then
     if ipTarget then
       fn_log_message("Attempting to reconnect to Hive Device at " .. ipTarget)
+      if connectionCallback then
+        connectionCallback(false, "Offline - Attempting to reconnect") -- Call the status callback with false to indicate disconnection
+      end
       connectSocket(ipTarget) -- Attempt to reconnect
     end
   end

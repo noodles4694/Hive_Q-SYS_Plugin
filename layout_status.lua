@@ -37,7 +37,7 @@ table.insert(
   graphics,
   {
     Type = "Text",
-    Text = "ONLINE:",
+    Text = "STATUS:",
     Font = "Roboto",
     FontSize = 12,
     FontStyle = "Regular",
@@ -257,13 +257,14 @@ table.insert(
     Size = {3 * btn_size[1], btn_size[2]}
   }
 )
-layout["online"] = {
-  PrettyName = "System~Online",
-  Style = "Indicator",
-  Color = {0,0,0},
+
+layout["Status"] = {
+  PrettyName = "System~Status",
+  Style = "TextBox",
   Position = {3 * btn_size[1], (0.5 * btn_size[2]) + (1 * btn_gap[2]) + status_header_size[2]},
-  Size = {btn_size[2], btn_size[2]}
+  Size = {9 * btn_size[1], btn_size[2]}
 }
+
 layout["ip_address"] = {
   PrettyName = "System~IP Address",
   Style = "TextBox",
@@ -296,17 +297,7 @@ layout["version"] = {
   Position = {3 * btn_size[1], (3.5 * btn_size[2]) + (4 * btn_gap[2]) + status_header_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["Status"] = {
-  PrettyName = "System~Status",
-  Style = "TextBox",
-  Color = Colors.control_background,
-  TextColor = Colors.control_text,
-  StrokeColor = Colors.control_text,
-  FontSize = 12,
-  StrokeWidth = 1,
-  Position = {3 * btn_size[1], (4.5 * btn_size[2]) + (5 * btn_gap[2]) + status_header_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
-}
+
 layout["output_resolution"] = {
   PrettyName = "System~Output Resolution",
   Style = "TextBox",

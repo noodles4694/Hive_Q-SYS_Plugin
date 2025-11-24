@@ -10,6 +10,9 @@ local seek_timer_list = {}
 local seek_last_value = {}
 local playlist_row_count = 0
 local playlist_active_row = 1
+local deice_settings = nil
+local engine_fps = 0
+local device_info = nil
 
 for i = 1, layer_count do
   play_mode[i] = "In Frame"
@@ -289,15 +292,15 @@ local fx_values = {
   40
 }
 
-  -- Q-SYS standard status states
-  local StatusState = {
-    OK          = 0,
-    COMPROMISED = 1,
-    FAULT       = 2,
-    NOTPRESENT  = 3,
-    MISSING     = 4,
-    INITIALIZING= 5
-  }
+-- Q-SYS standard status states
+local StatusState = {
+  OK = 0,
+  COMPROMISED = 1,
+  FAULT = 2,
+  NOTPRESENT = 3,
+  MISSING = 4,
+  INITIALIZING = 5
+}
 
 ticker = 1
 poll_parameter_list = {}
