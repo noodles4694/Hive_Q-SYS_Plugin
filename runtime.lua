@@ -313,7 +313,7 @@ end
 function fn_update_selected_file_info(value, layer)
   local found = false
   for media = 1, media_item_count do
-    Controls[string.format("media_thumbnail_%s_layer_%s", media, layer)].Boolean = media == (value + 1)
+    Controls[string.format("MediaThumbnail%sLayer%s", media, layer)].Boolean = media == (value + 1)
   end
   local currentFileName = file_list_names[tonumber(value)] or ""
   fn_update_preview_thumbnail(layer, currentFileName)
@@ -339,8 +339,8 @@ function fn_clear_media_thumbs()
   local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
   for i = 1, layer_count do
     for m = 1, media_item_count do
-      Controls[string.format("media_name_%s_layer_%s", m, i)].String = ""
-      Controls[string.format("media_thumbnail_%s_layer_%s", m, i)].Style = iconStyleBlankString
+      Controls[string.format("MediaName%sLayer%s", m, i)].String = ""
+      Controls[string.format("MediaThumbnail%sLayer%s", m, i)].Style = iconStyleBlankString
     end
   end
 end
@@ -351,7 +351,7 @@ function fn_process_JSON_update(path, value)
   if path == "/System Settings" then
     device_settings = value
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls.settings_json.String = rapidjson.encode(value)
+      Controls.SettingsJSON.String = rapidjson.encode(value)
     end
     fn_update_info()
   elseif path == "/Media List" then
@@ -366,8 +366,8 @@ function fn_process_JSON_update(path, value)
       table.insert(file_choice_list, file.name)
       file_metadata_list[file.name] = file
       for i = 1, layer_count do
-        if Controls[string.format("media_name_%s_layer_%s", file.fileIndex, i)] then
-          Controls[string.format("media_name_%s_layer_%s", file.fileIndex, i)].String = file.name
+        if Controls[string.format("MediaName%sLayer%s", file.fileIndex, i)] then
+          Controls[string.format("MediaName%sLayer%s", file.fileIndex, i)].String = file.name
         end
       end
       fn_get_file_thumbnail(file.fileIndex, file.name)
@@ -380,7 +380,7 @@ function fn_process_JSON_update(path, value)
     fn_update_info()
   elseif path == "/Output Mapping" then
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls.mapping_json.String = rapidjson.encode(value)
+      Controls.MappingJSON.String = rapidjson.encode(value)
     end
   elseif path == "/Play List" then
     fn_log_debug(
@@ -388,7 +388,7 @@ function fn_process_JSON_update(path, value)
         tostring(value.list and #value.list or 0) .. ", enabled: " .. tostring(value.usePlayList)
     )
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls.playlist_json.String = rapidjson.encode(value)
+      Controls.PlaylistJSON.String = rapidjson.encode(value)
     end
     if value.usePlayList and value.usePlayList == 1 then
       Controls.PlaylistEnable.Boolean = true
@@ -408,7 +408,7 @@ function fn_process_JSON_update(path, value)
                   ", layer 2 enabled: " .. tostring(value.layers[2] and value.layers[2].useCueList == 1)
     )
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls.timecode_json.String = rapidjson.encode(value)
+      Controls.TimecodeJSON.String = rapidjson.encode(value)
     end
     if value.layers[1] and value.layers[1].useCueList == 1 then
       Controls.L1TimecodeEnable.Boolean = true
@@ -425,7 +425,7 @@ function fn_process_JSON_update(path, value)
   elseif path == "/Schedule" then
     fn_log_debug("Schedule updated, enabled: " .. tostring(value.useSchedule))
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls.scheduler_json.String = rapidjson.encode(value)
+      Controls.SchedulerJSON.String = rapidjson.encode(value)
     end
     if value.useSchedule and value.useSchedule == 1 then
       Controls.ScheduleEnable.Boolean = true
@@ -435,7 +435,7 @@ function fn_process_JSON_update(path, value)
   elseif path == "/Timeline" then
     fn_log_debug("Timeline updated, enabled: " .. tostring(value.useTimeline))
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls.timeline_json.String = rapidjson.encode(value)
+      Controls.TimelineJSON.String = rapidjson.encode(value)
     end
     if value.useTimeline and value.useTimeline == 1 then
       Controls.TimelineEnable.Boolean = true
@@ -518,7 +518,7 @@ function fn_get_file_thumbnail(index, filename)
             IconData = Qlib.base64_enc(data)
           }
           for i = 1, layer_count do
-            Controls[string.format("media_thumbnail_%s_layer_%s", index, i)].Style = rapidjson.encode(iconStyle)
+            Controls[string.format("MediaThumbnail%sLayer%s", index, i)].Style = rapidjson.encode(iconStyle)
           end
         end
       end
@@ -544,12 +544,12 @@ function fn_update_preview_thumbnail(layer, filename)
       IconData = ""
     }
     local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
-    Controls[string.format("layer_%s_preview", layer)].Style = iconStyleBlankString
+    Controls[string.format("Layer%sPreview", layer)].Style = iconStyleBlankString
     if
       tonumber(layer) == 1 and
-        (Properties["Output Video Preview"].Value == "Disabled" or not Controls["preview_enable"].Boolean)
+        (Properties["Output Video Preview"].Value == "Disabled" or not Controls.PreviewEnable.Boolean)
      then
-      Controls["output_preview"].Style = iconStyleBlankString
+      Controls.OutputPreview.Style = iconStyleBlankString
     end
   else
     HttpClient.Download {
@@ -564,10 +564,10 @@ function fn_update_preview_thumbnail(layer, filename)
             Legend = "",
             IconData = Qlib.base64_enc(data)
           }
-          Controls[string.format("layer_%s_preview", layer)].Style = rapidjson.encode(iconStyle)
+          Controls[string.format("Layer%sPreview", layer)].Style = rapidjson.encode(iconStyle)
           if
             tonumber(layer) == 1 and
-              (Properties["Output Video Preview"].Value == "Disabled" or not Controls["preview_enable"].Boolean)
+              (Properties["Output Video Preview"].Value == "Disabled" or not Controls.PreviewEnable.Boolean)
            then
             Controls.OutputPreview.Style = rapidjson.encode(iconStyle)
           end
@@ -586,9 +586,9 @@ function fn_blank_previews()
   }
   local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
   for i = 1, layer_count do
-    Controls[string.format("layer_%s_preview", i)].Style = iconStyleBlankString
+    Controls[string.format("Layer%sPreview", i)].Style = iconStyleBlankString
   end
-  Controls["output_preview"].Style = iconStyleBlankString
+  Controls.OutputPreview.Style = iconStyleBlankString
 end
 
 -- Periodically fetch and update the output video preview
@@ -602,7 +602,7 @@ end
 
 -- Request and update the output video preview
 function fn_update_output_video_preview()
-  if Properties["Output Video Preview"].Value == "Disabled" or not Controls["preview_enable"].Boolean then
+  if Properties["Output Video Preview"].Value == "Disabled" or not Controls.PreviewEnable.Boolean then
     return
   end
   fn_log_debug("Requesting output preview frame")
@@ -627,7 +627,7 @@ function fn_update_output_video_preview()
           IconData = frameData.imgDataMapped
         }
         if wsConnected then
-          Controls["output_preview"].Style = rapidjson.encode(iconStyle)
+          Controls.OutputPreview.Style = rapidjson.encode(iconStyle)
         end
       else
         fn_log_error("Failed to get output frame data ")

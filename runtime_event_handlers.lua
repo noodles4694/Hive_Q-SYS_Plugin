@@ -167,9 +167,9 @@ for i = 1, layer_count do
   end
 
   for p = 1, media_item_count do
-    Controls[string.format("media_thumbnail_%s_layer_%s", p, i)].EventHandler = function()
-      if Controls[string.format("media_name_%s_layer_%s", p, i)].String ~= nil then
-        cmd_file_select(i, file_list[Controls[string.format("media_name_%s_layer_%s", p, i)].String])
+    Controls[string.format("MediaThumbnail%sLayer%s", p, i)].EventHandler = function()
+      if Controls[string.format("MediaName%sLayer%s", p, i)].String ~= nil then
+        cmd_file_select(i, file_list[Controls[string.format("MediaName%sLayer%s", p, i)].String])
       end
     end
   end
@@ -220,51 +220,51 @@ Controls.SystemWake.EventHandler = function()
   cmd_wake()
 end
 
-Controls["settings_json"].EventHandler = function()
+Controls.SettingsJSON.EventHandler = function()
   if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
     fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
     return
   end
-  cmd_update_settings_data(Controls["settings_json"].String)
+  cmd_update_settings_data(Controls.SettingsJSON.String)
 end
 
-Controls["timeline_json"].EventHandler = function()
+Controls.TimelineJSON.EventHandler = function()
     if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
     fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
     return
   end
-  cmd_update_timeline_data(Controls["timeline_json"].String)
+  cmd_update_timeline_data(Controls.TimelineJSON.String)
 end
 
-Controls["scheduler_json"].EventHandler = function()
+Controls.SchedulerJSON.EventHandler = function()
   if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
     fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
     return
   end
-  cmd_update_scheduler_data(Controls["scheduler_json"].String)
+  cmd_update_scheduler_data(Controls.SchedulerJSON.String)
 end
 
-Controls["timecode_json"].EventHandler = function()
+Controls.TimecodeJSON.EventHandler = function()
   if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
     fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
     return
   end
-  cmd_update_timecode_data(Controls["timecode_json"].String)
+  cmd_update_timecode_data(Controls.TimecodeJSON.String)
 end
 
-Controls["playlist_json"].EventHandler = function()
+Controls.PlaylistJSON.EventHandler = function()
   if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
     fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
     return
   end
-  cmd_update_playlist_data(Controls["playlist_json"].String)
+  cmd_update_playlist_data(Controls.PlaylistJSON.String)
 end
-Controls["mapping_json"].EventHandler = function()
+Controls.MappingJSON.EventHandler = function()
   if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
     fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
     return
   end
-  cmd_update_mapping_data(Controls["mapping_json"].String)
+  cmd_update_mapping_data(Controls.MappingJSON.String)
 end
 
 fn_log_debug("Control event handlers set up complete")

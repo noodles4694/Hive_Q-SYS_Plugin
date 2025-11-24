@@ -208,7 +208,7 @@ for i = 1, layer_count do
     table.insert(
       ctrls,
       {
-        Name = string.format("media_name_%s_layer_%s", p, i),
+        Name = string.format("MediaName%sLayer%s", p, i),
         ControlType = "Indicator",
         IndicatorType = "Text",
         PinStyle = "Output",
@@ -218,7 +218,7 @@ for i = 1, layer_count do
     table.insert(
       ctrls,
       {
-        Name = string.format("media_thumbnail_%s_layer_%s", p, i),
+        Name = string.format("MediaThumbnail%sLayer%s", p, i),
         ControlType = "Button",
         ButtonType = "StateTrigger",
         Min = 0,
@@ -231,7 +231,7 @@ for i = 1, layer_count do
   table.insert(
     ctrls,
     {
-      Name = string.format("layer_%s_preview", i),
+      Name = string.format("Layer%sPreview", i),
       ControlType = "Button",
       ButtonType = "Trigger",
       UserPin = false
@@ -491,10 +491,11 @@ table.insert(
   }
 )
 
+
 table.insert(
   ctrls,
   {
-    Name = "settings_json",
+    Name = "SettingsJSON",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Both",
@@ -505,7 +506,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "settings_json",
+    Name = "MappingJSON",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Both",
@@ -516,7 +517,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "mapping_json",
+    Name = "PlaylistJSON",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Both",
@@ -527,7 +528,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "playlist_json",
+    Name = "TimecodeJSON",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Both",
@@ -538,7 +539,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "timecode_json",
+    Name = "TimelineJSON",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Both",
@@ -549,18 +550,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "timeline_json",
-    ControlType = "Indicator",
-    IndicatorType = "Text",
-    PinStyle = "Both",
-    Count = 1,
-    UserPin = true
-  }
-)
-table.insert(
-  ctrls,
-  {
-    Name = "scheduler_json",
+    Name = "SchedulerJSON",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Both",
