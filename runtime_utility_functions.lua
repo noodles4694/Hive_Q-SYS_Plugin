@@ -22,6 +22,60 @@ function fn_log_debug(message)
   end
 end
 
+function setOnline()
+  if Controls.Status.Value ~= StatusState.OK then
+    Controls.Status.Value = StatusState.OK
+  end
+  if Controls.Status.String ~= "Online" then
+    Controls.Status.String = "Online"
+  end
+end
+
+function setInitializing(msg)
+  if Controls.Status.Value ~= StatusState.INITIALIZING then
+    Controls.Status.Value = StatusState.INITIALIZING
+  end
+  if Controls.Status.String ~= (msg or "Initializing") then
+    Controls.Status.String = msg or "Initializing"
+  end
+end
+
+function setFault(msg)
+  if Controls.Status.Value ~= StatusState.FAULT then
+    Controls.Status.Value = StatusState.FAULT
+  end
+  if Controls.Status.String ~= (msg or "Fault") then
+    Controls.Status.String = msg or "Fault"
+  end
+end
+
+function setCompromised(msg)
+  if Controls.Status.Value ~= StatusState.COMPROMISED then
+    Controls.Status.Value = StatusState.COMPROMISED
+  end
+  if Controls.Status.String ~= (msg or "Compromised") then
+    Controls.Status.String = msg or "Compromised"
+  end
+end
+
+function setMissing(msg)
+  if Controls.Status.Value ~= StatusState.MISSING then
+    Controls.Status.Value = StatusState.MISSING
+  end
+  if Controls.Status.String ~= (msg or "Missing") then
+    Controls.Status.String = msg or "Missing"
+  end
+end
+
+function setNotPresent(msg)
+  if Controls.Status.Value ~= StatusState.NOTPRESENT then
+    Controls.Status.Value = StatusState.NOTPRESENT
+  end
+  if Controls.Status.String ~= (msg or "Not Present") then
+    Controls.Status.String = msg or "Not Present"
+  end
+end
+
 ---checks if a string represents an ip address
 function fn_check_valid_ip(ip)
   if not ip then

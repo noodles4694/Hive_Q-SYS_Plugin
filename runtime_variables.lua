@@ -289,6 +289,16 @@ local fx_values = {
   40
 }
 
+  -- Q-SYS standard status states
+  local StatusState = {
+    OK          = 0,
+    COMPROMISED = 1,
+    FAULT       = 2,
+    NOTPRESENT  = 3,
+    MISSING     = 4,
+    INITIALIZING= 5
+  }
+
 ticker = 1
 poll_parameter_list = {}
 for _, v in pairs(parameter_list) do

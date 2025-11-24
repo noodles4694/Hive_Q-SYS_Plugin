@@ -1,18 +1,20 @@
 -- Logic to deal with connection and disconnection of the Hive player
-function fn_hive_connect_Status(status)
+function fn_hive_connect_Status(status,message)
   fn_log_debug("Setting connected status to " .. tostring(status))
   if status == true then
     Controls.online.Boolean = true
     Controls.online.Color = "Green"
+    setOnline()
     fn_watch_parameters()
     fn_update_info()
     fn_poll_info()
     fn_update_media_folders()
     fn_fetch_video_previews()
   else
+    setMissing(message or "Offline")
     Controls.online.Boolean = false
     Controls.online.Color = "Black"
-    Controls.status.String = "Offline"
+    Controls.Status.String = "Offline"
     fn_blank_previews()
   end
 end
@@ -187,7 +189,10 @@ function fn_process_transport_update(path, value)
     local currentFileName = file_list_names[selected_file[tonumber(layer)]] or ""
     if sub_parameter == "Media Time" then
       if not seek_timer_list[tonumber(layer)]:IsRunning() then
-        if currentFileName == "" or file_metadata_list[currentFileName] == nil or file_metadata_list[currentFileName].duration == 0 then
+        if
+          currentFileName == "" or file_metadata_list[currentFileName] == nil or
+            file_metadata_list[currentFileName].duration == 0
+         then
           Controls["seek_" .. layer].Position = 0
           Controls["time_elapsed_" .. layer].String = os.date("!%X", 0)
         else
@@ -295,14 +300,14 @@ function fn_update_selected_file_info(value, layer)
     Controls[string.format("media_thumbnail_%s_layer_%s", media, layer)].Boolean = media == (value + 1)
   end
   local currentFileName = file_list_names[tonumber(value)] or ""
-      fn_update_preview_thumbnail(layer, currentFileName)
-      Controls[string.format("file_select_%s", layer)].String = currentFileName
-      Controls[string.format("file_select_index_%s", layer)].Value = tonumber(value)
-      if file_metadata_list[currentFileName] then
-        Controls["duration_" .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration)) 
-      else
-        Controls["duration_" .. layer].String = os.date("!%X", 0)
-      end
+  fn_update_preview_thumbnail(layer, currentFileName)
+  Controls[string.format("file_select_%s", layer)].String = currentFileName
+  Controls[string.format("file_select_index_%s", layer)].Value = tonumber(value)
+  if file_metadata_list[currentFileName] then
+    Controls["duration_" .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
+  else
+    Controls["duration_" .. layer].String = os.date("!%X", 0)
+  end
 end
 
 -- Clear the media list thumbnails and names
@@ -328,7 +333,7 @@ end
 function fn_process_JSON_update(path, value)
   fn_log_debug("Processing JSON update: " .. path)
   if path == "/System Settings" then
-    if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+    if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
       Controls["settings_json"].String = rapidjson.encode(value)
     end
     fn_update_info()
@@ -352,12 +357,12 @@ function fn_process_JSON_update(path, value)
     end
     for i = 1, layer_count do
       Controls["file_select_" .. i].Choices = file_choice_list
-       fn_update_selected_file_info(selected_file[i],i)
+      fn_update_selected_file_info(selected_file[i], i)
     end
     -- let's update the system info as storage and num files might have changed
     fn_update_info()
   elseif path == "/Output Mapping" then
-        if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+    if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
       Controls["mapping_json"].String = rapidjson.encode(value)
     end
   elseif path == "/Play List" then
@@ -365,7 +370,7 @@ function fn_process_JSON_update(path, value)
       "Playlist updated, total items: " ..
         tostring(value.list and #value.list or 0) .. ", enabled: " .. tostring(value.usePlayList)
     )
-        if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+    if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
       Controls["playlist_json"].String = rapidjson.encode(value)
     end
     if value.usePlayList and value.usePlayList == 1 then
@@ -385,7 +390,7 @@ function fn_process_JSON_update(path, value)
                 tostring(value.layers[1] and value.layers[1].useCueList == 1) ..
                   ", layer 2 enabled: " .. tostring(value.layers[2] and value.layers[2].useCueList == 1)
     )
-        if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+    if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
       Controls["timecode_json"].String = rapidjson.encode(value)
     end
     if value.layers[1] and value.layers[1].useCueList == 1 then
@@ -402,7 +407,7 @@ function fn_process_JSON_update(path, value)
     Controls.l2_tc_rows.Value = value.layers[2] and #(value.layers[2].list) or 0
   elseif path == "/Schedule" then
     fn_log_debug("Schedule updated, enabled: " .. tostring(value.useSchedule))
-        if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+    if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
       Controls["scheduler_json"].String = rapidjson.encode(value)
     end
     if value.useSchedule and value.useSchedule == 1 then
@@ -412,7 +417,7 @@ function fn_process_JSON_update(path, value)
     end
   elseif path == "/Timeline" then
     fn_log_debug("Timeline updated, enabled: " .. tostring(value.useTimeline))
-        if(Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
+    if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
       Controls["timeline_json"].String = rapidjson.encode(value)
     end
     if value.useTimeline and value.useTimeline == 1 then
@@ -453,10 +458,19 @@ function fn_update_info()
             end
           end
           if device then
+            if (device.status == "OK") then
+              -- warn if less than 50Gb free
+              if device.space < (1024 * 1024 * 1024 * 50) then
+                setCompromised("Low Storage Space")
+              else
+              setOnline()
+              end
+            else
+              setFault(device.status)
+            end
             Controls.device_name.String = device.deviceName
             Controls.ip_address.String = device.ipAddress
             Controls.netmask.String = device.netMask
-            Controls.status.String = device.status
             Controls.output_framerate.String = device.rate
             Controls.output_resolution.String = string.format("%s x %s", device.resX, device.resY)
             Controls.serial.String = device.serial
@@ -514,7 +528,7 @@ function fn_update_preview_thumbnail(layer, filename)
   fn_log_debug("Requesting preview for media  " .. filename)
   if file_list[filename] == nil then
     fn_log_error("Filename " .. filename .. " not found in file list")
-  
+
     local iconStyleBlank = {
       DrawChrome = true,
       HorizontalAlignment = "Center",
@@ -523,30 +537,36 @@ function fn_update_preview_thumbnail(layer, filename)
     }
     local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
     Controls[string.format("layer_%s_preview", layer)].Style = iconStyleBlankString
-    if tonumber(layer) == 1 and (Properties["Output Video Preview"].Value == "Disabled" or not Controls["preview_enable"].Boolean) then
+    if
+      tonumber(layer) == 1 and
+        (Properties["Output Video Preview"].Value == "Disabled" or not Controls["preview_enable"].Boolean)
+     then
       Controls["output_preview"].Style = iconStyleBlankString
     end
   else
-  HttpClient.Download {
-    Url = string.format("http://%s/Thumbs/%s", ip_address, filename:gsub("%.%w+", ".jpg")),
-    Headers = {},
-    Auth = "basic",
-    Timeout = 10,
-    EventHandler = function(tbl, code, data, err, headers)
-      if code == 200 then
-        local iconStyle = {
-          DrawChrome = false,
-          Legend = "",
-          IconData = Qlib.base64_enc(data)
-        }
-        Controls[string.format("layer_%s_preview", layer)].Style = rapidjson.encode(iconStyle)
-        if tonumber(layer) == 1 and (Properties["Output Video Preview"].Value == "Disabled" or not Controls["preview_enable"].Boolean) then
-          Controls["output_preview"].Style = rapidjson.encode(iconStyle)
+    HttpClient.Download {
+      Url = string.format("http://%s/Thumbs/%s", ip_address, filename:gsub("%.%w+", ".jpg")),
+      Headers = {},
+      Auth = "basic",
+      Timeout = 10,
+      EventHandler = function(tbl, code, data, err, headers)
+        if code == 200 then
+          local iconStyle = {
+            DrawChrome = false,
+            Legend = "",
+            IconData = Qlib.base64_enc(data)
+          }
+          Controls[string.format("layer_%s_preview", layer)].Style = rapidjson.encode(iconStyle)
+          if
+            tonumber(layer) == 1 and
+              (Properties["Output Video Preview"].Value == "Disabled" or not Controls["preview_enable"].Boolean)
+           then
+            Controls["output_preview"].Style = rapidjson.encode(iconStyle)
+          end
         end
       end
-    end
-  }
-end
+    }
+  end
 end
 
 function fn_blank_previews()
@@ -599,7 +619,7 @@ function fn_update_output_video_preview()
           IconData = frameData.imgDataMapped
         }
         if Controls.online.Boolean then
-        Controls["output_preview"].Style = rapidjson.encode(iconStyle)
+          Controls["output_preview"].Style = rapidjson.encode(iconStyle)
         end
       else
         fn_log_error("Failed to get output frame data ")
@@ -679,9 +699,11 @@ for i = 1, layer_count do
 end
 
 -- Connect
+setInitializing("Connecting...")
 if fn_check_valid_ip(ip_address) then
   fn_log_message("Connecting to Hive player at " .. ip_address)
   Connect(ip_address, fn_hive_connect_Status)
 else
+  setMissing("Invalid IP")
   fn_log_error("Invalid IP address: " .. ip_address)
 end

@@ -47,9 +47,9 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "status",
+    Name = "Status",
     ControlType = "Indicator",
-    IndicatorType = "Text",
+    IndicatorType = "Status",
     PinStyle = "Output",
     Count = 1,
     UserPin = true
@@ -483,6 +483,17 @@ table.insert(
 table.insert(
   ctrls,
   {
+    Name = "LogMessage",
+    ControlType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+
+table.insert(
+  ctrls,
+  {
     Name = "settings_json",
     ControlType = "Indicator",
     IndicatorType = "Text",
@@ -557,4 +568,3 @@ table.insert(
     UserPin = true
   }
 )
-  

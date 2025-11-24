@@ -296,7 +296,7 @@ layout["version"] = {
   Position = {3 * btn_size[1], (3.5 * btn_size[2]) + (4 * btn_gap[2]) + status_header_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["status"] = {
+layout["Status"] = {
   PrettyName = "System~Status",
   Style = "TextBox",
   Color = Colors.control_background,

@@ -39,7 +39,7 @@ function Disconnect()
   wsConnected = false
   fn_log_message("Hive connection closed")
   if connectionCallback then
-    connectionCallback(false) -- Call the status callback with false to indicate disconnection
+    connectionCallback(false,"Connection Closed") -- Call the status callback with false to indicate disconnection
   end
   pingTimer:Stop()
 end
@@ -49,7 +49,7 @@ ws.Connected = function()
   wsConnected = true
   fn_log_message("Hive connection established")
   if connectionCallback then
-    connectionCallback(true) -- Call the status callback with true to indicate success
+    connectionCallback(true,"Online") -- Call the status callback with true to indicate success
   end
   -- send ping every 10 seconds to keep connection alive
   pingTimer:Start(10)
@@ -60,7 +60,7 @@ ws.Closed = function()
   wsConnected = false
   fn_log_message("Hive connection closed")
   if connectionCallback then
-    connectionCallback(false) -- Call the status callback with false to indicate disconnection
+    connectionCallback(false,"Connection Closed") -- Call the status callback with false to indicate disconnection
   end
   pingTimer:Stop()
   if shouldConnect then
