@@ -42,7 +42,7 @@ for i = 1, layer_count do
     }
   )
   for p = 1, media_item_count do
-    layout[string.format("media_name_%s_layer_%s", p, i)] = {
+    layout[string.format("MediaName%sLayer%s", p, i)] = {
       PrettyName = string.format("Layer %s~Media List~%s~Name", i, p),
       Style = "TextBox",
       Color = Colors.control_background,
@@ -59,7 +59,7 @@ for i = 1, layer_count do
       Size = {3 * btn_size[1], preview_size[2]}
     }
 
-    layout[string.format("media_thumbnail_%s_layer_%s", p, i)] = {
+    layout[string.format("MediaThumbnail%sLayer%s", p, i)] = {
       PrettyName = string.format("Layer %s~Media List~%s~Select", i, p),
       UnlinkOffColor = true,
       OffColor = Colors.transparent,

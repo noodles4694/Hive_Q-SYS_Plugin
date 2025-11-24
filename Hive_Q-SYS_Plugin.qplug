@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.573",
+  BuildVersion = "0.0.0.575",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -1996,7 +1996,7 @@ function GetControlLayout(props)
             }
           )
           for p = 1, media_item_count do
-            layout[string.format("media_name_%s_layer_%s", p, i)] = {
+            layout[string.format("MediaName%sLayer%s", p, i)] = {
               PrettyName = string.format("Layer %s~Media List~%s~Name", i, p),
               Style = "TextBox",
               Color = Colors.control_background,
@@ -2013,7 +2013,7 @@ function GetControlLayout(props)
               Size = {3 * btn_size[1], preview_size[2]}
             }
         
-            layout[string.format("media_thumbnail_%s_layer_%s", p, i)] = {
+            layout[string.format("MediaThumbnail%sLayer%s", p, i)] = {
               PrettyName = string.format("Layer %s~Media List~%s~Select", i, p),
               UnlinkOffColor = true,
               OffColor = Colors.transparent,
@@ -2482,7 +2482,7 @@ function GetControlLayout(props)
         }
       )
       
-      layout["output_preview"] = {
+      layout["OutputPreview"] = {
         PrettyName = "System~Preview",
         Style="Button",
         UnlinkOffColor = true,
@@ -2515,7 +2515,7 @@ function GetControlLayout(props)
           }
         )
       
-        layout[string.format("layer_%s_preview", i)] = {
+        layout[string.format("Layer%sPreview", i)] = {
           PrettyName = string.format("Layer %s~Preview", i),
           UnlinkOffColor = true,
           OffColor = Colors.transparent,

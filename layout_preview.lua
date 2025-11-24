@@ -27,7 +27,7 @@ table.insert(
   }
 )
 
-layout["output_preview"] = {
+layout["OutputPreview"] = {
   PrettyName = "System~Preview",
   Style="Button",
   UnlinkOffColor = true,
@@ -60,7 +60,7 @@ for i = 1, layer_count do
     }
   )
 
-  layout[string.format("layer_%s_preview", i)] = {
+  layout[string.format("Layer%sPreview", i)] = {
     PrettyName = string.format("Layer %s~Preview", i),
     UnlinkOffColor = true,
     OffColor = Colors.transparent,
