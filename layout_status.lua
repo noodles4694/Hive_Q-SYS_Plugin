@@ -286,7 +286,7 @@ layout["DeviceName"] = {
   Position = {3 * btn_size[1], (2.5 * btn_size[2]) + (3 * btn_gap[2]) + status_header_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["universe"] = {
+layout["Universe"] = {
   PrettyName = "System~Universe",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -297,7 +297,7 @@ layout["universe"] = {
   Position = {3 * btn_size[1], (4.5 * btn_size[2]) + (5 * btn_gap[2]) + status_header_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["version"] = {
+layout["Version"] = {
   PrettyName = "System~Version",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -309,7 +309,7 @@ layout["version"] = {
   Size = {3 * btn_size[1], btn_size[2]}
 }
 
-layout["output_resolution"] = {
+layout["OutputResolution"] = {
   PrettyName = "System~Output Resolution",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -320,7 +320,7 @@ layout["output_resolution"] = {
   Position = {3 * btn_size[1], (5.5 * btn_size[2]) + (6 * btn_gap[2]) + status_header_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["output_framerate"] = {
+layout["OutputFramerate"] = {
   PrettyName = "System~Output Framerate",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -331,7 +331,7 @@ layout["output_framerate"] = {
   Position = {3 * btn_size[1], (6.5 * btn_size[2]) + (7 * btn_gap[2]) + status_header_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["engine_fps"] = {
+layout["EngineFPS"] = {
   PrettyName = "System~Engine FPS",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -342,7 +342,7 @@ layout["engine_fps"] = {
   Position = {3 * btn_size[1], (7.5 * btn_size[2]) + (8 * btn_gap[2]) + status_header_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["activity"] = {
+layout["Activity"] = {
   PrettyName = "System~Engine FPS",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -353,7 +353,7 @@ layout["activity"] = {
   Position = {3 * btn_size[1], (8.5 * btn_size[2]) + (9 * btn_gap[2]) + status_header_size[2]},
   Size = {9 * btn_size[1], btn_size[2]}
 }
-layout["netmask"] = {
+layout["Netmask"] = {
   PrettyName = "System~NetMask",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -375,7 +375,7 @@ layout["SerialNumber"] = {
   Position = {9 * btn_size[1], (2.5 * btn_size[2]) + (3 * btn_gap[2]) + status_header_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["bee_type"] = {
+layout["BeeType"] = {
   PrettyName = "System~Bee Type",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -386,7 +386,7 @@ layout["bee_type"] = {
   Position = {9 * btn_size[1], (3.5 * btn_size[2]) + (4 * btn_gap[2]) + status_header_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["file_count"] = {
+layout["FileCount"] = {
   PrettyName = "System~Media File Count",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -397,7 +397,7 @@ layout["file_count"] = {
   Position = {9 * btn_size[1], (4.5 * btn_size[2]) + (5 * btn_gap[2]) + status_header_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["free_space"] = {
+layout["FreeSpace"] = {
   PrettyName = "System~Free Storage Space",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -408,7 +408,7 @@ layout["free_space"] = {
   Position = {9 * btn_size[1], (5.5 * btn_size[2]) + (6 * btn_gap[2]) + status_header_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["cpu_power"] = {
+layout["CpuPower"] = {
   PrettyName = "System~CPU Power",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -419,7 +419,7 @@ layout["cpu_power"] = {
   Position = {9 * btn_size[1], (6.5 * btn_size[2]) + (7 * btn_gap[2]) + status_header_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["sync_status"] = {
+layout["SyncStatus"] = {
   PrettyName = "System~Beesync Status",
   Style = "TextBox",
   Color = Colors.control_background,

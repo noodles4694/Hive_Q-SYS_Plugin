@@ -25,7 +25,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "version",
+    Name = "Version",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
@@ -47,7 +47,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "output_resolution",
+    Name = "OutputResolution",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
@@ -58,7 +58,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "output_framerate",
+    Name = "OutputFramerate",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
@@ -69,7 +69,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "engine_fps",
+    Name = "EngineFPS",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
@@ -80,7 +80,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "activity",
+    Name = "Activity",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
@@ -91,7 +91,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "netmask",
+    Name = "Netmask",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
@@ -113,7 +113,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "bee_type",
+    Name = "BeeType",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
@@ -124,7 +124,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "file_count",
+    Name = "FileCount",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
@@ -135,7 +135,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "universe",
+    Name = "Universe",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
@@ -146,7 +146,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "free_space",
+    Name = "FreeSpace",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
@@ -157,7 +157,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "cpu_power",
+    Name = "CpuPower",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
@@ -168,7 +168,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "sync_status",
+    Name = "SyncStatus",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
@@ -179,7 +179,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "thumbnail",
+    Name = "Thumbnail",
     ControlType = "Button",
     ButtonType = "Momentary",
     PinStyle = "Output",
@@ -242,7 +242,7 @@ end
 table.insert(
   ctrls,
   {
-    Name = "output_preview",
+    Name = "OutputPreview",
     ControlType = "Button",
     ButtonType = "Trigger",
     UserPin = false
@@ -252,7 +252,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "playlist_enable",
+    Name = "PlaylistEnable",
     ControlType = "Button",
     ButtonType = "Toggle",
     PinStyle = "Both",
@@ -263,7 +263,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "l1_timecode_enable",
+    Name = "L1TimecodeEnable",
     ControlType = "Button",
     ButtonType = "Toggle",
     PinStyle = "Both",
@@ -274,7 +274,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "l2_timecode_enable",
+    Name = "L2TimecodeEnable",
     ControlType = "Button",
     ButtonType = "Toggle",
     PinStyle = "Both",
@@ -285,7 +285,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "timeline_enable",
+    Name = "TimelineEnable",
     ControlType = "Button",
     ButtonType = "Toggle",
     PinStyle = "Both",
@@ -296,7 +296,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "schedule_enable",
+    Name = "ScheduleEnable",
     ControlType = "Button",
     ButtonType = "Toggle",
     PinStyle = "Both",
@@ -307,7 +307,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "playlist_rows",
+    Name = "PlaylistRows",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
@@ -321,7 +321,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "playlist_current_row",
+    Name = "PlaylistCurrentRow",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
@@ -335,7 +335,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "l1_tc_rows",
+    Name = "L1TCRows",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
@@ -349,7 +349,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "l2_tc_rows",
+    Name = "L2TCRows",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
@@ -363,7 +363,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "playlist_play_previous",
+    Name = "PlaylistPlayPrevious",
     ControlType = "Button",
     ButtonType = "Trigger",
     PinStyle = "Input",
@@ -374,7 +374,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "playlist_play_next",
+    Name = "PlaylistPlayNext",
     ControlType = "Button",
     ButtonType = "Trigger",
     PinStyle = "Input",
@@ -385,7 +385,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "playlist_play_first",
+    Name = "PlaylistPlayFirst",
     ControlType = "Button",
     ButtonType = "Trigger",
     PinStyle = "Input",
@@ -396,7 +396,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "playlist_play_last",
+    Name = "PlaylistPlayLast",
     ControlType = "Button",
     ButtonType = "Trigger",
     PinStyle = "Input",
@@ -407,7 +407,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "playlist_play_row",
+    Name = "PlaylistPlayRow",
     ControlType = "Button",
     ButtonType = "Trigger",
     PinStyle = "Input",
@@ -418,7 +418,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "playlist_play_row_index",
+    Name = "PlaylistPlayRowIndex",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
@@ -433,7 +433,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "system_restart",
+    Name = "SystemRestart",
     ControlType = "Button",
     ButtonType = "Trigger",
     PinStyle = "Input",
@@ -444,7 +444,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "system_shutdown",
+    Name = "SystemShutdown",
     ControlType = "Button",
     ButtonType = "Trigger",
     PinStyle = "Input",
@@ -456,7 +456,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "system_wake",
+    Name = "SystemWake",
     ControlType = "Button",
     ButtonType = "Trigger",
     PinStyle = "Input",
@@ -470,7 +470,7 @@ table.insert(
 table.insert(
   ctrls,
   {
-    Name = "preview_enable",
+    Name = "PreviewEnable",
     ControlType = "Button",
     ButtonType = "Toggle",
     PinStyle = "Both",

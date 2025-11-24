@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.561",
+  BuildVersion = "0.0.0.569",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -754,7 +754,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "version",
+      Name = "Version",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -776,7 +776,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "output_resolution",
+      Name = "OutputResolution",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -787,7 +787,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "output_framerate",
+      Name = "OutputFramerate",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -798,7 +798,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "engine_fps",
+      Name = "EngineFPS",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -809,7 +809,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "activity",
+      Name = "Activity",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -820,7 +820,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "netmask",
+      Name = "Netmask",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -842,7 +842,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "bee_type",
+      Name = "BeeType",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -853,7 +853,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "file_count",
+      Name = "FileCount",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -864,7 +864,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "universe",
+      Name = "Universe",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -875,7 +875,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "free_space",
+      Name = "FreeSpace",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -886,7 +886,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "cpu_power",
+      Name = "CpuPower",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -897,7 +897,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "sync_status",
+      Name = "SyncStatus",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -908,7 +908,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "thumbnail",
+      Name = "Thumbnail",
       ControlType = "Button",
       ButtonType = "Momentary",
       PinStyle = "Output",
@@ -971,7 +971,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "output_preview",
+      Name = "OutputPreview",
       ControlType = "Button",
       ButtonType = "Trigger",
       UserPin = false
@@ -981,7 +981,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "playlist_enable",
+      Name = "PlaylistEnable",
       ControlType = "Button",
       ButtonType = "Toggle",
       PinStyle = "Both",
@@ -992,7 +992,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "l1_timecode_enable",
+      Name = "L1TimecodeEnable",
       ControlType = "Button",
       ButtonType = "Toggle",
       PinStyle = "Both",
@@ -1003,7 +1003,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "l2_timecode_enable",
+      Name = "L2TimecodeEnable",
       ControlType = "Button",
       ButtonType = "Toggle",
       PinStyle = "Both",
@@ -1014,7 +1014,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "timeline_enable",
+      Name = "TimelineEnable",
       ControlType = "Button",
       ButtonType = "Toggle",
       PinStyle = "Both",
@@ -1025,7 +1025,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "schedule_enable",
+      Name = "ScheduleEnable",
       ControlType = "Button",
       ButtonType = "Toggle",
       PinStyle = "Both",
@@ -1036,7 +1036,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "playlist_rows",
+      Name = "PlaylistRows",
       ControlType = "Knob",
       ControlUnit = "Integer",
       Style = "Text Field",
@@ -1050,7 +1050,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "playlist_current_row",
+      Name = "PlaylistCurrentRow",
       ControlType = "Knob",
       ControlUnit = "Integer",
       Style = "Text Field",
@@ -1064,7 +1064,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "l1_tc_rows",
+      Name = "L1TCRows",
       ControlType = "Knob",
       ControlUnit = "Integer",
       Style = "Text Field",
@@ -1078,7 +1078,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "l2_tc_rows",
+      Name = "L2TCRows",
       ControlType = "Knob",
       ControlUnit = "Integer",
       Style = "Text Field",
@@ -1092,7 +1092,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "playlist_play_previous",
+      Name = "PlaylistPlayPrevious",
       ControlType = "Button",
       ButtonType = "Trigger",
       PinStyle = "Input",
@@ -1103,7 +1103,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "playlist_play_next",
+      Name = "PlaylistPlayNext",
       ControlType = "Button",
       ButtonType = "Trigger",
       PinStyle = "Input",
@@ -1114,7 +1114,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "playlist_play_first",
+      Name = "PlaylistPlayFirst",
       ControlType = "Button",
       ButtonType = "Trigger",
       PinStyle = "Input",
@@ -1125,7 +1125,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "playlist_play_last",
+      Name = "PlaylistPlayLast",
       ControlType = "Button",
       ButtonType = "Trigger",
       PinStyle = "Input",
@@ -1136,7 +1136,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "playlist_play_row",
+      Name = "PlaylistPlayRow",
       ControlType = "Button",
       ButtonType = "Trigger",
       PinStyle = "Input",
@@ -1147,7 +1147,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "playlist_play_row_index",
+      Name = "PlaylistPlayRowIndex",
       ControlType = "Knob",
       ControlUnit = "Integer",
       Style = "Text Field",
@@ -1162,7 +1162,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "system_restart",
+      Name = "SystemRestart",
       ControlType = "Button",
       ButtonType = "Trigger",
       PinStyle = "Input",
@@ -1173,7 +1173,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "system_shutdown",
+      Name = "SystemShutdown",
       ControlType = "Button",
       ButtonType = "Trigger",
       PinStyle = "Input",
@@ -1185,7 +1185,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "system_wake",
+      Name = "SystemWake",
       ControlType = "Button",
       ButtonType = "Trigger",
       PinStyle = "Input",
@@ -1199,7 +1199,7 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
-      Name = "preview_enable",
+      Name = "PreviewEnable",
       ControlType = "Button",
       ButtonType = "Toggle",
       PinStyle = "Both",
@@ -1633,7 +1633,7 @@ function GetControlLayout(props)
           Position = {3 * btn_size[1], (2.5 * btn_size[2]) + (3 * btn_gap[2]) + status_header_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
-        layout["universe"] = {
+        layout["Universe"] = {
           PrettyName = "System~Universe",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -1644,7 +1644,7 @@ function GetControlLayout(props)
           Position = {3 * btn_size[1], (4.5 * btn_size[2]) + (5 * btn_gap[2]) + status_header_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
-        layout["version"] = {
+        layout["Version"] = {
           PrettyName = "System~Version",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -1656,7 +1656,7 @@ function GetControlLayout(props)
           Size = {3 * btn_size[1], btn_size[2]}
         }
         
-        layout["output_resolution"] = {
+        layout["OutputResolution"] = {
           PrettyName = "System~Output Resolution",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -1667,7 +1667,7 @@ function GetControlLayout(props)
           Position = {3 * btn_size[1], (5.5 * btn_size[2]) + (6 * btn_gap[2]) + status_header_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
-        layout["output_framerate"] = {
+        layout["OutputFramerate"] = {
           PrettyName = "System~Output Framerate",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -1678,7 +1678,7 @@ function GetControlLayout(props)
           Position = {3 * btn_size[1], (6.5 * btn_size[2]) + (7 * btn_gap[2]) + status_header_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
-        layout["engine_fps"] = {
+        layout["EngineFPS"] = {
           PrettyName = "System~Engine FPS",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -1689,7 +1689,7 @@ function GetControlLayout(props)
           Position = {3 * btn_size[1], (7.5 * btn_size[2]) + (8 * btn_gap[2]) + status_header_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
-        layout["activity"] = {
+        layout["Activity"] = {
           PrettyName = "System~Engine FPS",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -1700,7 +1700,7 @@ function GetControlLayout(props)
           Position = {3 * btn_size[1], (8.5 * btn_size[2]) + (9 * btn_gap[2]) + status_header_size[2]},
           Size = {9 * btn_size[1], btn_size[2]}
         }
-        layout["netmask"] = {
+        layout["Netmask"] = {
           PrettyName = "System~NetMask",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -1722,7 +1722,7 @@ function GetControlLayout(props)
           Position = {9 * btn_size[1], (2.5 * btn_size[2]) + (3 * btn_gap[2]) + status_header_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
-        layout["bee_type"] = {
+        layout["BeeType"] = {
           PrettyName = "System~Bee Type",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -1733,7 +1733,7 @@ function GetControlLayout(props)
           Position = {9 * btn_size[1], (3.5 * btn_size[2]) + (4 * btn_gap[2]) + status_header_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
-        layout["file_count"] = {
+        layout["FileCount"] = {
           PrettyName = "System~Media File Count",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -1744,7 +1744,7 @@ function GetControlLayout(props)
           Position = {9 * btn_size[1], (4.5 * btn_size[2]) + (5 * btn_gap[2]) + status_header_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
-        layout["free_space"] = {
+        layout["FreeSpace"] = {
           PrettyName = "System~Free Storage Space",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -1755,7 +1755,7 @@ function GetControlLayout(props)
           Position = {9 * btn_size[1], (5.5 * btn_size[2]) + (6 * btn_gap[2]) + status_header_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
-        layout["cpu_power"] = {
+        layout["CpuPower"] = {
           PrettyName = "System~CPU Power",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -1766,7 +1766,7 @@ function GetControlLayout(props)
           Position = {9 * btn_size[1], (6.5 * btn_size[2]) + (7 * btn_gap[2]) + status_header_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
-        layout["sync_status"] = {
+        layout["SyncStatus"] = {
           PrettyName = "System~Beesync Status",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -2080,7 +2080,7 @@ function GetControlLayout(props)
           }
         )
         
-        layout["playlist_enable"] = {
+        layout["PlaylistEnable"] = {
           PrettyName = "Modules~Playlist Enable",
           Style = "Button",
           ButtonStyle = "Toggle",
@@ -2097,7 +2097,7 @@ function GetControlLayout(props)
           Size = {3 * btn_size[1], btn_size[2]}
         }
         
-        layout["l1_timecode_enable"] = {
+        layout["L1TimecodeEnable"] = {
           PrettyName = "Modules~Layer 1 TC Cuelist Enable",
           Style = "Button",
           ButtonStyle = "Toggle",
@@ -2114,7 +2114,7 @@ function GetControlLayout(props)
           Size = {3 * btn_size[1], btn_size[2]}
         }
         
-        layout["l2_timecode_enable"] = {
+        layout["L2TimecodeEnable"] = {
           PrettyName = "Modules~Layer 2 TC Cuelist Enable",
           Style = "Button",
           ButtonStyle = "Toggle",
@@ -2130,7 +2130,7 @@ function GetControlLayout(props)
           Position = {(6 * btn_size[1]) + (6 * btn_gap[1]), btn_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
-        layout["timeline_enable"] = {
+        layout["TimelineEnable"] = {
           PrettyName = "Modules~Timeline Enable",
           Style = "Button",
           ButtonStyle = "Toggle",
@@ -2146,7 +2146,7 @@ function GetControlLayout(props)
           Position = {(9 * btn_size[1]) + (8 * btn_gap[1]), btn_size[2]},
           Size = {3 * btn_size[1], btn_size[2]}
         }
-        layout["schedule_enable"] = {
+        layout["ScheduleEnable"] = {
           PrettyName = "Modules~Schedule Enable",
           Style = "Button",
           ButtonStyle = "Toggle",
@@ -2233,7 +2233,7 @@ function GetControlLayout(props)
           }
         )
         
-        layout["playlist_rows"] = {
+        layout["PlaylistRows"] = {
           PrettyName = "Modules~Playlist Rows",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -2248,7 +2248,7 @@ function GetControlLayout(props)
           Size = {3 * btn_size[1], btn_size[2]}
         }
         
-        layout["playlist_current_row"] = {
+        layout["PlaylistCurrentRow"] = {
           PrettyName = "Modules~Playlist Current Row",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -2263,7 +2263,7 @@ function GetControlLayout(props)
           Size = {3 * btn_size[1], btn_size[2]}
         }
         
-        layout["l1_tc_rows"] = {
+        layout["L1TCRows"] = {
           PrettyName = "Modules~Layer 1 Cue List Rows",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -2280,7 +2280,7 @@ function GetControlLayout(props)
         
         
         
-        layout["l2_tc_rows"] = {
+        layout["L2TCRows"] = {
           PrettyName = "Modules~Layer 2 Cue List Rows",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -2296,7 +2296,7 @@ function GetControlLayout(props)
         }
         
         
-        layout["playlist_play_previous"] = {
+        layout["PlaylistPlayPrevious"] = {
           PrettyName = "Modules~Playlist Play Previous",
           ButtonStyle = "Toggle",
           ButtonVisualStyle = "Flat",
@@ -2315,7 +2315,7 @@ function GetControlLayout(props)
           Size = {3 * btn_size[1], btn_size[2]}
         }
         
-        layout["playlist_play_next"] = {
+        layout["PlaylistPlayNext"] = {
           PrettyName = "Modules~Playlist Play Next",
           ButtonStyle = "Toggle",
           ButtonVisualStyle = "Flat",
@@ -2334,7 +2334,7 @@ function GetControlLayout(props)
           Size = {3 * btn_size[1], btn_size[2]}
         }
         
-        layout["playlist_play_first"] = {
+        layout["PlaylistPlayFirst"] = {
           PrettyName = "Modules~Playlist Play First",
           ButtonStyle = "Toggle",
           ButtonVisualStyle = "Flat",
@@ -2353,7 +2353,7 @@ function GetControlLayout(props)
           Size = {3 * btn_size[1], btn_size[2]}
         }
         
-        layout["playlist_play_last"] = {
+        layout["PlaylistPlayLast"] = {
           PrettyName = "Modules~Playlist Play Last",
           ButtonStyle = "Toggle",
           ButtonVisualStyle = "Flat",
@@ -2372,7 +2372,7 @@ function GetControlLayout(props)
           Size = {3 * btn_size[1], btn_size[2]}
         }
         
-        layout["playlist_play_row"] = {
+        layout["PlaylistPlayRow"] = {
           PrettyName = "Modules~Playlist Play Row",
           ButtonStyle = "Toggle",
           ButtonVisualStyle = "Flat",
@@ -2391,7 +2391,7 @@ function GetControlLayout(props)
           Size = {3 * btn_size[1], btn_size[2]}
         }
         
-        layout["playlist_play_row_index"] = {
+        layout["PlaylistPlayRowIndex"] = {
           PrettyName = "Modules~Playlist Play Row Index",
           Style = "TextBox",
           Color = Colors.control_background,
@@ -2407,7 +2407,7 @@ function GetControlLayout(props)
         }
         
         
-        layout["system_restart"] = {
+        layout["SystemRestart"] = {
           PrettyName = "System~Reboot Device",
           Style = "Button",
           ButtonVisualStyle = "Flat",
@@ -2425,7 +2425,7 @@ function GetControlLayout(props)
           },
           Size = {4 * btn_size[1], btn_size[2]}
         }
-        layout["system_shutdown"] = {
+        layout["SystemShutdown"] = {
           PrettyName = "System~Shutdown Device",
           Style = "Button",
           ButtonVisualStyle = "Flat",
@@ -2444,7 +2444,7 @@ function GetControlLayout(props)
           Size = {4 * btn_size[1], btn_size[2]}
         }
         
-        layout["system_wake"] = {
+        layout["SystemWake"] = {
           PrettyName = "System~Wake Device",
           Style = "Button",
           ButtonVisualStyle = "Flat",
@@ -3574,7 +3574,7 @@ function fn_watch_parameters()
   watchPatchString(
     "/Status/Text",
     function(path, value)
-      Controls.activity.String = value
+      Controls.Activity.String = value
     end
   )
 
@@ -3611,7 +3611,7 @@ function fn_poll_info()
       function(path, value)
         fn_log_debug("Engine FPS: " .. value)
         engine_fps = tonumber(value) or 0
-        Controls.engine_fps.String = value
+        Controls.EngineFPS.String = value
       end
     )
     fn_update_sync_status()
@@ -3658,7 +3658,7 @@ function fn_update_sync_status()
       if code == 200 then
         local info = rapidjson.decode(data)
         fn_log_debug("BeeSync status: " .. info.status)
-        Controls.sync_status.String = info.status
+        Controls.SyncStatus.String = info.status
       else
         fn_log_error("Failed to get BeeSync status: HTTP " .. tostring(code))
       end
@@ -3768,7 +3768,7 @@ end
 function fn_process_playlist_row_update(path, value)
   fn_log_debug("Playlist active row updated to " .. tostring(value + 1))
   playlist_active_row = value + 1 -- convert from 0 based to 1 based
-  Controls.playlist_current_row.Value = playlist_active_row
+  Controls.PlaylistCurrentRow.Value = playlist_active_row
 end
 
 -- Handle double updates from the Hive player
@@ -3892,7 +3892,7 @@ function fn_process_JSON_update(path, value)
   if path == "/System Settings" then
     device_settings = value
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls["settings_json"].String = rapidjson.encode(value)
+      Controls.settings_json.String = rapidjson.encode(value)
     end
     fn_update_info()
   elseif path == "/Media List" then
@@ -3921,7 +3921,7 @@ function fn_process_JSON_update(path, value)
     fn_update_info()
   elseif path == "/Output Mapping" then
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls["mapping_json"].String = rapidjson.encode(value)
+      Controls.mapping_json.String = rapidjson.encode(value)
     end
   elseif path == "/Play List" then
     fn_log_debug(
@@ -3929,15 +3929,15 @@ function fn_process_JSON_update(path, value)
         tostring(value.list and #value.list or 0) .. ", enabled: " .. tostring(value.usePlayList)
     )
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls["playlist_json"].String = rapidjson.encode(value)
+      Controls.playlist_json.String = rapidjson.encode(value)
     end
     if value.usePlayList and value.usePlayList == 1 then
-      Controls.playlist_enable.Boolean = true
+      Controls.PlaylistEnable.Boolean = true
     else
-      Controls.playlist_enable.Boolean = false
+      Controls.PlaylistEnable.Boolean = false
     end
     playlist_row_count = value.list and #value.list or 0
-    Controls.playlist_rows.Value = playlist_row_count
+    Controls.PlaylistRows.Value = playlist_row_count
   elseif path == "/Timecode Cue List" then
     fn_log_debug(
       "Timecode Cue List updated, layer 1 items: " ..
@@ -3949,39 +3949,39 @@ function fn_process_JSON_update(path, value)
                   ", layer 2 enabled: " .. tostring(value.layers[2] and value.layers[2].useCueList == 1)
     )
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls["timecode_json"].String = rapidjson.encode(value)
+      Controls.timecode_json.String = rapidjson.encode(value)
     end
     if value.layers[1] and value.layers[1].useCueList == 1 then
-      Controls.l1_timecode_enable.Boolean = true
+      Controls.L1TimecodeEnable.Boolean = true
     else
-      Controls.l1_timecode_enable.Boolean = false
+      Controls.L1TimecodeEnable.Boolean = false
     end
     if value.layers[2] and value.layers[2].useCueList == 1 then
-      Controls.l2_timecode_enable.Boolean = true
+      Controls.L2TimecodeEnable.Boolean = true
     else
-      Controls.l2_timecode_enable.Boolean = false
+      Controls.L2TimecodeEnable.Boolean = false
     end
-    Controls.l1_tc_rows.Value = value.layers[1] and #(value.layers[1].list) or 0
-    Controls.l2_tc_rows.Value = value.layers[2] and #(value.layers[2].list) or 0
+    Controls.L1TCRows.Value = value.layers[1] and #(value.layers[1].list) or 0
+    Controls.L2TCRows.Value = value.layers[2] and #(value.layers[2].list) or 0
   elseif path == "/Schedule" then
     fn_log_debug("Schedule updated, enabled: " .. tostring(value.useSchedule))
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls["scheduler_json"].String = rapidjson.encode(value)
+      Controls.scheduler_json.String = rapidjson.encode(value)
     end
     if value.useSchedule and value.useSchedule == 1 then
-      Controls.schedule_enable.Boolean = true
+      Controls.ScheduleEnable.Boolean = true
     else
-      Controls.schedule_enable.Boolean = false
+      Controls.ScheduleEnable.Boolean = false
     end
   elseif path == "/Timeline" then
     fn_log_debug("Timeline updated, enabled: " .. tostring(value.useTimeline))
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls["timeline_json"].String = rapidjson.encode(value)
+      Controls.timeline_json.String = rapidjson.encode(value)
     end
     if value.useTimeline and value.useTimeline == 1 then
-      Controls.timeline_enable.Boolean = true
+      Controls.TimelineEnable.Boolean = true
     else
-      Controls.timeline_enable.Boolean = false
+      Controls.TimelineEnable.Boolean = false
     end
   elseif path == "/Vioso WB Settings" then
   elseif path == "/Screenberry WB Settings" then
@@ -4005,7 +4005,7 @@ function fn_update_info()
       if code == 200 then
         local info = rapidjson.decode(data)
         fn_log_debug("Device info received")
-        Controls.version.String = info.hiveVersion
+        Controls.Version.String = info.hiveVersion
 
         if info and info.tileList then
           device_info = nil
@@ -4018,15 +4018,15 @@ function fn_update_info()
           if device_info then
             Controls.DeviceName.String = device_info.deviceName
             Controls.IPAddress.String = device_info.ipAddress
-            Controls.netmask.String = device_info.netMask
-            Controls.output_framerate.String = device_info.rate
-            Controls.output_resolution.String = string.format("%s x %s", device_info.resX, device_info.resY)
+            Controls.Netmask.String = device_info.netMask
+            Controls.OutputFramerate.String = device_info.rate
+            Controls.OutputResolution.String = string.format("%s x %s", device_info.resX, device_info.resY)
             Controls.SerialNumber.String = device_info.serial
-            Controls.bee_type.String = (device_info.beeType == 1) and "Queen" or "Worker"
-            Controls.file_count.String = device_info.nFiles
-            Controls.cpu_power.String = device_info.power
-            Controls.universe.String = device_settings.dmxUniverse
-            Controls.free_space.String = string.format("%.2f GB", tonumber(device_info.space) / (1024 * 1024 * 1024))
+            Controls.BeeType.String = (device_info.beeType == 1) and "Queen" or "Worker"
+            Controls.FileCount.String = device_info.nFiles
+            Controls.CpuPower.String = device_info.power
+            Controls.Universe.String = device_settings.dmxUniverse
+            Controls.FreeSpace.String = string.format("%.2f GB", tonumber(device_info.space) / (1024 * 1024 * 1024))
           end
         end
       else
@@ -4110,7 +4110,7 @@ function fn_update_preview_thumbnail(layer, filename)
             tonumber(layer) == 1 and
               (Properties["Output Video Preview"].Value == "Disabled" or not Controls["preview_enable"].Boolean)
            then
-            Controls["output_preview"].Style = rapidjson.encode(iconStyle)
+            Controls.OutputPreview.Style = rapidjson.encode(iconStyle)
           end
         end
       end
@@ -4783,48 +4783,48 @@ for i = 1, layer_count do
   end
 end
 
-Controls["playlist_enable"].EventHandler = function()
-  cmd_enable_playlist(Controls.playlist_enable.Boolean and 1 or 0)
+Controls.PlaylistEnable.EventHandler = function()
+  cmd_enable_playlist(Controls.PlaylistEnable.Boolean and 1 or 0)
 end
-Controls["timeline_enable"].EventHandler = function()
-  cmd_enable_timeline(Controls.timeline_enable.Boolean and 1 or 0)
+Controls.TimelineEnable.EventHandler = function()
+  cmd_enable_timeline(Controls.TimelineEnable.Boolean and 1 or 0)
 end
-Controls["schedule_enable"].EventHandler = function()
-  cmd_enable_schedule(Controls.schedule_enable.Boolean and 1 or 0)
+Controls.ScheduleEnable.EventHandler = function()
+  cmd_enable_schedule(Controls.ScheduleEnable.Boolean and 1 or 0)
 end
-Controls["l1_timecode_enable"].EventHandler = function()
-  cmd_enable_tc1(Controls.l1_timecode_enable.Boolean and 1 or 0)
+Controls.L1TimecodeEnable.EventHandler = function()
+  cmd_enable_tc1(Controls.L1TimecodeEnable.Boolean and 1 or 0)
 end
-Controls["l2_timecode_enable"].EventHandler = function()
-  cmd_enable_tc2(Controls.l2_timecode_enable.Boolean and 1 or 0)
+Controls.L2TimecodeEnable.EventHandler = function()
+  cmd_enable_tc2(Controls.L2TimecodeEnable.Boolean and 1 or 0)
 end
-Controls["playlist_play_previous"].EventHandler = function()
+Controls.PlaylistPlayPrevious.EventHandler = function()
   cmd_playlist_play_previous()
 end
-Controls["playlist_play_next"].EventHandler = function()
+Controls.PlaylistPlayNext.EventHandler = function()
   cmd_playlist_play_next()
 end
-Controls["playlist_play_first"].EventHandler = function()
+Controls.PlaylistPlayFirst.EventHandler = function()
   cmd_playlist_play_first()
 end
-Controls["playlist_play_last"].EventHandler = function()
+Controls.PlaylistPlayLast.EventHandler = function()
   cmd_playlist_play_last()
 end
-Controls["playlist_play_row"].EventHandler = function()
-  if Controls.playlist_play_row_index.String ~= "" then
-    local row = tonumber(Controls.playlist_play_row_index.String)
+Controls.PlaylistPlayRow.EventHandler = function()
+  if Controls.PlaylistPlayRowIndex.String ~= "" then
+    local row = tonumber(Controls.PlaylistPlayRowIndex.String)
     if row then
       cmd_playlist_play_row(row)
     end
   end
 end
-Controls["system_shutdown"].EventHandler = function()
+Controls.SystemShutdown.EventHandler = function()
   cmd_shutdown()
 end
-Controls["system_restart"].EventHandler = function()
+Controls.SystemRestart.EventHandler = function()
   cmd_restart()
 end
-Controls["system_wake"].EventHandler = function()
+Controls.SystemWake.EventHandler = function()
   cmd_wake()
 end
 

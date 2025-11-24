@@ -33,7 +33,7 @@ function fn_watch_parameters()
   watchPatchString(
     "/Status/Text",
     function(path, value)
-      Controls.activity.String = value
+      Controls.Activity.String = value
     end
   )
 
@@ -70,7 +70,7 @@ function fn_poll_info()
       function(path, value)
         fn_log_debug("Engine FPS: " .. value)
         engine_fps = tonumber(value) or 0
-        Controls.engine_fps.String = value
+        Controls.EngineFPS.String = value
       end
     )
     fn_update_sync_status()
@@ -117,7 +117,7 @@ function fn_update_sync_status()
       if code == 200 then
         local info = rapidjson.decode(data)
         fn_log_debug("BeeSync status: " .. info.status)
-        Controls.sync_status.String = info.status
+        Controls.SyncStatus.String = info.status
       else
         fn_log_error("Failed to get BeeSync status: HTTP " .. tostring(code))
       end
@@ -227,7 +227,7 @@ end
 function fn_process_playlist_row_update(path, value)
   fn_log_debug("Playlist active row updated to " .. tostring(value + 1))
   playlist_active_row = value + 1 -- convert from 0 based to 1 based
-  Controls.playlist_current_row.Value = playlist_active_row
+  Controls.PlaylistCurrentRow.Value = playlist_active_row
 end
 
 -- Handle double updates from the Hive player
@@ -351,7 +351,7 @@ function fn_process_JSON_update(path, value)
   if path == "/System Settings" then
     device_settings = value
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls["settings_json"].String = rapidjson.encode(value)
+      Controls.settings_json.String = rapidjson.encode(value)
     end
     fn_update_info()
   elseif path == "/Media List" then
@@ -380,7 +380,7 @@ function fn_process_JSON_update(path, value)
     fn_update_info()
   elseif path == "/Output Mapping" then
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls["mapping_json"].String = rapidjson.encode(value)
+      Controls.mapping_json.String = rapidjson.encode(value)
     end
   elseif path == "/Play List" then
     fn_log_debug(
@@ -388,15 +388,15 @@ function fn_process_JSON_update(path, value)
         tostring(value.list and #value.list or 0) .. ", enabled: " .. tostring(value.usePlayList)
     )
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls["playlist_json"].String = rapidjson.encode(value)
+      Controls.playlist_json.String = rapidjson.encode(value)
     end
     if value.usePlayList and value.usePlayList == 1 then
-      Controls.playlist_enable.Boolean = true
+      Controls.PlaylistEnable.Boolean = true
     else
-      Controls.playlist_enable.Boolean = false
+      Controls.PlaylistEnable.Boolean = false
     end
     playlist_row_count = value.list and #value.list or 0
-    Controls.playlist_rows.Value = playlist_row_count
+    Controls.PlaylistRows.Value = playlist_row_count
   elseif path == "/Timecode Cue List" then
     fn_log_debug(
       "Timecode Cue List updated, layer 1 items: " ..
@@ -408,39 +408,39 @@ function fn_process_JSON_update(path, value)
                   ", layer 2 enabled: " .. tostring(value.layers[2] and value.layers[2].useCueList == 1)
     )
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls["timecode_json"].String = rapidjson.encode(value)
+      Controls.timecode_json.String = rapidjson.encode(value)
     end
     if value.layers[1] and value.layers[1].useCueList == 1 then
-      Controls.l1_timecode_enable.Boolean = true
+      Controls.L1TimecodeEnable.Boolean = true
     else
-      Controls.l1_timecode_enable.Boolean = false
+      Controls.L1TimecodeEnable.Boolean = false
     end
     if value.layers[2] and value.layers[2].useCueList == 1 then
-      Controls.l2_timecode_enable.Boolean = true
+      Controls.L2TimecodeEnable.Boolean = true
     else
-      Controls.l2_timecode_enable.Boolean = false
+      Controls.L2TimecodeEnable.Boolean = false
     end
-    Controls.l1_tc_rows.Value = value.layers[1] and #(value.layers[1].list) or 0
-    Controls.l2_tc_rows.Value = value.layers[2] and #(value.layers[2].list) or 0
+    Controls.L1TCRows.Value = value.layers[1] and #(value.layers[1].list) or 0
+    Controls.L2TCRows.Value = value.layers[2] and #(value.layers[2].list) or 0
   elseif path == "/Schedule" then
     fn_log_debug("Schedule updated, enabled: " .. tostring(value.useSchedule))
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls["scheduler_json"].String = rapidjson.encode(value)
+      Controls.scheduler_json.String = rapidjson.encode(value)
     end
     if value.useSchedule and value.useSchedule == 1 then
-      Controls.schedule_enable.Boolean = true
+      Controls.ScheduleEnable.Boolean = true
     else
-      Controls.schedule_enable.Boolean = false
+      Controls.ScheduleEnable.Boolean = false
     end
   elseif path == "/Timeline" then
     fn_log_debug("Timeline updated, enabled: " .. tostring(value.useTimeline))
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      Controls["timeline_json"].String = rapidjson.encode(value)
+      Controls.timeline_json.String = rapidjson.encode(value)
     end
     if value.useTimeline and value.useTimeline == 1 then
-      Controls.timeline_enable.Boolean = true
+      Controls.TimelineEnable.Boolean = true
     else
-      Controls.timeline_enable.Boolean = false
+      Controls.TimelineEnable.Boolean = false
     end
   elseif path == "/Vioso WB Settings" then
   elseif path == "/Screenberry WB Settings" then
@@ -464,7 +464,7 @@ function fn_update_info()
       if code == 200 then
         local info = rapidjson.decode(data)
         fn_log_debug("Device info received")
-        Controls.version.String = info.hiveVersion
+        Controls.Version.String = info.hiveVersion
 
         if info and info.tileList then
           device_info = nil
@@ -477,15 +477,15 @@ function fn_update_info()
           if device_info then
             Controls.DeviceName.String = device_info.deviceName
             Controls.IPAddress.String = device_info.ipAddress
-            Controls.netmask.String = device_info.netMask
-            Controls.output_framerate.String = device_info.rate
-            Controls.output_resolution.String = string.format("%s x %s", device_info.resX, device_info.resY)
+            Controls.Netmask.String = device_info.netMask
+            Controls.OutputFramerate.String = device_info.rate
+            Controls.OutputResolution.String = string.format("%s x %s", device_info.resX, device_info.resY)
             Controls.SerialNumber.String = device_info.serial
-            Controls.bee_type.String = (device_info.beeType == 1) and "Queen" or "Worker"
-            Controls.file_count.String = device_info.nFiles
-            Controls.cpu_power.String = device_info.power
-            Controls.universe.String = device_settings.dmxUniverse
-            Controls.free_space.String = string.format("%.2f GB", tonumber(device_info.space) / (1024 * 1024 * 1024))
+            Controls.BeeType.String = (device_info.beeType == 1) and "Queen" or "Worker"
+            Controls.FileCount.String = device_info.nFiles
+            Controls.CpuPower.String = device_info.power
+            Controls.Universe.String = device_settings.dmxUniverse
+            Controls.FreeSpace.String = string.format("%.2f GB", tonumber(device_info.space) / (1024 * 1024 * 1024))
           end
         end
       else
@@ -569,7 +569,7 @@ function fn_update_preview_thumbnail(layer, filename)
             tonumber(layer) == 1 and
               (Properties["Output Video Preview"].Value == "Disabled" or not Controls["preview_enable"].Boolean)
            then
-            Controls["output_preview"].Style = rapidjson.encode(iconStyle)
+            Controls.OutputPreview.Style = rapidjson.encode(iconStyle)
           end
         end
       end

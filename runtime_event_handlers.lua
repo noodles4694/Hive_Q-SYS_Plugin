@@ -175,48 +175,48 @@ for i = 1, layer_count do
   end
 end
 
-Controls["playlist_enable"].EventHandler = function()
-  cmd_enable_playlist(Controls.playlist_enable.Boolean and 1 or 0)
+Controls.PlaylistEnable.EventHandler = function()
+  cmd_enable_playlist(Controls.PlaylistEnable.Boolean and 1 or 0)
 end
-Controls["timeline_enable"].EventHandler = function()
-  cmd_enable_timeline(Controls.timeline_enable.Boolean and 1 or 0)
+Controls.TimelineEnable.EventHandler = function()
+  cmd_enable_timeline(Controls.TimelineEnable.Boolean and 1 or 0)
 end
-Controls["schedule_enable"].EventHandler = function()
-  cmd_enable_schedule(Controls.schedule_enable.Boolean and 1 or 0)
+Controls.ScheduleEnable.EventHandler = function()
+  cmd_enable_schedule(Controls.ScheduleEnable.Boolean and 1 or 0)
 end
-Controls["l1_timecode_enable"].EventHandler = function()
-  cmd_enable_tc1(Controls.l1_timecode_enable.Boolean and 1 or 0)
+Controls.L1TimecodeEnable.EventHandler = function()
+  cmd_enable_tc1(Controls.L1TimecodeEnable.Boolean and 1 or 0)
 end
-Controls["l2_timecode_enable"].EventHandler = function()
-  cmd_enable_tc2(Controls.l2_timecode_enable.Boolean and 1 or 0)
+Controls.L2TimecodeEnable.EventHandler = function()
+  cmd_enable_tc2(Controls.L2TimecodeEnable.Boolean and 1 or 0)
 end
-Controls["playlist_play_previous"].EventHandler = function()
+Controls.PlaylistPlayPrevious.EventHandler = function()
   cmd_playlist_play_previous()
 end
-Controls["playlist_play_next"].EventHandler = function()
+Controls.PlaylistPlayNext.EventHandler = function()
   cmd_playlist_play_next()
 end
-Controls["playlist_play_first"].EventHandler = function()
+Controls.PlaylistPlayFirst.EventHandler = function()
   cmd_playlist_play_first()
 end
-Controls["playlist_play_last"].EventHandler = function()
+Controls.PlaylistPlayLast.EventHandler = function()
   cmd_playlist_play_last()
 end
-Controls["playlist_play_row"].EventHandler = function()
-  if Controls.playlist_play_row_index.String ~= "" then
-    local row = tonumber(Controls.playlist_play_row_index.String)
+Controls.PlaylistPlayRow.EventHandler = function()
+  if Controls.PlaylistPlayRowIndex.String ~= "" then
+    local row = tonumber(Controls.PlaylistPlayRowIndex.String)
     if row then
       cmd_playlist_play_row(row)
     end
   end
 end
-Controls["system_shutdown"].EventHandler = function()
+Controls.SystemShutdown.EventHandler = function()
   cmd_shutdown()
 end
-Controls["system_restart"].EventHandler = function()
+Controls.SystemRestart.EventHandler = function()
   cmd_restart()
 end
-Controls["system_wake"].EventHandler = function()
+Controls.SystemWake.EventHandler = function()
   cmd_wake()
 end
 

@@ -39,7 +39,7 @@ table.insert(
   }
 )
 
-layout["playlist_enable"] = {
+layout["PlaylistEnable"] = {
   PrettyName = "Modules~Playlist Enable",
   Style = "Button",
   ButtonStyle = "Toggle",
@@ -56,7 +56,7 @@ layout["playlist_enable"] = {
   Size = {3 * btn_size[1], btn_size[2]}
 }
 
-layout["l1_timecode_enable"] = {
+layout["L1TimecodeEnable"] = {
   PrettyName = "Modules~Layer 1 TC Cuelist Enable",
   Style = "Button",
   ButtonStyle = "Toggle",
@@ -73,7 +73,7 @@ layout["l1_timecode_enable"] = {
   Size = {3 * btn_size[1], btn_size[2]}
 }
 
-layout["l2_timecode_enable"] = {
+layout["L2TimecodeEnable"] = {
   PrettyName = "Modules~Layer 2 TC Cuelist Enable",
   Style = "Button",
   ButtonStyle = "Toggle",
@@ -89,7 +89,7 @@ layout["l2_timecode_enable"] = {
   Position = {(6 * btn_size[1]) + (6 * btn_gap[1]), btn_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["timeline_enable"] = {
+layout["TimelineEnable"] = {
   PrettyName = "Modules~Timeline Enable",
   Style = "Button",
   ButtonStyle = "Toggle",
@@ -105,7 +105,7 @@ layout["timeline_enable"] = {
   Position = {(9 * btn_size[1]) + (8 * btn_gap[1]), btn_size[2]},
   Size = {3 * btn_size[1], btn_size[2]}
 }
-layout["schedule_enable"] = {
+layout["ScheduleEnable"] = {
   PrettyName = "Modules~Schedule Enable",
   Style = "Button",
   ButtonStyle = "Toggle",
@@ -192,7 +192,7 @@ table.insert(
   }
 )
 
-layout["playlist_rows"] = {
+layout["PlaylistRows"] = {
   PrettyName = "Modules~Playlist Rows",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -207,7 +207,7 @@ layout["playlist_rows"] = {
   Size = {3 * btn_size[1], btn_size[2]}
 }
 
-layout["playlist_current_row"] = {
+layout["PlaylistCurrentRow"] = {
   PrettyName = "Modules~Playlist Current Row",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -222,7 +222,7 @@ layout["playlist_current_row"] = {
   Size = {3 * btn_size[1], btn_size[2]}
 }
 
-layout["l1_tc_rows"] = {
+layout["L1TCRows"] = {
   PrettyName = "Modules~Layer 1 Cue List Rows",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -239,7 +239,7 @@ layout["l1_tc_rows"] = {
 
 
 
-layout["l2_tc_rows"] = {
+layout["L2TCRows"] = {
   PrettyName = "Modules~Layer 2 Cue List Rows",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -255,7 +255,7 @@ layout["l2_tc_rows"] = {
 }
 
 
-layout["playlist_play_previous"] = {
+layout["PlaylistPlayPrevious"] = {
   PrettyName = "Modules~Playlist Play Previous",
   ButtonStyle = "Toggle",
   ButtonVisualStyle = "Flat",
@@ -274,7 +274,7 @@ layout["playlist_play_previous"] = {
   Size = {3 * btn_size[1], btn_size[2]}
 }
 
-layout["playlist_play_next"] = {
+layout["PlaylistPlayNext"] = {
   PrettyName = "Modules~Playlist Play Next",
   ButtonStyle = "Toggle",
   ButtonVisualStyle = "Flat",
@@ -293,7 +293,7 @@ layout["playlist_play_next"] = {
   Size = {3 * btn_size[1], btn_size[2]}
 }
 
-layout["playlist_play_first"] = {
+layout["PlaylistPlayFirst"] = {
   PrettyName = "Modules~Playlist Play First",
   ButtonStyle = "Toggle",
   ButtonVisualStyle = "Flat",
@@ -312,7 +312,7 @@ layout["playlist_play_first"] = {
   Size = {3 * btn_size[1], btn_size[2]}
 }
 
-layout["playlist_play_last"] = {
+layout["PlaylistPlayLast"] = {
   PrettyName = "Modules~Playlist Play Last",
   ButtonStyle = "Toggle",
   ButtonVisualStyle = "Flat",
@@ -331,7 +331,7 @@ layout["playlist_play_last"] = {
   Size = {3 * btn_size[1], btn_size[2]}
 }
 
-layout["playlist_play_row"] = {
+layout["PlaylistPlayRow"] = {
   PrettyName = "Modules~Playlist Play Row",
   ButtonStyle = "Toggle",
   ButtonVisualStyle = "Flat",
@@ -350,7 +350,7 @@ layout["playlist_play_row"] = {
   Size = {3 * btn_size[1], btn_size[2]}
 }
 
-layout["playlist_play_row_index"] = {
+layout["PlaylistPlayRowIndex"] = {
   PrettyName = "Modules~Playlist Play Row Index",
   Style = "TextBox",
   Color = Colors.control_background,
@@ -366,7 +366,7 @@ layout["playlist_play_row_index"] = {
 }
 
 
-layout["system_restart"] = {
+layout["SystemRestart"] = {
   PrettyName = "System~Reboot Device",
   Style = "Button",
   ButtonVisualStyle = "Flat",
@@ -384,7 +384,7 @@ layout["system_restart"] = {
   },
   Size = {4 * btn_size[1], btn_size[2]}
 }
-layout["system_shutdown"] = {
+layout["SystemShutdown"] = {
   PrettyName = "System~Shutdown Device",
   Style = "Button",
   ButtonVisualStyle = "Flat",
@@ -403,7 +403,7 @@ layout["system_shutdown"] = {
   Size = {4 * btn_size[1], btn_size[2]}
 }
 
-layout["system_wake"] = {
+layout["SystemWake"] = {
   PrettyName = "System~Wake Device",
   Style = "Button",
   ButtonVisualStyle = "Flat",
