@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.575",
+  BuildVersion = "0.0.0.604",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -26,543 +26,735 @@ local Colors = {
   control_label = {170, 170, 170},
   control_background = {18, 22, 26},
   control_background_light = {64, 64, 64},
-  control_text = {170, 170, 170},
+  control_text = {170, 170, 170}
 }
 
 -- Define a list of controls with their properties
 local control_list = {
-  ["File Select"] = {
-    Name = "file_select_",
+  [1] = {
+    Name = "FileSelect",
+    Label = "File Select",
+    Path = "FILE SELECT",
     ControlType = "Text",
     Style = "ComboBox",
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["File Select Index"] = {
-    Name = "file_select_index_",
+  [2] = {
+    Name = "FileSelectIndex",
+    Label = "File Select Index",
+    Path = "FILE SELECT INDEX",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "None",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = false,
+    Display = false,
     UserPin = true
   },
-  ["Folder Select"] = {
-    Name = "folder_select_",
+  [3] = {
+    Name = "FolderSelect",
+    Label = "Folder Select",
+    Path = "FOLDER SELECT",
     ControlType = "Text",
     Style = "ComboBox",
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Folder Select Index"] = {
-    Name = "folder_select_index_",
+  [4] = {
+    Name = "FolderSelectIndex",
+    Label = "Folder Select Index",
+    Path = "FOLDER SELECT INDEX",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "None",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = false,
+    Display = false,
     UserPin = true
   },
-  ["Time Elapsed"] = {
-    Name = "time_elapsed_",
+  [5] = {
+    Name = "TimeElapsed",
+    Label = "Time Elapsed",
+    Path = "TIME ELAPSED",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
+    Group = "Layer",
+    Watch = false,
+    Display = true,
     UserPin = true
   },
-  ["Duration"] = {
-    Name = "duration_",
+  [6] = {
+    Name = "Duration",
+    Label = "Duration",
+    Path = "DURATION",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
+    Group = "Layer",
+    Watch = false,
+    Display = true,
     UserPin = true
   },
-  ["Seek"] = {
-    Name = "seek_",
+  [7] = {
+    Name = "Seek",
+    Label = "Seek",
+    Path = "SEEK",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Fader",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = false,
+    Display = true,
     UserPin = true
   },
-  ["Intensity"] = {
-    Name = "intensity_",
+  [8] = {
+    Name = "Intensity",
+    Label = "Intensity",
+    Path = "INTENSITY",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["In Frame"] = {
-    Name = "in_frame_",
+  [9] = {
+    Name = "InFrame",
+    Label = "In Frame",
+    Path = "IN FRAME",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
     Min = 0,
     Max = 9999999,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Out Frame"] = {
-    Name = "out_frame_",
+  [10] = {
+    Name = "OutFrame",
+    Label = "Out Frame",
+    Path = "OUT FRAME",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
     Min = 0,
     Max = 9999999,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Play Mode"] = {
-    Name = "play_mode_",
+  [11] = {
+    Name = "PlayMode",
+    Label = "Play Mode",
+    Path = "PLAY MODE",
     ControlType = "Text",
     Style = "ComboBox",
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Play Mode Index"] = {
-    Name = "play_mode_index_",
+  [12] = {
+    Name = "PlayModeIndex",
+    Label = "Play Mode Index",
+    Path = "PLAY MODE INDEX",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "None",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = false,
+    Display = false,
     UserPin = true
   },
-  ["Framing Mode"] = {
-    Name = "framing_mode_",
+  [13] = {
+    Name = "FramingMode",
+    Label = "Framing Mode",
+    Path = "FRAMING MODE",
     ControlType = "Text",
     Style = "ComboBox",
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Framing Mode Index"] = {
-    Name = "framing_mode_index_",
+  [14] = {
+    Name = "FramingModeIndex",
+    Label = "Framing Mode Index",
+    Path = "FRAMING MODE INDEX",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "None",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = false,
+    Display = false,
     UserPin = true
   },
-  ["Blend Mode"] = {
-    Name = "blend_mode_",
+  [15] = {
+    Name = "BlendMode",
+    Label = "Blend Mode",
+    Path = "BLEND MODE",
     ControlType = "Text",
     Style = "ComboBox",
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Blend Mode Index"] = {
-    Name = "blend_mode_index_",
+  [16] = {
+    Name = "BlendModeIndex",
+    Label = "Blend Mode Index",
+    Path = "BLEND MODE INDEX",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "None",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = false,
+    Display = false,
     UserPin = true
   },
-  ["LUT"] = {
-    Name = "lut_",
+  [17] = {
+    Name = "Lut",
+    Label = "LUT",
+    Path = "LUT",
     ControlType = "Text",
     Style = "ComboBox",
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["LUT Index"] = {
-    Name = "lut_index_",
+  [18] = {
+    Name = "LutIndex",
+    Label = "LUT Index",
+    Path = "LUT INDEX",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "None",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = false,
+    Display = false,
     UserPin = true
   },
-  ["Play Speed"] = {
-    Name = "play_speed_",
+  [19] = {
+    Name = "PlaySpeed",
+    Label = "Play Speed",
+    Path = "PLAY SPEED",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 1000,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Move Speed"] = {
-    Name = "move_speed_",
+  [20] = {
+    Name = "MoveSpeed",
+    Label = "Move Speed",
+    Path = "MOVE SPEED",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["MTC Hour"] = {
-    Name = "mtc_hour_",
+  [21] = {
+    Name = "MtcHour",
+    Label = "MTC Hour",
+    Path = "MTC HOUR",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
     Min = 0,
     Max = 23,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["MTC Minute"] = {
-    Name = "mtc_minute_",
+  [22] = {
+    Name = "MtcMinute",
+    Label = "MTC Minute",
+    Path = "MTC MINUTE",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
     Min = 0,
     Max = 59,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["MTC Second"] = {
-    Name = "mtc_second_",
+  [23] = {
+    Name = "MtcSecond",
+    Label = "MTC Second",
+    Path = "MTC SECOND",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
     Min = 0,
     Max = 59,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["MTC Frame"] = {
-    Name = "mtc_frame_",
+  [24] = {
+    Name = "MtcFrame",
+    Label = "MTC Frame",
+    Path = "MTC FRAME",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
     Min = 0,
     Max = 59,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Scale"] = {
-    Name = "scale_",
+  [25] = {
+    Name = "Scale",
+    Label = "Scale",
+    Path = "SCALE",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 1000,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Aspect Ratio"] = {
-    Name = "aspect_ratio_",
+  [26] = {
+    Name = "AspectRatio",
+    Label = "Aspect Ratio",
+    Path = "ASPECT RATIO",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Position X"] = {
-    Name = "position_x_",
+  [27] = {
+    Name = "PositionX",
+    Label = "Position X",
+    Path = "POSITION X",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -100,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Position Y"] = {
-    Name = "position_y_",
+  [28] = {
+    Name = "PositionY",
+    Label = "Position Y",
+    Path = "POSITION Y",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -100,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Rotation X"] = {
-    Name = "rotation_x_",
+  [29] = {
+    Name = "RotationX",
+    Label = "Rotation X",
+    Path = "ROTATION X",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -1440,
     Max = 1440,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Rotation Y"] = {
-    Name = "rotation_y_",
+  [30] = {
+    Name = "RotationY",
+    Label = "Rotation Y",
+    Path = "ROTATION Y",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -1440,
     Max = 1440,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Rotation Z"] = {
-    Name = "rotation_z_",
+  [31] = {
+    Name = "RotationZ",
+    Label = "Rotation Z",
+    Path = "ROTATION Z",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -1440,
     Max = 1440,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Red"] = {
-    Name = "red_",
+  [32] = {
+    Name = "Red",
+    Label = "Red",
+    Path = "RED",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -100,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Green"] = {
-    Name = "green_",
+  [33] = {
+    Name = "Green",
+    Label = "Green",
+    Path = "GREEN",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -100,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Blue"] = {
-    Name = "blue_",
+  [34] = {
+    Name = "Blue",
+    Label = "Blue",
+    Path = "BLUE",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -100,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Hue"] = {
-    Name = "hue_",
+  [35] = {
+    Name = "Hue",
+    Label = "Hue",
+    Path = "HUE",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Saturation"] = {
-    Name = "saturation_",
+  [36] = {
+    Name = "Saturation",
+    Label = "Saturation",
+    Path = "SATURATION",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -100,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Contrast"] = {
-    Name = "contrast_",
+  [37] = {
+    Name = "Contrast",
+    Label = "Contrast",
+    Path = "CONTRAST",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -100,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Strobe"] = {
-    Name = "strobe_",
+  [38] = {
+    Name = "Strobe",
+    Label = "Strobe",
+    Path = "STROBE",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Volume"] = {
-    Name = "volume_",
+  [39] = {
+    Name = "Volume",
+    Label = "Volume",
+    Path = "VOLUME",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Transition Duration"] = {
-    Name = "transition_duration_",
+  [40] = {
+    Name = "TransitionDuration",
+    Label = "Transition Duration",
+    Path = "TRANSITION DURATION",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Transition Mode"] = {
-    Name = "transition_mode_",
+  [41] = {
+    Name = "TransitionMode",
+    Label = "Transition Mode",
+    Path = "TRANSITION MODE",
     ControlType = "Text",
     Style = "ComboBox",
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Transition Mode Index"] = {
-    Name = "transition_mode_index_",
+  [42] = {
+    Name = "TransitionModeIndex",
+    Label = "Transition Mode Index",
+    Path = "TRANSITION MODE INDEX",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "None",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Display = false,
+    Watch = false,
     UserPin = true
   },
-}
--- Create a list of parameter names for easy reference
-local parameter_list = {
-  "Folder Select",
-  "File Select",
-  "Time Elapsed",
-  "Duration",
-  "Seek",
-  "Intensity",
-  "In Frame",
-  "Out Frame",
-  "Play Mode",
-  "Framing Mode",
-  "Blend Mode",
-  "LUT",
-  "Play Speed",
-  "Move Speed",
-  "MTC Hour",
-  "MTC Minute",
-  "MTC Second",
-  "MTC Frame",
-  "Scale",
-  "Aspect Ratio",
-  "Position X",
-  "Position Y",
-  "Rotation X",
-  "Rotation Y",
-  "Rotation Z",
-  "Red",
-  "Green",
-  "Blue",
-  "Hue",
-  "Saturation",
-  "Contrast",
-  "Strobe",
-  "Volume",
-  "Transition Duration",
-  "Transition Mode"
-}
-
-local pinonly_list = {
-"File Select Index",
-"Folder Select Index",
-"Play Mode Index",
-"Framing Mode Index",
-"Blend Mode Index",
-"LUT Index",
-"Transition Mode Index",
-"FX1 Select Index",
-"FX2 Select Index"
-}
-
-local fx1_list = {}
-local fx2_list = {}
--- Add FX1 and FX2 parameters to fx1_list, fx2_list
-control_list["FX1 Select"] = {
-  Name = "fx1_select_",
-  ControlType = "Text",
-  Style = "ComboBox",
-  PinStyle = "Both",
-  UserPin = true
-}
-control_list["FX1 Select Index"] = {
-  Name = "fx1_select_index_",
-  ControlType = "Knob",
-  ControlUnit = "Integer",
-  Style = "None",
-  Min = 0,
-  Max = 65535,
-  PinStyle = "Both",
-  UserPin = true
-}
-fx1_list[#fx1_list + 1] = "FX1 Select"
-control_list["FX1 Opacity"] = {
-  Name = "fx1_opacity_",
-  ControlType = "Knob",
-  ControlUnit = "Percent",
-  Style = "Text Field",
-  Min = 0,
-  Max = 100,
-  PinStyle = "Both",
-  UserPin = true
-}
-fx1_list[#fx1_list + 1] = "FX1 Opacity"
-for i = 1, 16 do
-  control_list["FX1 Param " .. i] = {
-    Name = "fx1_param_" .. i .. "_",
+  [43] = {
+    Name = "FX1Select",
+    Label = "FX1 Select",
+    Path = "FX1 SELECT",
+    ControlType = "Text",
+    Style = "ComboBox",
+    PinStyle = "Both",
+    Group = "FX1",
+    Display = true,
+    Watch = true,
+    UserPin = true
+  },
+  [44] = {
+    Name = "FX1SelectIndex",
+    Label = "FX1 Select Index",
+    Path = "FX1 SELECT INDEX",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
+    PinStyle = "Both",
+    Group = "FX1",
+    Display = false,
+    Watch = false,
+    UserPin = true
+  },
+  [45] = {
+    Name = "FX1Opacity",
+    Label = "FX1 Opacity",
+    Path = "FX1 OPACITY",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "FX1",
+    Display = true,
+    Watch = true,
     UserPin = true
-  }
-  fx1_list[#fx1_list + 1] = "FX1 Param " .. i
-end
-control_list["FX2 Select"] = {
-  Name = "fx2_select_",
-  ControlType = "Text",
-  Style = "ComboBox",
-  PinStyle = "Both",
-  UserPin = true
-}
-fx2_list[#fx2_list + 1] = "FX2 Select"
-control_list["FX2 Opacity"] = {
-  Name = "fx2_opacity_",
-  ControlType = "Knob",
-  ControlUnit = "Percent",
-  Style = "Text Field",
-  Min = 0,
-  Max = 100,
-  PinStyle = "Both",
-  UserPin = true
-}
-control_list["FX2 Select Index"] = {
-  Name = "fx2_select_index_",
-  ControlType = "Knob",
-  ControlUnit = "Integer",
-  Style = "None",
-  Min = 0,
-  Max = 65535,
-  PinStyle = "Both",
-  UserPin = true
-}
-fx2_list[#fx2_list + 1] = "FX2 Opacity"
-
-for i = 1, 16 do
-  control_list["FX2 Param " .. i] = {
-    Name = "fx2_param_" .. i .. "_",
+  },
+  [62] = {
+    Name = "FX2Select",
+    Label = "FX2 Select",
+    Path = "FX2 SELECT",
+    ControlType = "Text",
+    Style = "ComboBox",
+    PinStyle = "Both",
+    Group = "FX2",
+    Display = true,
+    Watch = true,
+    UserPin = true
+  },
+  [63] = {
+    Name = "FX2SelectIndex",
+    Label = "FX2 Select Index",
+    Path = "FX2 SELECT INDEX",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
+    PinStyle = "Both",
+    Group = "FX2",
+    Display = false,
+    Watch = false,
+    UserPin = true
+  },
+  [64] = {
+    Name = "FX2Opacity",
+    Label = "FX2 Opacity",
+    Path = "FX2 OPACITY",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "FX2",
+    Display = true,
+    Watch = true,
     UserPin = true
   }
-  fx2_list[#fx2_list + 1] = "FX2 Param " .. i
+}
+
+for i = 1, 16 do
+  control_list[45 + i] = {
+    Name = "FX1Param" .. i,
+    Label = "FX1 Param " .. i,
+    Path = "FX1 PARAM " .. i,
+    ControlType = "Knob",
+    ControlUnit = "Percent",
+    Style = "Text Field",
+    Min = 0,
+    Max = 100,
+    PinStyle = "Both",
+    Group = "FX1",
+    Display = true,
+    Watch = true,
+    UserPin = true
+  }
+  control_list[64 + i] = {
+    Name = "FX2Param" .. i,
+    Label = "FX2 Param " .. i,
+    Path = "FX2 PARAM " .. i,
+    ControlType = "Knob",
+    ControlUnit = "Percent",
+    Style = "Text Field",
+    Min = 0,
+    Max = 100,
+    PinStyle = "Both",
+    Group = "FX2",
+    Display = true,
+    Watch = true,
+    UserPin = true
+  }
 end
+
+
+
+
 -- Define the color of the plugin object in the design
 function GetColor(props)
   return Colors.hive_yellow
@@ -918,55 +1110,57 @@ function GetControls(props)
   )
   
   -- Controls for Media, Preview and Layers Pages
-  for i = 1, layer_count do
-    for k, v in pairs(control_list) do
-      table.insert(
-        ctrls,
-        {
-          Name = v.Name .. i,
-          ControlType = v.ControlType,
-          ControlUnit = v.ControlUnit,
-          Min = v.Min,
-          Max = v.Max,
-          PinStyle = v.PinStyle,
-          UserPin = v.UserPin
-        }
-      )
-    end
-    for p = 1, max_media_items do
-      table.insert(
-        ctrls,
-        {
-          Name = string.format("MediaName%sLayer%s", p, i),
-          ControlType = "Indicator",
-          IndicatorType = "Text",
-          PinStyle = "Output",
-          UserPin = true
-        }
-      )
-      table.insert(
-        ctrls,
-        {
-          Name = string.format("MediaThumbnail%sLayer%s", p, i),
-          ControlType = "Button",
-          ButtonType = "StateTrigger",
-          Min = 0,
-          Max = 1,
-          PinStyle = "None",
-          UserPin = false
-        }
-      )
-    end
+  for k, v in ipairs(control_list) do
     table.insert(
       ctrls,
       {
-        Name = string.format("Layer%sPreview", i),
-        ControlType = "Button",
-        ButtonType = "Trigger",
-        UserPin = false
+        Name = v.Name,
+        ControlType = v.ControlType,
+        ControlUnit = v.ControlUnit,
+        Min = v.Min,
+        Max = v.Max,
+        PinStyle = v.PinStyle,
+        UserPin = v.UserPin,
+        Count = layer_count
       }
     )
   end
+  for p = 1, max_media_items do
+    table.insert(
+      ctrls,
+      {
+        Name = string.format("MediaName%s", p),
+        ControlType = "Indicator",
+        IndicatorType = "Text",
+        PinStyle = "Output",
+        UserPin = true,
+        Count = layer_count
+      }
+    )
+    table.insert(
+      ctrls,
+      {
+        Name = string.format("MediaThumbnail%s", p),
+        ControlType = "Button",
+        ButtonType = "StateTrigger",
+        Min = 0,
+        Max = 1,
+        PinStyle = "None",
+        UserPin = false,
+        Count = layer_count
+      }
+    )
+  end
+  table.insert(
+    ctrls,
+    {
+      Name = "LayerPreview",
+      ControlType = "Button",
+      ButtonType = "Trigger",
+      UserPin = false,
+      Count = layer_count
+    }
+  )
   
   table.insert(
     ctrls,
@@ -1220,7 +1414,6 @@ function GetControls(props)
     }
   )
   
-  
   table.insert(
     ctrls,
     {
@@ -1297,9 +1490,30 @@ function GetControlLayout(props)
   -- we need to re-create the page list as it is nullified when entering this call
   CreatePages()
   
+  -- function to count matching entries in a table
+  local function countMatches(tbl, conditions)
+      local count = 0
+      for _, obj in ipairs(tbl) do
+          local ok = true
+          for key, value in pairs(conditions) do
+              if obj[key] ~= value then
+                  ok = false
+                  break
+              end
+          end
+          if ok then
+              count = count + 1
+          end
+      end
+      return count
+  end
+  
   -- common variables used by each page layout
   local CurrentPage = PageNames[props["page_index"].Value]
   local media_item_count = props["Media List Count"].Value
+  local layerItemCount = countMatches(control_list, {Group = "Layer", Display = true})
+  local FX1ItemCount = countMatches(control_list, {Group = "FX1", Display = true})
+  local FX2ItemCount = countMatches(control_list, {Group = "FX2", Display = true})
   local column_size = 12
   local fx1_column_size = 6
   local fx2_column_size = 6
@@ -1309,15 +1523,15 @@ function GetControlLayout(props)
   local status_groupbox_size = {12.5 * btn_size[1], 11 * btn_size[2]}
   local player_groupbox_position = {0, 0}
   local player_groupbox_size = {
-    (((math.floor((#parameter_list / column_size)) + 1) * 6) + 1) * btn_size[1],
+    (((math.floor((layerItemCount / column_size)) + 1) * 6) + 1) * btn_size[1],
     (column_size + 2) * btn_size[2]
   }
   local fx1_groupbox_size = {
-    (((math.floor((#fx1_list / fx1_column_size))) * 6) + 1) * btn_size[1],
+    (((math.floor((FX1ItemCount / fx1_column_size))) * 6) + 1) * btn_size[1],
     (fx1_column_size + 2) * btn_size[2]
   }
   local fx2_groupbox_size = {
-    (((math.floor((#fx2_list / fx2_column_size))) * 6) + 1) * btn_size[1],
+    (((math.floor((FX2ItemCount / fx2_column_size))) * 6) + 1) * btn_size[1],
     (fx2_column_size + 2) * btn_size[2]
   }
   local preview_size = {2.4 * btn_size[1], (1.35 * btn_size[1])}
@@ -1818,140 +2032,160 @@ function GetControlLayout(props)
             Size = fx2_groupbox_size
           }
         )
-        for k, v in pairs(parameter_list) do
-          local column = math.floor((k - 1) / column_size) + 1
-          local row = k - (column - 1) * column_size
-          table.insert(
-            graphics,
-            {
-              Type = "Text",
-              Text = v .. ":",
-              Font = "Roboto",
-              FontSize = 12,
-              FontStyle = "Regular",
-              HTextAlign = "Right",
-              Color = Colors.control_label,
-              Position = {
-                player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
-                player_groupbox_position[2] + (row * btn_size[2])
-              },
-              Size = {3 * btn_size[1], btn_size[2]}
-            }
-          )
-          local controlCol = Colors.control_background
-          if control_list[v].Style == "Text Field" and control_list[v].ControlUnit == "Percent" then
-            controlCol = Colors.control_background_light
+        local layerCount = 0
+        local fx1Count = 0
+        local fx2Count = 0
+        for k, v in ipairs(control_list) do
+          if v.Group == "Layer" then
+            if v.Display == true then
+              layerCount = layerCount + 1
+              local column = math.floor((layerCount - 1) / column_size) + 1
+              local row = layerCount - (column - 1) * column_size
+              table.insert(
+                graphics,
+                {
+                  Type = "Text",
+                  Text = v.Label .. ":",
+                  Font = "Roboto",
+                  FontSize = 12,
+                  FontStyle = "Regular",
+                  HTextAlign = "Right",
+                  Color = Colors.control_label,
+                  Position = {
+                    player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
+                    player_groupbox_position[2] + (row * btn_size[2])
+                  },
+                  Size = {3 * btn_size[1], btn_size[2]}
+                }
+              )
+        
+              local controlCol = Colors.control_background
+              if v.Style == "Text Field" and v.ControlUnit == "Percent" then
+                controlCol = Colors.control_background_light
+              end
+              layout[v.Name .. " " .. i] = {
+                PrettyName = "Layer " .. i .. "~" .. v.Label,
+                Style = v.Style,
+                Color = controlCol,
+                TextColor = Colors.control_text,
+                StrokeColor = Colors.control_text,
+                FontSize = (v.Label == "File Select") and 8 or 12,
+                StrokeWidth = 1,
+                Position = {
+                  player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
+                  player_groupbox_position[2] + (row * btn_size[2])
+                },
+                Size = {3 * btn_size[1], btn_size[2]}
+              }
+            else
+              layout[v.Name .. " " .. i] = {
+                PrettyName = "Layer " .. i .. "~" .. v.Label,
+                Style = "None",
+                Position = {
+                  0,
+                  0
+                },
+                Size = {5, 5}
+              }
+            end
+          elseif v.Group == "FX1" then
+            if v.Display == true then
+              fx1Count = fx1Count + 1
+              local column = math.floor((fx1Count - 1) / fx1_column_size) + 1
+              local row = fx1Count - (column - 1) * fx1_column_size
+              table.insert(
+                graphics,
+                {
+                  Type = "Text",
+                  Text = v.Label .. ":",
+                  Font = "Roboto",
+                  FontSize = 12,
+                  FontStyle = "Regular",
+                  HTextAlign = "Right",
+                  Color = Colors.control_label,
+                  Position = {
+                    player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
+                    player_groupbox_size[2] + 8 + (row * btn_size[2])
+                  },
+                  Size = {3 * btn_size[1], btn_size[2]}
+                }
+              )
+              layout[v.Name .. " " .. i] = {
+                PrettyName = "Layer " .. i .. "~" .. v.Label,
+                Style = v.Style,
+                Color = Colors.control_background,
+                TextColor = Colors.control_text,
+                StrokeColor = Colors.control_text,
+                FontSize = 12,
+                StrokeWidth = 1,
+                Position = {
+                  player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
+                  player_groupbox_size[2] + 8 + (row * btn_size[2])
+                },
+                Size = {3 * btn_size[1], btn_size[2]}
+              }
+            else
+              layout[v.Name .. " " .. i] = {
+                PrettyName = "Layer " .. i .. "~" .. v.Label,
+                Style = "None",
+                Position = {
+                  0,
+                  0
+                },
+                Size = {5, 5}
+              }
+            end
+          elseif v.Group == "FX2" then
+            if v.Display == true then
+              fx2Count = fx2Count + 1
+              local column = math.floor((fx2Count - 1) / fx2_column_size) + 1
+              local row = fx2Count - (column - 1) * fx2_column_size
+              table.insert(
+                graphics,
+                {
+                  Type = "Text",
+                  Text = v.Label .. ":",
+                  Font = "Roboto",
+                  FontSize = 12,
+                  FontStyle = "Regular",
+                  HTextAlign = "Right",
+                  Color = Colors.control_label,
+                  Position = {
+                    player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
+                    player_groupbox_size[2] + 16 + fx1_groupbox_size[2] + (row * btn_size[2])
+                  },
+                  Size = {3 * btn_size[1], btn_size[2]}
+                }
+              )
+              layout[v.Name .. " " .. i] = {
+                PrettyName = "Layer " .. i .. "~" .. v.Label,
+                Style = v.Style,
+                Color = Colors.control_background,
+                TextColor = Colors.control_text,
+                StrokeColor = Colors.control_text,
+                FontSize = 12,
+                StrokeWidth = 1,
+                Position = {
+                  player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
+                  player_groupbox_size[2] + 16 + fx1_groupbox_size[2] + (row * btn_size[2])
+                },
+                Size = {3 * btn_size[1], btn_size[2]}
+              }
+            else
+              layout[v.Name .. " " .. i] = {
+                PrettyName = "Layer " .. i .. "~" .. v.Label,
+                Style = "None",
+                Position = {
+                  0,
+                  0
+                },
+                Size = {5, 5}
+              }
+            end
           end
-          layout[control_list[v].Name .. i] = {
-            PrettyName = "Layer " .. i .. "~" .. v,
-            Style = control_list[v].Style,
-            Color = controlCol,
-            TextColor = Colors.control_text,
-            StrokeColor = Colors.control_text,
-            FontSize = (v == "File Select") and 8 or 12,
-            StrokeWidth = 1,
-            Position = {
-              player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
-              player_groupbox_position[2] + (row * btn_size[2])
-            },
-            Size = {3 * btn_size[1], btn_size[2]}
-          }
-        end
-        -- add the controls that are only there for the pins
-        for k, v in pairs(pinonly_list) do
-          layout[control_list[v].Name .. i] = {
-            PrettyName = "Layer " .. i .. "~" .. v,
-            Style = control_list[v].Style,
-            Color = Colors.control_background,
-            TextColor = Colors.control_text,
-            StrokeColor = Colors.control_text,
-            FontSize = (v == "File Select") and 8 or 12,
-            StrokeWidth = 1,
-            Position = {
-              0,0
-            },
-            Size = {5,5}
-          }
-        end
-        for k, v in pairs(fx1_list) do
-          local column = math.floor((k - 1) / fx1_column_size) + 1
-          local row = k - (column - 1) * fx1_column_size
-          table.insert(
-            graphics,
-            {
-              Type = "Text",
-              Text = v .. ":",
-              Font = "Roboto",
-              FontSize = 12,
-              FontStyle = "Regular",
-              HTextAlign = "Right",
-              Color = Colors.control_label,
-              Position = {
-                player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
-                player_groupbox_size[2] + 8 + (row * btn_size[2])
-              },
-              Size = {3 * btn_size[1], btn_size[2]}
-            }
-          )
-          local controlCol = Colors.control_background
-          if control_list[v].Style == "Text Field" and control_list[v].ControlUnit == "Percent" then
-            controlCol = Colors.control_background_light
-          end
-          layout[control_list[v].Name .. i] = {
-            PrettyName = "Layer " .. i .. "~" .. v,
-            Style = control_list[v].Style,
-            Color = controlCol,
-            TextColor = Colors.control_text,
-            StrokeColor = Colors.control_text,
-            FontSize = 12,
-            StrokeWidth = 1,
-            Position = {
-              player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
-              player_groupbox_size[2] + 8 + (row * btn_size[2])
-            },
-            Size = {3 * btn_size[1], btn_size[2]}
-          }
-        end
-        for k, v in pairs(fx2_list) do
-          local column = math.floor((k - 1) / fx2_column_size) + 1
-          local row = k - (column - 1) * fx2_column_size
-          table.insert(
-            graphics,
-            {
-              Type = "Text",
-              Text = v .. ":",
-              Font = "Roboto",
-              FontSize = 12,
-              FontStyle = "Regular",
-              HTextAlign = "Right",
-              Color = Colors.control_label,
-              Position = {
-                player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
-                player_groupbox_size[2] + 16 + fx1_groupbox_size[2] + (row * btn_size[2])
-              },
-              Size = {3 * btn_size[1], btn_size[2]}
-            }
-          )
-          local controlCol = Colors.control_background
-          if control_list[v].Style == "Text Field" and control_list[v].ControlUnit == "Percent" then
-            controlCol = Colors.control_background_light
-          end
-          layout[control_list[v].Name .. i] = {
-            PrettyName = "Layer " .. i .. "~" .. v,
-            Style = control_list[v].Style,
-            Color = controlCol,
-            TextColor = Colors.control_text,
-            StrokeColor = Colors.control_text,
-            FontSize = 12,
-            StrokeWidth = 1,
-            Position = {
-              player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
-              player_groupbox_size[2] + 16 + fx1_groupbox_size[2] + (row * btn_size[2])
-            },
-            Size = {3 * btn_size[1], btn_size[2]}
-          }
         end
     elseif CurrentPage == "Media" then
+        
         table.insert(
           graphics,
           {
@@ -1996,7 +2230,7 @@ function GetControlLayout(props)
             }
           )
           for p = 1, media_item_count do
-            layout[string.format("MediaName%sLayer%s", p, i)] = {
+            layout[string.format("MediaName%s %s", p, i)] = {
               PrettyName = string.format("Layer %s~Media List~%s~Name", i, p),
               Style = "TextBox",
               Color = Colors.control_background,
@@ -2013,7 +2247,7 @@ function GetControlLayout(props)
               Size = {3 * btn_size[1], preview_size[2]}
             }
         
-            layout[string.format("MediaThumbnail%sLayer%s", p, i)] = {
+            layout[string.format("MediaThumbnail%s %s", p, i)] = {
               PrettyName = string.format("Layer %s~Media List~%s~Select", i, p),
               UnlinkOffColor = true,
               OffColor = Colors.transparent,
@@ -2028,6 +2262,7 @@ function GetControlLayout(props)
             }
           end
         end
+        
     elseif CurrentPage == "Modules" then
         table.insert(
           graphics,
@@ -2453,6 +2688,7 @@ function GetControlLayout(props)
           Size = {4 * btn_size[1], btn_size[2]}
         }
     elseif CurrentPage == "Preview" then
+      
       table.insert(
         graphics,
         {
@@ -2515,7 +2751,7 @@ function GetControlLayout(props)
           }
         )
       
-        layout[string.format("Layer%sPreview", i)] = {
+        layout[string.format("LayerPreview %s", i)] = {
           PrettyName = string.format("Layer %s~Preview", i),
           UnlinkOffColor = true,
           OffColor = Colors.transparent,
@@ -2535,7 +2771,7 @@ function GetControlLayout(props)
     end
   
     -- pin only controls - not displayed
-    layout["preview_enable"] = {
+    layout["PreviewEnable"] = {
       PrettyName = "System~Preview Enable",
       Style = "None",
       Color = Colors.control_background,
@@ -2562,7 +2798,7 @@ function GetControlLayout(props)
   
     -- add the JSON Data pins only if they are enabled in properties
     if (props["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-      layout["settings_json"] = {
+      layout["SettingsJSON"] = {
         PrettyName = "JSON Data~Settings",
         Style = "None",
         Color = Colors.control_background,
@@ -2576,7 +2812,7 @@ function GetControlLayout(props)
         },
         Size = {5, 5}
       }
-      layout["mapping_json"] = {
+      layout["MappingJSON"] = {
         PrettyName = "JSON Data~Mapping",
         Style = "None",
         Color = Colors.control_background,
@@ -2590,7 +2826,7 @@ function GetControlLayout(props)
         },
         Size = {5, 5}
       }
-      layout["playlist_json"] = {
+      layout["PlaylistJSON"] = {
         PrettyName = "JSON Data~Playlist",
         Style = "None",
         Color = Colors.control_background,
@@ -2604,7 +2840,7 @@ function GetControlLayout(props)
         },
         Size = {5, 5}
       }
-      layout["timecode_json"] = {
+      layout["TimecodeJSON"] = {
         PrettyName = "JSON Data~Timecode",
         Style = "None",
         Color = Colors.control_background,
@@ -2618,7 +2854,7 @@ function GetControlLayout(props)
         },
         Size = {5, 5}
       }
-      layout["timeline_json"] = {
+      layout["TimelineJSON"] = {
         PrettyName = "JSON Data~Timeline",
         Style = "None",
         Color = Colors.control_background,
@@ -2632,7 +2868,7 @@ function GetControlLayout(props)
         },
         Size = {5, 5}
       }
-      layout["scheduler_json"] = {
+      layout["SchedulerJSON"] = {
         PrettyName = "JSON Data~Scheduler",
         Style = "None",
         Color = Colors.control_background,
@@ -2958,12 +3194,6 @@ local StatusState = {
 }
 
 ticker = 1
-poll_parameter_list = {}
-for _, v in pairs(parameter_list) do
-  if v ~= "Time Elapsed" and v ~= "Duration" and v ~= "Seek" then
-    table.insert(poll_parameter_list, v:upper())
-  end
-end
 
 local ip_address = Properties["IP Address"].Value
 
@@ -3571,17 +3801,11 @@ function fn_watch_parameters()
   -- Watch for value changes in layer parameters
   fn_log_debug("Setting up layer parameter watchers")
   for i = 1, layer_count do
-    for _, parameter in ipairs(poll_parameter_list) do
-      local path = string.format("/LAYER %s/%s/Value", i, parameter)
+    for _, parameter in ipairs(control_list) do
+      if parameter.Watch == true then
+      local path = string.format("/LAYER %s/%s/Value", i, parameter.Path)
       watchPatchDouble(path, fn_process_double_update)
-    end
-    for _, parameter in ipairs(fx1_list) do
-      local path = string.format("/LAYER %s/%s/Value", i, parameter:upper())
-      watchPatchDouble(path, fn_process_double_update)
-    end
-    for _, parameter in ipairs(fx2_list) do
-      local path = string.format("/LAYER %s/%s/Value", i, parameter:upper())
-      watchPatchDouble(path, fn_process_double_update)
+      end
     end
   end
 
@@ -3767,12 +3991,19 @@ function fn_process_double_update(path, value)
   if path:sub(1, 6) == "/LAYER" then -- Layer parameter response
     local layer, parameter = path:match("/LAYER (%d+)/(%P+)/Value")
     if parameter then
-      local control = string.format("%s_%s", parameter:gsub("%s", "_"):lower(), layer)
+      local control = ""
+      for _, param in ipairs(control_list) do
+        if param.Path == parameter then
+          control = param.Name.." "..layer
+          break
+        end
+      end
+      if( control ~= "" ) then
       if parameter == "FILE SELECT" then
         selected_file[tonumber(layer)] = value
         fn_update_selected_file_info(value, layer)
       elseif parameter == "FOLDER SELECT" then
-        Controls[string.format("folder_select_index_%s", layer)].Value = value
+        Controls[string.format("FolderSelectIndex %s", layer)].Value = value
         for k, v in pairs(folder_list) do
           if v == value then
             Controls[control].String = k
@@ -3780,7 +4011,7 @@ function fn_process_double_update(path, value)
           end
         end
       elseif parameter == "LUT" then
-        Controls[string.format("lut_index_%s", layer)].Value = value
+        Controls[string.format("LutIndex %s", layer)].Value = value
         for k, v in pairs(lut_list) do
           if v == value then
             Controls[control].String = k
@@ -3792,27 +4023,27 @@ function fn_process_double_update(path, value)
       elseif parameter == "PLAY MODE" then
         local key = get_table_key(play_mode_keys, play_mode_values, value)
         Controls[control].String = key
-        Controls[string.format("play_mode_index_%s", layer)].Value = value
+        Controls[string.format("PlayModeIndex %s", layer)].Value = value
       elseif parameter == "FRAMING MODE" then
         local key = get_table_key(framing_mode_keys, framing_mode_values, value)
         Controls[control].String = key
-        Controls[string.format("framing_mode_index_%s", layer)].Value = value
+        Controls[string.format("FramingModeIndex %s", layer)].Value = value
       elseif parameter == "BLEND MODE" then
         local key = get_table_key(blend_mode_keys, blend_mode_values, value)
         Controls[control].String = key
-        Controls[string.format("blend_mode_index_%s", layer)].Value = value
+        Controls[string.format("BlendModeIndex %s", layer)].Value = value
       elseif parameter == "TRANSITION MODE" then
         local key = get_table_key(transition_mode_keys, transition_mode_values, value)
         Controls[control].String = key
-        Controls[string.format("transition_mode_index_%s", layer)].Value = value
+        Controls[string.format("TransitionModeIndex %s", layer)].Value = value
       elseif parameter == "FX1 SELECT" then
         local key = get_table_key(fx_keys, fx_values, value)
         Controls[control].String = key
-        Controls[string.format("fx1_select_index_%s", layer)].Value = value
+        Controls[string.format("FX1SelectIndex %s", layer)].Value = value
       elseif parameter == "FX2 SELECT" then
         local key = get_table_key(fx_keys, fx_values, value)
         Controls[control].String = key
-        Controls[string.format("fx2_select_index_%s", layer)].Value = value
+        Controls[string.format("FX2SelectIndex %s", layer)].Value = value
       elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
         if value >= 0.5 then
           Controls[control].Position = (value - 0.4444444444444444) / 0.5555555555555556
@@ -3839,21 +4070,22 @@ function fn_process_double_update(path, value)
       fn_log_error("Unknown layer parameter: " .. path)
     end
   end
+  end
 end
 
 function fn_update_selected_file_info(value, layer)
   local found = false
   for media = 1, media_item_count do
-    Controls[string.format("MediaThumbnail%sLayer%s", media, layer)].Boolean = media == (value + 1)
+    Controls[string.format("MediaThumbnail%s %s", media, layer)].Boolean = media == (value + 1)
   end
   local currentFileName = file_list_names[tonumber(value)] or ""
   fn_update_preview_thumbnail(layer, currentFileName)
-  Controls[string.format("file_select_%s", layer)].String = currentFileName
-  Controls[string.format("file_select_index_%s", layer)].Value = tonumber(value)
+  Controls[string.format("FileSelect %s", layer)].String = currentFileName
+  Controls[string.format("FileSelectIndex %s", layer)].Value = tonumber(value)
   if file_metadata_list[currentFileName] then
-    Controls["duration_" .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
+    Controls["Duration " .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
   else
-    Controls["duration_" .. layer].String = os.date("!%X", 0)
+    Controls["Duration " .. layer].String = os.date("!%X", 0)
   end
 end
 
@@ -3870,8 +4102,8 @@ function fn_clear_media_thumbs()
   local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
   for i = 1, layer_count do
     for m = 1, media_item_count do
-      Controls[string.format("MediaName%sLayer%s", m, i)].String = ""
-      Controls[string.format("MediaThumbnail%sLayer%s", m, i)].Style = iconStyleBlankString
+      Controls[string.format("MediaName%s %s", m, i)].String = ""
+      Controls[string.format("MediaThumbnail%s %s", m, i)].Style = iconStyleBlankString
     end
   end
 end
@@ -3897,14 +4129,14 @@ function fn_process_JSON_update(path, value)
       table.insert(file_choice_list, file.name)
       file_metadata_list[file.name] = file
       for i = 1, layer_count do
-        if Controls[string.format("MediaName%sLayer%s", file.fileIndex, i)] then
-          Controls[string.format("MediaName%sLayer%s", file.fileIndex, i)].String = file.name
+        if Controls[string.format("MediaName%s %s", file.fileIndex, i)] then
+          Controls[string.format("MediaName%s %s", file.fileIndex, i)].String = file.name
         end
       end
       fn_get_file_thumbnail(file.fileIndex, file.name)
     end
     for i = 1, layer_count do
-      Controls["file_select_" .. i].Choices = file_choice_list
+      Controls["FileSelect " .. i].Choices = file_choice_list
       fn_update_selected_file_info(selected_file[i], i)
     end
     -- let's update the system info as storage and num files might have changed
@@ -4049,7 +4281,7 @@ function fn_get_file_thumbnail(index, filename)
             IconData = Qlib.base64_enc(data)
           }
           for i = 1, layer_count do
-            Controls[string.format("MediaThumbnail%sLayer%s", index, i)].Style = rapidjson.encode(iconStyle)
+            Controls[string.format("MediaThumbnail%s %s", index, i)].Style = rapidjson.encode(iconStyle)
           end
         end
       end
@@ -4075,7 +4307,7 @@ function fn_update_preview_thumbnail(layer, filename)
       IconData = ""
     }
     local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
-    Controls[string.format("Layer%sPreview", layer)].Style = iconStyleBlankString
+    Controls[string.format("LayerPreview %s", layer)].Style = iconStyleBlankString
     if
       tonumber(layer) == 1 and
         (Properties["Output Video Preview"].Value == "Disabled" or not Controls.PreviewEnable.Boolean)
@@ -4095,7 +4327,7 @@ function fn_update_preview_thumbnail(layer, filename)
             Legend = "",
             IconData = Qlib.base64_enc(data)
           }
-          Controls[string.format("Layer%sPreview", layer)].Style = rapidjson.encode(iconStyle)
+          Controls[string.format("LayerPreview %s", layer)].Style = rapidjson.encode(iconStyle)
           if
             tonumber(layer) == 1 and
               (Properties["Output Video Preview"].Value == "Disabled" or not Controls.PreviewEnable.Boolean)
@@ -4117,7 +4349,7 @@ function fn_blank_previews()
   }
   local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
   for i = 1, layer_count do
-    Controls[string.format("Layer%sPreview", i)].Style = iconStyleBlankString
+    Controls[string.format("LayerPreview %s", i)].Style = iconStyleBlankString
   end
   Controls.OutputPreview.Style = iconStyleBlankString
 end
@@ -4197,7 +4429,7 @@ function fn_update_media_folders()
           table.insert(folder_choices, k)
         end
         for i = 1, layer_count do
-          Controls["folder_select_" .. i].Choices = folder_choices
+          Controls["FolderSelect " .. i].Choices = folder_choices
         end
       else
         fn_log_error("Failed to get media folder list: HTTP " .. tostring(code))
@@ -4209,13 +4441,13 @@ end
 -- Set up seek timers and last value trackers
 for layer, seek_timer in pairs(seek_timer_list) do
   seek_timer.EventHandler = function(timer)
-    if Controls[string.format("seek_%s", layer)].String == seek_last_value[layer] then
-      if Controls["file_select_" .. layer].String ~= "" then
+    if Controls[string.format("Seek %s", layer)].String == seek_last_value[layer] then
+      if Controls["FileSelect " .. layer].String ~= "" then
         local frame =
           math.floor(
-          file_metadata_list[Controls["file_select_" .. layer].String].duration *
-            file_metadata_list[Controls["file_select_" .. layer].String].rate *
-            Controls["seek_" .. layer].Position
+          file_metadata_list[Controls["FileSelect " .. layer].String].duration *
+            file_metadata_list[Controls["FileSelect " .. layer].String].rate *
+            Controls["Seek " .. layer].Position
         )
         -- Seek to desired frame
         local path = string.format("/LAYER %s/Transport Control/MediaClockGenerator/Seek", layer)
@@ -4229,19 +4461,20 @@ end
 
 -- Initialize combobox choices
 for i = 1, layer_count do
-  Controls["play_mode_" .. i].Choices = play_mode_keys
-  Controls["framing_mode_" .. i].Choices = framing_mode_keys
-  Controls["blend_mode_" .. i].Choices = blend_mode_keys
-  Controls["transition_mode_" .. i].Choices = transition_mode_keys
-  Controls["fx1_select_" .. i].Choices = fx_keys
-  Controls["fx2_select_" .. i].Choices = fx_keys
+  print("control  " .. rapidjson.encode(Controls))
+  Controls["PlayMode " .. i].Choices = play_mode_keys
+  Controls["FramingMode " .. i].Choices = framing_mode_keys
+  Controls["BlendMode " .. i].Choices = blend_mode_keys
+  Controls["TransitionMode " .. i].Choices = transition_mode_keys
+  Controls["FX1Select " .. i].Choices = fx_keys
+  Controls["FX2Select " .. i].Choices = fx_keys
 end
 
 -- Connect
 setInitializing("Connecting...")
 if fn_check_valid_ip(ip_address) then
-  fn_log_message("Connecting to Hive player at " .. ip_address)
   Connect(ip_address, fn_hive_connect_Status)
+  fn_log_message("Connecting to Hive player at " .. ip_address)
 else
   setMissing("Invalid IP")
   fn_log_error("Invalid IP address: " .. ip_address)
@@ -4599,175 +4832,175 @@ end
 -- Set up event handlers for controls
 fn_log_debug("Setting up control event handlers")
 for i = 1, layer_count do
-  Controls["file_select_" .. i].EventHandler = function()
-    cmd_file_select(i, file_list[Controls["file_select_" .. i].String])
+  Controls["FileSelect " .. i].EventHandler = function()
+    cmd_file_select(i, file_list[Controls["FileSelect " .. i].String])
   end
-  Controls["folder_select_" .. i].EventHandler = function()
-    cmd_folder_select(i, folder_list[Controls["folder_select_" .. i].String])
+  Controls["FolderSelect " .. i].EventHandler = function()
+    cmd_folder_select(i, folder_list[Controls["FolderSelect " .. i].String])
   end
-  Controls["file_select_index_" .. i].EventHandler = function()
-    cmd_file_select(i, Controls["file_select_index_" .. i].Value)
+  Controls["FileSelectIndex " .. i].EventHandler = function()
+    cmd_file_select(i, Controls["FileSelectIndex " .. i].Value)
   end
-  Controls["folder_select_index_" .. i].EventHandler = function()
-    cmd_folder_select(i, Controls["folder_select_index_" .. i].Value)
+  Controls["FolderSelectIndex " .. i].EventHandler = function()
+    cmd_folder_select(i, Controls["FolderSelectIndex " .. i].Value)
   end
-  Controls["intensity_" .. i].EventHandler = function()
-    cmd_intensity(i, Controls["intensity_" .. i].Position)
+  Controls["Intensity " .. i].EventHandler = function()
+    cmd_intensity(i, Controls["Intensity " .. i].Position)
   end
-  Controls["in_frame_" .. i].EventHandler = function()
-    cmd_in_frame(i, Controls["in_frame_" .. i].Value)
+  Controls["InFrame " .. i].EventHandler = function()
+    cmd_in_frame(i, Controls["InFrame " .. i].Value)
   end
-  Controls["out_frame_" .. i].EventHandler = function()
-    cmd_out_frame(i, Controls["out_frame_" .. i].Value)
+  Controls["OutFrame " .. i].EventHandler = function()
+    cmd_out_frame(i, Controls["OutFrame " .. i].Value)
   end
-  Controls["play_mode_" .. i].EventHandler = function()
-    local val = get_table_value(play_mode_keys, play_mode_values, Controls["play_mode_" .. i].String)
+  Controls["PlayMode " .. i].EventHandler = function()
+    local val = get_table_value(play_mode_keys, play_mode_values, Controls["PlayMode " .. i].String)
     cmd_play_mode(i, val)
   end
-  Controls["play_mode_index_" .. i].EventHandler = function()
-    cmd_play_mode(i, Controls["play_mode_index_" .. i].Value)
+  Controls["PlayModeIndex " .. i].EventHandler = function()
+    cmd_play_mode(i, Controls["PlayModeIndex " .. i].Value)
   end
-  Controls["framing_mode_" .. i].EventHandler = function()
-    local val = get_table_value(framing_mode_keys, framing_mode_values, Controls["framing_mode_" .. i].String)
+  Controls["FramingMode " .. i].EventHandler = function()
+    local val = get_table_value(framing_mode_keys, framing_mode_values, Controls["FramingMode " .. i].String)
     cmd_framing(i, val)
   end
-  Controls["framing_mode_index_" .. i].EventHandler = function()
-    cmd_framing(i, Controls["framing_mode_index_" .. i].Value)
+  Controls["FramingModeIndex " .. i].EventHandler = function()
+    cmd_framing(i, Controls["FramingModeIndex " .. i].Value)
   end
-  Controls["blend_mode_" .. i].EventHandler = function()
-    local val = get_table_value(blend_mode_keys, blend_mode_values, Controls["blend_mode_" .. i].String)
+  Controls["BlendMode " .. i].EventHandler = function()
+    local val = get_table_value(blend_mode_keys, blend_mode_values, Controls["BlendMode " .. i].String)
     cmd_blend_mode(i, val)
   end
-  Controls["blend_mode_index_" .. i].EventHandler = function()
-    cmd_blend_mode(i, Controls["blend_mode_index_" .. i].Value)
+  Controls["BlendModeIndex " .. i].EventHandler = function()
+    cmd_blend_mode(i, Controls["BlendModeIndex " .. i].Value)
   end
-  Controls["fx1_select_" .. i].EventHandler = function()
-    local val = get_table_value(fx_keys, fx_values, Controls["fx1_select_" .. i].String)
+  Controls["FX1Select" .. i].EventHandler = function()
+    local val = get_table_value(fx_keys, fx_values, Controls["FX1Select" .. i].String)
     cmd_fx1_select(i, val)
   end
-  Controls["fx1_select_index_" .. i].EventHandler = function()
-    cmd_fx1_select(i, Controls["fx1_select_index_" .. i].Value)
+  Controls["FX1SelectIndex " .. i].EventHandler = function()
+    cmd_fx1_select(i, Controls["FX1SelectIndex " .. i].Value)
   end
-  Controls["fx2_select_" .. i].EventHandler = function()
-    local val = get_table_value(fx_keys, fx_values, Controls["fx2_select_" .. i].String)
+  Controls["FX2Select " .. i].EventHandler = function()
+    local val = get_table_value(fx_keys, fx_values, Controls["FX2Select " .. i].String)
     cmd_fx2_select(i, val)
   end
-  Controls["fx2_select_index_" .. i].EventHandler = function()
-    cmd_fx2_select(i, Controls["fx2_select_index_" .. i].Value)
+  Controls["FX2SelectIndex " .. i].EventHandler = function()
+    cmd_fx2_select(i, Controls["FX2SelectIndex " .. i].Value)
   end
-  Controls["lut_" .. i].EventHandler = function()
-    cmd_lut_select(i, lut_list[Controls["lut_" .. i].String])
+  Controls["Lut " .. i].EventHandler = function()
+    cmd_lut_select(i, lut_list[Controls["Lut " .. i].String])
   end
-  Controls["lut_index_" .. i].EventHandler = function()
-    cmd_lut_select(i, Controls["lut_index_" .. i].Value)
+  Controls["LutIndex " .. i].EventHandler = function()
+    cmd_lut_select(i, Controls["LutIndex " .. i].Value)
   end
-  Controls["play_speed_" .. i].EventHandler = function()
-    local converted_value = Controls["play_speed_" .. i].Position
-    if Controls["play_speed_" .. i].Position >= 0.1 then
-      converted_value = 0.5555555555555556 * Controls["play_speed_" .. i].Position + 0.4444444444444444
+  Controls["PlaySpeed " .. i].EventHandler = function()
+    local converted_value = Controls["PlaySpeed " .. i].Position
+    if Controls["PlaySpeed " .. i].Position >= 0.1 then
+      converted_value = 0.5555555555555556 * Controls["PlaySpeed " .. i].Position + 0.4444444444444444
     else
-      converted_value = 5 * Controls["play_speed_" .. i].Position
+      converted_value = 5 * Controls["PlaySpeed " .. i].Position
     end
     cmd_play_speed(i, converted_value)
   end
-  Controls["move_speed_" .. i].EventHandler = function()
-    cmd_movement_speed(i, Controls["movement_speed_" .. i].Position)
+  Controls["MoveSpeed " .. i].EventHandler = function()
+    cmd_movement_speed(i, Controls["MoveSpeed " .. i].Position)
   end
-  Controls["mtc_hour_" .. i].EventHandler = function()
-    cmd_tc_hour(i, Controls["mtc_hour_" .. i].Value)
+  Controls["MtcHour " .. i].EventHandler = function()
+    cmd_tc_hour(i, Controls["MtcHour " .. i].Value)
   end
-  Controls["mtc_minute_" .. i].EventHandler = function()
-    cmd_tc_minute(i, Controls["mtc_minute_" .. i].Value)
+  Controls["MtcMinute " .. i].EventHandler = function()
+    cmd_tc_minute(i, Controls["MtcMinute " .. i].Value)
   end
-  Controls["mtc_second_" .. i].EventHandler = function()
-    cmd_tc_second(i, Controls["mtc_second_" .. i].Value)
+  Controls["MtcSecond " .. i].EventHandler = function()
+    cmd_tc_second(i, Controls["MtcSecond " .. i].Value)
   end
-  Controls["mtc_frame_" .. i].EventHandler = function()
-    cmd_tc_frame(i, Controls["mtc_frame_" .. i].Value)
+  Controls["MtcFrame " .. i].EventHandler = function()
+    cmd_tc_frame(i, Controls["MtcFrame " .. i].Value)
   end
-  Controls["scale_" .. i].EventHandler = function()
-    local converted_value = Controls["scale_" .. i].Position
-    if Controls["scale_" .. i].Position >= 0.1 then
-      converted_value = 0.5555555555555556 * Controls["scale_" .. i].Position + 0.4444444444444444
+  Controls["Scale " .. i].EventHandler = function()
+    local converted_value = Controls["Scale " .. i].Position
+    if Controls["Scale " .. i].Position >= 0.1 then
+      converted_value = 0.5555555555555556 * Controls["Scale " .. i].Position + 0.4444444444444444
     else
-      converted_value = 5 * Controls["scale_" .. i].Position
+      converted_value = 5 * Controls["Scale " .. i].Position
     end
     cmd_scale(i, converted_value)
   end
-  Controls["aspect_ratio_" .. i].EventHandler = function()
-    cmd_aspect_ratio(i, Controls["aspect_ratio_" .. i].Position)
+  Controls["AspectRatio " .. i].EventHandler = function()
+    cmd_aspect_ratio(i, Controls["AspectRatio " .. i].Position)
   end
-  Controls["position_x_" .. i].EventHandler = function()
-    cmd_position_x(i, (Controls["position_x_" .. i].Value + 100) / 200)
+  Controls["PositionX " .. i].EventHandler = function()
+    cmd_position_x(i, (Controls["PositionX " .. i].Value + 100) / 200)
   end
-  Controls["position_y_" .. i].EventHandler = function()
-    cmd_position_y(i, (Controls["position_y_" .. i].Value + 100) / 200)
+  Controls["PositionY " .. i].EventHandler = function()
+    cmd_position_y(i, (Controls["PositionY " .. i].Value + 100) / 200)
   end
-  Controls["rotation_x_" .. i].EventHandler = function()
-    cmd_rotation_x(i, (Controls["rotation_x_" .. i].Value + 1440) / 2880)
+  Controls["RotationX " .. i].EventHandler = function()
+    cmd_rotation_x(i, (Controls["RotationX " .. i].Value + 1440) / 2880)
   end
-  Controls["rotation_y_" .. i].EventHandler = function()
-    cmd_rotation_y(i, (Controls["rotation_y_" .. i].Value + 1440) / 2880)
+  Controls["RotationY " .. i].EventHandler = function()
+    cmd_rotation_y(i, (Controls["RotationY " .. i].Value + 1440) / 2880)
   end
-  Controls["rotation_z_" .. i].EventHandler = function()
-    cmd_rotation_z(i, (Controls["rotation_z_" .. i].Value + 1440) / 2880)
+  Controls["RotationZ " .. i].EventHandler = function()
+    cmd_rotation_z(i, (Controls["RotationZ " .. i].Value + 1440) / 2880)
   end
-  Controls["red_" .. i].EventHandler = function()
-    cmd_red(i, (Controls["red_" .. i].Value + 100) / 200)
+  Controls["Red " .. i].EventHandler = function()
+    cmd_red(i, (Controls["Red " .. i].Value + 100) / 200)
   end
-  Controls["green_" .. i].EventHandler = function()
-    cmd_green(i, (Controls["green_" .. i].Value + 100) / 200)
+  Controls["Green " .. i].EventHandler = function()
+    cmd_green(i, (Controls["Green " .. i].Value + 100) / 200)
   end
-  Controls["blue_" .. i].EventHandler = function()
-    cmd_blue(i, (Controls["blue_" .. i].Value + 100) / 200)
+  Controls["Blue " .. i].EventHandler = function()
+    cmd_blue(i, (Controls["Blue " .. i].Value + 100) / 200)
   end
-  Controls["hue_" .. i].EventHandler = function()
-    cmd_hue(i, Controls["hue_" .. i].Position)
+  Controls["Hue " .. i].EventHandler = function()
+    cmd_hue(i, Controls["Hue " .. i].Position)
   end
-  Controls["saturation_" .. i].EventHandler = function()
-    cmd_saturation(i, (Controls["saturation_" .. i].Value + 100) / 200)
+  Controls["Saturation " .. i].EventHandler = function()
+    cmd_saturation(i, (Controls["Saturation " .. i].Value + 100) / 200)
   end
-  Controls["contrast_" .. i].EventHandler = function()
-    cmd_contrast(i, (Controls["contrast_" .. i].Value + 100) / 200)
+  Controls["Contrast " .. i].EventHandler = function()
+    cmd_contrast(i, (Controls["Contrast " .. i].Value + 100) / 200)
   end
-  Controls["strobe_" .. i].EventHandler = function()
-    cmd_strobe(i, Controls["strobe_" .. i].Position)
+  Controls["Strobe " .. i].EventHandler = function()
+    cmd_strobe(i, Controls["Strobe " .. i].Position)
   end
-  Controls["volume_" .. i].EventHandler = function()
-    cmd_volume(i, Controls["volume_" .. i].Position)
+  Controls["Volume " .. i].EventHandler = function()
+    cmd_volume(i, Controls["Volume " .. i].Position)
   end
-  Controls["seek_" .. i].EventHandler = function()
+  Controls["Seek " .. i].EventHandler = function()
     seek_timer_list[i]:Start(.2)
   end
-  Controls["transition_duration_" .. i].EventHandler = function()
-    cmd_transition_duration(i, Controls["transition_duration_" .. i].Value)
+  Controls["TransitionDuration " .. i].EventHandler = function()
+    cmd_transition_duration(i, Controls["TransitionDuration " .. i].Value)
   end
-  Controls["transition_mode_" .. i].EventHandler = function()
-    local val = get_table_value(transition_mode_keys, transition_mode_values, Controls["transition_mode_" .. i].String)
+  Controls["TransitionMode " .. i].EventHandler = function()
+    local val = get_table_value(transition_mode_keys, transition_mode_values, Controls["TransitionMode " .. i].String)
     cmd_transition_mode(i, val)
   end
-  Controls["transition_mode_index_" .. i].EventHandler = function()
-    cmd_transition_mode(i, Controls["transition_mode_index_" .. i].Value)
+  Controls["TransitionModeIndex " .. i].EventHandler = function()
+    cmd_transition_mode(i, Controls["TransitionModeIndex " .. i].Value)
   end
-  Controls["fx1_opacity_" .. i].EventHandler = function()
-    _G["cmd_fx1_opacity"](i, Controls["fx1_opacity_" .. i].Position)
+  Controls["FX1Opacity " .. i].EventHandler = function()
+    _G["cmd_fx1_opacity"](i, Controls["FX1Opacity " .. i].Position)
   end
-  Controls["fx2_opacity_" .. i].EventHandler = function()
-    _G["cmd_fx2_opacity"](i, Controls["fx2_opacity_" .. i].Position)
+  Controls["FX2Opacity " .. i].EventHandler = function()
+    _G["cmd_fx2_opacity"](i, Controls["FX2Opacity " .. i].Position)
   end
   for p = 1, 16 do
-    Controls[string.format("fx1_param_%s_%s", p, i)].EventHandler = function()
-      _G["cmd_fx1_param_" .. p](i, Controls[string.format("fx1_param_%s_%s", p, i)].Position)
+    Controls[string.format("FX1Param%s %s", p, i)].EventHandler = function()
+      _G["cmd_fx1_param_" .. p](i, Controls[string.format("FX1Param%s %s", p, i)].Position)
     end
-    Controls[string.format("fx2_param_%s_%s", p, i)].EventHandler = function()
-      _G["cmd_fx2_param_" .. p](i, Controls[string.format("fx2_param_%s_%s", p, i)].Position)
+    Controls[string.format("FX2Param%s %s", p, i)].EventHandler = function()
+      _G["cmd_fx2_param_" .. p](i, Controls[string.format("FX2Param%s %s", p, i)].Position)
     end
   end
 
   for p = 1, media_item_count do
-    Controls[string.format("MediaThumbnail%sLayer%s", p, i)].EventHandler = function()
-      if Controls[string.format("MediaName%sLayer%s", p, i)].String ~= nil then
-        cmd_file_select(i, file_list[Controls[string.format("MediaName%sLayer%s", p, i)].String])
+    Controls[string.format("MediaThumbnail%s %s", p, i)].EventHandler = function()
+      if Controls[string.format("MediaName%s %s", p, i)].String ~= nil then
+        cmd_file_select(i, file_list[Controls[string.format("MediaName%s %s", p, i)].String])
       end
     end
   end
@@ -4827,7 +5060,7 @@ Controls.SettingsJSON.EventHandler = function()
 end
 
 Controls.TimelineJSON.EventHandler = function()
-    if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
+  if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
     fn_log_warning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
     return
   end

@@ -303,12 +303,6 @@ local StatusState = {
 }
 
 ticker = 1
-poll_parameter_list = {}
-for _, v in pairs(parameter_list) do
-  if v ~= "Time Elapsed" and v ~= "Duration" and v ~= "Seek" then
-    table.insert(poll_parameter_list, v:upper())
-  end
-end
 
 local ip_address = Properties["IP Address"].Value
 

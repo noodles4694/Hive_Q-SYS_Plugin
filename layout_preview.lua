@@ -1,3 +1,4 @@
+
 table.insert(
   graphics,
   {
@@ -60,7 +61,7 @@ for i = 1, layer_count do
     }
   )
 
-  layout[string.format("Layer%sPreview", i)] = {
+  layout[string.format("LayerPreview %s", i)] = {
     PrettyName = string.format("Layer %s~Preview", i),
     UnlinkOffColor = true,
     OffColor = Colors.transparent,

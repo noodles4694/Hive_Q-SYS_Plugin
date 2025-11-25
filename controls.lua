@@ -189,55 +189,57 @@ table.insert(
 )
 
 -- Controls for Media, Preview and Layers Pages
-for i = 1, layer_count do
-  for k, v in pairs(control_list) do
-    table.insert(
-      ctrls,
-      {
-        Name = v.Name .. i,
-        ControlType = v.ControlType,
-        ControlUnit = v.ControlUnit,
-        Min = v.Min,
-        Max = v.Max,
-        PinStyle = v.PinStyle,
-        UserPin = v.UserPin
-      }
-    )
-  end
-  for p = 1, max_media_items do
-    table.insert(
-      ctrls,
-      {
-        Name = string.format("MediaName%sLayer%s", p, i),
-        ControlType = "Indicator",
-        IndicatorType = "Text",
-        PinStyle = "Output",
-        UserPin = true
-      }
-    )
-    table.insert(
-      ctrls,
-      {
-        Name = string.format("MediaThumbnail%sLayer%s", p, i),
-        ControlType = "Button",
-        ButtonType = "StateTrigger",
-        Min = 0,
-        Max = 1,
-        PinStyle = "None",
-        UserPin = false
-      }
-    )
-  end
+for k, v in ipairs(control_list) do
   table.insert(
     ctrls,
     {
-      Name = string.format("Layer%sPreview", i),
-      ControlType = "Button",
-      ButtonType = "Trigger",
-      UserPin = false
+      Name = v.Name,
+      ControlType = v.ControlType,
+      ControlUnit = v.ControlUnit,
+      Min = v.Min,
+      Max = v.Max,
+      PinStyle = v.PinStyle,
+      UserPin = v.UserPin,
+      Count = layer_count
     }
   )
 end
+for p = 1, max_media_items do
+  table.insert(
+    ctrls,
+    {
+      Name = string.format("MediaName%s", p),
+      ControlType = "Indicator",
+      IndicatorType = "Text",
+      PinStyle = "Output",
+      UserPin = true,
+      Count = layer_count
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = string.format("MediaThumbnail%s", p),
+      ControlType = "Button",
+      ButtonType = "StateTrigger",
+      Min = 0,
+      Max = 1,
+      PinStyle = "None",
+      UserPin = false,
+      Count = layer_count
+    }
+  )
+end
+table.insert(
+  ctrls,
+  {
+    Name = "LayerPreview",
+    ControlType = "Button",
+    ButtonType = "Trigger",
+    UserPin = false,
+    Count = layer_count
+  }
+)
 
 table.insert(
   ctrls,
@@ -490,7 +492,6 @@ table.insert(
     UserPin = true
   }
 )
-
 
 table.insert(
   ctrls,

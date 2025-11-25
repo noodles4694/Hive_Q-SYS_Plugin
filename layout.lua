@@ -1,9 +1,30 @@
 -- we need to re-create the page list as it is nullified when entering this call
 CreatePages()
 
+-- function to count matching entries in a table
+local function countMatches(tbl, conditions)
+    local count = 0
+    for _, obj in ipairs(tbl) do
+        local ok = true
+        for key, value in pairs(conditions) do
+            if obj[key] ~= value then
+                ok = false
+                break
+            end
+        end
+        if ok then
+            count = count + 1
+        end
+    end
+    return count
+end
+
 -- common variables used by each page layout
 local CurrentPage = PageNames[props["page_index"].Value]
 local media_item_count = props["Media List Count"].Value
+local layerItemCount = countMatches(control_list, {Group = "Layer", Display = true})
+local FX1ItemCount = countMatches(control_list, {Group = "FX1", Display = true})
+local FX2ItemCount = countMatches(control_list, {Group = "FX2", Display = true})
 local column_size = 12
 local fx1_column_size = 6
 local fx2_column_size = 6
@@ -13,15 +34,15 @@ local status_header_size = {12.5 * btn_size[1], 120}
 local status_groupbox_size = {12.5 * btn_size[1], 11 * btn_size[2]}
 local player_groupbox_position = {0, 0}
 local player_groupbox_size = {
-  (((math.floor((#parameter_list / column_size)) + 1) * 6) + 1) * btn_size[1],
+  (((math.floor((layerItemCount / column_size)) + 1) * 6) + 1) * btn_size[1],
   (column_size + 2) * btn_size[2]
 }
 local fx1_groupbox_size = {
-  (((math.floor((#fx1_list / fx1_column_size))) * 6) + 1) * btn_size[1],
+  (((math.floor((FX1ItemCount / fx1_column_size))) * 6) + 1) * btn_size[1],
   (fx1_column_size + 2) * btn_size[2]
 }
 local fx2_groupbox_size = {
-  (((math.floor((#fx2_list / fx2_column_size))) * 6) + 1) * btn_size[1],
+  (((math.floor((FX2ItemCount / fx2_column_size))) * 6) + 1) * btn_size[1],
   (fx2_column_size + 2) * btn_size[2]
 }
 local preview_size = {2.4 * btn_size[1], (1.35 * btn_size[1])}
@@ -51,7 +72,7 @@ if CurrentPage then
   end
 
   -- pin only controls - not displayed
-  layout["preview_enable"] = {
+  layout["PreviewEnable"] = {
     PrettyName = "System~Preview Enable",
     Style = "None",
     Color = Colors.control_background,
@@ -78,7 +99,7 @@ if CurrentPage then
 
   -- add the JSON Data pins only if they are enabled in properties
   if (props["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
-    layout["settings_json"] = {
+    layout["SettingsJSON"] = {
       PrettyName = "JSON Data~Settings",
       Style = "None",
       Color = Colors.control_background,
@@ -92,7 +113,7 @@ if CurrentPage then
       },
       Size = {5, 5}
     }
-    layout["mapping_json"] = {
+    layout["MappingJSON"] = {
       PrettyName = "JSON Data~Mapping",
       Style = "None",
       Color = Colors.control_background,
@@ -106,7 +127,7 @@ if CurrentPage then
       },
       Size = {5, 5}
     }
-    layout["playlist_json"] = {
+    layout["PlaylistJSON"] = {
       PrettyName = "JSON Data~Playlist",
       Style = "None",
       Color = Colors.control_background,
@@ -120,7 +141,7 @@ if CurrentPage then
       },
       Size = {5, 5}
     }
-    layout["timecode_json"] = {
+    layout["TimecodeJSON"] = {
       PrettyName = "JSON Data~Timecode",
       Style = "None",
       Color = Colors.control_background,
@@ -134,7 +155,7 @@ if CurrentPage then
       },
       Size = {5, 5}
     }
-    layout["timeline_json"] = {
+    layout["TimelineJSON"] = {
       PrettyName = "JSON Data~Timeline",
       Style = "None",
       Color = Colors.control_background,
@@ -148,7 +169,7 @@ if CurrentPage then
       },
       Size = {5, 5}
     }
-    layout["scheduler_json"] = {
+    layout["SchedulerJSON"] = {
       PrettyName = "JSON Data~Scheduler",
       Style = "None",
       Color = Colors.control_background,

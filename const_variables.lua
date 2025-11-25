@@ -16,540 +16,732 @@ local Colors = {
   control_label = {170, 170, 170},
   control_background = {18, 22, 26},
   control_background_light = {64, 64, 64},
-  control_text = {170, 170, 170},
+  control_text = {170, 170, 170}
 }
 
 -- Define a list of controls with their properties
 local control_list = {
-  ["File Select"] = {
-    Name = "file_select_",
+  [1] = {
+    Name = "FileSelect",
+    Label = "File Select",
+    Path = "FILE SELECT",
     ControlType = "Text",
     Style = "ComboBox",
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["File Select Index"] = {
-    Name = "file_select_index_",
+  [2] = {
+    Name = "FileSelectIndex",
+    Label = "File Select Index",
+    Path = "FILE SELECT INDEX",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "None",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = false,
+    Display = false,
     UserPin = true
   },
-  ["Folder Select"] = {
-    Name = "folder_select_",
+  [3] = {
+    Name = "FolderSelect",
+    Label = "Folder Select",
+    Path = "FOLDER SELECT",
     ControlType = "Text",
     Style = "ComboBox",
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Folder Select Index"] = {
-    Name = "folder_select_index_",
+  [4] = {
+    Name = "FolderSelectIndex",
+    Label = "Folder Select Index",
+    Path = "FOLDER SELECT INDEX",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "None",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = false,
+    Display = false,
     UserPin = true
   },
-  ["Time Elapsed"] = {
-    Name = "time_elapsed_",
+  [5] = {
+    Name = "TimeElapsed",
+    Label = "Time Elapsed",
+    Path = "TIME ELAPSED",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
+    Group = "Layer",
+    Watch = false,
+    Display = true,
     UserPin = true
   },
-  ["Duration"] = {
-    Name = "duration_",
+  [6] = {
+    Name = "Duration",
+    Label = "Duration",
+    Path = "DURATION",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
+    Group = "Layer",
+    Watch = false,
+    Display = true,
     UserPin = true
   },
-  ["Seek"] = {
-    Name = "seek_",
+  [7] = {
+    Name = "Seek",
+    Label = "Seek",
+    Path = "SEEK",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Fader",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = false,
+    Display = true,
     UserPin = true
   },
-  ["Intensity"] = {
-    Name = "intensity_",
+  [8] = {
+    Name = "Intensity",
+    Label = "Intensity",
+    Path = "INTENSITY",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["In Frame"] = {
-    Name = "in_frame_",
+  [9] = {
+    Name = "InFrame",
+    Label = "In Frame",
+    Path = "IN FRAME",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
     Min = 0,
     Max = 9999999,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Out Frame"] = {
-    Name = "out_frame_",
+  [10] = {
+    Name = "OutFrame",
+    Label = "Out Frame",
+    Path = "OUT FRAME",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
     Min = 0,
     Max = 9999999,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Play Mode"] = {
-    Name = "play_mode_",
+  [11] = {
+    Name = "PlayMode",
+    Label = "Play Mode",
+    Path = "PLAY MODE",
     ControlType = "Text",
     Style = "ComboBox",
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Play Mode Index"] = {
-    Name = "play_mode_index_",
+  [12] = {
+    Name = "PlayModeIndex",
+    Label = "Play Mode Index",
+    Path = "PLAY MODE INDEX",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "None",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = false,
+    Display = false,
     UserPin = true
   },
-  ["Framing Mode"] = {
-    Name = "framing_mode_",
+  [13] = {
+    Name = "FramingMode",
+    Label = "Framing Mode",
+    Path = "FRAMING MODE",
     ControlType = "Text",
     Style = "ComboBox",
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Framing Mode Index"] = {
-    Name = "framing_mode_index_",
+  [14] = {
+    Name = "FramingModeIndex",
+    Label = "Framing Mode Index",
+    Path = "FRAMING MODE INDEX",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "None",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = false,
+    Display = false,
     UserPin = true
   },
-  ["Blend Mode"] = {
-    Name = "blend_mode_",
+  [15] = {
+    Name = "BlendMode",
+    Label = "Blend Mode",
+    Path = "BLEND MODE",
     ControlType = "Text",
     Style = "ComboBox",
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Blend Mode Index"] = {
-    Name = "blend_mode_index_",
+  [16] = {
+    Name = "BlendModeIndex",
+    Label = "Blend Mode Index",
+    Path = "BLEND MODE INDEX",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "None",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = false,
+    Display = false,
     UserPin = true
   },
-  ["LUT"] = {
-    Name = "lut_",
+  [17] = {
+    Name = "Lut",
+    Label = "LUT",
+    Path = "LUT",
     ControlType = "Text",
     Style = "ComboBox",
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["LUT Index"] = {
-    Name = "lut_index_",
+  [18] = {
+    Name = "LutIndex",
+    Label = "LUT Index",
+    Path = "LUT INDEX",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "None",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = false,
+    Display = false,
     UserPin = true
   },
-  ["Play Speed"] = {
-    Name = "play_speed_",
+  [19] = {
+    Name = "PlaySpeed",
+    Label = "Play Speed",
+    Path = "PLAY SPEED",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 1000,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Move Speed"] = {
-    Name = "move_speed_",
+  [20] = {
+    Name = "MoveSpeed",
+    Label = "Move Speed",
+    Path = "MOVE SPEED",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["MTC Hour"] = {
-    Name = "mtc_hour_",
+  [21] = {
+    Name = "MtcHour",
+    Label = "MTC Hour",
+    Path = "MTC HOUR",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
     Min = 0,
     Max = 23,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["MTC Minute"] = {
-    Name = "mtc_minute_",
+  [22] = {
+    Name = "MtcMinute",
+    Label = "MTC Minute",
+    Path = "MTC MINUTE",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
     Min = 0,
     Max = 59,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["MTC Second"] = {
-    Name = "mtc_second_",
+  [23] = {
+    Name = "MtcSecond",
+    Label = "MTC Second",
+    Path = "MTC SECOND",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
     Min = 0,
     Max = 59,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["MTC Frame"] = {
-    Name = "mtc_frame_",
+  [24] = {
+    Name = "MtcFrame",
+    Label = "MTC Frame",
+    Path = "MTC FRAME",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
     Min = 0,
     Max = 59,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Scale"] = {
-    Name = "scale_",
+  [25] = {
+    Name = "Scale",
+    Label = "Scale",
+    Path = "SCALE",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 1000,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Aspect Ratio"] = {
-    Name = "aspect_ratio_",
+  [26] = {
+    Name = "AspectRatio",
+    Label = "Aspect Ratio",
+    Path = "ASPECT RATIO",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Position X"] = {
-    Name = "position_x_",
+  [27] = {
+    Name = "PositionX",
+    Label = "Position X",
+    Path = "POSITION X",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -100,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Position Y"] = {
-    Name = "position_y_",
+  [28] = {
+    Name = "PositionY",
+    Label = "Position Y",
+    Path = "POSITION Y",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -100,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Rotation X"] = {
-    Name = "rotation_x_",
+  [29] = {
+    Name = "RotationX",
+    Label = "Rotation X",
+    Path = "ROTATION X",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -1440,
     Max = 1440,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Rotation Y"] = {
-    Name = "rotation_y_",
+  [30] = {
+    Name = "RotationY",
+    Label = "Rotation Y",
+    Path = "ROTATION Y",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -1440,
     Max = 1440,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Rotation Z"] = {
-    Name = "rotation_z_",
+  [31] = {
+    Name = "RotationZ",
+    Label = "Rotation Z",
+    Path = "ROTATION Z",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -1440,
     Max = 1440,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Red"] = {
-    Name = "red_",
+  [32] = {
+    Name = "Red",
+    Label = "Red",
+    Path = "RED",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -100,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Green"] = {
-    Name = "green_",
+  [33] = {
+    Name = "Green",
+    Label = "Green",
+    Path = "GREEN",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -100,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Blue"] = {
-    Name = "blue_",
+  [34] = {
+    Name = "Blue",
+    Label = "Blue",
+    Path = "BLUE",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -100,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Hue"] = {
-    Name = "hue_",
+  [35] = {
+    Name = "Hue",
+    Label = "Hue",
+    Path = "HUE",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Saturation"] = {
-    Name = "saturation_",
+  [36] = {
+    Name = "Saturation",
+    Label = "Saturation",
+    Path = "SATURATION",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -100,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Contrast"] = {
-    Name = "contrast_",
+  [37] = {
+    Name = "Contrast",
+    Label = "Contrast",
+    Path = "CONTRAST",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = -100,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Strobe"] = {
-    Name = "strobe_",
+  [38] = {
+    Name = "Strobe",
+    Label = "Strobe",
+    Path = "STROBE",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Volume"] = {
-    Name = "volume_",
+  [39] = {
+    Name = "Volume",
+    Label = "Volume",
+    Path = "VOLUME",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Transition Duration"] = {
-    Name = "transition_duration_",
+  [40] = {
+    Name = "TransitionDuration",
+    Label = "Transition Duration",
+    Path = "TRANSITION DURATION",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "Text Field",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Transition Mode"] = {
-    Name = "transition_mode_",
+  [41] = {
+    Name = "TransitionMode",
+    Label = "Transition Mode",
+    Path = "TRANSITION MODE",
     ControlType = "Text",
     Style = "ComboBox",
     PinStyle = "Both",
+    Group = "Layer",
+    Watch = true,
+    Display = true,
     UserPin = true
   },
-  ["Transition Mode Index"] = {
-    Name = "transition_mode_index_",
+  [42] = {
+    Name = "TransitionModeIndex",
+    Label = "Transition Mode Index",
+    Path = "TRANSITION MODE INDEX",
     ControlType = "Knob",
     ControlUnit = "Integer",
     Style = "None",
     Min = 0,
     Max = 65535,
     PinStyle = "Both",
+    Group = "Layer",
+    Display = false,
+    Watch = false,
     UserPin = true
   },
-}
--- Create a list of parameter names for easy reference
-local parameter_list = {
-  "Folder Select",
-  "File Select",
-  "Time Elapsed",
-  "Duration",
-  "Seek",
-  "Intensity",
-  "In Frame",
-  "Out Frame",
-  "Play Mode",
-  "Framing Mode",
-  "Blend Mode",
-  "LUT",
-  "Play Speed",
-  "Move Speed",
-  "MTC Hour",
-  "MTC Minute",
-  "MTC Second",
-  "MTC Frame",
-  "Scale",
-  "Aspect Ratio",
-  "Position X",
-  "Position Y",
-  "Rotation X",
-  "Rotation Y",
-  "Rotation Z",
-  "Red",
-  "Green",
-  "Blue",
-  "Hue",
-  "Saturation",
-  "Contrast",
-  "Strobe",
-  "Volume",
-  "Transition Duration",
-  "Transition Mode"
-}
-
-local pinonly_list = {
-"File Select Index",
-"Folder Select Index",
-"Play Mode Index",
-"Framing Mode Index",
-"Blend Mode Index",
-"LUT Index",
-"Transition Mode Index",
-"FX1 Select Index",
-"FX2 Select Index"
-}
-
-local fx1_list = {}
-local fx2_list = {}
--- Add FX1 and FX2 parameters to fx1_list, fx2_list
-control_list["FX1 Select"] = {
-  Name = "fx1_select_",
-  ControlType = "Text",
-  Style = "ComboBox",
-  PinStyle = "Both",
-  UserPin = true
-}
-control_list["FX1 Select Index"] = {
-  Name = "fx1_select_index_",
-  ControlType = "Knob",
-  ControlUnit = "Integer",
-  Style = "None",
-  Min = 0,
-  Max = 65535,
-  PinStyle = "Both",
-  UserPin = true
-}
-fx1_list[#fx1_list + 1] = "FX1 Select"
-control_list["FX1 Opacity"] = {
-  Name = "fx1_opacity_",
-  ControlType = "Knob",
-  ControlUnit = "Percent",
-  Style = "Text Field",
-  Min = 0,
-  Max = 100,
-  PinStyle = "Both",
-  UserPin = true
-}
-fx1_list[#fx1_list + 1] = "FX1 Opacity"
-for i = 1, 16 do
-  control_list["FX1 Param " .. i] = {
-    Name = "fx1_param_" .. i .. "_",
+  [43] = {
+    Name = "FX1Select",
+    Label = "FX1 Select",
+    Path = "FX1 SELECT",
+    ControlType = "Text",
+    Style = "ComboBox",
+    PinStyle = "Both",
+    Group = "FX1",
+    Display = true,
+    Watch = true,
+    UserPin = true
+  },
+  [44] = {
+    Name = "FX1SelectIndex",
+    Label = "FX1 Select Index",
+    Path = "FX1 SELECT INDEX",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
+    PinStyle = "Both",
+    Group = "FX1",
+    Display = false,
+    Watch = false,
+    UserPin = true
+  },
+  [45] = {
+    Name = "FX1Opacity",
+    Label = "FX1 Opacity",
+    Path = "FX1 OPACITY",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "FX1",
+    Display = true,
+    Watch = true,
     UserPin = true
-  }
-  fx1_list[#fx1_list + 1] = "FX1 Param " .. i
-end
-control_list["FX2 Select"] = {
-  Name = "fx2_select_",
-  ControlType = "Text",
-  Style = "ComboBox",
-  PinStyle = "Both",
-  UserPin = true
-}
-fx2_list[#fx2_list + 1] = "FX2 Select"
-control_list["FX2 Opacity"] = {
-  Name = "fx2_opacity_",
-  ControlType = "Knob",
-  ControlUnit = "Percent",
-  Style = "Text Field",
-  Min = 0,
-  Max = 100,
-  PinStyle = "Both",
-  UserPin = true
-}
-control_list["FX2 Select Index"] = {
-  Name = "fx2_select_index_",
-  ControlType = "Knob",
-  ControlUnit = "Integer",
-  Style = "None",
-  Min = 0,
-  Max = 65535,
-  PinStyle = "Both",
-  UserPin = true
-}
-fx2_list[#fx2_list + 1] = "FX2 Opacity"
-
-for i = 1, 16 do
-  control_list["FX2 Param " .. i] = {
-    Name = "fx2_param_" .. i .. "_",
+  },
+  [62] = {
+    Name = "FX2Select",
+    Label = "FX2 Select",
+    Path = "FX2 SELECT",
+    ControlType = "Text",
+    Style = "ComboBox",
+    PinStyle = "Both",
+    Group = "FX2",
+    Display = true,
+    Watch = true,
+    UserPin = true
+  },
+  [63] = {
+    Name = "FX2SelectIndex",
+    Label = "FX2 Select Index",
+    Path = "FX2 SELECT INDEX",
+    ControlType = "Knob",
+    ControlUnit = "Integer",
+    Style = "None",
+    Min = 0,
+    Max = 65535,
+    PinStyle = "Both",
+    Group = "FX2",
+    Display = false,
+    Watch = false,
+    UserPin = true
+  },
+  [64] = {
+    Name = "FX2Opacity",
+    Label = "FX2 Opacity",
+    Path = "FX2 OPACITY",
     ControlType = "Knob",
     ControlUnit = "Percent",
     Style = "Text Field",
     Min = 0,
     Max = 100,
     PinStyle = "Both",
+    Group = "FX2",
+    Display = true,
+    Watch = true,
     UserPin = true
   }
-  fx2_list[#fx2_list + 1] = "FX2 Param " .. i
+}
+
+for i = 1, 16 do
+  control_list[45 + i] = {
+    Name = "FX1Param" .. i,
+    Label = "FX1 Param " .. i,
+    Path = "FX1 PARAM " .. i,
+    ControlType = "Knob",
+    ControlUnit = "Percent",
+    Style = "Text Field",
+    Min = 0,
+    Max = 100,
+    PinStyle = "Both",
+    Group = "FX1",
+    Display = true,
+    Watch = true,
+    UserPin = true
+  }
+  control_list[64 + i] = {
+    Name = "FX2Param" .. i,
+    Label = "FX2 Param " .. i,
+    Path = "FX2 PARAM " .. i,
+    ControlType = "Knob",
+    ControlUnit = "Percent",
+    Style = "Text Field",
+    Min = 0,
+    Max = 100,
+    PinStyle = "Both",
+    Group = "FX2",
+    Display = true,
+    Watch = true,
+    UserPin = true
+  }
 end
+
+
+
+
