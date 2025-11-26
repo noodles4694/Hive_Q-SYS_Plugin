@@ -1,50 +1,50 @@
 -- This script is automatically loaded by the main script to define and initialize runtime variables
 
 ---- These variables can be changed during runtime
-local file_list = {}
-local file_list_names = {}
-local selected_file = {}
-local file_metadata_list = {}
-local play_mode = {}
-local seek_timer_list = {}
-local seek_last_value = {}
-local playlist_row_count = 0
-local playlist_active_row = 1
-local deice_settings = nil
-local engine_fps = 0
-local device_info = nil
+local fileList = {}
+local fileListNames = {}
+local selectedFile = {}
+local fileMetadataList = {}
+local playMode = {}
+local seekTimerList = {}
+local seekLastValue = {}
+local playlistRowCount = 0
+local playlistActiveRow = 1
+local deiceSettings = nil
+local engineFps = 0
+local deviceInfo = nil
 
 for i = 1, layer_count do
-  play_mode[i] = "In Frame"
-  selected_file[i] = 0
-  saved_play_mode = {}
-  seek_timer_list[i] = Timer.New()
+  playMode[i] = "In Frame"
+  selectedFile[i] = 0
+  savedPlayMode = {}
+  seekTimerList[i] = Timer.New()
 end
 
-local media_item_count = Properties["Media List Count"].Value
+local mediaItemCount = Properties["Media List Count"].Value
 
-local folder_list = {
+local folderList = {
   ["MEDIA"] = 0
 }
 
-local folder_choices = {}
-for k, v in pairs(folder_list) do
-  table.insert(folder_choices, k)
+local folderChoices = {}
+for k, v in pairs(folderList) do
+  table.insert(folderChoices, k)
 end
 
-local lut_list = {
+local lutList = {
   ["NONE"] = 0
 }
-local lut_choices = {}
-for k, v in pairs(lut_list) do
-  table.insert(lut_choices, k)
+local lutChoices = {}
+for k, v in pairs(lutList) do
+  table.insert(lutChoices, k)
 end
 
 -- Key and Value arrays to be used with all ENUM based controls, separating the keys and values
 -- is the easiest way to maintain order but still allow them to be edited if required
 
 -- Play Mode
-local play_mode_keys = {
+local playModeKeys = {
   "In Frame",
   "Out Frame",
   "Loop Forward",
@@ -68,7 +68,7 @@ local play_mode_keys = {
   "Bounce with re-trigger on intensity"
 }
 
-local play_mode_values = {
+local playModeValues = {
   0,
   1,
   2,
@@ -93,7 +93,7 @@ local play_mode_values = {
 }
 
 -- Transition Mode
-local transition_mode_keys = {
+local transitionModeKeys = {
   "Alpha",
   "Additive",
   "Multiply",
@@ -128,7 +128,7 @@ local transition_mode_keys = {
   "Glitch"
 }
 
-local transition_mode_values = {
+local transitionModeValues = {
   0,
   1,
   2,
@@ -164,7 +164,7 @@ local transition_mode_values = {
 }
 
 -- Framing Mode
-local framing_mode_keys = {
+local framingModeKeys = {
   "Letterbox",
   "Crop",
   "Stretch",
@@ -172,7 +172,7 @@ local framing_mode_keys = {
   "Centered"
 }
 
-local framing_mode_values = {
+local framingModeValues = {
   0,
   1,
   2,
@@ -181,7 +181,7 @@ local framing_mode_values = {
 }
 
 -- Blend Mode
-local blend_mode_keys = {
+local blendModeKeys = {
   "Alpha",
   "Additive",
   "Multiply",
@@ -192,7 +192,7 @@ local blend_mode_keys = {
   "Triangle Wipe"
 }
 
-local blend_mode_values = {
+local blendModeValues = {
   0,
   1,
   2,
@@ -204,7 +204,7 @@ local blend_mode_values = {
 }
 
 -- FX
-local fx_keys = {
+local fxKeys = {
   "NONE",
   "OLD TV",
   "SEPIA",
@@ -248,7 +248,7 @@ local fx_keys = {
   "Effect 40"
 }
 
-local fx_values = {
+local fxValues = {
   0,
   1,
   2,
@@ -304,7 +304,7 @@ local StatusState = {
 
 ticker = 1
 
-local ip_address = Properties["IP Address"].Value
+local ipAddress = Properties["IP Address"].Value
 
 -- Utility functions to get key from value and vice versa in the ENUM tables
 function GetTableKey(tblKeys, tblValues, value)

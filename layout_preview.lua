@@ -9,7 +9,7 @@ table.insert(
     Fill = Colors.hive_grey,
     StrokeWidth = 1,
     Position = {0, 0},
-    Size = preview_groupbox_size
+    Size = previewGroupboxSize
   }
 )
 
@@ -24,7 +24,7 @@ table.insert(
     HTextAlign = "Centre",
     Color = Colors.control_label,
     Position = {8, 8},
-    Size = preview_size
+    Size = previewSize
   }
 )
 
@@ -37,9 +37,9 @@ layout["OutputPreview"] = {
   StrokeColor = Colors.control_text,
   ButtonVisualStyle = "Flat",
   Position = {
-     8,(2 * btn_size[2])
+     8,(2 * btnSize[2])
   },
-  Size = preview_size,
+  Size = previewSize,
   CornerRadius = 0,
   Margin = 0,
   Padding = 0
@@ -56,8 +56,8 @@ for i = 1, layer_count do
       FontStyle = "Regular",
       HTextAlign = "Centre",
       Color = Colors.control_label,
-      Position = {((i - 1) * preview_size[1]) + (3 * btn_size[1]) + 8, 8},
-      Size = preview_size
+      Position = {((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8, 8},
+      Size = previewSize
     }
   )
 
@@ -69,10 +69,10 @@ for i = 1, layer_count do
     StrokeColor = Colors.control_text,
     ButtonVisualStyle = "Flat",
     Position = {
-      ((i - 1) * preview_size[1]) + (3 * btn_size[1]) + 8,
-      (2 * btn_size[2])
+      ((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8,
+      (2 * btnSize[2])
     },
-    Size = preview_size,
+    Size = previewSize,
     CornerRadius = 0,
     Margin = 0,
     Padding = 0

@@ -7,7 +7,7 @@ table.insert(
     Fill = Colors.hive_grey,
     StrokeWidth = 1,
     Position = {0, 0},
-    Size = status_header_size
+    Size = statusHeaderSize
   }
 )
 table.insert(
@@ -19,8 +19,8 @@ table.insert(
     CornerRadius = 8,
     Fill = Colors.hive_grey,
     StrokeWidth = 1,
-    Position = {0, 0 + status_header_size[2] + btn_gap[2]},
-    Size = status_groupbox_size
+    Position = {0, 0 + statusHeaderSize[2] + btnGap[2]},
+    Size = statusGroupboxSize
   }
 )
 local logo = '--[[ #encode "images\HiveLogo.png" ]]'
@@ -43,8 +43,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {0, (0.5 * btn_size[2]) + (1 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {0, (0.5 * btnSize[2]) + (1 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -57,8 +57,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {0, (1.5 * btn_size[2]) + (2 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {0, (1.5 * btnSize[2]) + (2 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -71,8 +71,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {0, (2.5 * btn_size[2]) + (3 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {0, (2.5 * btnSize[2]) + (3 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -85,8 +85,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {0, (3.5 * btn_size[2]) + (4 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {0, (3.5 * btnSize[2]) + (4 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -99,8 +99,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {0, (4.5 * btn_size[2]) + (5 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {0, (4.5 * btnSize[2]) + (5 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -113,8 +113,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {0, (5.5 * btn_size[2]) + (6 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {0, (5.5 * btnSize[2]) + (6 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -127,8 +127,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {0, (6.5 * btn_size[2]) + (7 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {0, (6.5 * btnSize[2]) + (7 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -141,8 +141,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {0, (7.5 * btn_size[2]) + (8 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {0, (7.5 * btnSize[2]) + (8 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -155,8 +155,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {0, (8.5 * btn_size[2]) + (9 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {0, (8.5 * btnSize[2]) + (9 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -169,8 +169,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {6 * btn_size[1], (1.5 * btn_size[2]) + (2 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {6 * btnSize[1], (1.5 * btnSize[2]) + (2 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -183,8 +183,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {6 * btn_size[1], (2.5 * btn_size[2]) + (3 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {6 * btnSize[1], (2.5 * btnSize[2]) + (3 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -197,8 +197,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {6 * btn_size[1], (3.5 * btn_size[2]) + (4 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {6 * btnSize[1], (3.5 * btnSize[2]) + (4 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -211,8 +211,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {6 * btn_size[1], (4.5 * btn_size[2]) + (5 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {6 * btnSize[1], (4.5 * btnSize[2]) + (5 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -225,8 +225,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {6 * btn_size[1], (5.5 * btn_size[2]) + (6 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {6 * btnSize[1], (5.5 * btnSize[2]) + (6 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -239,8 +239,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {6 * btn_size[1], (6.5 * btn_size[2]) + (7 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {6 * btnSize[1], (6.5 * btnSize[2]) + (7 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -253,16 +253,16 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {6 * btn_size[1], (7.5 * btn_size[2]) + (8 * btn_gap[2]) + status_header_size[2]},
-    Size = {3 * btn_size[1], btn_size[2]}
+    Position = {6 * btnSize[1], (7.5 * btnSize[2]) + (8 * btnGap[2]) + statusHeaderSize[2]},
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 
 layout["Status"] = {
   PrettyName = "System~Status",
   Style = "TextBox",
-  Position = {3 * btn_size[1], (0.5 * btn_size[2]) + (1 * btn_gap[2]) + status_header_size[2]},
-  Size = {9 * btn_size[1], btn_size[2]}
+  Position = {3 * btnSize[1], (0.5 * btnSize[2]) + (1 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {9 * btnSize[1], btnSize[2]}
 }
 
 layout["IPAddress"] = {
@@ -273,8 +273,8 @@ layout["IPAddress"] = {
   StrokeColor = Colors.control_text,
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {3 * btn_size[1], (1.5 * btn_size[2]) + (2 * btn_gap[2]) + status_header_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {3 * btnSize[1], (1.5 * btnSize[2]) + (2 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["DeviceName"] = {
   PrettyName = "System~Device Name",
@@ -283,8 +283,8 @@ layout["DeviceName"] = {
   TextColor = Colors.control_text,
   StrokeColor = Colors.control_text,
   StrokeWidth = 1,
-  Position = {3 * btn_size[1], (2.5 * btn_size[2]) + (3 * btn_gap[2]) + status_header_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {3 * btnSize[1], (2.5 * btnSize[2]) + (3 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["Universe"] = {
   PrettyName = "System~Universe",
@@ -294,8 +294,8 @@ layout["Universe"] = {
   StrokeColor = Colors.control_text,
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {3 * btn_size[1], (4.5 * btn_size[2]) + (5 * btn_gap[2]) + status_header_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {3 * btnSize[1], (4.5 * btnSize[2]) + (5 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["Version"] = {
   PrettyName = "System~Version",
@@ -305,8 +305,8 @@ layout["Version"] = {
   StrokeColor = Colors.control_text,
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {3 * btn_size[1], (3.5 * btn_size[2]) + (4 * btn_gap[2]) + status_header_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {3 * btnSize[1], (3.5 * btnSize[2]) + (4 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 
 layout["OutputResolution"] = {
@@ -317,8 +317,8 @@ layout["OutputResolution"] = {
   StrokeColor = Colors.control_text,
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {3 * btn_size[1], (5.5 * btn_size[2]) + (6 * btn_gap[2]) + status_header_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {3 * btnSize[1], (5.5 * btnSize[2]) + (6 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["OutputFramerate"] = {
   PrettyName = "System~Output Framerate",
@@ -328,8 +328,8 @@ layout["OutputFramerate"] = {
   StrokeColor = Colors.control_text,
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {3 * btn_size[1], (6.5 * btn_size[2]) + (7 * btn_gap[2]) + status_header_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {3 * btnSize[1], (6.5 * btnSize[2]) + (7 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["EngineFPS"] = {
   PrettyName = "System~Engine FPS",
@@ -339,8 +339,8 @@ layout["EngineFPS"] = {
   StrokeColor = Colors.control_text,
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {3 * btn_size[1], (7.5 * btn_size[2]) + (8 * btn_gap[2]) + status_header_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {3 * btnSize[1], (7.5 * btnSize[2]) + (8 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["Activity"] = {
   PrettyName = "System~Engine FPS",
@@ -350,8 +350,8 @@ layout["Activity"] = {
   StrokeColor = Colors.control_text,
   FontSize = 8,
   StrokeWidth = 1,
-  Position = {3 * btn_size[1], (8.5 * btn_size[2]) + (9 * btn_gap[2]) + status_header_size[2]},
-  Size = {9 * btn_size[1], btn_size[2]}
+  Position = {3 * btnSize[1], (8.5 * btnSize[2]) + (9 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {9 * btnSize[1], btnSize[2]}
 }
 layout["Netmask"] = {
   PrettyName = "System~NetMask",
@@ -361,8 +361,8 @@ layout["Netmask"] = {
   StrokeColor = Colors.control_text,
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {9 * btn_size[1], (1.5 * btn_size[2]) + (2 * btn_gap[2]) + status_header_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {9 * btnSize[1], (1.5 * btnSize[2]) + (2 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["SerialNumber"] = {
   PrettyName = "System~Serial Number",
@@ -372,8 +372,8 @@ layout["SerialNumber"] = {
   StrokeColor = Colors.control_text,
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {9 * btn_size[1], (2.5 * btn_size[2]) + (3 * btn_gap[2]) + status_header_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {9 * btnSize[1], (2.5 * btnSize[2]) + (3 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["BeeType"] = {
   PrettyName = "System~Bee Type",
@@ -383,8 +383,8 @@ layout["BeeType"] = {
   StrokeColor = Colors.control_text,
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {9 * btn_size[1], (3.5 * btn_size[2]) + (4 * btn_gap[2]) + status_header_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {9 * btnSize[1], (3.5 * btnSize[2]) + (4 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["FileCount"] = {
   PrettyName = "System~Media File Count",
@@ -394,8 +394,8 @@ layout["FileCount"] = {
   StrokeColor = Colors.control_text,
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {9 * btn_size[1], (4.5 * btn_size[2]) + (5 * btn_gap[2]) + status_header_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {9 * btnSize[1], (4.5 * btnSize[2]) + (5 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["FreeSpace"] = {
   PrettyName = "System~Free Storage Space",
@@ -405,8 +405,8 @@ layout["FreeSpace"] = {
   StrokeColor = Colors.control_text,
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {9 * btn_size[1], (5.5 * btn_size[2]) + (6 * btn_gap[2]) + status_header_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {9 * btnSize[1], (5.5 * btnSize[2]) + (6 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["CpuPower"] = {
   PrettyName = "System~CPU Power",
@@ -416,8 +416,8 @@ layout["CpuPower"] = {
   StrokeColor = Colors.control_text,
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {9 * btn_size[1], (6.5 * btn_size[2]) + (7 * btn_gap[2]) + status_header_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {9 * btnSize[1], (6.5 * btnSize[2]) + (7 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["SyncStatus"] = {
   PrettyName = "System~Beesync Status",
@@ -427,6 +427,6 @@ layout["SyncStatus"] = {
   StrokeColor = Colors.control_text,
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {9 * btn_size[1], (7.5 * btn_size[2]) + (8 * btn_gap[2]) + status_header_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {9 * btnSize[1], (7.5 * btnSize[2]) + (8 * btnGap[2]) + statusHeaderSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }

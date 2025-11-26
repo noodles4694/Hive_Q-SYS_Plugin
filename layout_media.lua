@@ -9,7 +9,7 @@ table.insert(
     Fill = Colors.hive_grey,
     StrokeWidth = 1,
     Position = {0, 0},
-    Size = media_list_groupbox_size
+    Size = mediaListGroupboxSize
   }
 )
 table.insert(
@@ -22,8 +22,8 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.control_label,
-    Position = {0, (1 * btn_size[2])},
-    Size = {2 * btn_size[1], btn_size[2]}
+    Position = {0, (1 * btnSize[2])},
+    Size = {2 * btnSize[1], btnSize[2]}
   }
 )
 
@@ -38,11 +38,11 @@ for i = 1, layer_count do
       FontStyle = "Regular",
       HTextAlign = "Centre",
       Color = Colors.control_label,
-      Position = {((i - 1) * preview_size[1]) + (3 * btn_size[1]) + 8, 8},
-      Size = preview_size
+      Position = {((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8, 8},
+      Size = previewSize
     }
   )
-  for p = 1, media_item_count do
+  for p = 1, mediaItemCount do
     layout[string.format("MediaName%s %s", p, i)] = {
       PrettyName = string.format("Layer %s~Media List~%s~Name", i, p),
       Style = "TextBox",
@@ -55,9 +55,9 @@ for i = 1, layer_count do
       StrokeWidth = 0,
       Position = {
         4,
-        (2 * btn_size[2]) + ((p - 1) * preview_size[2])
+        (2 * btnSize[2]) + ((p - 1) * previewSize[2])
       },
-      Size = {3 * btn_size[1], preview_size[2]}
+      Size = {3 * btnSize[1], previewSize[2]}
     }
 
     layout[string.format("MediaThumbnail%s %s", p, i)] = {
@@ -68,10 +68,10 @@ for i = 1, layer_count do
       StrokeColor = Colors.control_text,
       ButtonVisualStyle = "Flat",
       Position = {
-        ((i - 1) * preview_size[1]) + (3 * btn_size[1]) + 8,
-        (2 * btn_size[2]) + ((p - 1) * preview_size[2])
+        ((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8,
+        (2 * btnSize[2]) + ((p - 1) * previewSize[2])
       },
-      Size = preview_size
+      Size = previewSize
     }
   end
 end

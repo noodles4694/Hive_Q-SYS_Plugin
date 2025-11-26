@@ -10,10 +10,10 @@ table.insert(
     Fill = Colors.hive_grey,
     StrokeWidth = 1,
     Position = {
-      player_groupbox_position[1],
-      player_groupbox_position[2]
+      playerGroupboxPosition[1],
+      playerGroupboxPosition[2]
     },
-    Size = player_groupbox_size
+    Size = playerGroupboxSize
   }
 )
 table.insert(
@@ -26,10 +26,10 @@ table.insert(
     Fill = Colors.hive_grey,
     StrokeWidth = 1,
     Position = {
-      player_groupbox_position[1],
-      player_groupbox_size[2] + 8
+      playerGroupboxPosition[1],
+      playerGroupboxSize[2] + 8
     },
-    Size = fx1_groupbox_size
+    Size = fx1GroupboxSize
   }
 )
 table.insert(
@@ -42,10 +42,10 @@ table.insert(
     Fill = Colors.hive_grey,
     StrokeWidth = 1,
     Position = {
-      player_groupbox_position[1],
-      player_groupbox_size[2] + 16 + fx1_groupbox_size[2]
+      playerGroupboxPosition[1],
+      playerGroupboxSize[2] + 16 + fx1GroupboxSize[2]
     },
-    Size = fx2_groupbox_size
+    Size = fx2GroupboxSize
   }
 )
 local layerCount = 0
@@ -55,8 +55,8 @@ for k, v in ipairs(control_list) do
   if v.Group == "Layer" then
     if v.Display == true then
       layerCount = layerCount + 1
-      local column = math.floor((layerCount - 1) / column_size) + 1
-      local row = layerCount - (column - 1) * column_size
+      local column = math.floor((layerCount - 1) / columnSize) + 1
+      local row = layerCount - (column - 1) * columnSize
       table.insert(
         graphics,
         {
@@ -68,10 +68,10 @@ for k, v in ipairs(control_list) do
           HTextAlign = "Right",
           Color = Colors.control_label,
           Position = {
-            player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
-            player_groupbox_position[2] + (row * btn_size[2])
+            playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
+            playerGroupboxPosition[2] + (row * btnSize[2])
           },
-          Size = {3 * btn_size[1], btn_size[2]}
+          Size = {3 * btnSize[1], btnSize[2]}
         }
       )
 
@@ -88,10 +88,10 @@ for k, v in ipairs(control_list) do
         FontSize = (v.Label == "File Select") and 8 or 12,
         StrokeWidth = 1,
         Position = {
-          player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
-          player_groupbox_position[2] + (row * btn_size[2])
+          playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)) + (3 * btnSize[1]),
+          playerGroupboxPosition[2] + (row * btnSize[2])
         },
-        Size = {3 * btn_size[1], btn_size[2]}
+        Size = {3 * btnSize[1], btnSize[2]}
       }
     else
       layout[v.Name .. " " .. i] = {
@@ -107,8 +107,8 @@ for k, v in ipairs(control_list) do
   elseif v.Group == "FX1" then
     if v.Display == true then
       fx1Count = fx1Count + 1
-      local column = math.floor((fx1Count - 1) / fx1_column_size) + 1
-      local row = fx1Count - (column - 1) * fx1_column_size
+      local column = math.floor((fx1Count - 1) / fx1ColumnSize) + 1
+      local row = fx1Count - (column - 1) * fx1ColumnSize
       table.insert(
         graphics,
         {
@@ -120,10 +120,10 @@ for k, v in ipairs(control_list) do
           HTextAlign = "Right",
           Color = Colors.control_label,
           Position = {
-            player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
-            player_groupbox_size[2] + 8 + (row * btn_size[2])
+            playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
+            playerGroupboxSize[2] + 8 + (row * btnSize[2])
           },
-          Size = {3 * btn_size[1], btn_size[2]}
+          Size = {3 * btnSize[1], btnSize[2]}
         }
       )
       layout[v.Name .. " " .. i] = {
@@ -135,10 +135,10 @@ for k, v in ipairs(control_list) do
         FontSize = 12,
         StrokeWidth = 1,
         Position = {
-          player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
-          player_groupbox_size[2] + 8 + (row * btn_size[2])
+          playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)) + (3 * btnSize[1]),
+          playerGroupboxSize[2] + 8 + (row * btnSize[2])
         },
-        Size = {3 * btn_size[1], btn_size[2]}
+        Size = {3 * btnSize[1], btnSize[2]}
       }
     else
       layout[v.Name .. " " .. i] = {
@@ -154,8 +154,8 @@ for k, v in ipairs(control_list) do
   elseif v.Group == "FX2" then
     if v.Display == true then
       fx2Count = fx2Count + 1
-      local column = math.floor((fx2Count - 1) / fx2_column_size) + 1
-      local row = fx2Count - (column - 1) * fx2_column_size
+      local column = math.floor((fx2Count - 1) / fx2ColumnSize) + 1
+      local row = fx2Count - (column - 1) * fx2ColumnSize
       table.insert(
         graphics,
         {
@@ -167,10 +167,10 @@ for k, v in ipairs(control_list) do
           HTextAlign = "Right",
           Color = Colors.control_label,
           Position = {
-            player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)),
-            player_groupbox_size[2] + 16 + fx1_groupbox_size[2] + (row * btn_size[2])
+            playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
+            playerGroupboxSize[2] + 16 + fx1GroupboxSize[2] + (row * btnSize[2])
           },
-          Size = {3 * btn_size[1], btn_size[2]}
+          Size = {3 * btnSize[1], btnSize[2]}
         }
       )
       layout[v.Name .. " " .. i] = {
@@ -182,10 +182,10 @@ for k, v in ipairs(control_list) do
         FontSize = 12,
         StrokeWidth = 1,
         Position = {
-          player_groupbox_position[1] + ((6 * btn_size[1]) * (column - 1)) + (3 * btn_size[1]),
-          player_groupbox_size[2] + 16 + fx1_groupbox_size[2] + (row * btn_size[2])
+          playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)) + (3 * btnSize[1]),
+          playerGroupboxSize[2] + 16 + fx1GroupboxSize[2] + (row * btnSize[2])
         },
-        Size = {3 * btn_size[1], btn_size[2]}
+        Size = {3 * btnSize[1], btnSize[2]}
       }
     else
       layout[v.Name .. " " .. i] = {

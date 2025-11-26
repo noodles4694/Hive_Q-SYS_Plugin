@@ -8,7 +8,7 @@ table.insert(
     Fill = Colors.hive_grey,
     StrokeWidth = 1,
     Position = {0, 0},
-    Size = module_enable_groupbox_size
+    Size = moduleEnableGroupboxSize
   }
 )
 table.insert(
@@ -20,8 +20,8 @@ table.insert(
     CornerRadius = 8,
     Fill = Colors.hive_grey,
     StrokeWidth = 1,
-    Position = {0, module_enable_groupbox_size[2] + 4},
-    Size = module_playlist_groupbox_size
+    Position = {0, moduleEnableGroupboxSize[2] + 4},
+    Size = modulePlaylistGroupboxSize
   }
 )
 
@@ -34,8 +34,8 @@ table.insert(
     CornerRadius = 8,
     Fill = Colors.hive_grey,
     StrokeWidth = 1,
-    Position = {0, module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] + 8},
-    Size = module_system_groupbox_size
+    Position = {0, moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2] + 8},
+    Size = moduleSystemGroupboxSize
   }
 )
 
@@ -52,8 +52,8 @@ layout["PlaylistEnable"] = {
   Legend = "Playlist",
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {(2 * btn_gap[1]), btn_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {(2 * btnGap[1]), btnSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 
 layout["L1TimecodeEnable"] = {
@@ -69,8 +69,8 @@ layout["L1TimecodeEnable"] = {
   Legend = "L1 TC Cuelist",
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {(3 * btn_size[1]) + (4 * btn_gap[1]), btn_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {(3 * btnSize[1]) + (4 * btnGap[1]), btnSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 
 layout["L2TimecodeEnable"] = {
@@ -86,8 +86,8 @@ layout["L2TimecodeEnable"] = {
   Legend = "L2 TC Cuelist",
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {(6 * btn_size[1]) + (6 * btn_gap[1]), btn_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {(6 * btnSize[1]) + (6 * btnGap[1]), btnSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["TimelineEnable"] = {
   PrettyName = "Modules~Timeline Enable",
@@ -102,8 +102,8 @@ layout["TimelineEnable"] = {
   Legend = "Timeline",
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {(9 * btn_size[1]) + (8 * btn_gap[1]), btn_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {(9 * btnSize[1]) + (8 * btnGap[1]), btnSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["ScheduleEnable"] = {
   PrettyName = "Modules~Schedule Enable",
@@ -118,8 +118,8 @@ layout["ScheduleEnable"] = {
   Legend = "Scheduler",
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {(12 * btn_size[1]) + (10 * btn_gap[1]), btn_size[2]},
-  Size = {3 * btn_size[1], btn_size[2]}
+  Position = {(12 * btnSize[1]) + (10 * btnGap[1]), btnSize[2]},
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 
 
@@ -134,10 +134,10 @@ table.insert(
     HTextAlign = "Right",
     Color = Colors.control_label,
     Position = {
-      (0 * btn_size[1]) + (1 * btn_gap[1]),
-      (1 * btn_gap[2]) + module_enable_groupbox_size[2] + (1 * btn_size[2])
+      (0 * btnSize[1]) + (1 * btnGap[1]),
+      (1 * btnGap[2]) + moduleEnableGroupboxSize[2] + (1 * btnSize[2])
     },
-    Size = {3 * btn_size[1], btn_size[2]}
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -151,10 +151,10 @@ table.insert(
     HTextAlign = "Right",
     Color = Colors.control_label,
     Position = {
-      (0 * btn_size[1]) + (1 * btn_gap[1]),
-      (2 * btn_gap[2]) + module_enable_groupbox_size[2] + (2 * btn_size[2])
+      (0 * btnSize[1]) + (1 * btnGap[1]),
+      (2 * btnGap[2]) + moduleEnableGroupboxSize[2] + (2 * btnSize[2])
     },
-    Size = {3 * btn_size[1], btn_size[2]}
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -168,10 +168,10 @@ table.insert(
     HTextAlign = "Right",
     Color = Colors.control_label,
     Position = {
-      (0 * btn_size[1]) + (1 * btn_gap[1]),
-      (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])
+      (0 * btnSize[1]) + (1 * btnGap[1]),
+      (3 * btnGap[2]) + moduleEnableGroupboxSize[2] + (3 * btnSize[2])
     },
-    Size = {3 * btn_size[1], btn_size[2]}
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 table.insert(
@@ -185,10 +185,10 @@ table.insert(
     HTextAlign = "Right",
     Color = Colors.control_label,
     Position = {
-      (0 * btn_size[1]) + (1 * btn_gap[1]),
-      (4 * btn_gap[2]) + module_enable_groupbox_size[2] + (4 * btn_size[2])
+      (0 * btnSize[1]) + (1 * btnGap[1]),
+      (4 * btnGap[2]) + moduleEnableGroupboxSize[2] + (4 * btnSize[2])
     },
-    Size = {3 * btn_size[1], btn_size[2]}
+    Size = {3 * btnSize[1], btnSize[2]}
   }
 )
 
@@ -201,10 +201,10 @@ layout["PlaylistRows"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (3 * btn_size[1]) + (1 * btn_gap[1]),
-    (1 * btn_gap[2]) + module_enable_groupbox_size[2] + (1 * btn_size[2])
+    (3 * btnSize[1]) + (1 * btnGap[1]),
+    (1 * btnGap[2]) + moduleEnableGroupboxSize[2] + (1 * btnSize[2])
   },
-  Size = {3 * btn_size[1], btn_size[2]}
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 
 layout["PlaylistCurrentRow"] = {
@@ -216,10 +216,10 @@ layout["PlaylistCurrentRow"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (3 * btn_size[1]) + (1 * btn_gap[1]),
-    (2 * btn_gap[2]) + module_enable_groupbox_size[2] + (2 * btn_size[2])
+    (3 * btnSize[1]) + (1 * btnGap[1]),
+    (2 * btnGap[2]) + moduleEnableGroupboxSize[2] + (2 * btnSize[2])
   },
-  Size = {3 * btn_size[1], btn_size[2]}
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 
 layout["L1TCRows"] = {
@@ -231,10 +231,10 @@ layout["L1TCRows"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (3 * btn_size[1]) + (1 * btn_gap[1]),
-    (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])
+    (3 * btnSize[1]) + (1 * btnGap[1]),
+    (3 * btnGap[2]) + moduleEnableGroupboxSize[2] + (3 * btnSize[2])
   },
-  Size = {3 * btn_size[1], btn_size[2]}
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 
 
@@ -248,10 +248,10 @@ layout["L2TCRows"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (3 * btn_size[1]) + (1 * btn_gap[1]),
-    (4 * btn_gap[2]) + module_enable_groupbox_size[2] + (4 * btn_size[2])
+    (3 * btnSize[1]) + (1 * btnGap[1]),
+    (4 * btnGap[2]) + moduleEnableGroupboxSize[2] + (4 * btnSize[2])
   },
-  Size = {3 * btn_size[1], btn_size[2]}
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 
 
@@ -268,10 +268,10 @@ layout["PlaylistPlayPrevious"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (9 * btn_size[1]) + (3 * btn_gap[1]),
-    (1 * btn_gap[2]) + module_enable_groupbox_size[2] + (1 * btn_size[2])
+    (9 * btnSize[1]) + (3 * btnGap[1]),
+    (1 * btnGap[2]) + moduleEnableGroupboxSize[2] + (1 * btnSize[2])
   },
-  Size = {3 * btn_size[1], btn_size[2]}
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 
 layout["PlaylistPlayNext"] = {
@@ -287,10 +287,10 @@ layout["PlaylistPlayNext"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (12 * btn_size[1]) + (4 * btn_gap[1]),
-    (1 * btn_gap[2]) + module_enable_groupbox_size[2] + (1 * btn_size[2])
+    (12 * btnSize[1]) + (4 * btnGap[1]),
+    (1 * btnGap[2]) + moduleEnableGroupboxSize[2] + (1 * btnSize[2])
   },
-  Size = {3 * btn_size[1], btn_size[2]}
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 
 layout["PlaylistPlayFirst"] = {
@@ -306,10 +306,10 @@ layout["PlaylistPlayFirst"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (9 * btn_size[1]) + (3 * btn_gap[1]),
-    (2 * btn_gap[2]) + module_enable_groupbox_size[2] + (2 * btn_size[2])
+    (9 * btnSize[1]) + (3 * btnGap[1]),
+    (2 * btnGap[2]) + moduleEnableGroupboxSize[2] + (2 * btnSize[2])
   },
-  Size = {3 * btn_size[1], btn_size[2]}
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 
 layout["PlaylistPlayLast"] = {
@@ -325,10 +325,10 @@ layout["PlaylistPlayLast"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (12 * btn_size[1]) + (4 * btn_gap[1]),
-    (2 * btn_gap[2]) + module_enable_groupbox_size[2] + (2 * btn_size[2])
+    (12 * btnSize[1]) + (4 * btnGap[1]),
+    (2 * btnGap[2]) + moduleEnableGroupboxSize[2] + (2 * btnSize[2])
   },
-  Size = {3 * btn_size[1], btn_size[2]}
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 
 layout["PlaylistPlayRow"] = {
@@ -344,10 +344,10 @@ layout["PlaylistPlayRow"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (9 * btn_size[1]) + (3 * btn_gap[1]),
-    (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])
+    (9 * btnSize[1]) + (3 * btnGap[1]),
+    (3 * btnGap[2]) + moduleEnableGroupboxSize[2] + (3 * btnSize[2])
   },
-  Size = {3 * btn_size[1], btn_size[2]}
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 
 layout["PlaylistPlayRowIndex"] = {
@@ -359,10 +359,10 @@ layout["PlaylistPlayRowIndex"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (12 * btn_size[1]) + (4 * btn_gap[1]),
-    (3 * btn_gap[2]) + module_enable_groupbox_size[2] + (3 * btn_size[2])
+    (12 * btnSize[1]) + (4 * btnGap[1]),
+    (3 * btnGap[2]) + moduleEnableGroupboxSize[2] + (3 * btnSize[2])
   },
-  Size = {3 * btn_size[1], btn_size[2]}
+  Size = {3 * btnSize[1], btnSize[2]}
 }
 
 
@@ -379,10 +379,10 @@ layout["SystemRestart"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (2 * btn_size[1]) + (4 * btn_gap[1]),
-    (6 * btn_gap[2]) + module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] 
+    (2 * btnSize[1]) + (4 * btnGap[1]),
+    (6 * btnGap[2]) + moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2] 
   },
-  Size = {4 * btn_size[1], btn_size[2]}
+  Size = {4 * btnSize[1], btnSize[2]}
 }
 layout["SystemShutdown"] = {
   PrettyName = "System~Shutdown Device",
@@ -397,10 +397,10 @@ layout["SystemShutdown"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (6 * btn_size[1]) + (8 * btn_gap[1]),
-    (6 * btn_gap[2]) + module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] 
+    (6 * btnSize[1]) + (8 * btnGap[1]),
+    (6 * btnGap[2]) + moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2] 
   },
-  Size = {4 * btn_size[1], btn_size[2]}
+  Size = {4 * btnSize[1], btnSize[2]}
 }
 
 layout["SystemWake"] = {
@@ -416,8 +416,8 @@ layout["SystemWake"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (10 * btn_size[1]) + (12 * btn_gap[1]),
-    (6 * btn_gap[2]) + module_enable_groupbox_size[2] + module_playlist_groupbox_size[2] 
+    (10 * btnSize[1]) + (12 * btnGap[1]),
+    (6 * btnGap[2]) + moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2] 
   },
-  Size = {4 * btn_size[1], btn_size[2]}
+  Size = {4 * btnSize[1], btnSize[2]}
 }

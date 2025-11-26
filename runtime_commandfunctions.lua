@@ -1,8 +1,8 @@
 -- Command functions called by control callbacks
 function CmdFileSelect(layer, x) -- 0..65535: File Select
-  local currentFileName = file_list_names[selected_file[layer] + 1] or "None"
-  if file_metadata_list[currentFileName] then
-    Controls.Duration[layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
+  local currentFileName = fileListNames[selectedFile[layer] + 1] or "None"
+  if fileMetadataList[currentFileName] then
+    Controls.Duration[layer].String = os.date("!%X", math.floor(fileMetadataList[currentFileName].duration))
   else
     Controls.Duration[layer].String = os.date("!%X", 0)
   end
@@ -207,9 +207,9 @@ function CmdUpdateMappingData(x)
   SendJson("Output Mapping", rapidjson.decode(x))
 end
 
-function CheckHiveJsonDataValidity(json_string, description)
+function CheckHiveJsonDataValidity(jsonString, description)
   -- check it can be encoded as JSON and matches expected description
-  local status, result = pcall(rapidjson.decode, json_string)
+  local status, result = pcall(rapidjson.decode, jsonString)
   if status then
     if result and result.description == description then
       print("Valid " .. description .. " JSON data")
@@ -225,49 +225,49 @@ function CheckHiveJsonDataValidity(json_string, description)
 end
 
 function CmdPlaylistPlayPrevious()
-  if playlist_row_count > 0 then
-    local new_row = playlist_active_row - 1
-    if new_row < 1 then
-      new_row = playlist_row_count
+  if playlistRowCount > 0 then
+    local newRow = playlistActiveRow - 1
+    if newRow < 1 then
+      newRow = playlistRowCount
     end
-    SetPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+    SetPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", newRow - 1)
   end
 end
 
 function CmdPlaylistPlayNext()
-  if playlist_row_count > 0 then
-    local new_row = playlist_active_row + 1
-    if new_row > playlist_row_count then
-      new_row = 1
+  if playlistRowCount > 0 then
+    local newRow = playlistActiveRow + 1
+    if newRow > playlistRowCount then
+      newRow = 1
     end
-    SetPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+    SetPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", newRow - 1)
   end
 end
 
 function CmdPlaylistPlayFirst()
-  if playlist_row_count > 0 then
-    local new_row = 1
-    SetPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+  if playlistRowCount > 0 then
+    local newRow = 1
+    SetPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", newRow - 1)
   end
 end
 
 function CmdPlaylistPlayLast()
-  if playlist_row_count > 0 then
-    local new_row = playlist_row_count
-    SetPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+  if playlistRowCount > 0 then
+    local newRow = playlistRowCount
+    SetPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", newRow - 1)
   end
 end
 
 function CmdPlaylistPlayRow(x)
-  if playlist_row_count > 0 then
-    local new_row = x
-    if new_row < 1 then
-      new_row = 1
+  if playlistRowCount > 0 then
+    local newRow = x
+    if newRow < 1 then
+      newRow = 1
     end
-    if new_row > playlist_row_count then
-      new_row = playlist_row_count
+    if newRow > playlistRowCount then
+      newRow = playlistRowCount
     end
-    SetPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", new_row - 1)
+    SetPatchDouble("/Playlist Control/Playlist Controller 1/Play List Next", newRow - 1)
   end
 end
 
@@ -276,7 +276,7 @@ function CmdRestart()
     return
   end
   LogMessage("Sending restart command to device")
-  local url = string.format("http://%s/api/runSystemCommand", ip_address)
+  local url = string.format("http://%s/api/runSystemCommand", ipAddress)
   HttpClient.Post {
     Url = url,
     Data = rapidjson.encode(
@@ -303,7 +303,7 @@ function CmdShutdown()
     return
   end
   LogMessage("Sending shutdown command to device")
-  local url = string.format("http://%s/api/runSystemCommand", ip_address)
+  local url = string.format("http://%s/api/runSystemCommand", ipAddress)
   HttpClient.Post {
     Url = url,
     Data = rapidjson.encode(

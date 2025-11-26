@@ -2,10 +2,10 @@
 LogDebug("Setting up control event handlers")
 for i = 1, layer_count do
   Controls.FileSelect[i].EventHandler = function()
-    CmdFileSelect(i, file_list[Controls.FileSelect[i].String])
+    CmdFileSelect(i, fileList[Controls.FileSelect[i].String])
   end
   Controls.FolderSelect[i].EventHandler = function()
-    CmdFolderSelect(i, folder_list[Controls.FolderSelect[i].String])
+    CmdFolderSelect(i, folderList[Controls.FolderSelect[i].String])
   end
   Controls.FileSelectIndex[i].EventHandler = function()
     CmdFileSelect(i, Controls.FileSelectIndex[i].Value)
@@ -23,42 +23,42 @@ for i = 1, layer_count do
     CmdOutFrame(i, Controls.OutFrame[i].Value)
   end
   Controls.PlayMode[i].EventHandler = function()
-    local val = GetTableValue(play_mode_keys, play_mode_values, Controls.PlayMode[i].String)
+    local val = GetTableValue(playModeKeys, playModeValues, Controls.PlayMode[i].String)
     CmdPlayMode(i, val)
   end
   Controls.PlayModeIndex[i].EventHandler = function()
     CmdPlayMode(i, Controls.PlayModeIndex[i].Value)
   end
   Controls.FramingMode[i].EventHandler = function()
-    local val = GetTableValue(framing_mode_keys, framing_mode_values, Controls.FramingMode[i].String)
+    local val = GetTableValue(framingModeKeys, framingModeValues, Controls.FramingMode[i].String)
     CmdFraming(i, val)
   end
   Controls.FramingModeIndex[i].EventHandler = function()
     CmdFraming(i, Controls.FramingModeIndex[i].Value)
   end
   Controls.BlendMode[i].EventHandler = function()
-    local val = GetTableValue(blend_mode_keys, blend_mode_values, Controls.BlendMode[i].String)
+    local val = GetTableValue(blendModeKeys, blendModeValues, Controls.BlendMode[i].String)
     CmdBlendMode(i, val)
   end
   Controls.BlendModeIndex[i].EventHandler = function()
     CmdBlendMode(i, Controls.BlendModeIndex[i].Value)
   end
   Controls.FX1Select[i].EventHandler = function()
-    local val = GetTableValue(fx_keys, fx_values, Controls.FX1Select[i].String)
+    local val = GetTableValue(fxKeys, fxValues, Controls.FX1Select[i].String)
     CmdFx1Select(i, val)
   end
   Controls.FX1SelectIndex[i].EventHandler = function()
     CmdFx1Select(i, Controls.FX1SelectIndex[i].Value)
   end
   Controls.FX2Select[i].EventHandler = function()
-    local val = GetTableValue(fx_keys, fx_values, Controls.FX2Select[i].String)
+    local val = GetTableValue(fxKeys, fxValues, Controls.FX2Select[i].String)
     CmdFx2Select(i, val)
   end
   Controls.FX2SelectIndex[i].EventHandler = function()
     CmdFx2Select(i, Controls.FX2SelectIndex[i].Value)
   end
   Controls.Lut[i].EventHandler = function()
-    CmdLutSelect(i, lut_list[Controls.Lut[i].String])
+    CmdLutSelect(i, lutList[Controls.Lut[i].String])
   end
   Controls.LutIndex[i].EventHandler = function()
     CmdLutSelect(i, Controls.LutIndex[i].Value)
@@ -139,13 +139,13 @@ for i = 1, layer_count do
     CmdVolume(i, Controls.Volume[i].Position)
   end
   Controls.Seek[i].EventHandler = function()
-    seek_timer_list[i]:Start(.2)
+    seekTimerList[i]:Start(.2)
   end
   Controls.TransitionDuration[i].EventHandler = function()
     CmdTransitionDuration(i, Controls.TransitionDuration[i].Value)
   end
   Controls.TransitionMode[i].EventHandler = function()
-    local val = GetTableValue(transition_mode_keys, transition_mode_values, Controls.TransitionMode[i].String)
+    local val = GetTableValue(transitionModeKeys, transitionModeValues, Controls.TransitionMode[i].String)
     CmdTransitionMode(i, val)
   end
   Controls.TransitionModeIndex[i].EventHandler = function()
@@ -166,10 +166,10 @@ for i = 1, layer_count do
     end
   end
 
-  for p = 1, media_item_count do
+  for p = 1, mediaItemCount do
     Controls[string.format("MediaThumbnail%s", p)][i].EventHandler = function()
       if Controls[string.format("MediaName%s", p)][i].String ~= nil then
-        CmdFileSelect(i, file_list[Controls[string.format("MediaName%s", p)][i].String])
+        CmdFileSelect(i, fileList[Controls[string.format("MediaName%s", p)][i].String])
       end
     end
   end
