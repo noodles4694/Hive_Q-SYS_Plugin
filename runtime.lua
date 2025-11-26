@@ -183,7 +183,7 @@ function fn_process_LUT_data(path, data)
         end
       end
       for i = 1, layer_count do
-        Controls["lut_" .. i].Choices = lut_choices
+        Controls.Lut[i].Choices = lut_choices
       end
     end
   else
@@ -196,6 +196,7 @@ function fn_process_transport_update(path, value)
   local layer, parameter = path:match("/LAYER (%d+)/(%P+)")
   if parameter == "Transport Control" then
     local layer, parameter, sub_parameter = path:match("/LAYER (%d+)/(%P+)/(%P+)")
+    layer = tonumber(layer)
     local currentFileName = file_list_names[selected_file[tonumber(layer)]] or ""
     if sub_parameter == "Media Time" then
       if not seek_timer_list[tonumber(layer)]:IsRunning() then
@@ -203,17 +204,17 @@ function fn_process_transport_update(path, value)
           currentFileName == "" or file_metadata_list[currentFileName] == nil or
             file_metadata_list[currentFileName].duration == 0
          then
-          Controls["seek_" .. layer].Position = 0
-          Controls["time_elapsed_" .. layer].String = os.date("!%X", 0)
+          Controls.Seek[layer].Position = 0
+          Controls.TimeElapsed[layer].String = os.date("!%X", 0)
         else
           local pos = tonumber(value) / file_metadata_list[currentFileName].duration
-          Controls["seek_" .. layer].Position = pos
-          Controls["time_elapsed_" .. layer].String = os.date("!%X", math.floor(value))
+          Controls.Seek[layer].Position = pos
+          Controls.TimeElapsed[layer].String = os.date("!%X", math.floor(value))
         end
       end
     end
   else
-    fn_log_error("Unknown transport parameter: " .. parameter)
+    fn_log_error("Unknown transport parameter: " .. par)
   end
 end
 
@@ -229,11 +230,12 @@ function fn_process_double_update(path, value)
   fn_log_debug("Processing double update: " .. path .. " = " .. tostring(value))
   if path:sub(1, 6) == "/LAYER" then -- Layer parameter response
     local layer, parameter = path:match("/LAYER (%d+)/(%P+)/Value")
+    layer = tonumber(layer)
     if parameter then
       local control = ""
       for _, param in ipairs(control_list) do
         if param.Path == parameter then
-          control = param.Name.." "..layer
+          control = param.Name
           break
         end
       end
@@ -242,68 +244,68 @@ function fn_process_double_update(path, value)
         selected_file[tonumber(layer)] = value
         fn_update_selected_file_info(value, layer)
       elseif parameter == "FOLDER SELECT" then
-        Controls[string.format("FolderSelectIndex %s", layer)].Value = value
+        Controls.FolderSelectIndex[layer].Value = value
         for k, v in pairs(folder_list) do
           if v == value then
-            Controls[control].String = k
+            Controls[control][layer].String = k
             break
           end
         end
       elseif parameter == "LUT" then
-        Controls[string.format("LutIndex %s", layer)].Value = value
+        Controls.LutIndex[layer].Value = value
         for k, v in pairs(lut_list) do
           if v == value then
-            Controls[control].String = k
+            Controls[control][layer].String = k
             break
           end
         end
       elseif parameter:sub(-5, -1) == "FRAME" then
-        Controls[control].Value = value
+        Controls[control][layer].Value = value
       elseif parameter == "PLAY MODE" then
         local key = get_table_key(play_mode_keys, play_mode_values, value)
-        Controls[control].String = key
-        Controls[string.format("PlayModeIndex %s", layer)].Value = value
+        Controls[control][layer].String = key
+        Controls.PlayModeIndex[layer].Value = value
       elseif parameter == "FRAMING MODE" then
         local key = get_table_key(framing_mode_keys, framing_mode_values, value)
-        Controls[control].String = key
-        Controls[string.format("FramingModeIndex %s", layer)].Value = value
+        Controls[control][layer].String = key
+        Controls.FramingModeIndex[layer].Value = value
       elseif parameter == "BLEND MODE" then
         local key = get_table_key(blend_mode_keys, blend_mode_values, value)
-        Controls[control].String = key
-        Controls[string.format("BlendModeIndex %s", layer)].Value = value
+        Controls[control][layer].String = key
+        Controls.BlendModeIndex[layer].Value = value
       elseif parameter == "TRANSITION MODE" then
         local key = get_table_key(transition_mode_keys, transition_mode_values, value)
-        Controls[control].String = key
-        Controls[string.format("TransitionModeIndex %s", layer)].Value = value
+        Controls[control][layer].String = key
+        Controls.TransitionModeIndex[layer].Value = value
       elseif parameter == "FX1 SELECT" then
         local key = get_table_key(fx_keys, fx_values, value)
-        Controls[control].String = key
-        Controls[string.format("FX1SelectIndex %s", layer)].Value = value
+        Controls[control][layer].String = key
+        Controls.FX1SelectIndex[layer].Value = value
       elseif parameter == "FX2 SELECT" then
         local key = get_table_key(fx_keys, fx_values, value)
-        Controls[control].String = key
-        Controls[string.format("FX2SelectIndex %s", layer)].Value = value
+        Controls[control][layer].String = key
+        Controls.FX2SelectIndex[layer].Value = value
       elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
         if value >= 0.5 then
-          Controls[control].Position = (value - 0.4444444444444444) / 0.5555555555555556
+          Controls[control][layer].Position = (value - 0.4444444444444444) / 0.5555555555555556
         else
-          Controls[control].Position = value / 5
+          Controls[control][layer].Position = value / 5
         end
       elseif parameter:sub(1, 3) == "MTC" then
-        Controls[control].Value = value
+        Controls[control][layer].Value = value
       elseif parameter:sub(1, 8) == "POSITION" then
-        Controls[control].Value = (value * 200) - 100
+        Controls[control][layer].Value = (value * 200) - 100
       elseif parameter:sub(1, 8) == "ROTATION" then
-        Controls[control].Value = (value * 2880) - 1440
+        Controls[control][layer].Value = (value * 2880) - 1440
       elseif parameter:sub(1, 19) == "TRANSITION DURATION" then
-        Controls[control].Value = value
+        Controls[control][layer].Value = value
       elseif
         parameter == "RED" or parameter == "BLUE" or parameter == "GREEN" or parameter == "SATURATION" or
           parameter == "CONTRAST"
        then
-        Controls[control].Value = (value * 200) - 100
+        Controls[control][layer].Value = (value * 200) - 100
       else -- parameters where data directly proportional to position
-        Controls[control].Position = value
+        Controls[control][layer].Position = value
       end
     else
       fn_log_error("Unknown layer parameter: " .. path)
@@ -315,16 +317,16 @@ end
 function fn_update_selected_file_info(value, layer)
   local found = false
   for media = 1, media_item_count do
-    Controls[string.format("MediaThumbnail%s %s", media, layer)].Boolean = media == (value + 1)
+    Controls[string.format("MediaThumbnail%s", media)][layer].Boolean = media == (value + 1)
   end
   local currentFileName = file_list_names[tonumber(value)] or ""
   fn_update_preview_thumbnail(layer, currentFileName)
-  Controls[string.format("FileSelect %s", layer)].String = currentFileName
-  Controls[string.format("FileSelectIndex %s", layer)].Value = tonumber(value)
+  Controls.FileSelect[layer].String = currentFileName
+  Controls.FileSelectIndex[layer].Value = tonumber(value)
   if file_metadata_list[currentFileName] then
-    Controls["Duration " .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
+    Controls.Duration[layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
   else
-    Controls["Duration " .. layer].String = os.date("!%X", 0)
+    Controls.Duration[layer].String = os.date("!%X", 0)
   end
 end
 
@@ -341,8 +343,8 @@ function fn_clear_media_thumbs()
   local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
   for i = 1, layer_count do
     for m = 1, media_item_count do
-      Controls[string.format("MediaName%s %s", m, i)].String = ""
-      Controls[string.format("MediaThumbnail%s %s", m, i)].Style = iconStyleBlankString
+      Controls[string.format("MediaName%s", m)][i].String = ""
+      Controls[string.format("MediaThumbnail%s", m)][i].Style = iconStyleBlankString
     end
   end
 end
@@ -368,14 +370,14 @@ function fn_process_JSON_update(path, value)
       table.insert(file_choice_list, file.name)
       file_metadata_list[file.name] = file
       for i = 1, layer_count do
-        if Controls[string.format("MediaName%s %s", file.fileIndex, i)] then
-          Controls[string.format("MediaName%s %s", file.fileIndex, i)].String = file.name
+        if Controls[string.format("MediaName%s", file.fileIndex)][i] then
+          Controls[string.format("MediaName%s", file.fileIndex)][i].String = file.name
         end
       end
       fn_get_file_thumbnail(file.fileIndex, file.name)
     end
     for i = 1, layer_count do
-      Controls["FileSelect " .. i].Choices = file_choice_list
+      Controls.FileSelect[i].Choices = file_choice_list
       fn_update_selected_file_info(selected_file[i], i)
     end
     -- let's update the system info as storage and num files might have changed
@@ -520,7 +522,7 @@ function fn_get_file_thumbnail(index, filename)
             IconData = Qlib.base64_enc(data)
           }
           for i = 1, layer_count do
-            Controls[string.format("MediaThumbnail%s %s", index, i)].Style = rapidjson.encode(iconStyle)
+            Controls[string.format("MediaThumbnail%s", index)][i].Style = rapidjson.encode(iconStyle)
           end
         end
       end
@@ -546,7 +548,7 @@ function fn_update_preview_thumbnail(layer, filename)
       IconData = ""
     }
     local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
-    Controls[string.format("LayerPreview %s", layer)].Style = iconStyleBlankString
+    Controls.LayerPreview[layer].Style = iconStyleBlankString
     if
       tonumber(layer) == 1 and
         (Properties["Output Video Preview"].Value == "Disabled" or not Controls.PreviewEnable.Boolean)
@@ -566,7 +568,7 @@ function fn_update_preview_thumbnail(layer, filename)
             Legend = "",
             IconData = Qlib.base64_enc(data)
           }
-          Controls[string.format("LayerPreview %s", layer)].Style = rapidjson.encode(iconStyle)
+          Controls.LayerPreview[layer].Style = rapidjson.encode(iconStyle)
           if
             tonumber(layer) == 1 and
               (Properties["Output Video Preview"].Value == "Disabled" or not Controls.PreviewEnable.Boolean)
@@ -588,7 +590,7 @@ function fn_blank_previews()
   }
   local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
   for i = 1, layer_count do
-    Controls[string.format("LayerPreview %s", i)].Style = iconStyleBlankString
+    Controls.LayerPreview[i].Style = iconStyleBlankString
   end
   Controls.OutputPreview.Style = iconStyleBlankString
 end
@@ -668,7 +670,7 @@ function fn_update_media_folders()
           table.insert(folder_choices, k)
         end
         for i = 1, layer_count do
-          Controls["FolderSelect " .. i].Choices = folder_choices
+          Controls.FolderSelect[i].Choices = folder_choices
         end
       else
         fn_log_error("Failed to get media folder list: HTTP " .. tostring(code))
@@ -680,13 +682,13 @@ end
 -- Set up seek timers and last value trackers
 for layer, seek_timer in pairs(seek_timer_list) do
   seek_timer.EventHandler = function(timer)
-    if Controls[string.format("Seek %s", layer)].String == seek_last_value[layer] then
-      if Controls["FileSelect " .. layer].String ~= "" then
+    if Controls.Seek[layer].String == seek_last_value[layer] then
+      if Controls.FileSelect[layer].String ~= "" then
         local frame =
           math.floor(
-          file_metadata_list[Controls["FileSelect " .. layer].String].duration *
-            file_metadata_list[Controls["FileSelect " .. layer].String].rate *
-            Controls["Seek " .. layer].Position
+          file_metadata_list[Controls.FileSelect[layer].String].duration *
+            file_metadata_list[Controls.FileSelect[layer].String].rate *
+            Controls.Seek[layer].Position
         )
         -- Seek to desired frame
         local path = string.format("/LAYER %s/Transport Control/MediaClockGenerator/Seek", layer)
@@ -694,19 +696,18 @@ for layer, seek_timer in pairs(seek_timer_list) do
       end
       seek_timer_list[layer]:Stop()
     end
-    seek_last_value[layer] = Controls[string.format("seek_%s", layer)].String
+    seek_last_value[layer] = Controls.Seek[layer].String
   end
 end
 
 -- Initialize combobox choices
 for i = 1, layer_count do
-  print("control  " .. rapidjson.encode(Controls))
-  Controls["PlayMode " .. i].Choices = play_mode_keys
-  Controls["FramingMode " .. i].Choices = framing_mode_keys
-  Controls["BlendMode " .. i].Choices = blend_mode_keys
-  Controls["TransitionMode " .. i].Choices = transition_mode_keys
-  Controls["FX1Select " .. i].Choices = fx_keys
-  Controls["FX2Select " .. i].Choices = fx_keys
+  Controls.PlayMode[i].Choices = play_mode_keys
+  Controls.FramingMode[i].Choices = framing_mode_keys
+  Controls.BlendMode[i].Choices = blend_mode_keys
+  Controls.TransitionMode[i].Choices = transition_mode_keys
+  Controls.FX1Select[i].Choices = fx_keys
+  Controls.FX2Select[i].Choices = fx_keys
 end
 
 -- Connect

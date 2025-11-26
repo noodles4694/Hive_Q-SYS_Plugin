@@ -2,9 +2,9 @@
 function cmd_file_select(layer, x) -- 0..65535: File Select
   local currentFileName = file_list_names[selected_file[layer] + 1] or "None"
   if file_metadata_list[currentFileName] then
-    Controls["duration_" .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
+    Controls.Duration[layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
   else
-    Controls["duration_" .. layer].String = os.date("!%X", 0)
+    Controls.Duration[layer].String = os.date("!%X", 0)
   end
   fn_send(layer, "FILE SELECT", x)
 end

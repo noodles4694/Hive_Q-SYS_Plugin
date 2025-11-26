@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.604",
+  BuildVersion = "0.0.0.619",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -3944,7 +3944,7 @@ function fn_process_LUT_data(path, data)
         end
       end
       for i = 1, layer_count do
-        Controls["lut_" .. i].Choices = lut_choices
+        Controls.Lut[i].Choices = lut_choices
       end
     end
   else
@@ -3957,6 +3957,7 @@ function fn_process_transport_update(path, value)
   local layer, parameter = path:match("/LAYER (%d+)/(%P+)")
   if parameter == "Transport Control" then
     local layer, parameter, sub_parameter = path:match("/LAYER (%d+)/(%P+)/(%P+)")
+    layer = tonumber(layer)
     local currentFileName = file_list_names[selected_file[tonumber(layer)]] or ""
     if sub_parameter == "Media Time" then
       if not seek_timer_list[tonumber(layer)]:IsRunning() then
@@ -3964,17 +3965,17 @@ function fn_process_transport_update(path, value)
           currentFileName == "" or file_metadata_list[currentFileName] == nil or
             file_metadata_list[currentFileName].duration == 0
          then
-          Controls["seek_" .. layer].Position = 0
-          Controls["time_elapsed_" .. layer].String = os.date("!%X", 0)
+          Controls.Seek[layer].Position = 0
+          Controls.TimeElapsed[layer].String = os.date("!%X", 0)
         else
           local pos = tonumber(value) / file_metadata_list[currentFileName].duration
-          Controls["seek_" .. layer].Position = pos
-          Controls["time_elapsed_" .. layer].String = os.date("!%X", math.floor(value))
+          Controls.Seek[layer].Position = pos
+          Controls.TimeElapsed[layer].String = os.date("!%X", math.floor(value))
         end
       end
     end
   else
-    fn_log_error("Unknown transport parameter: " .. parameter)
+    fn_log_error("Unknown transport parameter: " .. par)
   end
 end
 
@@ -3990,11 +3991,12 @@ function fn_process_double_update(path, value)
   fn_log_debug("Processing double update: " .. path .. " = " .. tostring(value))
   if path:sub(1, 6) == "/LAYER" then -- Layer parameter response
     local layer, parameter = path:match("/LAYER (%d+)/(%P+)/Value")
+    layer = tonumber(layer)
     if parameter then
       local control = ""
       for _, param in ipairs(control_list) do
         if param.Path == parameter then
-          control = param.Name.." "..layer
+          control = param.Name
           break
         end
       end
@@ -4003,68 +4005,68 @@ function fn_process_double_update(path, value)
         selected_file[tonumber(layer)] = value
         fn_update_selected_file_info(value, layer)
       elseif parameter == "FOLDER SELECT" then
-        Controls[string.format("FolderSelectIndex %s", layer)].Value = value
+        Controls.FolderSelectIndex[layer].Value = value
         for k, v in pairs(folder_list) do
           if v == value then
-            Controls[control].String = k
+            Controls[control][layer].String = k
             break
           end
         end
       elseif parameter == "LUT" then
-        Controls[string.format("LutIndex %s", layer)].Value = value
+        Controls.LutIndex[layer].Value = value
         for k, v in pairs(lut_list) do
           if v == value then
-            Controls[control].String = k
+            Controls[control][layer].String = k
             break
           end
         end
       elseif parameter:sub(-5, -1) == "FRAME" then
-        Controls[control].Value = value
+        Controls[control][layer].Value = value
       elseif parameter == "PLAY MODE" then
         local key = get_table_key(play_mode_keys, play_mode_values, value)
-        Controls[control].String = key
-        Controls[string.format("PlayModeIndex %s", layer)].Value = value
+        Controls[control][layer].String = key
+        Controls.PlayModeIndex[layer].Value = value
       elseif parameter == "FRAMING MODE" then
         local key = get_table_key(framing_mode_keys, framing_mode_values, value)
-        Controls[control].String = key
-        Controls[string.format("FramingModeIndex %s", layer)].Value = value
+        Controls[control][layer].String = key
+        Controls.FramingModeIndex[layer].Value = value
       elseif parameter == "BLEND MODE" then
         local key = get_table_key(blend_mode_keys, blend_mode_values, value)
-        Controls[control].String = key
-        Controls[string.format("BlendModeIndex %s", layer)].Value = value
+        Controls[control][layer].String = key
+        Controls.BlendModeIndex[layer].Value = value
       elseif parameter == "TRANSITION MODE" then
         local key = get_table_key(transition_mode_keys, transition_mode_values, value)
-        Controls[control].String = key
-        Controls[string.format("TransitionModeIndex %s", layer)].Value = value
+        Controls[control][layer].String = key
+        Controls.TransitionModeIndex[layer].Value = value
       elseif parameter == "FX1 SELECT" then
         local key = get_table_key(fx_keys, fx_values, value)
-        Controls[control].String = key
-        Controls[string.format("FX1SelectIndex %s", layer)].Value = value
+        Controls[control][layer].String = key
+        Controls.FX1SelectIndex[layer].Value = value
       elseif parameter == "FX2 SELECT" then
         local key = get_table_key(fx_keys, fx_values, value)
-        Controls[control].String = key
-        Controls[string.format("FX2SelectIndex %s", layer)].Value = value
+        Controls[control][layer].String = key
+        Controls.FX2SelectIndex[layer].Value = value
       elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
         if value >= 0.5 then
-          Controls[control].Position = (value - 0.4444444444444444) / 0.5555555555555556
+          Controls[control][layer].Position = (value - 0.4444444444444444) / 0.5555555555555556
         else
-          Controls[control].Position = value / 5
+          Controls[control][layer].Position = value / 5
         end
       elseif parameter:sub(1, 3) == "MTC" then
-        Controls[control].Value = value
+        Controls[control][layer].Value = value
       elseif parameter:sub(1, 8) == "POSITION" then
-        Controls[control].Value = (value * 200) - 100
+        Controls[control][layer].Value = (value * 200) - 100
       elseif parameter:sub(1, 8) == "ROTATION" then
-        Controls[control].Value = (value * 2880) - 1440
+        Controls[control][layer].Value = (value * 2880) - 1440
       elseif parameter:sub(1, 19) == "TRANSITION DURATION" then
-        Controls[control].Value = value
+        Controls[control][layer].Value = value
       elseif
         parameter == "RED" or parameter == "BLUE" or parameter == "GREEN" or parameter == "SATURATION" or
           parameter == "CONTRAST"
        then
-        Controls[control].Value = (value * 200) - 100
+        Controls[control][layer].Value = (value * 200) - 100
       else -- parameters where data directly proportional to position
-        Controls[control].Position = value
+        Controls[control][layer].Position = value
       end
     else
       fn_log_error("Unknown layer parameter: " .. path)
@@ -4076,16 +4078,16 @@ end
 function fn_update_selected_file_info(value, layer)
   local found = false
   for media = 1, media_item_count do
-    Controls[string.format("MediaThumbnail%s %s", media, layer)].Boolean = media == (value + 1)
+    Controls[string.format("MediaThumbnail%s", media)][layer].Boolean = media == (value + 1)
   end
   local currentFileName = file_list_names[tonumber(value)] or ""
   fn_update_preview_thumbnail(layer, currentFileName)
-  Controls[string.format("FileSelect %s", layer)].String = currentFileName
-  Controls[string.format("FileSelectIndex %s", layer)].Value = tonumber(value)
+  Controls.FileSelect[layer].String = currentFileName
+  Controls.FileSelectIndex[layer].Value = tonumber(value)
   if file_metadata_list[currentFileName] then
-    Controls["Duration " .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
+    Controls.Duration[layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
   else
-    Controls["Duration " .. layer].String = os.date("!%X", 0)
+    Controls.Duration[layer].String = os.date("!%X", 0)
   end
 end
 
@@ -4102,8 +4104,8 @@ function fn_clear_media_thumbs()
   local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
   for i = 1, layer_count do
     for m = 1, media_item_count do
-      Controls[string.format("MediaName%s %s", m, i)].String = ""
-      Controls[string.format("MediaThumbnail%s %s", m, i)].Style = iconStyleBlankString
+      Controls[string.format("MediaName%s", m)][i].String = ""
+      Controls[string.format("MediaThumbnail%s", m)][i].Style = iconStyleBlankString
     end
   end
 end
@@ -4129,14 +4131,14 @@ function fn_process_JSON_update(path, value)
       table.insert(file_choice_list, file.name)
       file_metadata_list[file.name] = file
       for i = 1, layer_count do
-        if Controls[string.format("MediaName%s %s", file.fileIndex, i)] then
-          Controls[string.format("MediaName%s %s", file.fileIndex, i)].String = file.name
+        if Controls[string.format("MediaName%s", file.fileIndex)][i] then
+          Controls[string.format("MediaName%s", file.fileIndex)][i].String = file.name
         end
       end
       fn_get_file_thumbnail(file.fileIndex, file.name)
     end
     for i = 1, layer_count do
-      Controls["FileSelect " .. i].Choices = file_choice_list
+      Controls.FileSelect[i].Choices = file_choice_list
       fn_update_selected_file_info(selected_file[i], i)
     end
     -- let's update the system info as storage and num files might have changed
@@ -4281,7 +4283,7 @@ function fn_get_file_thumbnail(index, filename)
             IconData = Qlib.base64_enc(data)
           }
           for i = 1, layer_count do
-            Controls[string.format("MediaThumbnail%s %s", index, i)].Style = rapidjson.encode(iconStyle)
+            Controls[string.format("MediaThumbnail%s", index)][i].Style = rapidjson.encode(iconStyle)
           end
         end
       end
@@ -4307,7 +4309,7 @@ function fn_update_preview_thumbnail(layer, filename)
       IconData = ""
     }
     local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
-    Controls[string.format("LayerPreview %s", layer)].Style = iconStyleBlankString
+    Controls.LayerPreview[layer].Style = iconStyleBlankString
     if
       tonumber(layer) == 1 and
         (Properties["Output Video Preview"].Value == "Disabled" or not Controls.PreviewEnable.Boolean)
@@ -4327,7 +4329,7 @@ function fn_update_preview_thumbnail(layer, filename)
             Legend = "",
             IconData = Qlib.base64_enc(data)
           }
-          Controls[string.format("LayerPreview %s", layer)].Style = rapidjson.encode(iconStyle)
+          Controls.LayerPreview[layer].Style = rapidjson.encode(iconStyle)
           if
             tonumber(layer) == 1 and
               (Properties["Output Video Preview"].Value == "Disabled" or not Controls.PreviewEnable.Boolean)
@@ -4349,7 +4351,7 @@ function fn_blank_previews()
   }
   local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
   for i = 1, layer_count do
-    Controls[string.format("LayerPreview %s", i)].Style = iconStyleBlankString
+    Controls.LayerPreview[i].Style = iconStyleBlankString
   end
   Controls.OutputPreview.Style = iconStyleBlankString
 end
@@ -4429,7 +4431,7 @@ function fn_update_media_folders()
           table.insert(folder_choices, k)
         end
         for i = 1, layer_count do
-          Controls["FolderSelect " .. i].Choices = folder_choices
+          Controls.FolderSelect[i].Choices = folder_choices
         end
       else
         fn_log_error("Failed to get media folder list: HTTP " .. tostring(code))
@@ -4441,13 +4443,13 @@ end
 -- Set up seek timers and last value trackers
 for layer, seek_timer in pairs(seek_timer_list) do
   seek_timer.EventHandler = function(timer)
-    if Controls[string.format("Seek %s", layer)].String == seek_last_value[layer] then
-      if Controls["FileSelect " .. layer].String ~= "" then
+    if Controls.Seek[layer].String == seek_last_value[layer] then
+      if Controls.FileSelect[layer].String ~= "" then
         local frame =
           math.floor(
-          file_metadata_list[Controls["FileSelect " .. layer].String].duration *
-            file_metadata_list[Controls["FileSelect " .. layer].String].rate *
-            Controls["Seek " .. layer].Position
+          file_metadata_list[Controls.FileSelect[layer].String].duration *
+            file_metadata_list[Controls.FileSelect[layer].String].rate *
+            Controls.Seek[layer].Position
         )
         -- Seek to desired frame
         local path = string.format("/LAYER %s/Transport Control/MediaClockGenerator/Seek", layer)
@@ -4455,19 +4457,18 @@ for layer, seek_timer in pairs(seek_timer_list) do
       end
       seek_timer_list[layer]:Stop()
     end
-    seek_last_value[layer] = Controls[string.format("seek_%s", layer)].String
+    seek_last_value[layer] = Controls.Seek[layer].String
   end
 end
 
 -- Initialize combobox choices
 for i = 1, layer_count do
-  print("control  " .. rapidjson.encode(Controls))
-  Controls["PlayMode " .. i].Choices = play_mode_keys
-  Controls["FramingMode " .. i].Choices = framing_mode_keys
-  Controls["BlendMode " .. i].Choices = blend_mode_keys
-  Controls["TransitionMode " .. i].Choices = transition_mode_keys
-  Controls["FX1Select " .. i].Choices = fx_keys
-  Controls["FX2Select " .. i].Choices = fx_keys
+  Controls.PlayMode[i].Choices = play_mode_keys
+  Controls.FramingMode[i].Choices = framing_mode_keys
+  Controls.BlendMode[i].Choices = blend_mode_keys
+  Controls.TransitionMode[i].Choices = transition_mode_keys
+  Controls.FX1Select[i].Choices = fx_keys
+  Controls.FX2Select[i].Choices = fx_keys
 end
 
 -- Connect
@@ -4483,9 +4484,9 @@ end
 function cmd_file_select(layer, x) -- 0..65535: File Select
   local currentFileName = file_list_names[selected_file[layer] + 1] or "None"
   if file_metadata_list[currentFileName] then
-    Controls["duration_" .. layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
+    Controls.Duration[layer].String = os.date("!%X", math.floor(file_metadata_list[currentFileName].duration))
   else
-    Controls["duration_" .. layer].String = os.date("!%X", 0)
+    Controls.Duration[layer].String = os.date("!%X", 0)
   end
   fn_send(layer, "FILE SELECT", x)
 end
@@ -4832,175 +4833,175 @@ end
 -- Set up event handlers for controls
 fn_log_debug("Setting up control event handlers")
 for i = 1, layer_count do
-  Controls["FileSelect " .. i].EventHandler = function()
-    cmd_file_select(i, file_list[Controls["FileSelect " .. i].String])
+  Controls.FileSelect[i].EventHandler = function()
+    cmd_file_select(i, file_list[Controls.FileSelect[i].String])
   end
-  Controls["FolderSelect " .. i].EventHandler = function()
-    cmd_folder_select(i, folder_list[Controls["FolderSelect " .. i].String])
+  Controls.FolderSelect[i].EventHandler = function()
+    cmd_folder_select(i, folder_list[Controls.FolderSelect[i].String])
   end
-  Controls["FileSelectIndex " .. i].EventHandler = function()
-    cmd_file_select(i, Controls["FileSelectIndex " .. i].Value)
+  Controls.FileSelectIndex[i].EventHandler = function()
+    cmd_file_select(i, Controls.FileSelectIndex[i].Value)
   end
-  Controls["FolderSelectIndex " .. i].EventHandler = function()
-    cmd_folder_select(i, Controls["FolderSelectIndex " .. i].Value)
+  Controls.FolderSelectIndex[i].EventHandler = function()
+    cmd_folder_select(i, Controls.FolderSelectIndex[i].Value)
   end
-  Controls["Intensity " .. i].EventHandler = function()
-    cmd_intensity(i, Controls["Intensity " .. i].Position)
+  Controls.Intensity[i].EventHandler = function()
+    cmd_intensity(i, Controls.Intensity[i].Position)
   end
-  Controls["InFrame " .. i].EventHandler = function()
-    cmd_in_frame(i, Controls["InFrame " .. i].Value)
+  Controls.InFrame[i].EventHandler = function()
+    cmd_in_frame(i, Controls.InFrame[i].Value)
   end
-  Controls["OutFrame " .. i].EventHandler = function()
-    cmd_out_frame(i, Controls["OutFrame " .. i].Value)
+  Controls.OutFrame[i].EventHandler = function()
+    cmd_out_frame(i, Controls.OutFrame[i].Value)
   end
-  Controls["PlayMode " .. i].EventHandler = function()
-    local val = get_table_value(play_mode_keys, play_mode_values, Controls["PlayMode " .. i].String)
+  Controls.PlayMode[i].EventHandler = function()
+    local val = get_table_value(play_mode_keys, play_mode_values, Controls.PlayMode[i].String)
     cmd_play_mode(i, val)
   end
-  Controls["PlayModeIndex " .. i].EventHandler = function()
-    cmd_play_mode(i, Controls["PlayModeIndex " .. i].Value)
+  Controls.PlayModeIndex[i].EventHandler = function()
+    cmd_play_mode(i, Controls.PlayModeIndex[i].Value)
   end
-  Controls["FramingMode " .. i].EventHandler = function()
-    local val = get_table_value(framing_mode_keys, framing_mode_values, Controls["FramingMode " .. i].String)
+  Controls.FramingMode[i].EventHandler = function()
+    local val = get_table_value(framing_mode_keys, framing_mode_values, Controls.FramingMode[i].String)
     cmd_framing(i, val)
   end
-  Controls["FramingModeIndex " .. i].EventHandler = function()
-    cmd_framing(i, Controls["FramingModeIndex " .. i].Value)
+  Controls.FramingModeIndex[i].EventHandler = function()
+    cmd_framing(i, Controls.FramingModeIndex[i].Value)
   end
-  Controls["BlendMode " .. i].EventHandler = function()
-    local val = get_table_value(blend_mode_keys, blend_mode_values, Controls["BlendMode " .. i].String)
+  Controls.BlendMode[i].EventHandler = function()
+    local val = get_table_value(blend_mode_keys, blend_mode_values, Controls.BlendMode[i].String)
     cmd_blend_mode(i, val)
   end
-  Controls["BlendModeIndex " .. i].EventHandler = function()
-    cmd_blend_mode(i, Controls["BlendModeIndex " .. i].Value)
+  Controls.BlendModeIndex[i].EventHandler = function()
+    cmd_blend_mode(i, Controls.BlendModeIndex[i].Value)
   end
-  Controls["FX1Select" .. i].EventHandler = function()
-    local val = get_table_value(fx_keys, fx_values, Controls["FX1Select" .. i].String)
+  Controls.FX1Select[i].EventHandler = function()
+    local val = get_table_value(fx_keys, fx_values, Controls.FX1Select[i].String)
     cmd_fx1_select(i, val)
   end
-  Controls["FX1SelectIndex " .. i].EventHandler = function()
-    cmd_fx1_select(i, Controls["FX1SelectIndex " .. i].Value)
+  Controls.FX1SelectIndex[i].EventHandler = function()
+    cmd_fx1_select(i, Controls.FX1SelectIndex[i].Value)
   end
-  Controls["FX2Select " .. i].EventHandler = function()
-    local val = get_table_value(fx_keys, fx_values, Controls["FX2Select " .. i].String)
+  Controls.FX2Select[i].EventHandler = function()
+    local val = get_table_value(fx_keys, fx_values, Controls.FX2Select[i].String)
     cmd_fx2_select(i, val)
   end
-  Controls["FX2SelectIndex " .. i].EventHandler = function()
-    cmd_fx2_select(i, Controls["FX2SelectIndex " .. i].Value)
+  Controls.FX2SelectIndex[i].EventHandler = function()
+    cmd_fx2_select(i, Controls.FX2SelectIndex[i].Value)
   end
-  Controls["Lut " .. i].EventHandler = function()
-    cmd_lut_select(i, lut_list[Controls["Lut " .. i].String])
+  Controls.Lut[i].EventHandler = function()
+    cmd_lut_select(i, lut_list[Controls.Lut[i].String])
   end
-  Controls["LutIndex " .. i].EventHandler = function()
-    cmd_lut_select(i, Controls["LutIndex " .. i].Value)
+  Controls.LutIndex[i].EventHandler = function()
+    cmd_lut_select(i, Controls.LutIndex[i].Value)
   end
-  Controls["PlaySpeed " .. i].EventHandler = function()
-    local converted_value = Controls["PlaySpeed " .. i].Position
-    if Controls["PlaySpeed " .. i].Position >= 0.1 then
-      converted_value = 0.5555555555555556 * Controls["PlaySpeed " .. i].Position + 0.4444444444444444
+  Controls.PlaySpeed[i].EventHandler = function()
+    local converted_value = Controls.PlaySpeed[i].Position
+    if Controls.PlaySpeed[i].Position >= 0.1 then
+      converted_value = 0.5555555555555556 * Controls.PlaySpeed[i].Position + 0.4444444444444444
     else
-      converted_value = 5 * Controls["PlaySpeed " .. i].Position
+      converted_value = 5 * Controls.PlaySpeed[i].Position
     end
     cmd_play_speed(i, converted_value)
   end
-  Controls["MoveSpeed " .. i].EventHandler = function()
-    cmd_movement_speed(i, Controls["MoveSpeed " .. i].Position)
+  Controls.MoveSpeed[i].EventHandler = function()
+    cmd_movement_speed(i, Controls.MoveSpeed[i].Position)
   end
-  Controls["MtcHour " .. i].EventHandler = function()
-    cmd_tc_hour(i, Controls["MtcHour " .. i].Value)
+  Controls.MtcHour[i].EventHandler = function()
+    cmd_tc_hour(i, Controls.MtcHour[i].Value)
   end
-  Controls["MtcMinute " .. i].EventHandler = function()
-    cmd_tc_minute(i, Controls["MtcMinute " .. i].Value)
+  Controls.MtcMinute[i].EventHandler = function()
+    cmd_tc_minute(i, Controls.MtcMinute[i].Value)
   end
-  Controls["MtcSecond " .. i].EventHandler = function()
-    cmd_tc_second(i, Controls["MtcSecond " .. i].Value)
+  Controls.MtcSecond[i].EventHandler = function()
+    cmd_tc_second(i, Controls.MtcSecond[i].Value)
   end
-  Controls["MtcFrame " .. i].EventHandler = function()
-    cmd_tc_frame(i, Controls["MtcFrame " .. i].Value)
+  Controls.MtcFrame[i].EventHandler = function()
+    cmd_tc_frame(i, Controls.MtcFrame[i].Value)
   end
-  Controls["Scale " .. i].EventHandler = function()
-    local converted_value = Controls["Scale " .. i].Position
-    if Controls["Scale " .. i].Position >= 0.1 then
-      converted_value = 0.5555555555555556 * Controls["Scale " .. i].Position + 0.4444444444444444
+  Controls.Scale[i].EventHandler = function()
+    local converted_value = Controls.Scale[i].Position
+    if Controls.Scale[i].Position >= 0.1 then
+      converted_value = 0.5555555555555556 * Controls.Scale[i].Position + 0.4444444444444444
     else
-      converted_value = 5 * Controls["Scale " .. i].Position
+      converted_value = 5 * Controls.Scale[i].Position
     end
     cmd_scale(i, converted_value)
   end
-  Controls["AspectRatio " .. i].EventHandler = function()
-    cmd_aspect_ratio(i, Controls["AspectRatio " .. i].Position)
+  Controls.AspectRatio[i].EventHandler = function()
+    cmd_aspect_ratio(i, Controls.AspectRatio[i].Position)
   end
-  Controls["PositionX " .. i].EventHandler = function()
-    cmd_position_x(i, (Controls["PositionX " .. i].Value + 100) / 200)
+  Controls.PositionX[i].EventHandler = function()
+    cmd_position_x(i, (Controls.PositionX[i].Value + 100) / 200)
   end
-  Controls["PositionY " .. i].EventHandler = function()
-    cmd_position_y(i, (Controls["PositionY " .. i].Value + 100) / 200)
+  Controls.PositionY[i].EventHandler = function()
+    cmd_position_y(i, (Controls.PositionY[i].Value + 100) / 200)
   end
-  Controls["RotationX " .. i].EventHandler = function()
-    cmd_rotation_x(i, (Controls["RotationX " .. i].Value + 1440) / 2880)
+  Controls.RotationX[i].EventHandler = function()
+    cmd_rotation_x(i, (Controls.RotationX[i].Value + 1440) / 2880)
   end
-  Controls["RotationY " .. i].EventHandler = function()
-    cmd_rotation_y(i, (Controls["RotationY " .. i].Value + 1440) / 2880)
+  Controls.RotationY[i].EventHandler = function()
+    cmd_rotation_y(i, (Controls.RotationY[i].Value + 1440) / 2880)
   end
-  Controls["RotationZ " .. i].EventHandler = function()
-    cmd_rotation_z(i, (Controls["RotationZ " .. i].Value + 1440) / 2880)
+  Controls.RotationZ[i].EventHandler = function()
+    cmd_rotation_z(i, (Controls.RotationZ[i].Value + 1440) / 2880)
   end
-  Controls["Red " .. i].EventHandler = function()
-    cmd_red(i, (Controls["Red " .. i].Value + 100) / 200)
+  Controls.Red[i].EventHandler = function()
+    cmd_red(i, (Controls.Red[i].Value + 100) / 200)
   end
-  Controls["Green " .. i].EventHandler = function()
-    cmd_green(i, (Controls["Green " .. i].Value + 100) / 200)
+  Controls.Green[i].EventHandler = function()
+    cmd_green(i, (Controls.Green[i].Value + 100) / 200)
   end
-  Controls["Blue " .. i].EventHandler = function()
-    cmd_blue(i, (Controls["Blue " .. i].Value + 100) / 200)
+  Controls.Blue[i].EventHandler = function()
+    cmd_blue(i, (Controls.Blue[i].Value + 100) / 200)
   end
-  Controls["Hue " .. i].EventHandler = function()
-    cmd_hue(i, Controls["Hue " .. i].Position)
+  Controls.Hue[i].EventHandler = function()
+    cmd_hue(i, Controls.Hue[i].Position)
   end
-  Controls["Saturation " .. i].EventHandler = function()
-    cmd_saturation(i, (Controls["Saturation " .. i].Value + 100) / 200)
+  Controls.Saturation[i].EventHandler = function()
+    cmd_saturation(i, (Controls.Saturation[i].Value + 100) / 200)
   end
-  Controls["Contrast " .. i].EventHandler = function()
-    cmd_contrast(i, (Controls["Contrast " .. i].Value + 100) / 200)
+  Controls.Contrast[i].EventHandler = function()
+    cmd_contrast(i, (Controls.Contrast[i].Value + 100) / 200)
   end
-  Controls["Strobe " .. i].EventHandler = function()
-    cmd_strobe(i, Controls["Strobe " .. i].Position)
+  Controls.Strobe[i].EventHandler = function()
+    cmd_strobe(i, Controls.Strobe[i].Position)
   end
-  Controls["Volume " .. i].EventHandler = function()
-    cmd_volume(i, Controls["Volume " .. i].Position)
+  Controls.Volume[i].EventHandler = function()
+    cmd_volume(i, Controls.Volume[i].Position)
   end
-  Controls["Seek " .. i].EventHandler = function()
+  Controls.Seek[i].EventHandler = function()
     seek_timer_list[i]:Start(.2)
   end
-  Controls["TransitionDuration " .. i].EventHandler = function()
-    cmd_transition_duration(i, Controls["TransitionDuration " .. i].Value)
+  Controls.TransitionDuration[i].EventHandler = function()
+    cmd_transition_duration(i, Controls.TransitionDuration[i].Value)
   end
-  Controls["TransitionMode " .. i].EventHandler = function()
-    local val = get_table_value(transition_mode_keys, transition_mode_values, Controls["TransitionMode " .. i].String)
+  Controls.TransitionMode[i].EventHandler = function()
+    local val = get_table_value(transition_mode_keys, transition_mode_values, Controls.TransitionMode[i].String)
     cmd_transition_mode(i, val)
   end
-  Controls["TransitionModeIndex " .. i].EventHandler = function()
-    cmd_transition_mode(i, Controls["TransitionModeIndex " .. i].Value)
+  Controls.TransitionModeIndex[i].EventHandler = function()
+    cmd_transition_mode(i, Controls.TransitionModeIndex[i].Value)
   end
-  Controls["FX1Opacity " .. i].EventHandler = function()
-    _G["cmd_fx1_opacity"](i, Controls["FX1Opacity " .. i].Position)
+  Controls.FX1Opacity[i].EventHandler = function()
+    _G["cmd_fx1_opacity"](i, Controls.FX1Opacity[i].Position)
   end
-  Controls["FX2Opacity " .. i].EventHandler = function()
-    _G["cmd_fx2_opacity"](i, Controls["FX2Opacity " .. i].Position)
+  Controls.FX2Opacity[i].EventHandler = function()
+    _G["cmd_fx2_opacity"](i, Controls.FX2Opacity[i].Position)
   end
   for p = 1, 16 do
-    Controls[string.format("FX1Param%s %s", p, i)].EventHandler = function()
-      _G["cmd_fx1_param_" .. p](i, Controls[string.format("FX1Param%s %s", p, i)].Position)
+    Controls[string.format("FX1Param%s", p)][i].EventHandler = function()
+      _G["cmd_fx1_param_" .. p](i, Controls[string.format("FX1Param%s", p)][i].Position)
     end
-    Controls[string.format("FX2Param%s %s", p, i)].EventHandler = function()
-      _G["cmd_fx2_param_" .. p](i, Controls[string.format("FX2Param%s %s", p, i)].Position)
+    Controls[string.format("FX2Param%s", p)][i].EventHandler = function()
+      _G["cmd_fx2_param_" .. p](i, Controls[string.format("FX2Param%s", p)][i].Position)
     end
   end
 
   for p = 1, media_item_count do
-    Controls[string.format("MediaThumbnail%s %s", p, i)].EventHandler = function()
-      if Controls[string.format("MediaName%s %s", p, i)].String ~= nil then
-        cmd_file_select(i, file_list[Controls[string.format("MediaName%s %s", p, i)].String])
+    Controls[string.format("MediaThumbnail%s", p)][i].EventHandler = function()
+      if Controls[string.format("MediaName%s", p)][i].String ~= nil then
+        cmd_file_select(i, file_list[Controls[string.format("MediaName%s", p)][i].String])
       end
     end
   end

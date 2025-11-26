@@ -1,175 +1,175 @@
 -- Set up event handlers for controls
 fn_log_debug("Setting up control event handlers")
 for i = 1, layer_count do
-  Controls["FileSelect " .. i].EventHandler = function()
-    cmd_file_select(i, file_list[Controls["FileSelect " .. i].String])
+  Controls.FileSelect[i].EventHandler = function()
+    cmd_file_select(i, file_list[Controls.FileSelect[i].String])
   end
-  Controls["FolderSelect " .. i].EventHandler = function()
-    cmd_folder_select(i, folder_list[Controls["FolderSelect " .. i].String])
+  Controls.FolderSelect[i].EventHandler = function()
+    cmd_folder_select(i, folder_list[Controls.FolderSelect[i].String])
   end
-  Controls["FileSelectIndex " .. i].EventHandler = function()
-    cmd_file_select(i, Controls["FileSelectIndex " .. i].Value)
+  Controls.FileSelectIndex[i].EventHandler = function()
+    cmd_file_select(i, Controls.FileSelectIndex[i].Value)
   end
-  Controls["FolderSelectIndex " .. i].EventHandler = function()
-    cmd_folder_select(i, Controls["FolderSelectIndex " .. i].Value)
+  Controls.FolderSelectIndex[i].EventHandler = function()
+    cmd_folder_select(i, Controls.FolderSelectIndex[i].Value)
   end
-  Controls["Intensity " .. i].EventHandler = function()
-    cmd_intensity(i, Controls["Intensity " .. i].Position)
+  Controls.Intensity[i].EventHandler = function()
+    cmd_intensity(i, Controls.Intensity[i].Position)
   end
-  Controls["InFrame " .. i].EventHandler = function()
-    cmd_in_frame(i, Controls["InFrame " .. i].Value)
+  Controls.InFrame[i].EventHandler = function()
+    cmd_in_frame(i, Controls.InFrame[i].Value)
   end
-  Controls["OutFrame " .. i].EventHandler = function()
-    cmd_out_frame(i, Controls["OutFrame " .. i].Value)
+  Controls.OutFrame[i].EventHandler = function()
+    cmd_out_frame(i, Controls.OutFrame[i].Value)
   end
-  Controls["PlayMode " .. i].EventHandler = function()
-    local val = get_table_value(play_mode_keys, play_mode_values, Controls["PlayMode " .. i].String)
+  Controls.PlayMode[i].EventHandler = function()
+    local val = get_table_value(play_mode_keys, play_mode_values, Controls.PlayMode[i].String)
     cmd_play_mode(i, val)
   end
-  Controls["PlayModeIndex " .. i].EventHandler = function()
-    cmd_play_mode(i, Controls["PlayModeIndex " .. i].Value)
+  Controls.PlayModeIndex[i].EventHandler = function()
+    cmd_play_mode(i, Controls.PlayModeIndex[i].Value)
   end
-  Controls["FramingMode " .. i].EventHandler = function()
-    local val = get_table_value(framing_mode_keys, framing_mode_values, Controls["FramingMode " .. i].String)
+  Controls.FramingMode[i].EventHandler = function()
+    local val = get_table_value(framing_mode_keys, framing_mode_values, Controls.FramingMode[i].String)
     cmd_framing(i, val)
   end
-  Controls["FramingModeIndex " .. i].EventHandler = function()
-    cmd_framing(i, Controls["FramingModeIndex " .. i].Value)
+  Controls.FramingModeIndex[i].EventHandler = function()
+    cmd_framing(i, Controls.FramingModeIndex[i].Value)
   end
-  Controls["BlendMode " .. i].EventHandler = function()
-    local val = get_table_value(blend_mode_keys, blend_mode_values, Controls["BlendMode " .. i].String)
+  Controls.BlendMode[i].EventHandler = function()
+    local val = get_table_value(blend_mode_keys, blend_mode_values, Controls.BlendMode[i].String)
     cmd_blend_mode(i, val)
   end
-  Controls["BlendModeIndex " .. i].EventHandler = function()
-    cmd_blend_mode(i, Controls["BlendModeIndex " .. i].Value)
+  Controls.BlendModeIndex[i].EventHandler = function()
+    cmd_blend_mode(i, Controls.BlendModeIndex[i].Value)
   end
-  Controls["FX1Select" .. i].EventHandler = function()
-    local val = get_table_value(fx_keys, fx_values, Controls["FX1Select" .. i].String)
+  Controls.FX1Select[i].EventHandler = function()
+    local val = get_table_value(fx_keys, fx_values, Controls.FX1Select[i].String)
     cmd_fx1_select(i, val)
   end
-  Controls["FX1SelectIndex " .. i].EventHandler = function()
-    cmd_fx1_select(i, Controls["FX1SelectIndex " .. i].Value)
+  Controls.FX1SelectIndex[i].EventHandler = function()
+    cmd_fx1_select(i, Controls.FX1SelectIndex[i].Value)
   end
-  Controls["FX2Select " .. i].EventHandler = function()
-    local val = get_table_value(fx_keys, fx_values, Controls["FX2Select " .. i].String)
+  Controls.FX2Select[i].EventHandler = function()
+    local val = get_table_value(fx_keys, fx_values, Controls.FX2Select[i].String)
     cmd_fx2_select(i, val)
   end
-  Controls["FX2SelectIndex " .. i].EventHandler = function()
-    cmd_fx2_select(i, Controls["FX2SelectIndex " .. i].Value)
+  Controls.FX2SelectIndex[i].EventHandler = function()
+    cmd_fx2_select(i, Controls.FX2SelectIndex[i].Value)
   end
-  Controls["Lut " .. i].EventHandler = function()
-    cmd_lut_select(i, lut_list[Controls["Lut " .. i].String])
+  Controls.Lut[i].EventHandler = function()
+    cmd_lut_select(i, lut_list[Controls.Lut[i].String])
   end
-  Controls["LutIndex " .. i].EventHandler = function()
-    cmd_lut_select(i, Controls["LutIndex " .. i].Value)
+  Controls.LutIndex[i].EventHandler = function()
+    cmd_lut_select(i, Controls.LutIndex[i].Value)
   end
-  Controls["PlaySpeed " .. i].EventHandler = function()
-    local converted_value = Controls["PlaySpeed " .. i].Position
-    if Controls["PlaySpeed " .. i].Position >= 0.1 then
-      converted_value = 0.5555555555555556 * Controls["PlaySpeed " .. i].Position + 0.4444444444444444
+  Controls.PlaySpeed[i].EventHandler = function()
+    local converted_value = Controls.PlaySpeed[i].Position
+    if Controls.PlaySpeed[i].Position >= 0.1 then
+      converted_value = 0.5555555555555556 * Controls.PlaySpeed[i].Position + 0.4444444444444444
     else
-      converted_value = 5 * Controls["PlaySpeed " .. i].Position
+      converted_value = 5 * Controls.PlaySpeed[i].Position
     end
     cmd_play_speed(i, converted_value)
   end
-  Controls["MoveSpeed " .. i].EventHandler = function()
-    cmd_movement_speed(i, Controls["MoveSpeed " .. i].Position)
+  Controls.MoveSpeed[i].EventHandler = function()
+    cmd_movement_speed(i, Controls.MoveSpeed[i].Position)
   end
-  Controls["MtcHour " .. i].EventHandler = function()
-    cmd_tc_hour(i, Controls["MtcHour " .. i].Value)
+  Controls.MtcHour[i].EventHandler = function()
+    cmd_tc_hour(i, Controls.MtcHour[i].Value)
   end
-  Controls["MtcMinute " .. i].EventHandler = function()
-    cmd_tc_minute(i, Controls["MtcMinute " .. i].Value)
+  Controls.MtcMinute[i].EventHandler = function()
+    cmd_tc_minute(i, Controls.MtcMinute[i].Value)
   end
-  Controls["MtcSecond " .. i].EventHandler = function()
-    cmd_tc_second(i, Controls["MtcSecond " .. i].Value)
+  Controls.MtcSecond[i].EventHandler = function()
+    cmd_tc_second(i, Controls.MtcSecond[i].Value)
   end
-  Controls["MtcFrame " .. i].EventHandler = function()
-    cmd_tc_frame(i, Controls["MtcFrame " .. i].Value)
+  Controls.MtcFrame[i].EventHandler = function()
+    cmd_tc_frame(i, Controls.MtcFrame[i].Value)
   end
-  Controls["Scale " .. i].EventHandler = function()
-    local converted_value = Controls["Scale " .. i].Position
-    if Controls["Scale " .. i].Position >= 0.1 then
-      converted_value = 0.5555555555555556 * Controls["Scale " .. i].Position + 0.4444444444444444
+  Controls.Scale[i].EventHandler = function()
+    local converted_value = Controls.Scale[i].Position
+    if Controls.Scale[i].Position >= 0.1 then
+      converted_value = 0.5555555555555556 * Controls.Scale[i].Position + 0.4444444444444444
     else
-      converted_value = 5 * Controls["Scale " .. i].Position
+      converted_value = 5 * Controls.Scale[i].Position
     end
     cmd_scale(i, converted_value)
   end
-  Controls["AspectRatio " .. i].EventHandler = function()
-    cmd_aspect_ratio(i, Controls["AspectRatio " .. i].Position)
+  Controls.AspectRatio[i].EventHandler = function()
+    cmd_aspect_ratio(i, Controls.AspectRatio[i].Position)
   end
-  Controls["PositionX " .. i].EventHandler = function()
-    cmd_position_x(i, (Controls["PositionX " .. i].Value + 100) / 200)
+  Controls.PositionX[i].EventHandler = function()
+    cmd_position_x(i, (Controls.PositionX[i].Value + 100) / 200)
   end
-  Controls["PositionY " .. i].EventHandler = function()
-    cmd_position_y(i, (Controls["PositionY " .. i].Value + 100) / 200)
+  Controls.PositionY[i].EventHandler = function()
+    cmd_position_y(i, (Controls.PositionY[i].Value + 100) / 200)
   end
-  Controls["RotationX " .. i].EventHandler = function()
-    cmd_rotation_x(i, (Controls["RotationX " .. i].Value + 1440) / 2880)
+  Controls.RotationX[i].EventHandler = function()
+    cmd_rotation_x(i, (Controls.RotationX[i].Value + 1440) / 2880)
   end
-  Controls["RotationY " .. i].EventHandler = function()
-    cmd_rotation_y(i, (Controls["RotationY " .. i].Value + 1440) / 2880)
+  Controls.RotationY[i].EventHandler = function()
+    cmd_rotation_y(i, (Controls.RotationY[i].Value + 1440) / 2880)
   end
-  Controls["RotationZ " .. i].EventHandler = function()
-    cmd_rotation_z(i, (Controls["RotationZ " .. i].Value + 1440) / 2880)
+  Controls.RotationZ[i].EventHandler = function()
+    cmd_rotation_z(i, (Controls.RotationZ[i].Value + 1440) / 2880)
   end
-  Controls["Red " .. i].EventHandler = function()
-    cmd_red(i, (Controls["Red " .. i].Value + 100) / 200)
+  Controls.Red[i].EventHandler = function()
+    cmd_red(i, (Controls.Red[i].Value + 100) / 200)
   end
-  Controls["Green " .. i].EventHandler = function()
-    cmd_green(i, (Controls["Green " .. i].Value + 100) / 200)
+  Controls.Green[i].EventHandler = function()
+    cmd_green(i, (Controls.Green[i].Value + 100) / 200)
   end
-  Controls["Blue " .. i].EventHandler = function()
-    cmd_blue(i, (Controls["Blue " .. i].Value + 100) / 200)
+  Controls.Blue[i].EventHandler = function()
+    cmd_blue(i, (Controls.Blue[i].Value + 100) / 200)
   end
-  Controls["Hue " .. i].EventHandler = function()
-    cmd_hue(i, Controls["Hue " .. i].Position)
+  Controls.Hue[i].EventHandler = function()
+    cmd_hue(i, Controls.Hue[i].Position)
   end
-  Controls["Saturation " .. i].EventHandler = function()
-    cmd_saturation(i, (Controls["Saturation " .. i].Value + 100) / 200)
+  Controls.Saturation[i].EventHandler = function()
+    cmd_saturation(i, (Controls.Saturation[i].Value + 100) / 200)
   end
-  Controls["Contrast " .. i].EventHandler = function()
-    cmd_contrast(i, (Controls["Contrast " .. i].Value + 100) / 200)
+  Controls.Contrast[i].EventHandler = function()
+    cmd_contrast(i, (Controls.Contrast[i].Value + 100) / 200)
   end
-  Controls["Strobe " .. i].EventHandler = function()
-    cmd_strobe(i, Controls["Strobe " .. i].Position)
+  Controls.Strobe[i].EventHandler = function()
+    cmd_strobe(i, Controls.Strobe[i].Position)
   end
-  Controls["Volume " .. i].EventHandler = function()
-    cmd_volume(i, Controls["Volume " .. i].Position)
+  Controls.Volume[i].EventHandler = function()
+    cmd_volume(i, Controls.Volume[i].Position)
   end
-  Controls["Seek " .. i].EventHandler = function()
+  Controls.Seek[i].EventHandler = function()
     seek_timer_list[i]:Start(.2)
   end
-  Controls["TransitionDuration " .. i].EventHandler = function()
-    cmd_transition_duration(i, Controls["TransitionDuration " .. i].Value)
+  Controls.TransitionDuration[i].EventHandler = function()
+    cmd_transition_duration(i, Controls.TransitionDuration[i].Value)
   end
-  Controls["TransitionMode " .. i].EventHandler = function()
-    local val = get_table_value(transition_mode_keys, transition_mode_values, Controls["TransitionMode " .. i].String)
+  Controls.TransitionMode[i].EventHandler = function()
+    local val = get_table_value(transition_mode_keys, transition_mode_values, Controls.TransitionMode[i].String)
     cmd_transition_mode(i, val)
   end
-  Controls["TransitionModeIndex " .. i].EventHandler = function()
-    cmd_transition_mode(i, Controls["TransitionModeIndex " .. i].Value)
+  Controls.TransitionModeIndex[i].EventHandler = function()
+    cmd_transition_mode(i, Controls.TransitionModeIndex[i].Value)
   end
-  Controls["FX1Opacity " .. i].EventHandler = function()
-    _G["cmd_fx1_opacity"](i, Controls["FX1Opacity " .. i].Position)
+  Controls.FX1Opacity[i].EventHandler = function()
+    _G["cmd_fx1_opacity"](i, Controls.FX1Opacity[i].Position)
   end
-  Controls["FX2Opacity " .. i].EventHandler = function()
-    _G["cmd_fx2_opacity"](i, Controls["FX2Opacity " .. i].Position)
+  Controls.FX2Opacity[i].EventHandler = function()
+    _G["cmd_fx2_opacity"](i, Controls.FX2Opacity[i].Position)
   end
   for p = 1, 16 do
-    Controls[string.format("FX1Param%s %s", p, i)].EventHandler = function()
-      _G["cmd_fx1_param_" .. p](i, Controls[string.format("FX1Param%s %s", p, i)].Position)
+    Controls[string.format("FX1Param%s", p)][i].EventHandler = function()
+      _G["cmd_fx1_param_" .. p](i, Controls[string.format("FX1Param%s", p)][i].Position)
     end
-    Controls[string.format("FX2Param%s %s", p, i)].EventHandler = function()
-      _G["cmd_fx2_param_" .. p](i, Controls[string.format("FX2Param%s %s", p, i)].Position)
+    Controls[string.format("FX2Param%s", p)][i].EventHandler = function()
+      _G["cmd_fx2_param_" .. p](i, Controls[string.format("FX2Param%s", p)][i].Position)
     end
   end
 
   for p = 1, media_item_count do
-    Controls[string.format("MediaThumbnail%s %s", p, i)].EventHandler = function()
-      if Controls[string.format("MediaName%s %s", p, i)].String ~= nil then
-        cmd_file_select(i, file_list[Controls[string.format("MediaName%s %s", p, i)].String])
+    Controls[string.format("MediaThumbnail%s", p)][i].EventHandler = function()
+      if Controls[string.format("MediaName%s", p)][i].String ~= nil then
+        cmd_file_select(i, file_list[Controls[string.format("MediaName%s", p)][i].String])
       end
     end
   end
