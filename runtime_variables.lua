@@ -307,7 +307,7 @@ ticker = 1
 local ip_address = Properties["IP Address"].Value
 
 -- Utility functions to get key from value and vice versa in the ENUM tables
-function get_table_key(tblKeys, tblValues, value)
+function GetTableKey(tblKeys, tblValues, value)
   for i = 1, #tblValues do
     if tblValues[i] == value then
       return tblKeys[i]
@@ -316,7 +316,7 @@ function get_table_key(tblKeys, tblValues, value)
   return nil
 end
 
-function get_table_value(tblKeys, tblValues, key)
+function GetTableValue(tblKeys, tblValues, key)
   for i = 1, #tblKeys do
     if tblKeys[i] == key then
       return tblValues[i]

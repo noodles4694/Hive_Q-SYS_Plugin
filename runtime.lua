@@ -1,36 +1,36 @@
 -- Logic to deal with connection and disconnection of the Hive player
-function fn_hive_connect_Status(status, message)
-  fn_log_debug("Setting connected status to " .. tostring(status))
+function FnHiveConnectStatus(status, message)
+  FnLogDebug("Setting connected status to " .. tostring(status))
   if status == true then
-    setOnline()
-    fn_watch_parameters()
-    fn_update_info()
-    fn_poll_info()
-    fn_update_media_folders()
-    fn_fetch_video_previews()
+    SetOnline()
+    FnWatchParameters()
+    FnUpdateInfo()
+    FnPollInfo()
+    FnUpdateMediaFolders()
+    FnFetchVideoPreviews()
   else
-    setMissing(message or "Offline")
-    fn_blank_previews()
+    SetMissing(message or "Offline")
+    FnBlankPreviews()
   end
 end
 
 -- Watch for parameter changes from the Hive player
-function fn_watch_parameters()
+function FnWatchParameters()
   -- Watch for JSON updates
-  fn_log_debug("Setting up JSON watchers")
-  watchPatchJSON("/System Settings", fn_process_JSON_update)
-  watchPatchJSON("/Media List", fn_process_JSON_update)
-  watchPatchJSON("/Play List", fn_process_JSON_update)
-  watchPatchJSON("/Timecode Cue List", fn_process_JSON_update)
-  watchPatchJSON("/Schedule", fn_process_JSON_update)
-  watchPatchJSON("/Timeline", fn_process_JSON_update)
-  watchPatchJSON("/Output Mapping", fn_process_JSON_update)
-  watchPatchDouble("/Playlist Control/Playlist Controller 1/Row Index", fn_process_playlist_row_update)
+  FnLogDebug("Setting up JSON watchers")
+  WatchPatchJSON("/System Settings", FnProcessJSONUpdate)
+  WatchPatchJSON("/Media List", FnProcessJSONUpdate)
+  WatchPatchJSON("/Play List", FnProcessJSONUpdate)
+  WatchPatchJSON("/Timecode Cue List", FnProcessJSONUpdate)
+  WatchPatchJSON("/Schedule", FnProcessJSONUpdate)
+  WatchPatchJSON("/Timeline", FnProcessJSONUpdate)
+  WatchPatchJSON("/Output Mapping", FnProcessJSONUpdate)
+  WatchPatchDouble("/Playlist Control/Playlist Controller 1/Row Index", FnProcessPlaylistRowUpdate)
   -- get the LUT options and update controls
   -- set the RAW mode so we can parse the raw data manually
-  getPatchJSON("/LUT Colour Modes", fn_process_LUT_data, true)
-  fn_log_debug("LUT options requested")
-  watchPatchString(
+  GetPatchJSON("/LUT Colour Modes", FnProcessLUTData, true)
+  FnLogDebug("LUT options requested")
+  WatchPatchString(
     "/Status/Text",
     function(path, value)
       Controls.Activity.String = value
@@ -38,68 +38,68 @@ function fn_watch_parameters()
   )
 
   -- Watch for value changes in layer parameters
-  fn_log_debug("Setting up layer parameter watchers")
+  FnLogDebug("Setting up layer parameter watchers")
   for i = 1, layer_count do
     for _, parameter in ipairs(control_list) do
       if parameter.Watch == true then
       local path = string.format("/LAYER %s/%s/Value", i, parameter.Path)
-      watchPatchDouble(path, fn_process_double_update)
+      WatchPatchDouble(path, FnProcessDoubleUpdate)
       end
     end
   end
 
   -- Watch for value changes in transport control parameters
-  fn_log_debug("Setting up transport control watchers")
+  FnLogDebug("Setting up transport control watchers")
   for i = 1, layer_count do
-    watchPatchDouble(string.format("/LAYER %s/Transport Control/Media Time/Value", i), fn_process_transport_update)
+    WatchPatchDouble(string.format("/LAYER %s/Transport Control/Media Time/Value", i), FnProcessTransportUpdate)
   end
 end
 
 -- Poll and update the engine FPS and BeeSync status every second
-function fn_poll_info()
+function FnPollInfo()
   if wsConnected == true then
-    fn_log_debug("Polling engine FPS")
-    getPatchString(
+    FnLogDebug("Polling engine FPS")
+    GetPatchString(
       "/Mapping/Render Resolution/FPS",
       function(path, value)
-        fn_log_debug("Engine FPS: " .. value)
+        FnLogDebug("Engine FPS: " .. value)
         engine_fps = tonumber(value) or 0
         Controls.EngineFPS.String = value
       end
     )
-    fn_update_sync_status()
-    fn_update_status()
+    FnUpdateSyncStatus()
+    FnUpdateStatus()
   end
   if wsConnected then
-    Timer.CallAfter(fn_poll_info, 1)
+    Timer.CallAfter(FnPollInfo, 1)
   end
 end
 
-function fn_update_status()
+function FnUpdateStatus()
   if device_info and wsConnected then
     -- OK status ("" or "OK")
     if device_info.status == "OK" then
       -- warn if less than 50Gb free
       if device_info.space < (1024 * 1024 * 1024 * 50) then
         -- check is fps has dropped to below 80% of output rate
-        setCompromised("Low Disk Space")
+        SetCompromised("Low Disk Space")
       elseif engine_fps < (device_info.rate * 0.8) then
-        setCompromised("Low FPS")
+        SetCompromised("Low FPS")
       else
-        setOnline()
+        SetOnline()
       end
     else
-      setFault(device_info.status)
+      SetFault(device_info.status)
     end
   end
 end
 
 -- Poll and update the BeeSync status
-function fn_update_sync_status()
+function FnUpdateSyncStatus()
   if wsConnected ~= true then
     return
   end
-  fn_log_debug("Polling BeeSync status")
+  FnLogDebug("Polling BeeSync status")
   local url = string.format("http://%s/api/getBeeSyncStatus", ip_address)
   HttpClient.Post {
     Url = url,
@@ -110,43 +110,43 @@ function fn_update_sync_status()
     EventHandler = function(tbl, code, data, error, headers)
       if code == 200 then
         local info = rapidjson.decode(data)
-        fn_log_debug("BeeSync status: " .. info.status)
+        FnLogDebug("BeeSync status: " .. info.status)
         Controls.SyncStatus.String = info.status
       else
-        fn_log_error("Failed to get BeeSync status: HTTP " .. tostring(code))
+        FnLogError("Failed to get BeeSync status: HTTP " .. tostring(code))
       end
     end
   }
 end
 
 -- Set the value of a layer parameter
-function fn_send(layer, cmd, val)
-  fn_log_debug(string.format("Sending command to layer %s: %s = %s", layer, cmd, tostring(val)))
+function FnSend(layer, cmd, val)
+  FnLogDebug(string.format("Sending command to layer %s: %s = %s", layer, cmd, tostring(val)))
   local path = "/LAYER " .. layer .. "/" .. cmd .. "/Value"
-  setPatchDouble(path, val)
+  SetPatchDouble(path, val)
 end
 
 -- Set a JSON data value in full
-function fn_send_json(cmd, val)
-  fn_log_debug(string.format("Sending JSON command: %s = %s", cmd, rapidjson.encode(val)))
+function FnSendJson(cmd, val)
+  FnLogDebug(string.format("Sending JSON command: %s = %s", cmd, rapidjson.encode(val)))
   local path = "/" .. cmd
-  setPatchJSON(path, val)
+  SetPatchJSON(path, val)
 end
 
 -- Update a section of JSON data value
-function fn_update_json(cmd, val)
-  fn_log_debug(string.format("Updating JSON command: %s = %s", cmd, rapidjson.encode(val)))
+function FnUpdateJson(cmd, val)
+  FnLogDebug(string.format("Updating JSON command: %s = %s", cmd, rapidjson.encode(val)))
   local path = "/" .. cmd
-  updatePatchJSON(path, val)
+  UpdatePatchJSON(path, val)
 end
 
 -- Process the LUT data received from the Hive player
-function fn_process_LUT_data(path, data)
+function FnProcessLUTData(path, data)
   -- The LUT list is inside a JSON object under the "Value" key
   -- however it is not indexed so we have to extract the string pairs manually
   -- in order to maintain the ordering
   -- this is not ideal but it works
-  fn_log_debug("Processing LUT data")
+  FnLogDebug("Processing LUT data")
   -- find the start of the "Value" object
   local startPos = data:find('"Value"%s*:%s*{')
   if startPos then
@@ -187,12 +187,12 @@ function fn_process_LUT_data(path, data)
       end
     end
   else
-    fn_log_error("Failed to find LUT Value block in JSON data")
+    FnLogError("Failed to find LUT Value block in JSON data")
   end
 end
 
 -- Handle transport control updates from the Hive player
-function fn_process_transport_update(path, value)
+function FnProcessTransportUpdate(path, value)
   local layer, parameter = path:match("/LAYER (%d+)/(%P+)")
   if parameter == "Transport Control" then
     local layer, parameter, sub_parameter = path:match("/LAYER (%d+)/(%P+)/(%P+)")
@@ -214,20 +214,20 @@ function fn_process_transport_update(path, value)
       end
     end
   else
-    fn_log_error("Unknown transport parameter: " .. par)
+    FnLogError("Unknown transport parameter: " .. par)
   end
 end
 
 -- Handle playlist row updates from the Hive player
-function fn_process_playlist_row_update(path, value)
-  fn_log_debug("Playlist active row updated to " .. tostring(value + 1))
+function FnProcessPlaylistRowUpdate(path, value)
+  FnLogDebug("Playlist active row updated to " .. tostring(value + 1))
   playlist_active_row = value + 1 -- convert from 0 based to 1 based
   Controls.PlaylistCurrentRow.Value = playlist_active_row
 end
 
 -- Handle double updates from the Hive player
-function fn_process_double_update(path, value)
-  fn_log_debug("Processing double update: " .. path .. " = " .. tostring(value))
+function FnProcessDoubleUpdate(path, value)
+  FnLogDebug("Processing double update: " .. path .. " = " .. tostring(value))
   if path:sub(1, 6) == "/LAYER" then -- Layer parameter response
     local layer, parameter = path:match("/LAYER (%d+)/(%P+)/Value")
     layer = tonumber(layer)
@@ -242,7 +242,7 @@ function fn_process_double_update(path, value)
       if( control ~= "" ) then
       if parameter == "FILE SELECT" then
         selected_file[tonumber(layer)] = value
-        fn_update_selected_file_info(value, layer)
+        FnUpdateSelectedFileInfo(value, layer)
       elseif parameter == "FOLDER SELECT" then
         Controls.FolderSelectIndex[layer].Value = value
         for k, v in pairs(folder_list) do
@@ -262,27 +262,27 @@ function fn_process_double_update(path, value)
       elseif parameter:sub(-5, -1) == "FRAME" then
         Controls[control][layer].Value = value
       elseif parameter == "PLAY MODE" then
-        local key = get_table_key(play_mode_keys, play_mode_values, value)
+        local key = GetTableKey(play_mode_keys, play_mode_values, value)
         Controls[control][layer].String = key
         Controls.PlayModeIndex[layer].Value = value
       elseif parameter == "FRAMING MODE" then
-        local key = get_table_key(framing_mode_keys, framing_mode_values, value)
+        local key = GetTableKey(framing_mode_keys, framing_mode_values, value)
         Controls[control][layer].String = key
         Controls.FramingModeIndex[layer].Value = value
       elseif parameter == "BLEND MODE" then
-        local key = get_table_key(blend_mode_keys, blend_mode_values, value)
+        local key = GetTableKey(blend_mode_keys, blend_mode_values, value)
         Controls[control][layer].String = key
         Controls.BlendModeIndex[layer].Value = value
       elseif parameter == "TRANSITION MODE" then
-        local key = get_table_key(transition_mode_keys, transition_mode_values, value)
+        local key = GetTableKey(transition_mode_keys, transition_mode_values, value)
         Controls[control][layer].String = key
         Controls.TransitionModeIndex[layer].Value = value
       elseif parameter == "FX1 SELECT" then
-        local key = get_table_key(fx_keys, fx_values, value)
+        local key = GetTableKey(fx_keys, fx_values, value)
         Controls[control][layer].String = key
         Controls.FX1SelectIndex[layer].Value = value
       elseif parameter == "FX2 SELECT" then
-        local key = get_table_key(fx_keys, fx_values, value)
+        local key = GetTableKey(fx_keys, fx_values, value)
         Controls[control][layer].String = key
         Controls.FX2SelectIndex[layer].Value = value
       elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
@@ -308,19 +308,19 @@ function fn_process_double_update(path, value)
         Controls[control][layer].Position = value
       end
     else
-      fn_log_error("Unknown layer parameter: " .. path)
+      FnLogError("Unknown layer parameter: " .. path)
     end
   end
   end
 end
 
-function fn_update_selected_file_info(value, layer)
+function FnUpdateSelectedFileInfo(value, layer)
   local found = false
   for media = 1, media_item_count do
     Controls[string.format("MediaThumbnail%s", media)][layer].Boolean = media == (value + 1)
   end
   local currentFileName = file_list_names[tonumber(value)] or ""
-  fn_update_preview_thumbnail(layer, currentFileName)
+  FnUpdatePreviewThumbnail(layer, currentFileName)
   Controls.FileSelect[layer].String = currentFileName
   Controls.FileSelectIndex[layer].Value = tonumber(value)
   if file_metadata_list[currentFileName] then
@@ -331,7 +331,7 @@ function fn_update_selected_file_info(value, layer)
 end
 
 -- Clear the media list thumbnails and names
-function fn_clear_media_thumbs()
+function FnClearMediaThumbs()
   local iconStyleBlank = {
     DrawChrome = true,
     HorizontalAlignment = "Center",
@@ -350,20 +350,20 @@ function fn_clear_media_thumbs()
 end
 
 -- Handle JSON updates from the Hive player
-function fn_process_JSON_update(path, value)
-  fn_log_debug("Processing JSON update: " .. path)
+function FnProcessJSONUpdate(path, value)
+  FnLogDebug("Processing JSON update: " .. path)
   if path == "/System Settings" then
     device_settings = value
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
       Controls.SettingsJSON.String = rapidjson.encode(value)
     end
-    fn_update_info()
+    FnUpdateInfo()
   elseif path == "/Media List" then
     local file_choice_list = {}
     file_list = {}
     file_list_names = {}
     file_metadata_list = {}
-    fn_clear_media_thumbs()
+    FnClearMediaThumbs()
     for _, file in ipairs(value.files) do
       file_list[file.name] = file.fileIndex - 1
       file_list_names[file.fileIndex - 1] = file.name
@@ -374,20 +374,20 @@ function fn_process_JSON_update(path, value)
           Controls[string.format("MediaName%s", file.fileIndex)][i].String = file.name
         end
       end
-      fn_get_file_thumbnail(file.fileIndex, file.name)
+      FnGetFileThumbnail(file.fileIndex, file.name)
     end
     for i = 1, layer_count do
       Controls.FileSelect[i].Choices = file_choice_list
-      fn_update_selected_file_info(selected_file[i], i)
+      FnUpdateSelectedFileInfo(selected_file[i], i)
     end
     -- let's update the system info as storage and num files might have changed
-    fn_update_info()
+    FnUpdateInfo()
   elseif path == "/Output Mapping" then
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
       Controls.MappingJSON.String = rapidjson.encode(value)
     end
   elseif path == "/Play List" then
-    fn_log_debug(
+    FnLogDebug(
       "Playlist updated, total items: " ..
         tostring(value.list and #value.list or 0) .. ", enabled: " .. tostring(value.usePlayList)
     )
@@ -402,7 +402,7 @@ function fn_process_JSON_update(path, value)
     playlist_row_count = value.list and #value.list or 0
     Controls.PlaylistRows.Value = playlist_row_count
   elseif path == "/Timecode Cue List" then
-    fn_log_debug(
+    FnLogDebug(
       "Timecode Cue List updated, layer 1 items: " ..
         tostring(value.layers[1] and #(value.layers[1].list) or 0) ..
           ", layer 2 items: " ..
@@ -427,7 +427,7 @@ function fn_process_JSON_update(path, value)
     Controls.L1TCRows.Value = value.layers[1] and #(value.layers[1].list) or 0
     Controls.L2TCRows.Value = value.layers[2] and #(value.layers[2].list) or 0
   elseif path == "/Schedule" then
-    fn_log_debug("Schedule updated, enabled: " .. tostring(value.useSchedule))
+    FnLogDebug("Schedule updated, enabled: " .. tostring(value.useSchedule))
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
       Controls.SchedulerJSON.String = rapidjson.encode(value)
     end
@@ -437,7 +437,7 @@ function fn_process_JSON_update(path, value)
       Controls.ScheduleEnable.Boolean = false
     end
   elseif path == "/Timeline" then
-    fn_log_debug("Timeline updated, enabled: " .. tostring(value.useTimeline))
+    FnLogDebug("Timeline updated, enabled: " .. tostring(value.useTimeline))
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
       Controls.TimelineJSON.String = rapidjson.encode(value)
     end
@@ -452,11 +452,11 @@ function fn_process_JSON_update(path, value)
 end
 
 -- Request and update the device information from the Hive player
-function fn_update_info()
+function FnUpdateInfo()
   if wsConnected ~= true then
     return
   end
-  fn_log_debug("Updating device info")
+  FnLogDebug("Updating device info")
   local url = string.format("http://%s/api/getTileList", ip_address)
   HttpClient.Post {
     Url = url,
@@ -467,13 +467,13 @@ function fn_update_info()
     EventHandler = function(tbl, code, data, error, headers)
       if code == 200 then
         local info = rapidjson.decode(data)
-        fn_log_debug("Device info received")
+        FnLogDebug("Device info received")
         Controls.Version.String = info.hiveVersion
 
         if info and info.tileList then
           device_info = nil
           for _, tile in ipairs(info.tileList) do
-            if fn_compare_ips(tile.ipAddress, ip_address) then
+            if FnCompareIps(tile.ipAddress, ip_address) then
               device_info = tile
               break
             end
@@ -493,19 +493,19 @@ function fn_update_info()
           end
         end
       else
-        fn_log_error("Failed to get device info: HTTP " .. tostring(code))
+        FnLogError("Failed to get device info: HTTP " .. tostring(code))
       end
     end
   }
 end
 
 -- Request and update the thumbnail for a specific media index and filename
-function fn_get_file_thumbnail(index, filename)
+function FnGetFileThumbnail(index, filename)
   if wsConnected ~= true then
     return
   end
   if index <= media_item_count then
-    fn_log_debug("Requesting thumbnail for media index " .. tostring(index) .. ", file: " .. filename)
+    FnLogDebug("Requesting thumbnail for media index " .. tostring(index) .. ", file: " .. filename)
     HttpClient.Download {
       Url = string.format("http://%s/Thumbs/%s", ip_address, filename:gsub("%.%w+", ".jpg")),
       Headers = {},
@@ -528,18 +528,18 @@ function fn_get_file_thumbnail(index, filename)
       end
     }
   else
-    fn_log_error("Thumbnail index " .. tostring(index) .. " exceeds media item count of " .. tostring(media_item_count))
+    FnLogError("Thumbnail index " .. tostring(index) .. " exceeds media item count of " .. tostring(media_item_count))
   end
 end
 
 -- Request and update the preview thumbnail for a specific layer and filename
-function fn_update_preview_thumbnail(layer, filename)
+function FnUpdatePreviewThumbnail(layer, filename)
   if wsConnected ~= true or tonumber(layer) > layer_count then
     return
   end
-  fn_log_debug("Requesting preview for media  " .. filename)
+  FnLogDebug("Requesting preview for media  " .. filename)
   if file_list[filename] == nil then
-    fn_log_error("Filename " .. filename .. " not found in file list")
+    FnLogError("Filename " .. filename .. " not found in file list")
 
     local iconStyleBlank = {
       DrawChrome = true,
@@ -581,7 +581,7 @@ function fn_update_preview_thumbnail(layer, filename)
   end
 end
 
-function fn_blank_previews()
+function FnBlankPreviews()
   local iconStyleBlank = {
     DrawChrome = true,
     HorizontalAlignment = "Center",
@@ -596,20 +596,20 @@ function fn_blank_previews()
 end
 
 -- Periodically fetch and update the output video preview
-function fn_fetch_video_previews()
-  fn_update_output_video_preview()
+function FnFetchVideoPreviews()
+  FnUpdateOutputVideoPreview()
   if wsConnected then
     local refresh_period = 1 / string.gsub(Properties["Preview Refresh"].Value, " fps", "")
-    Timer.CallAfter(fn_fetch_video_previews, refresh_period)
+    Timer.CallAfter(FnFetchVideoPreviews, refresh_period)
   end
 end
 
 -- Request and update the output video preview
-function fn_update_output_video_preview()
+function FnUpdateOutputVideoPreview()
   if Properties["Output Video Preview"].Value == "Disabled" or not Controls.PreviewEnable.Boolean then
     return
   end
-  fn_log_debug("Requesting output preview frame")
+  FnLogDebug("Requesting output preview frame")
   local url = string.format("http://%s/api/getOutputFrame", ip_address)
   HttpClient.Post {
     Url = url,
@@ -634,18 +634,18 @@ function fn_update_output_video_preview()
           Controls.OutputPreview.Style = rapidjson.encode(iconStyle)
         end
       else
-        fn_log_error("Failed to get output frame data ")
+        FnLogError("Failed to get output frame data ")
       end
     end
   }
 end
 
 -- retrieve the list of availiable media fiolders and update the options in he comboboxes
-function fn_update_media_folders()
+function FnUpdateMediaFolders()
   if wsConnected ~= true then
     return
   end
-  fn_log_debug("Updating media folder list")
+  FnLogDebug("Updating media folder list")
   url = string.format("http://%s/api/getMediaFoldersList", ip_address)
   HttpClient.Post {
     Url = url,
@@ -655,7 +655,7 @@ function fn_update_media_folders()
     },
     EventHandler = function(tbl, code, data, error, headers)
       if code == 200 then
-        fn_log_debug("Media folder list received")
+        FnLogDebug("Media folder list received")
         local folders = rapidjson.decode(data)
         folder_list = {
           ["MEDIA"] = 0 -- Default folder
@@ -673,7 +673,7 @@ function fn_update_media_folders()
           Controls.FolderSelect[i].Choices = folder_choices
         end
       else
-        fn_log_error("Failed to get media folder list: HTTP " .. tostring(code))
+        FnLogError("Failed to get media folder list: HTTP " .. tostring(code))
       end
     end
   }
@@ -692,7 +692,7 @@ for layer, seek_timer in pairs(seek_timer_list) do
         )
         -- Seek to desired frame
         local path = string.format("/LAYER %s/Transport Control/MediaClockGenerator/Seek", layer)
-        setPatchDouble(path, frame)
+        SetPatchDouble(path, frame)
       end
       seek_timer_list[layer]:Stop()
     end
@@ -711,11 +711,11 @@ for i = 1, layer_count do
 end
 
 -- Connect
-setInitializing("Connecting...")
-if fn_check_valid_ip(ip_address) then
-  Connect(ip_address, fn_hive_connect_Status)
-  fn_log_message("Connecting to Hive player at " .. ip_address)
+SetInitializing("Connecting...")
+if FnCheckValidIp(ip_address) then
+  Connect(ip_address, FnHiveConnectStatus)
+  FnLogMessage("Connecting to Hive player at " .. ip_address)
 else
-  setMissing("Invalid IP")
-  fn_log_error("Invalid IP address: " .. ip_address)
+  SetMissing("Invalid IP")
+  FnLogError("Invalid IP address: " .. ip_address)
 end

@@ -1,8 +1,8 @@
 -- we need to re-create the page list as it is nullified when entering this call
 CreatePages()
 
--- function to count matching entries in a table
-local function countMatches(tbl, conditions)
+-- Count matching entries in a table
+local function CountMatches(tbl, conditions)
     local count = 0
     for _, obj in ipairs(tbl) do
         local ok = true
@@ -22,9 +22,9 @@ end
 -- common variables used by each page layout
 local CurrentPage = PageNames[props["page_index"].Value]
 local media_item_count = props["Media List Count"].Value
-local layerItemCount = countMatches(control_list, {Group = "Layer", Display = true})
-local FX1ItemCount = countMatches(control_list, {Group = "FX1", Display = true})
-local FX2ItemCount = countMatches(control_list, {Group = "FX2", Display = true})
+local layerItemCount = CountMatches(control_list, {Group = "Layer", Display = true})
+local FX1ItemCount = CountMatches(control_list, {Group = "FX1", Display = true})
+local FX2ItemCount = CountMatches(control_list, {Group = "FX2", Display = true})
 local column_size = 12
 local fx1_column_size = 6
 local fx2_column_size = 6

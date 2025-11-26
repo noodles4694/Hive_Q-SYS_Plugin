@@ -25,10 +25,10 @@ function Connect(ip, statusCallback)
   shouldConnect = true
   ipTarget = ip
   if (ipTarget) then
-    fn_log_message("Connecting to Hive Device at " .. ipTarget)
-    connectSocket(ipTarget)
+    FnLogMessage("Connecting to Hive Device at " .. ipTarget)
+    ConnectSocket(ipTarget)
   else
-    fn_log_error("No IP address provided for Device connection.")
+    FnLogError("No IP address provided for Device connection.")
   end
 end
 
@@ -37,7 +37,7 @@ function Disconnect()
   shouldConnect = false
   ws:Close()
   wsConnected = false
-  fn_log_message("Hive connection closed")
+  FnLogMessage("Hive connection closed")
   if connectionCallback then
     connectionCallback(false, "Connection Closed") -- Call the status callback with false to indicate disconnection
   end
@@ -47,7 +47,7 @@ end
 -- WebSocket event handlers
 ws.Connected = function()
   wsConnected = true
-  fn_log_message("Hive connection established")
+  FnLogMessage("Hive connection established")
   if connectionCallback then
     connectionCallback(true, "Online") -- Call the status callback with true to indicate success
   end
@@ -58,20 +58,20 @@ end
 -- Handle WebSocket closure and attempt to reconnect if needed
 ws.Closed = function()
   wsConnected = false
-  fn_log_message("Hive connection closed")
+  FnLogMessage("Hive connection closed")
   if connectionCallback then
     connectionCallback(false, "Connection Closed") -- Call the status callback with false to indicate disconnection
   end
   pingTimer:Stop()
   if shouldConnect then
     if ipTarget then
-      fn_log_message("Attempting to reconnect to Hive Device at " .. ipTarget)
+      FnLogMessage("Attempting to reconnect to Hive Device at " .. ipTarget)
       if connectionCallback then
         connectionCallback(false, "Offline - Attempting to reconnect") -- Call the status callback with false to indicate disconnection
       end
-      connectSocket(ipTarget) -- Attempt to reconnect
+      ConnectSocket(ipTarget) -- Attempt to reconnect
     else
-      fn_log_error("No IP address provided for reconnection.")
+      FnLogError("No IP address provided for reconnection.")
     end
   end
 end
@@ -111,7 +111,7 @@ ws.Data = function(ws, data)
         pendingRawCallbacks[response.sequence] = nil
       end
     else
-      fn_log_error("No callback / handler found for data: ")
+      FnLogError("No callback / handler found for data: ")
     end
     dataBuffer = "" -- Clear the buffer after processing
   end
@@ -119,55 +119,55 @@ end
 
 -- Handle WebSocket errors
 ws.Error = function(socket, err)
-  fn_log_error("Hive connection error: " .. err)
+  FnLogError("Hive connection error: " .. err)
   pingTimer:Stop()
   -- Attempt to reconnect if the connection is lost
   if wsConnected == false and shouldConnect == true then
     if ipTarget then
-      fn_log_message("Attempting to reconnect to Hive Device at " .. ipTarget)
+      FnLogMessage("Attempting to reconnect to Hive Device at " .. ipTarget)
       if connectionCallback then
         connectionCallback(false, "Offline - Attempting to reconnect") -- Call the status callback with false to indicate disconnection
       end
-      connectSocket(ipTarget) -- Attempt to reconnect
+      ConnectSocket(ipTarget) -- Attempt to reconnect
     end
   end
 end
 
 -- Timer to send ping messages to keep the WebSocket connection alive
 pingTimer.EventHandler = function()
-  fn_log_debug("Sending ping to Hive")
+  FnLogDebug("Sending ping to Hive")
   ws:Ping()
 end
 
 -- Function to connect to the WebSocket server
-function connectSocket(ip)
+function ConnectSocket(ip)
   -- Check if the WebSocket is already connected
   if (wsConnected) then
-    fn_log_message("WebSocket is already connected.")
+    FnLogMessage("WebSocket is already connected.")
     ws:Close()
   end
   -- Connect to the Hive WebSocket server
-  fn_log_debug("Connecting to Hive WebSocket at " .. ip)
+  FnLogDebug("Connecting to Hive WebSocket at " .. ip)
   ws:Connect("ws", ip, "", 9002)
 end
 
 -- Handler for Watched Patch updates
-function refreshView(refreshViewMessage)
+function RefreshView(refreshViewMessage)
   local callback = refreshViewMap[refreshViewMessage.Path]
   if callback then
     callback(refreshViewMessage.Path, refreshViewMessage.Value)
   else
-    fn_log_error("No callback found for refresh view message: " .. refreshViewMessage)
+    FnLogError("No callback found for refresh view message: " .. refreshViewMessage)
   end
 end
 
--- Register the refreshView handler
-handlers["RefreshView"] = refreshView
+-- Register the RefreshView handler
+handlers["RefreshView"] = RefreshView
 
 -- Function to remove a watch on a specific path
-function _RemoveWatch(path)
+function RemoveWatchInternal(path)
   if (wsConnected) then
-    fn_log_debug("Removing watch for path: " .. path)
+    FnLogDebug("Removing watch for path: " .. path)
     -- Create the request object
     local request = {
       apiVersion = 1,
@@ -180,16 +180,16 @@ function _RemoveWatch(path)
 end
 
 -- Public function to remove a watch and its associated callback
-function removeWatch(path)
+function RemoveWatch(path)
   if path then
     refreshViewMap[path] = nil
-    _RemoveWatch(path)
+    RemoveWatchInternal(path)
     print("Removed watch for path: " .. path)
   end
 end
 
 -- Functions to get patch numerical values
-function getPatchDouble(path, callback)
+function GetPatchDouble(path, callback)
   if (wsConnected) then
     -- Increment the sequence number for each request
     sequenceNo = sequenceNo + 1
@@ -210,7 +210,7 @@ function getPatchDouble(path, callback)
   end
 end
 -- Functions to set patch numerical values
-function setPatchDouble(path, value)
+function SetPatchDouble(path, value)
   if (wsConnected) then
     -- Create the request object
     local request = {
@@ -224,7 +224,7 @@ function setPatchDouble(path, value)
 end
 
 -- Functions to watch for changes to patch numerical values
-function _WatchPatchDouble(path)
+function WatchPatchDoubleInternal(path)
   if (wsConnected) then
     -- Create the request object
     local request = {
@@ -238,14 +238,14 @@ function _WatchPatchDouble(path)
 end
 
 -- Public function to watch a patch numerical value and set up its callback
-function watchPatchDouble(path, callback)
+function WatchPatchDouble(path, callback)
   refreshViewMap[path] = callback
-  _WatchPatchDouble(path)
-  getPatchDouble(path, callback)
+  WatchPatchDoubleInternal(path)
+  GetPatchDouble(path, callback)
 end
 
 -- Public function to get patch string values
-function getPatchString(path, callback)
+function GetPatchString(path, callback)
   if (wsConnected) then
     -- Increment the sequence number for each request
     sequenceNo = sequenceNo + 1
@@ -267,7 +267,7 @@ function getPatchString(path, callback)
 end
 
 -- Public function to set patch string values
-function setPatchString(path, value)
+function SetPatchString(path, value)
   if (wsConnected) then
     -- Create the request object
     local request = {
@@ -281,7 +281,7 @@ function setPatchString(path, value)
 end
 
 -- Function to watch changes to patch string values
-function _WatchPatchString(path)
+function WatchPatchStringInternal(path)
   if (wsConnected) then
     -- Create the request object
     local request = {
@@ -295,14 +295,14 @@ function _WatchPatchString(path)
 end
 
 -- Public function to watch a patch string value and set up its callback
-function watchPatchString(path, callback)
+function WatchPatchString(path, callback)
   refreshViewMap[path] = callback
-  _WatchPatchString(path)
-  getPatchString(path, callback)
+  WatchPatchStringInternal(path)
+  GetPatchString(path, callback)
 end
 
 -- Public function to get patch JSON values
-function getPatchJSON(path, callback, raw)
+function GetPatchJSON(path, callback, raw)
   if (wsConnected) then
     -- Increment the sequence number for each request
     sequenceNo = sequenceNo + 1
@@ -328,7 +328,7 @@ function getPatchJSON(path, callback, raw)
 end
 
 -- Public function to set patch JSON values
-function setPatchJSON(path, value)
+function SetPatchJSON(path, value)
   if (wsConnected) then
     -- Create the request object
     local request = {
@@ -342,7 +342,7 @@ function setPatchJSON(path, value)
 end
 
 -- Public function to update patch JSON values
-function updatePatchJSON(path, value)
+function UpdatePatchJSON(path, value)
   if (wsConnected) then
     -- Create the request object
     local request = {
@@ -356,7 +356,7 @@ function updatePatchJSON(path, value)
 end
 
 -- Function to watch changes to patch JSON values
-function _WatchPatchJSON(path)
+function WatchPatchJSONInternal(path)
   if (wsConnected) then
     -- Create the request object
     local request = {
@@ -370,8 +370,8 @@ function _WatchPatchJSON(path)
 end
 
 -- Public function to watch a patch JSON value and set up its callback
-function watchPatchJSON(path, callback)
+function WatchPatchJSON(path, callback)
   refreshViewMap[path] = callback
-  _WatchPatchJSON(path)
-  getPatchJSON(path, callback)
+  WatchPatchJSONInternal(path)
+  GetPatchJSON(path, callback)
 end

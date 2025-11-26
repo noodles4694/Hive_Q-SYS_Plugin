@@ -3,26 +3,33 @@
 -- Logging functions
 
 -- Logs a message to both the Log and the console
-function fn_log_message(message)
+function FnLogMessage(message)
   Log.Message(message)
   print(message)
 end
 -- Logs an error message to both the Log and the console, but only if logging level is set to Errors Only or Debug
-function fn_log_error(message)
+function FnLogError(message)
   if Properties["Logging Level"].Value == "Errors Only" or Properties["Logging Level"].Value == "Debug" then
     Log.Error(message)
     print("Error: " .. message)
   end
 end
+-- Logs a warning message to both the Log and the console, but only if logging level is set to Debug
+function FnLogWarning(message)
+  if Properties["Logging Level"].Value == "Debug" then
+    Log.Message("Warning: " .. message)
+    print("Warning: " .. message)
+  end
+end
 -- Logs a debug message to both the Log and the console, but only if logging level is set to Debug
-function fn_log_debug(message)
+function FnLogDebug(message)
   if Properties["Logging Level"].Value == "Debug" then
     Log.Message("Debug: " .. message)
     print("Debug: " .. message)
   end
 end
 
-function setOnline()
+function SetOnline()
   if Controls.Status.Value ~= StatusState.OK then
     Controls.Status.Value = StatusState.OK
   end
@@ -31,7 +38,7 @@ function setOnline()
   end
 end
 
-function setInitializing(msg)
+function SetInitializing(msg)
   if Controls.Status.Value ~= StatusState.INITIALIZING then
     Controls.Status.Value = StatusState.INITIALIZING
   end
@@ -40,7 +47,7 @@ function setInitializing(msg)
   end
 end
 
-function setFault(msg)
+function SetFault(msg)
   if Controls.Status.Value ~= StatusState.FAULT then
     Controls.Status.Value = StatusState.FAULT
   end
@@ -49,7 +56,7 @@ function setFault(msg)
   end
 end
 
-function setCompromised(msg)
+function SetCompromised(msg)
   if Controls.Status.Value ~= StatusState.COMPROMISED then
     Controls.Status.Value = StatusState.COMPROMISED
   end
@@ -58,7 +65,7 @@ function setCompromised(msg)
   end
 end
 
-function setMissing(msg)
+function SetMissing(msg)
   if Controls.Status.Value ~= StatusState.MISSING then
     Controls.Status.Value = StatusState.MISSING
   end
@@ -67,7 +74,7 @@ function setMissing(msg)
   end
 end
 
-function setNotPresent(msg)
+function SetNotPresent(msg)
   if Controls.Status.Value ~= StatusState.NOTPRESENT then
     Controls.Status.Value = StatusState.NOTPRESENT
   end
@@ -77,7 +84,7 @@ function setNotPresent(msg)
 end
 
 ---checks if a string represents an ip address
-function fn_check_valid_ip(ip)
+function FnCheckValidIp(ip)
   if not ip then
     return false
   end
@@ -105,8 +112,8 @@ function fn_check_valid_ip(ip)
 end
 
 -- compares two ip addresses, ignoring leading zeros
-function fn_compare_ips(ip1, ip2)
-  local function normalize(ip)
+function FnCompareIps(ip1, ip2)
+  local function Normalize(ip)
     local parts = {}
     if not ip then
       return ""
@@ -116,13 +123,13 @@ function fn_compare_ips(ip1, ip2)
     end
     return table.concat(parts, ".")
   end
-  return normalize(ip1) == normalize(ip2)
+  return Normalize(ip1) == Normalize(ip2)
 end
 
 --- Send Wake-on-LAN magic packet to a given MAC address.
 -- @param mac           string  MAC like "AA:BB:CC:DD:EE:FF" or "AABBCCDDEEFF"
 -- @return boolean|string       true on success, or nil + error message
-function wake_on_lan(mac)
+function WakeOnLan(mac)
   local broadcast_ip = "255.255.255.255"
   local port = 9
 
