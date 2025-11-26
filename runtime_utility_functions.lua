@@ -3,26 +3,26 @@
 -- Logging functions
 
 -- Logs a message to both the Log and the console
-function FnLogMessage(message)
+function LogMessage(message)
   Log.Message(message)
   print(message)
 end
 -- Logs an error message to both the Log and the console, but only if logging level is set to Errors Only or Debug
-function FnLogError(message)
+function LogError(message)
   if Properties["Logging Level"].Value == "Errors Only" or Properties["Logging Level"].Value == "Debug" then
     Log.Error(message)
     print("Error: " .. message)
   end
 end
 -- Logs a warning message to both the Log and the console, but only if logging level is set to Debug
-function FnLogWarning(message)
+function LogWarning(message)
   if Properties["Logging Level"].Value == "Debug" then
     Log.Message("Warning: " .. message)
     print("Warning: " .. message)
   end
 end
 -- Logs a debug message to both the Log and the console, but only if logging level is set to Debug
-function FnLogDebug(message)
+function LogDebug(message)
   if Properties["Logging Level"].Value == "Debug" then
     Log.Message("Debug: " .. message)
     print("Debug: " .. message)
@@ -84,7 +84,7 @@ function SetNotPresent(msg)
 end
 
 ---checks if a string represents an ip address
-function FnCheckValidIp(ip)
+function CheckValidIp(ip)
   if not ip then
     return false
   end
@@ -112,7 +112,7 @@ function FnCheckValidIp(ip)
 end
 
 -- compares two ip addresses, ignoring leading zeros
-function FnCompareIps(ip1, ip2)
+function CompareIps(ip1, ip2)
   local function Normalize(ip)
     local parts = {}
     if not ip then

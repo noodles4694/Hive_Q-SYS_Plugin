@@ -25,10 +25,10 @@ function Connect(ip, statusCallback)
   shouldConnect = true
   ipTarget = ip
   if (ipTarget) then
-    FnLogMessage("Connecting to Hive Device at " .. ipTarget)
+    LogMessage("Connecting to Hive Device at " .. ipTarget)
     ConnectSocket(ipTarget)
   else
-    FnLogError("No IP address provided for Device connection.")
+    LogError("No IP address provided for Device connection.")
   end
 end
 
@@ -37,7 +37,7 @@ function Disconnect()
   shouldConnect = false
   ws:Close()
   wsConnected = false
-  FnLogMessage("Hive connection closed")
+  LogMessage("Hive connection closed")
   if connectionCallback then
     connectionCallback(false, "Connection Closed") -- Call the status callback with false to indicate disconnection
   end
@@ -47,7 +47,7 @@ end
 -- WebSocket event handlers
 ws.Connected = function()
   wsConnected = true
-  FnLogMessage("Hive connection established")
+  LogMessage("Hive connection established")
   if connectionCallback then
     connectionCallback(true, "Online") -- Call the status callback with true to indicate success
   end
@@ -58,20 +58,20 @@ end
 -- Handle WebSocket closure and attempt to reconnect if needed
 ws.Closed = function()
   wsConnected = false
-  FnLogMessage("Hive connection closed")
+  LogMessage("Hive connection closed")
   if connectionCallback then
     connectionCallback(false, "Connection Closed") -- Call the status callback with false to indicate disconnection
   end
   pingTimer:Stop()
   if shouldConnect then
     if ipTarget then
-      FnLogMessage("Attempting to reconnect to Hive Device at " .. ipTarget)
+      LogMessage("Attempting to reconnect to Hive Device at " .. ipTarget)
       if connectionCallback then
         connectionCallback(false, "Offline - Attempting to reconnect") -- Call the status callback with false to indicate disconnection
       end
       ConnectSocket(ipTarget) -- Attempt to reconnect
     else
-      FnLogError("No IP address provided for reconnection.")
+      LogError("No IP address provided for reconnection.")
     end
   end
 end
@@ -111,7 +111,7 @@ ws.Data = function(ws, data)
         pendingRawCallbacks[response.sequence] = nil
       end
     else
-      FnLogError("No callback / handler found for data: ")
+      LogError("No callback / handler found for data: ")
     end
     dataBuffer = "" -- Clear the buffer after processing
   end
@@ -119,12 +119,12 @@ end
 
 -- Handle WebSocket errors
 ws.Error = function(socket, err)
-  FnLogError("Hive connection error: " .. err)
+  LogError("Hive connection error: " .. err)
   pingTimer:Stop()
   -- Attempt to reconnect if the connection is lost
   if wsConnected == false and shouldConnect == true then
     if ipTarget then
-      FnLogMessage("Attempting to reconnect to Hive Device at " .. ipTarget)
+      LogMessage("Attempting to reconnect to Hive Device at " .. ipTarget)
       if connectionCallback then
         connectionCallback(false, "Offline - Attempting to reconnect") -- Call the status callback with false to indicate disconnection
       end
@@ -135,7 +135,7 @@ end
 
 -- Timer to send ping messages to keep the WebSocket connection alive
 pingTimer.EventHandler = function()
-  FnLogDebug("Sending ping to Hive")
+  LogDebug("Sending ping to Hive")
   ws:Ping()
 end
 
@@ -143,11 +143,11 @@ end
 function ConnectSocket(ip)
   -- Check if the WebSocket is already connected
   if (wsConnected) then
-    FnLogMessage("WebSocket is already connected.")
+    LogMessage("WebSocket is already connected.")
     ws:Close()
   end
   -- Connect to the Hive WebSocket server
-  FnLogDebug("Connecting to Hive WebSocket at " .. ip)
+  LogDebug("Connecting to Hive WebSocket at " .. ip)
   ws:Connect("ws", ip, "", 9002)
 end
 
@@ -157,7 +157,7 @@ function RefreshView(refreshViewMessage)
   if callback then
     callback(refreshViewMessage.Path, refreshViewMessage.Value)
   else
-    FnLogError("No callback found for refresh view message: " .. refreshViewMessage)
+    LogError("No callback found for refresh view message: " .. refreshViewMessage)
   end
 end
 
@@ -167,7 +167,7 @@ handlers["RefreshView"] = RefreshView
 -- Function to remove a watch on a specific path
 function RemoveWatchInternal(path)
   if (wsConnected) then
-    FnLogDebug("Removing watch for path: " .. path)
+    LogDebug("Removing watch for path: " .. path)
     -- Create the request object
     local request = {
       apiVersion = 1,

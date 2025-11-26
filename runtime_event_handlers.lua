@@ -1,5 +1,5 @@
 -- Set up event handlers for controls
-FnLogDebug("Setting up control event handlers")
+LogDebug("Setting up control event handlers")
 for i = 1, layer_count do
   Controls.FileSelect[i].EventHandler = function()
     CmdFileSelect(i, file_list[Controls.FileSelect[i].String])
@@ -222,7 +222,7 @@ end
 
 Controls.SettingsJSON.EventHandler = function()
   if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
-    FnLogWarning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    LogWarning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
     return
   end
   CmdUpdateSettingsData(Controls.SettingsJSON.String)
@@ -230,7 +230,7 @@ end
 
 Controls.TimelineJSON.EventHandler = function()
   if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
-    FnLogWarning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    LogWarning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
     return
   end
   CmdUpdateTimelineData(Controls.TimelineJSON.String)
@@ -238,7 +238,7 @@ end
 
 Controls.SchedulerJSON.EventHandler = function()
   if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
-    FnLogWarning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    LogWarning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
     return
   end
   CmdUpdateSchedulerData(Controls.SchedulerJSON.String)
@@ -246,7 +246,7 @@ end
 
 Controls.TimecodeJSON.EventHandler = function()
   if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
-    FnLogWarning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    LogWarning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
     return
   end
   CmdUpdateTimecodeData(Controls.TimecodeJSON.String)
@@ -254,17 +254,17 @@ end
 
 Controls.PlaylistJSON.EventHandler = function()
   if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
-    FnLogWarning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    LogWarning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
     return
   end
   CmdUpdatePlaylistData(Controls.PlaylistJSON.String)
 end
 Controls.MappingJSON.EventHandler = function()
   if Properties["Enable JSON Data Pins (WARNING)"].Value ~= "Enabled" then
-    FnLogWarning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
+    LogWarning("Attempted to send Settings JSON data while JSON Data Pins are disabled in properties.")
     return
   end
   CmdUpdateMappingData(Controls.MappingJSON.String)
 end
 
-FnLogDebug("Control event handlers set up complete")
+LogDebug("Control event handlers set up complete")
