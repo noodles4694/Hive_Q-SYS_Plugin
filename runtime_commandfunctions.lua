@@ -154,7 +154,7 @@ function CmdEnableTc2(x)
 end
 
 function CmdUpdateSettingsData(x)
-      LogDebug("Updating System Settings JSON data")
+  LogDebug("Updating System Settings JSON data")
   if CheckHiveJsonDataValidity(x, "hive buzz settings list") == false then
     LogError("Not sending invalid System Settings JSON data")
     return
@@ -163,7 +163,7 @@ function CmdUpdateSettingsData(x)
 end
 
 function CmdUpdateTimelineData(x)
-    LogDebug("Updating Timeline JSON data")
+  LogDebug("Updating Timeline JSON data")
   if CheckHiveJsonDataValidity(x, "hive buzz timeline") == false then
     LogError("Not sending invalid Timeline JSON data")
     return
@@ -212,14 +212,13 @@ function CheckHiveJsonDataValidity(jsonString, description)
   local status, result = pcall(rapidjson.decode, jsonString)
   if status then
     if result and result.description == description then
-      print("Valid " .. description .. " JSON data")
       return true
     else
-      print("Invalid " .. description .. " JSON data")
+      LogError("Invalid " .. description .. " JSON data")
       return false
     end
   else
-    print("Invalid " .. description .. " JSON data")
+    LogError("Invalid " .. description .. " JSON data")
     return false
   end
 end
