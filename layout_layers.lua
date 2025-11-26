@@ -7,7 +7,7 @@ table.insert(
     Text = "Parameters",
     HTextAlign = "Left",
     CornerRadius = 8,
-    Fill = Colors.hive_grey,
+    Fill = Colors.HiveGrey,
     StrokeWidth = 1,
     Position = {
       playerGroupboxPosition[1],
@@ -23,7 +23,7 @@ table.insert(
     Text = "FX 1",
     HTextAlign = "Left",
     CornerRadius = 8,
-    Fill = Colors.hive_grey,
+    Fill = Colors.HiveGrey,
     StrokeWidth = 1,
     Position = {
       playerGroupboxPosition[1],
@@ -39,7 +39,7 @@ table.insert(
     Text = "FX 2",
     HTextAlign = "Left",
     CornerRadius = 8,
-    Fill = Colors.hive_grey,
+    Fill = Colors.HiveGrey,
     StrokeWidth = 1,
     Position = {
       playerGroupboxPosition[1],
@@ -66,7 +66,7 @@ for k, v in ipairs(control_list) do
           FontSize = 12,
           FontStyle = "Regular",
           HTextAlign = "Right",
-          Color = Colors.control_label,
+          Color = Colors.ControlLabel,
           Position = {
             playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
             playerGroupboxPosition[2] + (row * btnSize[2])
@@ -75,16 +75,16 @@ for k, v in ipairs(control_list) do
         }
       )
 
-      local controlCol = Colors.control_background
+      local controlCol = Colors.ControlBackground
       if v.Style == "Text Field" and v.ControlUnit == "Percent" then
-        controlCol = Colors.control_background_light
+        controlCol = Colors.ControlBackgroundLight
       end
       layout[v.Name .. " " .. i] = {
         PrettyName = "Layer " .. i .. "~" .. v.Label,
         Style = v.Style,
         Color = controlCol,
-        TextColor = Colors.control_text,
-        StrokeColor = Colors.control_text,
+        TextColor = Colors.ControlText,
+        StrokeColor = Colors.ControlText,
         FontSize = (v.Label == "File Select") and 8 or 12,
         StrokeWidth = 1,
         Position = {
@@ -118,7 +118,7 @@ for k, v in ipairs(control_list) do
           FontSize = 12,
           FontStyle = "Regular",
           HTextAlign = "Right",
-          Color = Colors.control_label,
+          Color = Colors.ControlLabel,
           Position = {
             playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
             playerGroupboxSize[2] + 8 + (row * btnSize[2])
@@ -129,9 +129,9 @@ for k, v in ipairs(control_list) do
       layout[v.Name .. " " .. i] = {
         PrettyName = "Layer " .. i .. "~" .. v.Label,
         Style = v.Style,
-        Color = Colors.control_background,
-        TextColor = Colors.control_text,
-        StrokeColor = Colors.control_text,
+        Color = Colors.ControlBackground,
+        TextColor = Colors.ControlText,
+        StrokeColor = Colors.ControlText,
         FontSize = 12,
         StrokeWidth = 1,
         Position = {
@@ -165,7 +165,7 @@ for k, v in ipairs(control_list) do
           FontSize = 12,
           FontStyle = "Regular",
           HTextAlign = "Right",
-          Color = Colors.control_label,
+          Color = Colors.ControlLabel,
           Position = {
             playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
             playerGroupboxSize[2] + 16 + fx1GroupboxSize[2] + (row * btnSize[2])
@@ -176,9 +176,9 @@ for k, v in ipairs(control_list) do
       layout[v.Name .. " " .. i] = {
         PrettyName = "Layer " .. i .. "~" .. v.Label,
         Style = v.Style,
-        Color = Colors.control_background,
-        TextColor = Colors.control_text,
-        StrokeColor = Colors.control_text,
+        Color = Colors.ControlBackground,
+        TextColor = Colors.ControlText,
+        StrokeColor = Colors.ControlText,
         FontSize = 12,
         StrokeWidth = 1,
         Position = {

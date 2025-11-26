@@ -3,7 +3,7 @@
 --[[ #include "const_variables.lua" ]]
 -- Define the color of the plugin object in the design
 function GetColor(props)
-  return Colors.hive_yellow
+  return Colors.HiveYellow
 end
 
 -- The name that will initially display when dragged into a design
@@ -23,7 +23,7 @@ end
 PageNames = {}
 function CreatePages()
   PageNames = {"Status"}
-  for i = 1, layer_count do
+  for i = 1, layerCount do
     table.insert(PageNames, "Layer " .. i)
   end
   table.insert(PageNames, "Media")

@@ -1,4 +1,3 @@
-
 table.insert(
   graphics,
   {
@@ -6,7 +5,7 @@ table.insert(
     Text = "Media List",
     HTextAlign = "Left",
     CornerRadius = 8,
-    Fill = Colors.hive_grey,
+    Fill = Colors.HiveGrey,
     StrokeWidth = 1,
     Position = {0, 0},
     Size = mediaListGroupboxSize
@@ -21,13 +20,13 @@ table.insert(
     FontSize = 12,
     FontStyle = "Regular",
     HTextAlign = "Right",
-    Color = Colors.control_label,
+    Color = Colors.ControlLabel,
     Position = {0, (1 * btnSize[2])},
     Size = {2 * btnSize[1], btnSize[2]}
   }
 )
 
-for i = 1, layer_count do
+for i = 1, layerCount do
   table.insert(
     graphics,
     {
@@ -37,7 +36,7 @@ for i = 1, layer_count do
       FontSize = 12,
       FontStyle = "Regular",
       HTextAlign = "Centre",
-      Color = Colors.control_label,
+      Color = Colors.ControlLabel,
       Position = {((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8, 8},
       Size = previewSize
     }
@@ -46,8 +45,8 @@ for i = 1, layer_count do
     layout[string.format("MediaName%s %s", p, i)] = {
       PrettyName = string.format("Layer %s~Media List~%s~Name", i, p),
       Style = "TextBox",
-      Color = Colors.control_background,
-      TextColor = Colors.control_text,
+      Color = Colors.ControlBackground,
+      TextColor = Colors.ControlText,
       HTextAlign = "Right",
       VTextAlign = "Centre",
       FontSize = 8,
@@ -63,9 +62,9 @@ for i = 1, layer_count do
     layout[string.format("MediaThumbnail%s %s", p, i)] = {
       PrettyName = string.format("Layer %s~Media List~%s~Select", i, p),
       UnlinkOffColor = true,
-      OffColor = Colors.transparent,
+      OffColor = Colors.Transparent,
       Color = Colors.Red,
-      StrokeColor = Colors.control_text,
+      StrokeColor = Colors.ControlText,
       ButtonVisualStyle = "Flat",
       Position = {
         ((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8,
@@ -75,4 +74,3 @@ for i = 1, layer_count do
     }
   end
 end
-

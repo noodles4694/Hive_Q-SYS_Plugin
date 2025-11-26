@@ -3,20 +3,20 @@ CreatePages()
 
 -- Count matching entries in a table
 local function CountMatches(tbl, conditions)
-    local count = 0
-    for _, obj in ipairs(tbl) do
-        local ok = true
-        for key, value in pairs(conditions) do
-            if obj[key] ~= value then
-                ok = false
-                break
-            end
-        end
-        if ok then
-            count = count + 1
-        end
+  local count = 0
+  for _, obj in ipairs(tbl) do
+    local ok = true
+    for key, value in pairs(conditions) do
+      if obj[key] ~= value then
+        ok = false
+        break
+      end
     end
-    return count
+    if ok then
+      count = count + 1
+    end
+  end
+  return count
 end
 
 -- common variables used by each page layout
@@ -47,11 +47,11 @@ local fx2GroupboxSize = {
 }
 local previewSize = {2.4 * btnSize[1], (1.35 * btnSize[1])}
 local previewGroupboxSize = {
-  (layer_count * previewSize[1]) + (4 * layer_count) + 8 + (3 * btnSize[1]),
+  (layerCount * previewSize[1]) + (4 * layerCount) + 8 + (3 * btnSize[1]),
   (2 * previewSize[2]) + 8
 }
 local mediaListGroupboxSize = {
-  (layer_count * previewSize[1]) + (4 * layer_count) + 8 + (3 * btnSize[1]),
+  (layerCount * previewSize[1]) + (4 * layerCount) + 8 + (3 * btnSize[1]),
   ((mediaItemCount + 1) * previewSize[2]) + 8
 }
 local moduleEnableGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (2 * btnSize[2]) + (2 * btnGap[2])}
@@ -75,9 +75,9 @@ if CurrentPage then
   layout["PreviewEnable"] = {
     PrettyName = "System~Preview Enable",
     Style = "None",
-    Color = Colors.control_background,
-    TextColor = Colors.control_text,
-    StrokeColor = Colors.control_text,
+    Color = Colors.ControlBackground,
+    TextColor = Colors.ControlText,
+    StrokeColor = Colors.ControlText,
     FontSize = 8,
     StrokeWidth = 1,
     Position = {
@@ -102,9 +102,9 @@ if CurrentPage then
     layout["SettingsJSON"] = {
       PrettyName = "JSON Data~Settings",
       Style = "None",
-      Color = Colors.control_background,
-      TextColor = Colors.control_text,
-      StrokeColor = Colors.control_text,
+      Color = Colors.ControlBackground,
+      TextColor = Colors.ControlText,
+      StrokeColor = Colors.ControlText,
       FontSize = 8,
       StrokeWidth = 1,
       Position = {
@@ -116,9 +116,9 @@ if CurrentPage then
     layout["MappingJSON"] = {
       PrettyName = "JSON Data~Mapping",
       Style = "None",
-      Color = Colors.control_background,
-      TextColor = Colors.control_text,
-      StrokeColor = Colors.control_text,
+      Color = Colors.ControlBackground,
+      TextColor = Colors.ControlText,
+      StrokeColor = Colors.ControlText,
       FontSize = 8,
       StrokeWidth = 1,
       Position = {
@@ -130,9 +130,9 @@ if CurrentPage then
     layout["PlaylistJSON"] = {
       PrettyName = "JSON Data~Playlist",
       Style = "None",
-      Color = Colors.control_background,
-      TextColor = Colors.control_text,
-      StrokeColor = Colors.control_text,
+      Color = Colors.ControlBackground,
+      TextColor = Colors.ControlText,
+      StrokeColor = Colors.ControlText,
       FontSize = 8,
       StrokeWidth = 1,
       Position = {
@@ -144,9 +144,9 @@ if CurrentPage then
     layout["TimecodeJSON"] = {
       PrettyName = "JSON Data~Timecode",
       Style = "None",
-      Color = Colors.control_background,
-      TextColor = Colors.control_text,
-      StrokeColor = Colors.control_text,
+      Color = Colors.ControlBackground,
+      TextColor = Colors.ControlText,
+      StrokeColor = Colors.ControlText,
       FontSize = 8,
       StrokeWidth = 1,
       Position = {
@@ -158,9 +158,9 @@ if CurrentPage then
     layout["TimelineJSON"] = {
       PrettyName = "JSON Data~Timeline",
       Style = "None",
-      Color = Colors.control_background,
-      TextColor = Colors.control_text,
-      StrokeColor = Colors.control_text,
+      Color = Colors.ControlBackground,
+      TextColor = Colors.ControlText,
+      StrokeColor = Colors.ControlText,
       FontSize = 8,
       StrokeWidth = 1,
       Position = {
@@ -172,9 +172,9 @@ if CurrentPage then
     layout["SchedulerJSON"] = {
       PrettyName = "JSON Data~Scheduler",
       Style = "None",
-      Color = Colors.control_background,
-      TextColor = Colors.control_text,
-      StrokeColor = Colors.control_text,
+      Color = Colors.ControlBackground,
+      TextColor = Colors.ControlText,
+      StrokeColor = Colors.ControlText,
       FontSize = 8,
       StrokeWidth = 1,
       Position = {

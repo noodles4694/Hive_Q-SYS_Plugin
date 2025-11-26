@@ -39,18 +39,18 @@ function WatchParameters()
 
   -- Watch for value changes in layer parameters
   LogDebug("Setting up layer parameter watchers")
-  for i = 1, layer_count do
+  for i = 1, layerCount do
     for _, parameter in ipairs(control_list) do
       if parameter.Watch == true then
-      local path = string.format("/LAYER %s/%s/Value", i, parameter.Path)
-      WatchPatchDouble(path, ProcessDoubleUpdate)
+        local path = string.format("/LAYER %s/%s/Value", i, parameter.Path)
+        WatchPatchDouble(path, ProcessDoubleUpdate)
       end
     end
   end
 
   -- Watch for value changes in transport control parameters
   LogDebug("Setting up transport control watchers")
-  for i = 1, layer_count do
+  for i = 1, layerCount do
     WatchPatchDouble(string.format("/LAYER %s/Transport Control/Media Time/Value", i), ProcessTransportUpdate)
   end
 end
@@ -182,7 +182,7 @@ function ProcessLUTData(path, data)
           idx = idx + 1
         end
       end
-      for i = 1, layer_count do
+      for i = 1, layerCount do
         Controls.Lut[i].Choices = lutChoices
       end
     end
@@ -239,78 +239,78 @@ function ProcessDoubleUpdate(path, value)
           break
         end
       end
-      if( control ~= "" ) then
-      if parameter == "FILE SELECT" then
-        selectedFile[tonumber(layer)] = value
-        UpdateSelectedFileInfo(value, layer)
-      elseif parameter == "FOLDER SELECT" then
-        Controls.FolderSelectIndex[layer].Value = value
-        for k, v in pairs(folderList) do
-          if v == value then
-            Controls[control][layer].String = k
-            break
+      if (control ~= "") then
+        if parameter == "FILE SELECT" then
+          selectedFile[tonumber(layer)] = value
+          UpdateSelectedFileInfo(value, layer)
+        elseif parameter == "FOLDER SELECT" then
+          Controls.FolderSelectIndex[layer].Value = value
+          for k, v in pairs(folderList) do
+            if v == value then
+              Controls[control][layer].String = k
+              break
+            end
           end
-        end
-      elseif parameter == "LUT" then
-        Controls.LutIndex[layer].Value = value
-        for k, v in pairs(lutList) do
-          if v == value then
-            Controls[control][layer].String = k
-            break
+        elseif parameter == "LUT" then
+          Controls.LutIndex[layer].Value = value
+          for k, v in pairs(lutList) do
+            if v == value then
+              Controls[control][layer].String = k
+              break
+            end
           end
+        elseif parameter:sub(-5, -1) == "FRAME" then
+          Controls[control][layer].Value = value
+        elseif parameter == "PLAY MODE" then
+          local key = GetTableKey(playModeKeys, playModeValues, value)
+          Controls[control][layer].String = key
+          Controls.PlayModeIndex[layer].Value = value
+        elseif parameter == "FRAMING MODE" then
+          local key = GetTableKey(framingModeKeys, framingModeValues, value)
+          Controls[control][layer].String = key
+          Controls.FramingModeIndex[layer].Value = value
+        elseif parameter == "BLEND MODE" then
+          local key = GetTableKey(blendModeKeys, blendModeValues, value)
+          Controls[control][layer].String = key
+          Controls.BlendModeIndex[layer].Value = value
+        elseif parameter == "TRANSITION MODE" then
+          local key = GetTableKey(transitionModeKeys, transitionModeValues, value)
+          Controls[control][layer].String = key
+          Controls.TransitionModeIndex[layer].Value = value
+        elseif parameter == "FX1 SELECT" then
+          local key = GetTableKey(fxKeys, fxValues, value)
+          Controls[control][layer].String = key
+          Controls.FX1SelectIndex[layer].Value = value
+        elseif parameter == "FX2 SELECT" then
+          local key = GetTableKey(fxKeys, fxValues, value)
+          Controls[control][layer].String = key
+          Controls.FX2SelectIndex[layer].Value = value
+        elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
+          if value >= 0.5 then
+            Controls[control][layer].Position = (value - 0.4444444444444444) / 0.5555555555555556
+          else
+            Controls[control][layer].Position = value / 5
+          end
+        elseif parameter:sub(1, 3) == "MTC" then
+          Controls[control][layer].Value = value
+        elseif parameter:sub(1, 8) == "POSITION" then
+          Controls[control][layer].Value = (value * 200) - 100
+        elseif parameter:sub(1, 8) == "ROTATION" then
+          Controls[control][layer].Value = (value * 2880) - 1440
+        elseif parameter:sub(1, 19) == "TRANSITION DURATION" then
+          Controls[control][layer].Value = value
+        elseif
+          parameter == "RED" or parameter == "BLUE" or parameter == "GREEN" or parameter == "SATURATION" or
+            parameter == "CONTRAST"
+         then
+          Controls[control][layer].Value = (value * 200) - 100
+        else -- parameters where data directly proportional to position
+          Controls[control][layer].Position = value
         end
-      elseif parameter:sub(-5, -1) == "FRAME" then
-        Controls[control][layer].Value = value
-      elseif parameter == "PLAY MODE" then
-        local key = GetTableKey(playModeKeys, playModeValues, value)
-        Controls[control][layer].String = key
-        Controls.PlayModeIndex[layer].Value = value
-      elseif parameter == "FRAMING MODE" then
-        local key = GetTableKey(framingModeKeys, framingModeValues, value)
-        Controls[control][layer].String = key
-        Controls.FramingModeIndex[layer].Value = value
-      elseif parameter == "BLEND MODE" then
-        local key = GetTableKey(blendModeKeys, blendModeValues, value)
-        Controls[control][layer].String = key
-        Controls.BlendModeIndex[layer].Value = value
-      elseif parameter == "TRANSITION MODE" then
-        local key = GetTableKey(transitionModeKeys, transitionModeValues, value)
-        Controls[control][layer].String = key
-        Controls.TransitionModeIndex[layer].Value = value
-      elseif parameter == "FX1 SELECT" then
-        local key = GetTableKey(fxKeys, fxValues, value)
-        Controls[control][layer].String = key
-        Controls.FX1SelectIndex[layer].Value = value
-      elseif parameter == "FX2 SELECT" then
-        local key = GetTableKey(fxKeys, fxValues, value)
-        Controls[control][layer].String = key
-        Controls.FX2SelectIndex[layer].Value = value
-      elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
-        if value >= 0.5 then
-          Controls[control][layer].Position = (value - 0.4444444444444444) / 0.5555555555555556
-        else
-          Controls[control][layer].Position = value / 5
-        end
-      elseif parameter:sub(1, 3) == "MTC" then
-        Controls[control][layer].Value = value
-      elseif parameter:sub(1, 8) == "POSITION" then
-        Controls[control][layer].Value = (value * 200) - 100
-      elseif parameter:sub(1, 8) == "ROTATION" then
-        Controls[control][layer].Value = (value * 2880) - 1440
-      elseif parameter:sub(1, 19) == "TRANSITION DURATION" then
-        Controls[control][layer].Value = value
-      elseif
-        parameter == "RED" or parameter == "BLUE" or parameter == "GREEN" or parameter == "SATURATION" or
-          parameter == "CONTRAST"
-       then
-        Controls[control][layer].Value = (value * 200) - 100
-      else -- parameters where data directly proportional to position
-        Controls[control][layer].Position = value
+      else
+        LogError("Unknown layer parameter: " .. path)
       end
-    else
-      LogError("Unknown layer parameter: " .. path)
     end
-  end
   end
 end
 
@@ -341,7 +341,7 @@ function ClearMediaThumbs()
     IconData = ""
   }
   local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
-  for i = 1, layer_count do
+  for i = 1, layerCount do
     for m = 1, mediaItemCount do
       Controls[string.format("MediaName%s", m)][i].String = ""
       Controls[string.format("MediaThumbnail%s", m)][i].Style = iconStyleBlankString
@@ -369,14 +369,14 @@ function ProcessJSONUpdate(path, value)
       fileListNames[file.fileIndex - 1] = file.name
       table.insert(fileChoiceList, file.name)
       fileMetadataList[file.name] = file
-      for i = 1, layer_count do
+      for i = 1, layerCount do
         if Controls[string.format("MediaName%s", file.fileIndex)][i] then
           Controls[string.format("MediaName%s", file.fileIndex)][i].String = file.name
         end
       end
       GetFileThumbnail(file.fileIndex, file.name)
     end
-    for i = 1, layer_count do
+    for i = 1, layerCount do
       Controls.FileSelect[i].Choices = fileChoiceList
       UpdateSelectedFileInfo(selectedFile[i], i)
     end
@@ -521,7 +521,7 @@ function GetFileThumbnail(index, filename)
             Margin = 0,
             IconData = Qlib.base64_enc(data)
           }
-          for i = 1, layer_count do
+          for i = 1, layerCount do
             Controls[string.format("MediaThumbnail%s", index)][i].Style = rapidjson.encode(iconStyle)
           end
         end
@@ -534,7 +534,7 @@ end
 
 -- Request and update the preview thumbnail for a specific layer and filename
 function UpdatePreviewThumbnail(layer, filename)
-  if wsConnected ~= true or tonumber(layer) > layer_count then
+  if wsConnected ~= true or tonumber(layer) > layerCount then
     return
   end
   LogDebug("Requesting preview for media  " .. filename)
@@ -589,7 +589,7 @@ function BlankPreviews()
     IconData = ""
   }
   local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
-  for i = 1, layer_count do
+  for i = 1, layerCount do
     Controls.LayerPreview[i].Style = iconStyleBlankString
   end
   Controls.OutputPreview.Style = iconStyleBlankString
@@ -669,7 +669,7 @@ function UpdateMediaFolders()
         for k, v in pairs(folderList) do
           table.insert(folderChoices, k)
         end
-        for i = 1, layer_count do
+        for i = 1, layerCount do
           Controls.FolderSelect[i].Choices = folderChoices
         end
       else
@@ -701,7 +701,7 @@ for layer, seekTimer in pairs(seekTimerList) do
 end
 
 -- Initialize combobox choices
-for i = 1, layer_count do
+for i = 1, layerCount do
   Controls.PlayMode[i].Choices = playModeKeys
   Controls.FramingMode[i].Choices = framingModeKeys
   Controls.BlendMode[i].Choices = blendModeKeys

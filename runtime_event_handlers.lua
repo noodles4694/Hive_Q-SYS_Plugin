@@ -1,6 +1,6 @@
 -- Set up event handlers for controls
 LogDebug("Setting up control event handlers")
-for i = 1, layer_count do
+for i = 1, layerCount do
   Controls.FileSelect[i].EventHandler = function()
     CmdFileSelect(i, fileList[Controls.FileSelect[i].String])
   end

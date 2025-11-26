@@ -14,7 +14,7 @@ local deiceSettings = nil
 local engineFps = 0
 local deviceInfo = nil
 
-for i = 1, layer_count do
+for i = 1, layerCount do
   playMode[i] = "In Frame"
   selectedFile[i] = 0
   savedPlayMode = {}

@@ -1,22 +1,22 @@
 -- This file contains constant variables used throughout the project
 -- These variables should not be changed during runtime
-local layer_count = 2
-local max_media_items = 255
+local layerCount = 2
+local maxMediaItems = 255
 
 --create a table of colors to be used in the UI
 local Colors = {
-  hive_yellow = {255, 215, 0},
-  hive_grey = {18, 22, 26},
+  HiveYellow = {255, 215, 0},
+  HiveGrey = {18, 22, 26},
   White = {255, 255, 255},
   Black = {0, 0, 0},
   Red = {255, 0, 0},
   Green = {0, 255, 0},
-  enable_green = {0, 164, 0},
-  transparent = {0, 0, 0, 0},
-  control_label = {170, 170, 170},
-  control_background = {18, 22, 26},
-  control_background_light = {64, 64, 64},
-  control_text = {170, 170, 170}
+  EnableGreen = {0, 164, 0},
+  Transparent = {0, 0, 0, 0},
+  ControlLabel = {170, 170, 170},
+  ControlBackground = {18, 22, 26},
+  ControlBackgroundLight = {64, 64, 64},
+  ControlText = {170, 170, 170}
 }
 
 -- Define a list of controls with their properties

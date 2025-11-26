@@ -200,11 +200,11 @@ for k, v in ipairs(control_list) do
       Max = v.Max,
       PinStyle = v.PinStyle,
       UserPin = v.UserPin,
-      Count = layer_count
+      Count = layerCount
     }
   )
 end
-for p = 1, max_media_items do
+for p = 1, maxMediaItems do
   table.insert(
     ctrls,
     {
@@ -213,7 +213,7 @@ for p = 1, max_media_items do
       IndicatorType = "Text",
       PinStyle = "Output",
       UserPin = true,
-      Count = layer_count
+      Count = layerCount
     }
   )
   table.insert(
@@ -226,7 +226,7 @@ for p = 1, max_media_items do
       Max = 1,
       PinStyle = "None",
       UserPin = false,
-      Count = layer_count
+      Count = layerCount
     }
   )
 end
@@ -237,7 +237,7 @@ table.insert(
     ControlType = "Button",
     ButtonType = "Trigger",
     UserPin = false,
-    Count = layer_count
+    Count = layerCount
   }
 )
 

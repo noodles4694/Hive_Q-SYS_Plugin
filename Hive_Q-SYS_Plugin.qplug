@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.623",
+  BuildVersion = "0.0.0.624",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -10,23 +10,23 @@ PluginInfo = {
 }
 -- This file contains constant variables used throughout the project
 -- These variables should not be changed during runtime
-local layer_count = 2
-local max_media_items = 255
+local layerCount = 2
+local maxMediaItems = 255
 
 --create a table of colors to be used in the UI
 local Colors = {
-  hive_yellow = {255, 215, 0},
-  hive_grey = {18, 22, 26},
+  HiveYellow = {255, 215, 0},
+  HiveGrey = {18, 22, 26},
   White = {255, 255, 255},
   Black = {0, 0, 0},
   Red = {255, 0, 0},
   Green = {0, 255, 0},
-  enable_green = {0, 164, 0},
-  transparent = {0, 0, 0, 0},
-  control_label = {170, 170, 170},
-  control_background = {18, 22, 26},
-  control_background_light = {64, 64, 64},
-  control_text = {170, 170, 170}
+  EnableGreen = {0, 164, 0},
+  Transparent = {0, 0, 0, 0},
+  ControlLabel = {170, 170, 170},
+  ControlBackground = {18, 22, 26},
+  ControlBackgroundLight = {64, 64, 64},
+  ControlText = {170, 170, 170}
 }
 
 -- Define a list of controls with their properties
@@ -753,7 +753,7 @@ for i = 1, 16 do
 end
 -- Define the color of the plugin object in the design
 function GetColor(props)
-  return Colors.hive_yellow
+  return Colors.HiveYellow
 end
 
 -- The name that will initially display when dragged into a design
@@ -773,7 +773,7 @@ end
 PageNames = {}
 function CreatePages()
   PageNames = {"Status"}
-  for i = 1, layer_count do
+  for i = 1, layerCount do
     table.insert(PageNames, "Layer " .. i)
   end
   table.insert(PageNames, "Media")
@@ -1117,11 +1117,11 @@ function GetControls(props)
         Max = v.Max,
         PinStyle = v.PinStyle,
         UserPin = v.UserPin,
-        Count = layer_count
+        Count = layerCount
       }
     )
   end
-  for p = 1, max_media_items do
+  for p = 1, maxMediaItems do
     table.insert(
       ctrls,
       {
@@ -1130,7 +1130,7 @@ function GetControls(props)
         IndicatorType = "Text",
         PinStyle = "Output",
         UserPin = true,
-        Count = layer_count
+        Count = layerCount
       }
     )
     table.insert(
@@ -1143,7 +1143,7 @@ function GetControls(props)
         Max = 1,
         PinStyle = "None",
         UserPin = false,
-        Count = layer_count
+        Count = layerCount
       }
     )
   end
@@ -1154,7 +1154,7 @@ function GetControls(props)
       ControlType = "Button",
       ButtonType = "Trigger",
       UserPin = false,
-      Count = layer_count
+      Count = layerCount
     }
   )
   
@@ -1488,20 +1488,20 @@ function GetControlLayout(props)
   
   -- Count matching entries in a table
   local function CountMatches(tbl, conditions)
-      local count = 0
-      for _, obj in ipairs(tbl) do
-          local ok = true
-          for key, value in pairs(conditions) do
-              if obj[key] ~= value then
-                  ok = false
-                  break
-              end
-          end
-          if ok then
-              count = count + 1
-          end
+    local count = 0
+    for _, obj in ipairs(tbl) do
+      local ok = true
+      for key, value in pairs(conditions) do
+        if obj[key] ~= value then
+          ok = false
+          break
+        end
       end
-      return count
+      if ok then
+        count = count + 1
+      end
+    end
+    return count
   end
   
   -- common variables used by each page layout
@@ -1532,11 +1532,11 @@ function GetControlLayout(props)
   }
   local previewSize = {2.4 * btnSize[1], (1.35 * btnSize[1])}
   local previewGroupboxSize = {
-    (layer_count * previewSize[1]) + (4 * layer_count) + 8 + (3 * btnSize[1]),
+    (layerCount * previewSize[1]) + (4 * layerCount) + 8 + (3 * btnSize[1]),
     (2 * previewSize[2]) + 8
   }
   local mediaListGroupboxSize = {
-    (layer_count * previewSize[1]) + (4 * layer_count) + 8 + (3 * btnSize[1]),
+    (layerCount * previewSize[1]) + (4 * layerCount) + 8 + (3 * btnSize[1]),
     ((mediaItemCount + 1) * previewSize[2]) + 8
   }
   local moduleEnableGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (2 * btnSize[2]) + (2 * btnGap[2])}
@@ -1551,7 +1551,7 @@ function GetControlLayout(props)
             Type = "GroupBox",
             HTextAlign = "Left",
             CornerRadius = 8,
-            Fill = Colors.hive_grey,
+            Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {0, 0},
             Size = statusHeaderSize
@@ -1564,7 +1564,7 @@ function GetControlLayout(props)
             Text = "Setup",
             HTextAlign = "Left",
             CornerRadius = 8,
-            Fill = Colors.hive_grey,
+            Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {0, 0 + statusHeaderSize[2] + btnGap[2]},
             Size = statusGroupboxSize
@@ -1589,7 +1589,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {0, (0.5 * btnSize[2]) + (1 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1603,7 +1603,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {0, (1.5 * btnSize[2]) + (2 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1617,7 +1617,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {0, (2.5 * btnSize[2]) + (3 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1631,7 +1631,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {0, (3.5 * btnSize[2]) + (4 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1645,7 +1645,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {0, (4.5 * btnSize[2]) + (5 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1659,7 +1659,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {0, (5.5 * btnSize[2]) + (6 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1673,7 +1673,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {0, (6.5 * btnSize[2]) + (7 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1687,7 +1687,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {0, (7.5 * btnSize[2]) + (8 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1701,7 +1701,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {0, (8.5 * btnSize[2]) + (9 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1715,7 +1715,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {6 * btnSize[1], (1.5 * btnSize[2]) + (2 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1729,7 +1729,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {6 * btnSize[1], (2.5 * btnSize[2]) + (3 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1743,7 +1743,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {6 * btnSize[1], (3.5 * btnSize[2]) + (4 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1757,7 +1757,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {6 * btnSize[1], (4.5 * btnSize[2]) + (5 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1771,7 +1771,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {6 * btnSize[1], (5.5 * btnSize[2]) + (6 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1785,7 +1785,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {6 * btnSize[1], (6.5 * btnSize[2]) + (7 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1799,7 +1799,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {6 * btnSize[1], (7.5 * btnSize[2]) + (8 * btnGap[2]) + statusHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
@@ -1815,9 +1815,9 @@ function GetControlLayout(props)
         layout["IPAddress"] = {
           PrettyName = "System~IP Address",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {3 * btnSize[1], (1.5 * btnSize[2]) + (2 * btnGap[2]) + statusHeaderSize[2]},
@@ -1826,9 +1826,9 @@ function GetControlLayout(props)
         layout["DeviceName"] = {
           PrettyName = "System~Device Name",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           StrokeWidth = 1,
           Position = {3 * btnSize[1], (2.5 * btnSize[2]) + (3 * btnGap[2]) + statusHeaderSize[2]},
           Size = {3 * btnSize[1], btnSize[2]}
@@ -1836,9 +1836,9 @@ function GetControlLayout(props)
         layout["Universe"] = {
           PrettyName = "System~Universe",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {3 * btnSize[1], (4.5 * btnSize[2]) + (5 * btnGap[2]) + statusHeaderSize[2]},
@@ -1847,9 +1847,9 @@ function GetControlLayout(props)
         layout["Version"] = {
           PrettyName = "System~Version",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {3 * btnSize[1], (3.5 * btnSize[2]) + (4 * btnGap[2]) + statusHeaderSize[2]},
@@ -1859,9 +1859,9 @@ function GetControlLayout(props)
         layout["OutputResolution"] = {
           PrettyName = "System~Output Resolution",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {3 * btnSize[1], (5.5 * btnSize[2]) + (6 * btnGap[2]) + statusHeaderSize[2]},
@@ -1870,9 +1870,9 @@ function GetControlLayout(props)
         layout["OutputFramerate"] = {
           PrettyName = "System~Output Framerate",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {3 * btnSize[1], (6.5 * btnSize[2]) + (7 * btnGap[2]) + statusHeaderSize[2]},
@@ -1881,9 +1881,9 @@ function GetControlLayout(props)
         layout["EngineFPS"] = {
           PrettyName = "System~Engine FPS",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {3 * btnSize[1], (7.5 * btnSize[2]) + (8 * btnGap[2]) + statusHeaderSize[2]},
@@ -1892,9 +1892,9 @@ function GetControlLayout(props)
         layout["Activity"] = {
           PrettyName = "System~Engine FPS",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.hive_yellow,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.HiveYellow,
+          StrokeColor = Colors.ControlText,
           FontSize = 8,
           StrokeWidth = 1,
           Position = {3 * btnSize[1], (8.5 * btnSize[2]) + (9 * btnGap[2]) + statusHeaderSize[2]},
@@ -1903,9 +1903,9 @@ function GetControlLayout(props)
         layout["Netmask"] = {
           PrettyName = "System~NetMask",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {9 * btnSize[1], (1.5 * btnSize[2]) + (2 * btnGap[2]) + statusHeaderSize[2]},
@@ -1914,9 +1914,9 @@ function GetControlLayout(props)
         layout["SerialNumber"] = {
           PrettyName = "System~Serial Number",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {9 * btnSize[1], (2.5 * btnSize[2]) + (3 * btnGap[2]) + statusHeaderSize[2]},
@@ -1925,9 +1925,9 @@ function GetControlLayout(props)
         layout["BeeType"] = {
           PrettyName = "System~Bee Type",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {9 * btnSize[1], (3.5 * btnSize[2]) + (4 * btnGap[2]) + statusHeaderSize[2]},
@@ -1936,9 +1936,9 @@ function GetControlLayout(props)
         layout["FileCount"] = {
           PrettyName = "System~Media File Count",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {9 * btnSize[1], (4.5 * btnSize[2]) + (5 * btnGap[2]) + statusHeaderSize[2]},
@@ -1947,9 +1947,9 @@ function GetControlLayout(props)
         layout["FreeSpace"] = {
           PrettyName = "System~Free Storage Space",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {9 * btnSize[1], (5.5 * btnSize[2]) + (6 * btnGap[2]) + statusHeaderSize[2]},
@@ -1958,9 +1958,9 @@ function GetControlLayout(props)
         layout["CpuPower"] = {
           PrettyName = "System~CPU Power",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {9 * btnSize[1], (6.5 * btnSize[2]) + (7 * btnGap[2]) + statusHeaderSize[2]},
@@ -1969,9 +1969,9 @@ function GetControlLayout(props)
         layout["SyncStatus"] = {
           PrettyName = "System~Beesync Status",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {9 * btnSize[1], (7.5 * btnSize[2]) + (8 * btnGap[2]) + statusHeaderSize[2]},
@@ -1987,7 +1987,7 @@ function GetControlLayout(props)
             Text = "Parameters",
             HTextAlign = "Left",
             CornerRadius = 8,
-            Fill = Colors.hive_grey,
+            Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {
               playerGroupboxPosition[1],
@@ -2003,7 +2003,7 @@ function GetControlLayout(props)
             Text = "FX 1",
             HTextAlign = "Left",
             CornerRadius = 8,
-            Fill = Colors.hive_grey,
+            Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {
               playerGroupboxPosition[1],
@@ -2019,7 +2019,7 @@ function GetControlLayout(props)
             Text = "FX 2",
             HTextAlign = "Left",
             CornerRadius = 8,
-            Fill = Colors.hive_grey,
+            Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {
               playerGroupboxPosition[1],
@@ -2046,7 +2046,7 @@ function GetControlLayout(props)
                   FontSize = 12,
                   FontStyle = "Regular",
                   HTextAlign = "Right",
-                  Color = Colors.control_label,
+                  Color = Colors.ControlLabel,
                   Position = {
                     playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
                     playerGroupboxPosition[2] + (row * btnSize[2])
@@ -2055,16 +2055,16 @@ function GetControlLayout(props)
                 }
               )
         
-              local controlCol = Colors.control_background
+              local controlCol = Colors.ControlBackground
               if v.Style == "Text Field" and v.ControlUnit == "Percent" then
-                controlCol = Colors.control_background_light
+                controlCol = Colors.ControlBackgroundLight
               end
               layout[v.Name .. " " .. i] = {
                 PrettyName = "Layer " .. i .. "~" .. v.Label,
                 Style = v.Style,
                 Color = controlCol,
-                TextColor = Colors.control_text,
-                StrokeColor = Colors.control_text,
+                TextColor = Colors.ControlText,
+                StrokeColor = Colors.ControlText,
                 FontSize = (v.Label == "File Select") and 8 or 12,
                 StrokeWidth = 1,
                 Position = {
@@ -2098,7 +2098,7 @@ function GetControlLayout(props)
                   FontSize = 12,
                   FontStyle = "Regular",
                   HTextAlign = "Right",
-                  Color = Colors.control_label,
+                  Color = Colors.ControlLabel,
                   Position = {
                     playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
                     playerGroupboxSize[2] + 8 + (row * btnSize[2])
@@ -2109,9 +2109,9 @@ function GetControlLayout(props)
               layout[v.Name .. " " .. i] = {
                 PrettyName = "Layer " .. i .. "~" .. v.Label,
                 Style = v.Style,
-                Color = Colors.control_background,
-                TextColor = Colors.control_text,
-                StrokeColor = Colors.control_text,
+                Color = Colors.ControlBackground,
+                TextColor = Colors.ControlText,
+                StrokeColor = Colors.ControlText,
                 FontSize = 12,
                 StrokeWidth = 1,
                 Position = {
@@ -2145,7 +2145,7 @@ function GetControlLayout(props)
                   FontSize = 12,
                   FontStyle = "Regular",
                   HTextAlign = "Right",
-                  Color = Colors.control_label,
+                  Color = Colors.ControlLabel,
                   Position = {
                     playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
                     playerGroupboxSize[2] + 16 + fx1GroupboxSize[2] + (row * btnSize[2])
@@ -2156,9 +2156,9 @@ function GetControlLayout(props)
               layout[v.Name .. " " .. i] = {
                 PrettyName = "Layer " .. i .. "~" .. v.Label,
                 Style = v.Style,
-                Color = Colors.control_background,
-                TextColor = Colors.control_text,
-                StrokeColor = Colors.control_text,
+                Color = Colors.ControlBackground,
+                TextColor = Colors.ControlText,
+                StrokeColor = Colors.ControlText,
                 FontSize = 12,
                 StrokeWidth = 1,
                 Position = {
@@ -2181,7 +2181,6 @@ function GetControlLayout(props)
           end
         end
     elseif CurrentPage == "Media" then
-        
         table.insert(
           graphics,
           {
@@ -2189,7 +2188,7 @@ function GetControlLayout(props)
             Text = "Media List",
             HTextAlign = "Left",
             CornerRadius = 8,
-            Fill = Colors.hive_grey,
+            Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {0, 0},
             Size = mediaListGroupboxSize
@@ -2204,13 +2203,13 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {0, (1 * btnSize[2])},
             Size = {2 * btnSize[1], btnSize[2]}
           }
         )
         
-        for i = 1, layer_count do
+        for i = 1, layerCount do
           table.insert(
             graphics,
             {
@@ -2220,7 +2219,7 @@ function GetControlLayout(props)
               FontSize = 12,
               FontStyle = "Regular",
               HTextAlign = "Centre",
-              Color = Colors.control_label,
+              Color = Colors.ControlLabel,
               Position = {((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8, 8},
               Size = previewSize
             }
@@ -2229,8 +2228,8 @@ function GetControlLayout(props)
             layout[string.format("MediaName%s %s", p, i)] = {
               PrettyName = string.format("Layer %s~Media List~%s~Name", i, p),
               Style = "TextBox",
-              Color = Colors.control_background,
-              TextColor = Colors.control_text,
+              Color = Colors.ControlBackground,
+              TextColor = Colors.ControlText,
               HTextAlign = "Right",
               VTextAlign = "Centre",
               FontSize = 8,
@@ -2246,9 +2245,9 @@ function GetControlLayout(props)
             layout[string.format("MediaThumbnail%s %s", p, i)] = {
               PrettyName = string.format("Layer %s~Media List~%s~Select", i, p),
               UnlinkOffColor = true,
-              OffColor = Colors.transparent,
+              OffColor = Colors.Transparent,
               Color = Colors.Red,
-              StrokeColor = Colors.control_text,
+              StrokeColor = Colors.ControlText,
               ButtonVisualStyle = "Flat",
               Position = {
                 ((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8,
@@ -2258,7 +2257,6 @@ function GetControlLayout(props)
             }
           end
         end
-        
     elseif CurrentPage == "Modules" then
         table.insert(
           graphics,
@@ -2267,7 +2265,7 @@ function GetControlLayout(props)
             Text = "Enable Disable",
             HTextAlign = "Left",
             CornerRadius = 8,
-            Fill = Colors.hive_grey,
+            Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {0, 0},
             Size = moduleEnableGroupboxSize
@@ -2280,7 +2278,7 @@ function GetControlLayout(props)
             Text = "Playlist Functions",
             HTextAlign = "Left",
             CornerRadius = 8,
-            Fill = Colors.hive_grey,
+            Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {0, moduleEnableGroupboxSize[2] + 4},
             Size = modulePlaylistGroupboxSize
@@ -2294,7 +2292,7 @@ function GetControlLayout(props)
             Text = "System",
             HTextAlign = "Left",
             CornerRadius = 8,
-            Fill = Colors.hive_grey,
+            Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {0, moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2] + 8},
             Size = moduleSystemGroupboxSize
@@ -2306,11 +2304,11 @@ function GetControlLayout(props)
           Style = "Button",
           ButtonStyle = "Toggle",
           ButtonVisualStyle = "Flat",
-          Color = Colors.enable_green,
-          OffColor = Colors.control_background_light,
+          Color = Colors.EnableGreen,
+          OffColor = Colors.ControlBackgroundLight,
           UnlinkOffColor = true,
           TextColor = Colors.White,
-          StrokeColor = Colors.control_text,
+          StrokeColor = Colors.ControlText,
           Legend = "Playlist",
           FontSize = 12,
           StrokeWidth = 1,
@@ -2323,11 +2321,11 @@ function GetControlLayout(props)
           Style = "Button",
           ButtonStyle = "Toggle",
           ButtonVisualStyle = "Flat",
-          Color = Colors.enable_green,
-          OffColor = Colors.control_background_light,
+          Color = Colors.EnableGreen,
+          OffColor = Colors.ControlBackgroundLight,
           UnlinkOffColor = true,
           TextColor = Colors.White,
-          StrokeColor = Colors.control_text,
+          StrokeColor = Colors.ControlText,
           Legend = "L1 TC Cuelist",
           FontSize = 12,
           StrokeWidth = 1,
@@ -2340,11 +2338,11 @@ function GetControlLayout(props)
           Style = "Button",
           ButtonStyle = "Toggle",
           ButtonVisualStyle = "Flat",
-          Color = Colors.enable_green,
-          OffColor = Colors.control_background_light,
+          Color = Colors.EnableGreen,
+          OffColor = Colors.ControlBackgroundLight,
           UnlinkOffColor = true,
           TextColor = Colors.White,
-          StrokeColor = Colors.control_text,
+          StrokeColor = Colors.ControlText,
           Legend = "L2 TC Cuelist",
           FontSize = 12,
           StrokeWidth = 1,
@@ -2356,11 +2354,11 @@ function GetControlLayout(props)
           Style = "Button",
           ButtonStyle = "Toggle",
           ButtonVisualStyle = "Flat",
-          Color = Colors.enable_green,
-          OffColor = Colors.control_background_light,
+          Color = Colors.EnableGreen,
+          OffColor = Colors.ControlBackgroundLight,
           UnlinkOffColor = true,
           TextColor = Colors.White,
-          StrokeColor = Colors.control_text,
+          StrokeColor = Colors.ControlText,
           Legend = "Timeline",
           FontSize = 12,
           StrokeWidth = 1,
@@ -2372,18 +2370,17 @@ function GetControlLayout(props)
           Style = "Button",
           ButtonStyle = "Toggle",
           ButtonVisualStyle = "Flat",
-          Color = Colors.enable_green,
-          OffColor = Colors.control_background_light,
+          Color = Colors.EnableGreen,
+          OffColor = Colors.ControlBackgroundLight,
           UnlinkOffColor = true,
           TextColor = Colors.White,
-          StrokeColor = Colors.control_text,
+          StrokeColor = Colors.ControlText,
           Legend = "Scheduler",
           FontSize = 12,
           StrokeWidth = 1,
           Position = {(12 * btnSize[1]) + (10 * btnGap[1]), btnSize[2]},
           Size = {3 * btnSize[1], btnSize[2]}
         }
-        
         
         table.insert(
           graphics,
@@ -2394,7 +2391,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {
               (0 * btnSize[1]) + (1 * btnGap[1]),
               (1 * btnGap[2]) + moduleEnableGroupboxSize[2] + (1 * btnSize[2])
@@ -2411,7 +2408,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {
               (0 * btnSize[1]) + (1 * btnGap[1]),
               (2 * btnGap[2]) + moduleEnableGroupboxSize[2] + (2 * btnSize[2])
@@ -2428,7 +2425,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {
               (0 * btnSize[1]) + (1 * btnGap[1]),
               (3 * btnGap[2]) + moduleEnableGroupboxSize[2] + (3 * btnSize[2])
@@ -2445,7 +2442,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Right",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {
               (0 * btnSize[1]) + (1 * btnGap[1]),
               (4 * btnGap[2]) + moduleEnableGroupboxSize[2] + (4 * btnSize[2])
@@ -2457,9 +2454,9 @@ function GetControlLayout(props)
         layout["PlaylistRows"] = {
           PrettyName = "Modules~Playlist Rows",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {
@@ -2472,9 +2469,9 @@ function GetControlLayout(props)
         layout["PlaylistCurrentRow"] = {
           PrettyName = "Modules~Playlist Current Row",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {
@@ -2487,9 +2484,9 @@ function GetControlLayout(props)
         layout["L1TCRows"] = {
           PrettyName = "Modules~Layer 1 Cue List Rows",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {
@@ -2499,14 +2496,12 @@ function GetControlLayout(props)
           Size = {3 * btnSize[1], btnSize[2]}
         }
         
-        
-        
         layout["L2TCRows"] = {
           PrettyName = "Modules~Layer 2 Cue List Rows",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {
@@ -2516,16 +2511,15 @@ function GetControlLayout(props)
           Size = {3 * btnSize[1], btnSize[2]}
         }
         
-        
         layout["PlaylistPlayPrevious"] = {
           PrettyName = "Modules~Playlist Play Previous",
           ButtonStyle = "Toggle",
           ButtonVisualStyle = "Flat",
-          Color = Colors.enable_green,
-          OffColor = Colors.control_background_light,
+          Color = Colors.EnableGreen,
+          OffColor = Colors.ControlBackgroundLight,
           UnlinkOffColor = true,
           TextColor = Colors.White,
-          StrokeColor = Colors.control_text,
+          StrokeColor = Colors.ControlText,
           Legend = "<< Previous",
           FontSize = 12,
           StrokeWidth = 1,
@@ -2540,11 +2534,11 @@ function GetControlLayout(props)
           PrettyName = "Modules~Playlist Play Next",
           ButtonStyle = "Toggle",
           ButtonVisualStyle = "Flat",
-          Color = Colors.enable_green,
-          OffColor = Colors.control_background_light,
+          Color = Colors.EnableGreen,
+          OffColor = Colors.ControlBackgroundLight,
           UnlinkOffColor = true,
           TextColor = Colors.White,
-          StrokeColor = Colors.control_text,
+          StrokeColor = Colors.ControlText,
           Legend = "Next >>",
           FontSize = 12,
           StrokeWidth = 1,
@@ -2559,11 +2553,11 @@ function GetControlLayout(props)
           PrettyName = "Modules~Playlist Play First",
           ButtonStyle = "Toggle",
           ButtonVisualStyle = "Flat",
-          Color = Colors.enable_green,
-          OffColor = Colors.control_background_light,
+          Color = Colors.EnableGreen,
+          OffColor = Colors.ControlBackgroundLight,
           UnlinkOffColor = true,
           TextColor = Colors.White,
-          StrokeColor = Colors.control_text,
+          StrokeColor = Colors.ControlText,
           Legend = "<<<< First",
           FontSize = 12,
           StrokeWidth = 1,
@@ -2578,11 +2572,11 @@ function GetControlLayout(props)
           PrettyName = "Modules~Playlist Play Last",
           ButtonStyle = "Toggle",
           ButtonVisualStyle = "Flat",
-          Color = Colors.enable_green,
-          OffColor = Colors.control_background_light,
+          Color = Colors.EnableGreen,
+          OffColor = Colors.ControlBackgroundLight,
           UnlinkOffColor = true,
           TextColor = Colors.White,
-          StrokeColor = Colors.control_text,
+          StrokeColor = Colors.ControlText,
           Legend = "Last >>>>",
           FontSize = 12,
           StrokeWidth = 1,
@@ -2597,11 +2591,11 @@ function GetControlLayout(props)
           PrettyName = "Modules~Playlist Play Row",
           ButtonStyle = "Toggle",
           ButtonVisualStyle = "Flat",
-          Color = Colors.enable_green,
-          OffColor = Colors.control_background_light,
+          Color = Colors.EnableGreen,
+          OffColor = Colors.ControlBackgroundLight,
           UnlinkOffColor = true,
           TextColor = Colors.White,
-          StrokeColor = Colors.control_text,
+          StrokeColor = Colors.ControlText,
           Legend = "Play Row",
           FontSize = 12,
           StrokeWidth = 1,
@@ -2615,9 +2609,9 @@ function GetControlLayout(props)
         layout["PlaylistPlayRowIndex"] = {
           PrettyName = "Modules~Playlist Play Row Index",
           Style = "TextBox",
-          Color = Colors.control_background,
-          TextColor = Colors.control_text,
-          StrokeColor = Colors.control_text,
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
           Position = {
@@ -2627,22 +2621,21 @@ function GetControlLayout(props)
           Size = {3 * btnSize[1], btnSize[2]}
         }
         
-        
         layout["SystemRestart"] = {
           PrettyName = "System~Reboot Device",
           Style = "Button",
           ButtonVisualStyle = "Flat",
-          Color = Colors.enable_green,
-          OffColor = Colors.control_background_light,
+          Color = Colors.EnableGreen,
+          OffColor = Colors.ControlBackgroundLight,
           UnlinkOffColor = true,
           TextColor = Colors.White,
-          StrokeColor = Colors.control_text,
+          StrokeColor = Colors.ControlText,
           Legend = "REBOOT DEVICE",
           FontSize = 12,
           StrokeWidth = 1,
           Position = {
             (2 * btnSize[1]) + (4 * btnGap[1]),
-            (6 * btnGap[2]) + moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2] 
+            (6 * btnGap[2]) + moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2]
           },
           Size = {4 * btnSize[1], btnSize[2]}
         }
@@ -2650,17 +2643,17 @@ function GetControlLayout(props)
           PrettyName = "System~Shutdown Device",
           Style = "Button",
           ButtonVisualStyle = "Flat",
-          Color = Colors.enable_green,
-          OffColor = Colors.control_background_light,
+          Color = Colors.EnableGreen,
+          OffColor = Colors.ControlBackgroundLight,
           UnlinkOffColor = true,
           TextColor = Colors.White,
-          StrokeColor = Colors.control_text,
+          StrokeColor = Colors.ControlText,
           Legend = "SHUTDOWN DEVICE",
           FontSize = 12,
           StrokeWidth = 1,
           Position = {
             (6 * btnSize[1]) + (8 * btnGap[1]),
-            (6 * btnGap[2]) + moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2] 
+            (6 * btnGap[2]) + moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2]
           },
           Size = {4 * btnSize[1], btnSize[2]}
         }
@@ -2669,22 +2662,21 @@ function GetControlLayout(props)
           PrettyName = "System~Wake Device",
           Style = "Button",
           ButtonVisualStyle = "Flat",
-          Color = Colors.enable_green,
-          OffColor = Colors.control_background_light,
+          Color = Colors.EnableGreen,
+          OffColor = Colors.ControlBackgroundLight,
           UnlinkOffColor = true,
           TextColor = Colors.White,
-          StrokeColor = Colors.control_text,
+          StrokeColor = Colors.ControlText,
           Legend = "WAKE DEVICE",
           FontSize = 12,
           StrokeWidth = 1,
           Position = {
             (10 * btnSize[1]) + (12 * btnGap[1]),
-            (6 * btnGap[2]) + moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2] 
+            (6 * btnGap[2]) + moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2]
           },
           Size = {4 * btnSize[1], btnSize[2]}
         }
     elseif CurrentPage == "Preview" then
-      
       table.insert(
         graphics,
         {
@@ -2692,7 +2684,7 @@ function GetControlLayout(props)
           Text = "",
           HTextAlign = "Left",
           CornerRadius = 8,
-          Fill = Colors.hive_grey,
+          Fill = Colors.HiveGrey,
           StrokeWidth = 1,
           Position = {0, 0},
           Size = previewGroupboxSize
@@ -2708,7 +2700,7 @@ function GetControlLayout(props)
           FontSize = 12,
           FontStyle = "Regular",
           HTextAlign = "Centre",
-          Color = Colors.control_label,
+          Color = Colors.ControlLabel,
           Position = {8, 8},
           Size = previewSize
         }
@@ -2716,14 +2708,15 @@ function GetControlLayout(props)
       
       layout["OutputPreview"] = {
         PrettyName = "System~Preview",
-        Style="Button",
+        Style = "Button",
         UnlinkOffColor = true,
-        OffColor = Colors.transparent,
+        OffColor = Colors.Transparent,
         Color = Colors.Black,
-        StrokeColor = Colors.control_text,
+        StrokeColor = Colors.ControlText,
         ButtonVisualStyle = "Flat",
         Position = {
-           8,(2 * btnSize[2])
+          8,
+          (2 * btnSize[2])
         },
         Size = previewSize,
         CornerRadius = 0,
@@ -2731,7 +2724,7 @@ function GetControlLayout(props)
         Padding = 0
       }
       
-      for i = 1, layer_count do
+      for i = 1, layerCount do
         table.insert(
           graphics,
           {
@@ -2741,7 +2734,7 @@ function GetControlLayout(props)
             FontSize = 12,
             FontStyle = "Regular",
             HTextAlign = "Centre",
-            Color = Colors.control_label,
+            Color = Colors.ControlLabel,
             Position = {((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8, 8},
             Size = previewSize
           }
@@ -2750,9 +2743,9 @@ function GetControlLayout(props)
         layout[string.format("LayerPreview %s", i)] = {
           PrettyName = string.format("Layer %s~Preview", i),
           UnlinkOffColor = true,
-          OffColor = Colors.transparent,
+          OffColor = Colors.Transparent,
           Color = Colors.Black,
-          StrokeColor = Colors.control_text,
+          StrokeColor = Colors.ControlText,
           ButtonVisualStyle = "Flat",
           Position = {
             ((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8,
@@ -2770,9 +2763,9 @@ function GetControlLayout(props)
     layout["PreviewEnable"] = {
       PrettyName = "System~Preview Enable",
       Style = "None",
-      Color = Colors.control_background,
-      TextColor = Colors.control_text,
-      StrokeColor = Colors.control_text,
+      Color = Colors.ControlBackground,
+      TextColor = Colors.ControlText,
+      StrokeColor = Colors.ControlText,
       FontSize = 8,
       StrokeWidth = 1,
       Position = {
@@ -2797,9 +2790,9 @@ function GetControlLayout(props)
       layout["SettingsJSON"] = {
         PrettyName = "JSON Data~Settings",
         Style = "None",
-        Color = Colors.control_background,
-        TextColor = Colors.control_text,
-        StrokeColor = Colors.control_text,
+        Color = Colors.ControlBackground,
+        TextColor = Colors.ControlText,
+        StrokeColor = Colors.ControlText,
         FontSize = 8,
         StrokeWidth = 1,
         Position = {
@@ -2811,9 +2804,9 @@ function GetControlLayout(props)
       layout["MappingJSON"] = {
         PrettyName = "JSON Data~Mapping",
         Style = "None",
-        Color = Colors.control_background,
-        TextColor = Colors.control_text,
-        StrokeColor = Colors.control_text,
+        Color = Colors.ControlBackground,
+        TextColor = Colors.ControlText,
+        StrokeColor = Colors.ControlText,
         FontSize = 8,
         StrokeWidth = 1,
         Position = {
@@ -2825,9 +2818,9 @@ function GetControlLayout(props)
       layout["PlaylistJSON"] = {
         PrettyName = "JSON Data~Playlist",
         Style = "None",
-        Color = Colors.control_background,
-        TextColor = Colors.control_text,
-        StrokeColor = Colors.control_text,
+        Color = Colors.ControlBackground,
+        TextColor = Colors.ControlText,
+        StrokeColor = Colors.ControlText,
         FontSize = 8,
         StrokeWidth = 1,
         Position = {
@@ -2839,9 +2832,9 @@ function GetControlLayout(props)
       layout["TimecodeJSON"] = {
         PrettyName = "JSON Data~Timecode",
         Style = "None",
-        Color = Colors.control_background,
-        TextColor = Colors.control_text,
-        StrokeColor = Colors.control_text,
+        Color = Colors.ControlBackground,
+        TextColor = Colors.ControlText,
+        StrokeColor = Colors.ControlText,
         FontSize = 8,
         StrokeWidth = 1,
         Position = {
@@ -2853,9 +2846,9 @@ function GetControlLayout(props)
       layout["TimelineJSON"] = {
         PrettyName = "JSON Data~Timeline",
         Style = "None",
-        Color = Colors.control_background,
-        TextColor = Colors.control_text,
-        StrokeColor = Colors.control_text,
+        Color = Colors.ControlBackground,
+        TextColor = Colors.ControlText,
+        StrokeColor = Colors.ControlText,
         FontSize = 8,
         StrokeWidth = 1,
         Position = {
@@ -2867,9 +2860,9 @@ function GetControlLayout(props)
       layout["SchedulerJSON"] = {
         PrettyName = "JSON Data~Scheduler",
         Style = "None",
-        Color = Colors.control_background,
-        TextColor = Colors.control_text,
-        StrokeColor = Colors.control_text,
+        Color = Colors.ControlBackground,
+        TextColor = Colors.ControlText,
+        StrokeColor = Colors.ControlText,
         FontSize = 8,
         StrokeWidth = 1,
         Position = {
@@ -2901,7 +2894,7 @@ local deiceSettings = nil
 local engineFps = 0
 local deviceInfo = nil
 
-for i = 1, layer_count do
+for i = 1, layerCount do
   playMode[i] = "In Frame"
   selectedFile[i] = 0
   savedPlayMode = {}
@@ -3803,18 +3796,18 @@ function WatchParameters()
 
   -- Watch for value changes in layer parameters
   LogDebug("Setting up layer parameter watchers")
-  for i = 1, layer_count do
+  for i = 1, layerCount do
     for _, parameter in ipairs(control_list) do
       if parameter.Watch == true then
-      local path = string.format("/LAYER %s/%s/Value", i, parameter.Path)
-      WatchPatchDouble(path, ProcessDoubleUpdate)
+        local path = string.format("/LAYER %s/%s/Value", i, parameter.Path)
+        WatchPatchDouble(path, ProcessDoubleUpdate)
       end
     end
   end
 
   -- Watch for value changes in transport control parameters
   LogDebug("Setting up transport control watchers")
-  for i = 1, layer_count do
+  for i = 1, layerCount do
     WatchPatchDouble(string.format("/LAYER %s/Transport Control/Media Time/Value", i), ProcessTransportUpdate)
   end
 end
@@ -3946,7 +3939,7 @@ function ProcessLUTData(path, data)
           idx = idx + 1
         end
       end
-      for i = 1, layer_count do
+      for i = 1, layerCount do
         Controls.Lut[i].Choices = lutChoices
       end
     end
@@ -4003,78 +3996,78 @@ function ProcessDoubleUpdate(path, value)
           break
         end
       end
-      if( control ~= "" ) then
-      if parameter == "FILE SELECT" then
-        selectedFile[tonumber(layer)] = value
-        UpdateSelectedFileInfo(value, layer)
-      elseif parameter == "FOLDER SELECT" then
-        Controls.FolderSelectIndex[layer].Value = value
-        for k, v in pairs(folderList) do
-          if v == value then
-            Controls[control][layer].String = k
-            break
+      if (control ~= "") then
+        if parameter == "FILE SELECT" then
+          selectedFile[tonumber(layer)] = value
+          UpdateSelectedFileInfo(value, layer)
+        elseif parameter == "FOLDER SELECT" then
+          Controls.FolderSelectIndex[layer].Value = value
+          for k, v in pairs(folderList) do
+            if v == value then
+              Controls[control][layer].String = k
+              break
+            end
           end
-        end
-      elseif parameter == "LUT" then
-        Controls.LutIndex[layer].Value = value
-        for k, v in pairs(lutList) do
-          if v == value then
-            Controls[control][layer].String = k
-            break
+        elseif parameter == "LUT" then
+          Controls.LutIndex[layer].Value = value
+          for k, v in pairs(lutList) do
+            if v == value then
+              Controls[control][layer].String = k
+              break
+            end
           end
+        elseif parameter:sub(-5, -1) == "FRAME" then
+          Controls[control][layer].Value = value
+        elseif parameter == "PLAY MODE" then
+          local key = GetTableKey(playModeKeys, playModeValues, value)
+          Controls[control][layer].String = key
+          Controls.PlayModeIndex[layer].Value = value
+        elseif parameter == "FRAMING MODE" then
+          local key = GetTableKey(framingModeKeys, framingModeValues, value)
+          Controls[control][layer].String = key
+          Controls.FramingModeIndex[layer].Value = value
+        elseif parameter == "BLEND MODE" then
+          local key = GetTableKey(blendModeKeys, blendModeValues, value)
+          Controls[control][layer].String = key
+          Controls.BlendModeIndex[layer].Value = value
+        elseif parameter == "TRANSITION MODE" then
+          local key = GetTableKey(transitionModeKeys, transitionModeValues, value)
+          Controls[control][layer].String = key
+          Controls.TransitionModeIndex[layer].Value = value
+        elseif parameter == "FX1 SELECT" then
+          local key = GetTableKey(fxKeys, fxValues, value)
+          Controls[control][layer].String = key
+          Controls.FX1SelectIndex[layer].Value = value
+        elseif parameter == "FX2 SELECT" then
+          local key = GetTableKey(fxKeys, fxValues, value)
+          Controls[control][layer].String = key
+          Controls.FX2SelectIndex[layer].Value = value
+        elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
+          if value >= 0.5 then
+            Controls[control][layer].Position = (value - 0.4444444444444444) / 0.5555555555555556
+          else
+            Controls[control][layer].Position = value / 5
+          end
+        elseif parameter:sub(1, 3) == "MTC" then
+          Controls[control][layer].Value = value
+        elseif parameter:sub(1, 8) == "POSITION" then
+          Controls[control][layer].Value = (value * 200) - 100
+        elseif parameter:sub(1, 8) == "ROTATION" then
+          Controls[control][layer].Value = (value * 2880) - 1440
+        elseif parameter:sub(1, 19) == "TRANSITION DURATION" then
+          Controls[control][layer].Value = value
+        elseif
+          parameter == "RED" or parameter == "BLUE" or parameter == "GREEN" or parameter == "SATURATION" or
+            parameter == "CONTRAST"
+         then
+          Controls[control][layer].Value = (value * 200) - 100
+        else -- parameters where data directly proportional to position
+          Controls[control][layer].Position = value
         end
-      elseif parameter:sub(-5, -1) == "FRAME" then
-        Controls[control][layer].Value = value
-      elseif parameter == "PLAY MODE" then
-        local key = GetTableKey(playModeKeys, playModeValues, value)
-        Controls[control][layer].String = key
-        Controls.PlayModeIndex[layer].Value = value
-      elseif parameter == "FRAMING MODE" then
-        local key = GetTableKey(framingModeKeys, framingModeValues, value)
-        Controls[control][layer].String = key
-        Controls.FramingModeIndex[layer].Value = value
-      elseif parameter == "BLEND MODE" then
-        local key = GetTableKey(blendModeKeys, blendModeValues, value)
-        Controls[control][layer].String = key
-        Controls.BlendModeIndex[layer].Value = value
-      elseif parameter == "TRANSITION MODE" then
-        local key = GetTableKey(transitionModeKeys, transitionModeValues, value)
-        Controls[control][layer].String = key
-        Controls.TransitionModeIndex[layer].Value = value
-      elseif parameter == "FX1 SELECT" then
-        local key = GetTableKey(fxKeys, fxValues, value)
-        Controls[control][layer].String = key
-        Controls.FX1SelectIndex[layer].Value = value
-      elseif parameter == "FX2 SELECT" then
-        local key = GetTableKey(fxKeys, fxValues, value)
-        Controls[control][layer].String = key
-        Controls.FX2SelectIndex[layer].Value = value
-      elseif parameter == "PLAY SPEED" or parameter == "SCALE" then
-        if value >= 0.5 then
-          Controls[control][layer].Position = (value - 0.4444444444444444) / 0.5555555555555556
-        else
-          Controls[control][layer].Position = value / 5
-        end
-      elseif parameter:sub(1, 3) == "MTC" then
-        Controls[control][layer].Value = value
-      elseif parameter:sub(1, 8) == "POSITION" then
-        Controls[control][layer].Value = (value * 200) - 100
-      elseif parameter:sub(1, 8) == "ROTATION" then
-        Controls[control][layer].Value = (value * 2880) - 1440
-      elseif parameter:sub(1, 19) == "TRANSITION DURATION" then
-        Controls[control][layer].Value = value
-      elseif
-        parameter == "RED" or parameter == "BLUE" or parameter == "GREEN" or parameter == "SATURATION" or
-          parameter == "CONTRAST"
-       then
-        Controls[control][layer].Value = (value * 200) - 100
-      else -- parameters where data directly proportional to position
-        Controls[control][layer].Position = value
+      else
+        LogError("Unknown layer parameter: " .. path)
       end
-    else
-      LogError("Unknown layer parameter: " .. path)
     end
-  end
   end
 end
 
@@ -4105,7 +4098,7 @@ function ClearMediaThumbs()
     IconData = ""
   }
   local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
-  for i = 1, layer_count do
+  for i = 1, layerCount do
     for m = 1, mediaItemCount do
       Controls[string.format("MediaName%s", m)][i].String = ""
       Controls[string.format("MediaThumbnail%s", m)][i].Style = iconStyleBlankString
@@ -4133,14 +4126,14 @@ function ProcessJSONUpdate(path, value)
       fileListNames[file.fileIndex - 1] = file.name
       table.insert(fileChoiceList, file.name)
       fileMetadataList[file.name] = file
-      for i = 1, layer_count do
+      for i = 1, layerCount do
         if Controls[string.format("MediaName%s", file.fileIndex)][i] then
           Controls[string.format("MediaName%s", file.fileIndex)][i].String = file.name
         end
       end
       GetFileThumbnail(file.fileIndex, file.name)
     end
-    for i = 1, layer_count do
+    for i = 1, layerCount do
       Controls.FileSelect[i].Choices = fileChoiceList
       UpdateSelectedFileInfo(selectedFile[i], i)
     end
@@ -4285,7 +4278,7 @@ function GetFileThumbnail(index, filename)
             Margin = 0,
             IconData = Qlib.base64_enc(data)
           }
-          for i = 1, layer_count do
+          for i = 1, layerCount do
             Controls[string.format("MediaThumbnail%s", index)][i].Style = rapidjson.encode(iconStyle)
           end
         end
@@ -4298,7 +4291,7 @@ end
 
 -- Request and update the preview thumbnail for a specific layer and filename
 function UpdatePreviewThumbnail(layer, filename)
-  if wsConnected ~= true or tonumber(layer) > layer_count then
+  if wsConnected ~= true or tonumber(layer) > layerCount then
     return
   end
   LogDebug("Requesting preview for media  " .. filename)
@@ -4353,7 +4346,7 @@ function BlankPreviews()
     IconData = ""
   }
   local iconStyleBlankString = rapidjson.encode(iconStyleBlank)
-  for i = 1, layer_count do
+  for i = 1, layerCount do
     Controls.LayerPreview[i].Style = iconStyleBlankString
   end
   Controls.OutputPreview.Style = iconStyleBlankString
@@ -4433,7 +4426,7 @@ function UpdateMediaFolders()
         for k, v in pairs(folderList) do
           table.insert(folderChoices, k)
         end
-        for i = 1, layer_count do
+        for i = 1, layerCount do
           Controls.FolderSelect[i].Choices = folderChoices
         end
       else
@@ -4465,7 +4458,7 @@ for layer, seekTimer in pairs(seekTimerList) do
 end
 
 -- Initialize combobox choices
-for i = 1, layer_count do
+for i = 1, layerCount do
   Controls.PlayMode[i].Choices = playModeKeys
   Controls.FramingMode[i].Choices = framingModeKeys
   Controls.BlendMode[i].Choices = blendModeKeys
@@ -4835,7 +4828,7 @@ for i = 1, 2 do
 end
 -- Set up event handlers for controls
 LogDebug("Setting up control event handlers")
-for i = 1, layer_count do
+for i = 1, layerCount do
   Controls.FileSelect[i].EventHandler = function()
     CmdFileSelect(i, fileList[Controls.FileSelect[i].String])
   end
