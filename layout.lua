@@ -25,15 +25,16 @@ local mediaItemCount = props["Media List Count"].Value
 local layerItemCount = CountMatches(control_list, {Group = "Layer", Display = true})
 local FX1ItemCount = CountMatches(control_list, {Group = "FX1", Display = true})
 local FX2ItemCount = CountMatches(control_list, {Group = "FX2", Display = true})
+local cornerRadius = 0
 local columnSize = 12
 local fx1ColumnSize = 6
 local fx2ColumnSize = 6
 local btnSize = {32, 24}
 local btnGap = {4, 4}
-local statusHeaderSize = {12.5 * btnSize[1], 120}
-local statusGroupboxSize = {12.5 * btnSize[1], 11 * btnSize[2]}
-local playerGroupboxPosition = {0, 0}
-local playerGroupboxSize = {
+local hiveHeaderSize = {12.5 * btnSize[1], 120}
+local headerSize = {12.5 * btnSize[1], 20}
+local layerGroupboxPosition = {0, 0}
+local layerGroupboxSize = {
   (((math.floor((layerItemCount / columnSize)) + 1) * 6) + 1) * btnSize[1],
   (columnSize + 2) * btnSize[2]
 }

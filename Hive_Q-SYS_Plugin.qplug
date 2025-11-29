@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.624",
+  BuildVersion = "0.0.0.675",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -942,7 +942,29 @@ function GetControls(props)
   table.insert(
     ctrls,
     {
+      Name = "Model",
+      ControlType = "Indicator",
+      IndicatorType = "Text",
+      PinStyle = "Output",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
       Name = "Version",
+      ControlType = "Indicator",
+      IndicatorType = "Text",
+      PinStyle = "Output",
+      Count = 1,
+      UserPin = true
+    }
+  )
+  table.insert(
+    ctrls,
+    {
+      Name = "MACAddress",
       ControlType = "Indicator",
       IndicatorType = "Text",
       PinStyle = "Output",
@@ -1510,15 +1532,16 @@ function GetControlLayout(props)
   local layerItemCount = CountMatches(control_list, {Group = "Layer", Display = true})
   local FX1ItemCount = CountMatches(control_list, {Group = "FX1", Display = true})
   local FX2ItemCount = CountMatches(control_list, {Group = "FX2", Display = true})
+  local cornerRadius = 0
   local columnSize = 12
   local fx1ColumnSize = 6
   local fx2ColumnSize = 6
   local btnSize = {32, 24}
   local btnGap = {4, 4}
-  local statusHeaderSize = {12.5 * btnSize[1], 120}
-  local statusGroupboxSize = {12.5 * btnSize[1], 11 * btnSize[2]}
-  local playerGroupboxPosition = {0, 0}
-  local playerGroupboxSize = {
+  local hiveHeaderSize = {12.5 * btnSize[1], 120}
+  local headerSize = {12.5 * btnSize[1], 20}
+  local layerGroupboxPosition = {0, 0}
+  local layerGroupboxSize = {
     (((math.floor((layerItemCount / columnSize)) + 1) * 6) + 1) * btnSize[1],
     (columnSize + 2) * btnSize[2]
   }
@@ -1545,29 +1568,21 @@ function GetControlLayout(props)
   
   if CurrentPage then
     if CurrentPage == "Status" then
+        
+        local statusVerticalOffset = 0
+        local statusTextboxSize = {headerSize[1]/2 - btnSize[1], btnSize[2]}
+        local statusGroupboxSize = {12.5 * btnSize[1], (15 * statusTextboxSize[2]) + (28 * btnGap[2]) + btnSize[2]}
+        
         table.insert(
           graphics,
           {
             Type = "GroupBox",
             HTextAlign = "Left",
-            CornerRadius = 8,
+            CornerRadius = cornerRadius,
             Fill = Colors.HiveGrey,
             StrokeWidth = 1,
-            Position = {0, 0},
-            Size = statusHeaderSize
-          }
-        )
-        table.insert(
-          graphics,
-          {
-            Type = "GroupBox",
-            Text = "Setup",
-            HTextAlign = "Left",
-            CornerRadius = 8,
-            Fill = Colors.HiveGrey,
-            StrokeWidth = 1,
-            Position = {0, 0 + statusHeaderSize[2] + btnGap[2]},
-            Size = statusGroupboxSize
+            Position = {0, statusVerticalOffset},
+            Size = hiveHeaderSize
           }
         )
         local logo = 'iVBORw0KGgoAAAANSUhEUgAAAs4AAAEsCAYAAADTiDU4AAAACXBIWXMAAC4jAAAuIwF4pT92AAAFyWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgOS4xLWMwMDIgNzkuYTFjZDEyZiwgMjAyNC8xMS8xMS0xOTowODo0NiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0RXZ0PSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VFdmVudCMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDI2LjQgKFdpbmRvd3MpIiB4bXA6Q3JlYXRlRGF0ZT0iMjAyNS0wNS0xNlQxNTo1NTozMyswMTowMCIgeG1wOk1vZGlmeURhdGU9IjIwMjUtMDktMDNUMjI6MDg6MjMrMDE6MDAiIHhtcDpNZXRhZGF0YURhdGU9IjIwMjUtMDktMDNUMjI6MDg6MjMrMDE6MDAiIGRjOmZvcm1hdD0iaW1hZ2UvcG5nIiBwaG90b3Nob3A6Q29sb3JNb2RlPSIzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjgwODM0ZGJiLWQ2YjEtN2U0NS04M2JiLTE4OGVmOTcxNzAwMCIgeG1wTU06RG9jdW1lbnRJRD0iYWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOjBlNzVmODVmLTkzZDYtMGE0NS05YzQ2LTFmYTZhZjUwYzQ3ZCIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ4bXAuZGlkOmExMTg1MmY5LTkzOTctYWU0Yi04YjZkLTUzYjExYTA0OTViNSI+IDx4bXBNTTpIaXN0b3J5PiA8cmRmOlNlcT4gPHJkZjpsaSBzdEV2dDphY3Rpb249ImNyZWF0ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6YTExODUyZjktOTM5Ny1hZTRiLThiNmQtNTNiMTFhMDQ5NWI1IiBzdEV2dDp3aGVuPSIyMDI1LTA1LTE2VDE1OjU1OjMzKzAxOjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgMjYuNCAoV2luZG93cykiLz4gPHJkZjpsaSBzdEV2dDphY3Rpb249InNhdmVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjgwODM0ZGJiLWQ2YjEtN2U0NS04M2JiLTE4OGVmOTcxNzAwMCIgc3RFdnQ6d2hlbj0iMjAyNS0wOS0wM1QyMjowODoyMyswMTowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIDI2LjQgKFdpbmRvd3MpIiBzdEV2dDpjaGFuZ2VkPSIvIi8+IDwvcmRmOlNlcT4gPC94bXBNTTpIaXN0b3J5PiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pp7YGoUAADhCSURBVHic7d13mFx19cfx90wSQgkkoTfpYCgCgjRpoTdpiiiiCOJPQMGCCoKgSBXEhoiiUhQFEYTQiyBNaVKkSA0dlBoInYTs/P44uxIwyc53d+587515v54njwj3zv2wJLtn7px7Tq3RaCBJkiRpxuq5A0iSJElVYOEsSZIkNcHCWZIkSWqChbMkSZLUBAtnSZIkqQkWzpIkSVITLJwlSZKkJlg4S5IkSU2wcJYkSZKaYOEsSZIkNcHCWZIkSWqChbMkSZLUBAtnSZIkqQkWzpIkSVIThhb54j2XzFPkyw/EB4CPAosCrwEXApdlTVQtGwA3Am/kDlIBawDbAfMBE4ALgGtyBmqLxiR462XqG94CI1fNnUaSpJaqNRqNwl68RIXzYsAhwGf437vsNwNHAOe3N1KlrAh8jygE7wT2wzcc07M6cBCw9TT+2dXAd4Dr2hmo7Sa9ArMsSn39a2D4/LnTSJLUMp3eqjEE+AZwL/BZpv3vuzpwHnAusFr7olXCHMAPgDuIohmiiL4UOAVYPE+sUloE+BlwE9MumgHGAtcCJwALtSdWBjOPghcfoOeadWDyc7nTSJLUMp1cOO8APEAUfjM3cfx2xN3n3wLvKy5WZewDPEi88ZiWXYHxwDHEG5RuNRNwLPG12LvJc/bqPf7gokJl1TMFRs0LLz1EzxUrweTncyeSJKklOrFwXpPoJz0LWGIA5+9CFIyHAaNbmKsqtiD6mI8D5u3n2DrwTeINyi4F5yqjvYh/968DwxLPnRk4FLgb2LHFufLr6YGR88Ir/6Hn6rXhrX/nTiRJ0qB1Uo/zaKLY/VILX/NF4LvER/CdbkngR8A2g3iNvwP7EnfuO9k2wJHA8i18zcuIr909LXzN/OpD4KVnYI6FqG90O8xUmuceJElK1il3nPch7vy1smiGKMaPIx6I277Fr10WNaIIHM/gimaAtYke398Acw/ytcpoVeByoie+lUUzwGbAv4j+51lb/Nr59EyJO8+vPkXPlbZtSJKqreqF82bEXc7jKLZQ+wBwDnAR8OECr9NunybaUg5o8evuThTi3yIK86pbEjgZuAXYpOBr7UX8N9mr4Ou0T6MH5uht27hqbXjrqdyJJEkakKq2aiwG/JCYyZzD6cC3gUczXX+w1iLaMtZsw7XGEz3AVRz3NxtwIPHGIscbgNuIHvK/Zrh2603dtrHJPTB0jtyJJElKUrU7zrMSbQUPkK9oBvgU8BAxUaJKTZtLE3dOr6c9RTPAUkRrw8VUZ9xfDfgacef3QPLdNV8FuBI4AxiTKUPr9E3bePUpeq78ILz5ZO5EkiQlqVLhvDMxj/kA0icYFKFvosSDwJ6Zs/RnKNE28QCwW6YMWxAPDR5DufufdyB6jX8ELJA5S59PEr/3DwOGZ84yOD29bRsvPtw753lC7kSSJDWtCoXzKsDfgN8TSybKZiTwC6Kw+UjmLNOyDXA/cFTuIL2+Sdyt3yN3kPdYFfgLMcZw2cxZpucgovWl2uPrenpg9Lzw8mP0XLUaTJmYO5EkSU0pc+G8MPBr4FZiWkPZjSHmR19J8Q+QNWNdohA8j4HNsy7SHMAviTvQud9sLAucRDz4t3HmLM1YGDiT+H1W3QdVe3pg9nnhpYfpuWIV2zYkSZVQ1sL5K0QLxOdzBxmADYmRZScDy2S4/jzAT4jVzmUvBFcj3mycQfu/VqOIfvl7gM+1+dqtsCHvTJSZL3OWgWnYtiFJqpayFc6fJDap/YTm1mSX2W5Ei8RPiCKtHQ4gPsr/Spuu1yqfJL5WxwIj2nC9A4CHaf0Yvhz2IVpfqvnv0piqbePKVWDSM7kTSZI0XWUpnFcEziXuPLZ6sURuXwHuI0ayFeVjRKvBkUQbRFV9nfhaFfUA407AHcTXqZPWqc9G/DvdweCX2LRfTw/MPh9MfIyeq9eBSS5JkSSVU+7CeTZiUsAdwHZ5oxRqPuJu6n20dozessRilrOJh9s6wUJEm8tVwOotes0PA5cS87dXbNFrltGKRE/7n8jTJjRwjd5RdS+Op+fq1W3bkCSVUs7CeU/iI+aDMmZot/cDfwauIXpUB2o24HiiP7dTV4GPJdZ3nwYsPsDXWI6YkvF3Ystkt/g40fryI6r0CURPT6znnvhIzHl+6+nciSRJepcchfPGwHXECLdqPtQ0eOsRUxF+B6yQeO6exJ3rL7U6VEl9mpirvD/Nz++eB/h+73k7FJSrCr5GjEmszsOPjb62jcfpuWZdmPRc7kSSJP1XO1duLwL8gKrPoC3GCcB3gBdmcMzGxIOGndYDnuJh4hOKM2ZwzDeJdegj25KoOm4F9iWmrZRfvQ4Tn4XZF6C+8Z0wrMw7cyRJ3aLoO84jgQ8ARxDj5Syap+2LxDSMb/G/00SWJXpW/0J3F80Q86hPBy7if2cY70rcYT4Gi+ZpWZVoEfo90SZUhu2b09e3YfCV/8Sd5xdvyp1IkqTC7zivCuwF7F7YRTrPk8DeRH/v3sTdU03bj4mZ2YcSM6HVnIeIr9eLuYPMWA2GDIEnnoYVtqa+xvm5A0mSulw7WjWGEGPAfk6VHlTK702qP8ta5XME8dBgycdW1KDWgAnPU1tkQ2qrnQHD580dSpLU5drxcOAU4uPhMcApbbhep7BoVitdQ9xlPoiqFM0Tn6e28DrU1r7MolmSVArtnKrxH+Lp/i2Jj4olFe8tYgLLWGJJTsnVoAZMeB4WWJvaetdBbWjuUJIkAXnG0V1C3H0+JMO1pW7yW+LP2gm5gzSnBjTgpefgfetTX/fq3IEkSXqXXAtQ3ga+B3yI+AhZUus8Rqxh3xV4NGuSptWg1hPtGQuuE0Wzd5olSSWTe+X2rcRHyN8AJueNInWE44l12+fkDtK8vvaMF2DB3vYMSZJKKHfh3OeHxEfKZ+YOIlXUjcRGyn2ASZmzJOgtml96Dt431vYMSVKplaVwhtgK90lgZ+CpzFmkKjkUWItYZV8hvUXzi89RW2AN6uteZXuGJKnUylQ49zkdeD+x3ELS9I0j/qx8N3OOAZiqaF54fWrr/S13IEmS+lXGwhngNWBfYDPgjsxZpLJ5Afg/YHvggcxZBmCq9oyF16fmg4CSpIooa+Hc53JgZeCYzDmksjgDWA74Te4gAzPVneb517CnWZJUKWUvnPvsD6xEzICWutF9wEeATwHPZs4yQL0bAfvaM9b/e+5AkiQlqUrhDHAnsXXwq8RH1VK3OApYEbgod5CB62vPeB4WXKu3PWNI7lCSJCWpUuHc56fE6LrTcweRCnYd0ap0IJWec/5OewYLrk/dO82SpIqqYuEM8Dwxtm474KG8UaSWmwR8mZjLXPGHY99pz2CB1amve0X8PUmSKqiqhXOf84APAD/LHURqkfOB5emI39Pvbs+oj73e6RmSpEqreuEM8AZxd24N4PbMWaSBegb4GLAtMD5zlhbovdM84TlYqK89w55mSVK1dULh3OdmYBWiH7RCK4clfk4sMjknd5DW6C2aJz5PbeF1qK9je4YkqTN0UuHc5yiiCLksdxCpH/8CxgJ7AxPzRmmV3vaMCc/DAmtTW+862zMkSR2jEwtngEeBzYFdgSezJpH+19vAfsAKwDWZs7TQ1BsBx7rcRJLUcTq1cO7zW2LL2u9zB5F6XUzMZP5B7iAtV69F0bzA6tTXu8o7zZKkjtPphTPAK8BngC2AhzNnUfeaCHwR2Aq4N3OWAjTgjZeoLf5x6uvfmDuMJEmF6IbCuc+lRO/zIcDjeaNU1mXAW7lDVMxLwLeARYBf5I1SpAZMngQLb4cPAkqSOlU3Fc4QvaXfA36YO0jF/B3YmOgbX5loN1Bz3gCuBV7OHaRYQ2DWOWjcuDONJ07LHUaSpEJ0W+G8OLGq+9DcQSriKWAnYB3gyt6/dx/RbrAVld9q1xYLANcDfwXWzZylQA0YMgsMnYnG9bvQeOJ3uQNJktRy3VI4DwMOJnpLdwJG5o1TCUcAywJ/nM4/v5i4+/xN4MU2ZaqyDYg7zz8jiunO05gCw0fDzMNo/P2zNJ78Q+5EkiS1VDcUztsR83IPBYbnjVIJ5xFj0g4iHqzsz7FEgX1ykaE6yN7EG7gv5Q5SiMYUGD4nzDKExvWfpvGfs3InkiSpZTq5cP4QcAVwLrB05ixVcAuwCe+80UjxDLA7sBbxEKZmbCRwPHAXsEPmLK3XmALD54bhw2hcsyONp6b3oYUkSdXSiYXzQsBPgX8AG2XOUgXPAF8DViPeaAzGjcTYv92BBwf5Wt1gBeCs3l8rZM7SWn13nmceRuP6nWg8dXruRJIkDVqnFc7fBO4Hvpw7SEX8lLgb/5MWv+7JwBhiDFujxa/diXYg7j4fB8yWOUvrNKbALHPCsCE0/razDwxKkiqvUwrnbYHbgWPopMKjOOcDqwJfpbk+5oHoAY4GlgFOKeganWYfYDyxKKUz9EyBmed+54FB2zYkSRVW9cJ5OWK83DhiwoNm7F/Ap4k3Gre16Zrjgc8RLRw3temaVTY/8HPgOmBs3igt8t8HBm3bkCRVW1UL5+FEm8G/iPFymrFJwP5EH22uGWGXAmsCuwHPZ8pQJesAVwFnA+/LnGXwGlNg5jlhpnq0bfzbaRuSpOqpYuG8F/HgmX3Mzfk10S5xTO4gvU4FliTaOHryRqmEjxF37Q+l6m1IPVNg+DzRtvG3Hd0wKEmqnCoVzusDNwMn0Al34Ip3LTEp4wvAY5mzvNfLxIODSwMXZc5SBTMRC3zGA5/KnGVw+to2ZhpC44ZdvPMsSaqUKhTOCxEfV19NFIKasaeJ9pX1idnMZfYw8BFgS2KVt2ZsfqLV5jqq3NPf6H1gcHjvnWeLZ0lSRZS5cB4OHELcZftY3iiVMIVYk70M01+TXVaXENsH98X+52asQ0yR+QWwcOYsA/PfO891GjfsSOOlW3MnkiSpX2UtnHcEHgK+C8ycOUsV/JkomJtdk11WPwaWAk7KHaQi9iTeWH4td5ABaUyBmUZGp/tbT+dOI0lSv8pWOI8FrgTOJFo0NGPXE9sRdyDaHjrBRODzxJxp+5/7Nxz4EXAvVex/bvTAUGDILLmTSJLUr7IUzgsBvyTGb22YOUsVPEssyVgb+GvmLEW5jeh/3pkoCjVjY4j+53OAVTJnkSSpI5WhcD6I+Lh5j9xBKuIIYAmiv7UbnE4sutkXeCtzlirYHriVeCM6OnMWSZI6Ss7CeQfgHuAw7GNuxtnEA3QHAa9lzpLDj4H3AyfnDlIRexCTSr6aOYckSR0jR+H8QeLj5LOIQlAz9i/go8DHcWTbY8DuwKbA3zJnqYJ5iTcc1wObZM4iSVLltbNwHk20F9xGfJysGXsV2IdYk31u5ixl8xdgXeDTwJOZs1TBWsDlxKcWS2fO8h41aACNt3MHkSSpX7VGo1HYi/dcMk/fX+5MPPk/b2EX6ywnAIcD/8kdpAJGAPsTmwiHZs5SBVOI31uHUoaV5z2T4O3XqK17LbU5P5w7zdRWBhZJOP5R4M5CklTPCsRzGM36N3mXNc1EfCIzpMnjpxBv3ie1OMcHid9zKT+UL+rNo4HbkrSfHc8CNxaQY118LmWgXqWNgxLaVTg/DCxe2IU6x1+ArwN35Q5SQYsD3ydmgKt/w2n9D/50U96AWoP62H/CbKW6Gf5nokWqWWdQxXGAxTgV+GzC8VeQt5VobuC5xHPmIwqoVtqJeBg6xQ7E71UNzKqkv2k7kZih32rjgSULeN1u8DIwsl0Xa1erxhNtuk5VjQc+SfTuWjQPzCPAJ4CNgX/mjVJ6z5F2V6tYjUYsQymXiYnHv1xIimpK/dq9VESIBD3AmwnHT6KYT2vOSswBTqMarC0HcM6vWp4iuDV34FLf+A5Kuwrn8vyQLpc3iI/MlyOWvmjwriQ+8vwKfiOaHv889i+1ki9d5Z9RalFZhq9dSpN9UQ35bwPnJZ4zFpit9VG6xkcSj/838ZxWEcrw56Cq2vqQTBnmOHerU4gHtb4LTM6cpRMdR3x9j8sdRJKalFo4DyM+qVS6OYHVE8/5dRFBVC0Wzu13JbEd8XPAU5mzdLqXiDvPq5L+A0mS2u3iAZyTetdU4fMDOOfslqdQ5Vg4t89TxAzijYnV4mqf24DtiDGIru+WVFYTgfMTz9m6iCBdYIfE4x8F7i4ghyrGwrk9jiTaBtx6l9c4op/827i+W1I5pU7WmIcYZabmzQt8KPGcS4oIouqxcC7WWcDyRKH2RuYseseRwDLE2CxJKpOBzIjepYggHWxzoJZ4zrgCcqiCLJyLcTfxwMaOwD2Zs2jaHgd2Az4MXJc5iyT1mQDckHjOZkUE6WDbJB4/AbimiCCqHgvn1vo38CXgA8RdA5XfDcB6xB2bBzNnkSRIv7v5PuLTTfVvFmCjxHNOx/a+MlusnRdzRXHrnECsfn41dxANyGnE9rdDif+OvqmUlMv5wI8Tz9mF+N6lGdseGJV4zoUF5Bis24AX8GfVMGI7ddtYOA/eVcBXgTsz59DgvQ0cSMzYPpb0j/MkqRUeJlrIUh762xkL52ZskXj8G8Ra+LLZHbfkZtHt71QG427g48RMZovmzvIgsC3Rp35j5iySutM5iccvBKxQRJAOkzq+7yLKudVvZO4A3crCOd1rwMFEH7PD0DvbX4C1iCUqL2TOIqm7DGRpk8tQZmxd0gvOsi7PsmMgEwvnNMcDSwGH5w6itjqO+O9+VO4gkrrGI8BdiedsW0SQDpL6xuJlYqys9F8Wzs35KzAW2Ad4Om8UZfIS0f+8IuW9AyGps5yUePzqwJxFBOkAQ4FPJp5zOU7T0HtYOM/Y48QftI1whqPCXcT67k1xfbekYl2QeHwd+HwRQTrA6sAiieeMKyCHKs7CefoOJrbLnZk7iErpL8T67q8AkzNnkdSZHgbuTzxnyyKCdIDUNo0pwGVFBFG1WTj/rz8AyxJ9zH5Eo/709T+fmDuIpI40LvH4dUmfU9wNUqdp3Aw8X0QQVZuF8ztuB9YHPg3clzmLquVxYE9gJeDazFkkdZZxicfXcQX3e61E+qi+04sIouqzcIYngM8Bq2DRo8G5k3jztRO++ZLUGjeS/v3E5U3vtsMAzvlty1OoI3R74XwssCSxKU5qlT9iu4+k1jk38fgtgVmKCFJRqW0a1wKvFBFE1dethfM/gfcD38QHu1KkPpHc7Q4m+p8vzx1EUqWlTtcYRfpq6U41P9GqkeKSIoKoM3Rr4XwN8EDuEBWyFPGx1aPENIkPZU1TLU8Cv88dQlKl3Qg8m3hO6l3WTpX6dZgCnFFEEHWGbi2cR+UOUBE1YunH/cAuvf9/Y+AfwA9JX13arebLHUBSpTVIvwvq+u2wXeLxNwGPFZBDHaJbC2f173PAeOAIpv37ZN/ef/6NdoaSpC71x8Tj5wbWKiJIhSxA+lzrcQXkUAexcNZ7rQlcRKx6XaKfY+cGfgDcgv10klSkS0mfK7xVEUEqZPMBnHNey1Ooo1g4q8+cwM+BG0h/h74qcDHRy7tki3NJksLFicd/tpAU1ZHarvIQPv+kflg4C+BbxDeMLw7ydXYmvukcCcw62FCSpHdJHUu3MLByATmqYGZgo8RzzikiiDqLhXN324oYzXcUrXtgsg4cANwD7Nqi15QkxVSjlxLP2baAHFWwFukPsP+qiCDqLBbO3Wklol/uQtLnWzZrUWKxzPXABgVdQ5K6yWukP7zWrYVzapvKA8QD79IMWTh3l1HEtsR/Apu16ZprAX8Ffk18bChJGrjUZSgfBFYoIkjJfTzx+NSvq7qUhXP3+CxwL/D1TNf/fObrS1InuIxY0pGi2+46jyX9ORsLZzXFwrnzbUiMizuVWD2a0wjijveDwCczZ5GkKnoNuCLxnG2KCFJiqdsCXyM2Ckv9snDuXGOA3wFXEuPiymQpYqXphZQvmySVXep0jdWAeYsIUlKphfMphaRQR7Jw7jxDiW1/9wKfyZylP1sRd8NPBEZnziJJVXEK8FbC8TXa91xLbksCSyee84cigqgzWTh3lt2B+4EDcwdJ9AVijvS+uYNIUgVMIh66TtEt7XF7JB7/HPCPIoKoM1k4d4YPA1cBv6H/NdllNRr4ITH/eZPMWSSp7MYlHr8lsSG206VuC/wL6Q9bqotZOFfbnMBvgb8TTxF3gmWBy4HzgMUzZ5GksrpkAOds3vIU5bIo8TMkxW+KCKLOZeFcTTWiHeMhYJfMWYqyDTGM/vvY/yxJ7/UEcFfiOZ0+XSN17N5LxKe1UtMsnKtna+A+4gHAUXmjFK4O7E8U0LvmjSJJpZM6DWJzOvvnfmp/84WFpFBH6+Q/QJ1mDWJ25/nAMpmztNucxA+IG+j8jxolqVmp0yBGEs/EdKJFgOUSzzmviCDqbBbO5Tc38BPgRmCjvFGyW5Po6zsJWCxvFEnK7lng9sRz/q+IICWw1QDOubjlKdTxLJzL7fPAI8BXcgcpmc8R/d374+9hSd0t9a5p6nKQqtgy8fiLgdeLCKLOZtFRTtsCtwK/JtZU63/ViQcHHwA+mzmLJOUyLvH40XReu8YQ0he8nFREEHU+C+dyGUOsoh4HrJI3SmUsCZxKPOSxZt4oktR2dwBPJp7TadM1dgSGJRz/FukLZCTAwrksZgaOJdZkd8t2p1bbinh48HfAXJmzSFI7/Srx+NSxbWX36cTjryNG0UnJLJzz+zwxbu3ruYN0iM8QX89v5Q4iSW2SOlZtDPFpXSeYBVg38Zzziwii7mDhnM8GwJVEH/NCmbN0mlHAUcAtpK9flaSquR14JvGc3YoIksF6wOyJ5zi/WQNm4dx+7wP+SPRXbZg5S6dbFbgAuIj0+Z6SVCV/Sjx+IOPbyii17eSvxLQqaUAsnNtnZuDbwP3AJzJn6TZbAv8CfojruyV1ptQ+55WB+QvI0W6pY+j+XEgKdQ0L5/b4FDF3+HCiH0t57As8DHwhdxBJarG7SZ+uUfWbOBsDiyaeY3+zBsXCuVirEGuy/wAsmDmLwijgROAfpD9QIklllroJb9ciQrRRarvJXaS/uZDexcK5GPMBJxBLTLp9TXZZfQi4Fvgt8YS5JFXduMTjV6Ta7Rqp86h9KFCDZuHcel8DHgT2yh1ETdmFmJ/9XWBo5iySNBhXAG8nHF8nvUe4LMYASySec3oRQdRdLJxb52PEA2g/In00jvI7BNd3S6q2ycApiedUdYtgapvG3b2/pEGxcB685YiRZ2fjyLOqW5xY3/1XYI28USRpQM5KPH6TQlIUL/XBxvMKSaGuY+E8cCOB44m7zC7Z6CwbADcS/c+LZM4iSSmuBl5NOH5WYOdiohRmKWC1xHPOLSKIuo+F88DsScxj/lLuICrULsA9wP65g6j0JuUOUCJv5Q7Q5SYDlyee89EighRo68Tj7yMe1u8kr+UO0K0snNNsANwM/IKYnKHONxvwfWKMkZ8saHqG9/5vvct/QSx7Ul4XJB6/MTCkiCAFSS2czy4kRV4jev8395/5dv4aAtQG/ZUbJKcINGcM8fBY1YfFa+BWIH4YXUZsgOy0uxcanM8AW1Ct4qMIU4C5cocQFwJv0PzCrTmA9YnnO8puIWCdxHPOLyJIZqcTd5276XtOjejh3zdnCAvnGZsF+DpwWO4gKo3Nen/9mPh98WLeOCqJEbxzB0jK7XngUmD7hHO2phqF80eBYQnHP00svOo08/T+6jZL5A5Q7/+QrrUHMY/ZolnT8jVgPPHGSpLKJnWKxLaFpGi91Ja5Trzb3M1eyh3Awvl/rUcMkf8l8ZGQND1zAscSfe+pM0UlqUipW/IWB9YuIkgLzQxsmHjOuAJyqItZOL9jfmK83DW4JltpViN+SP2BGJMkSbm9ANyUeE7Zl6FsRlqL6dPAJQVlUZfq1sL5vc303wUewvFyGpxPEe093+fdf7Z8lkBSDqmzi7crIkQLpU7TSJ0uIvWrWwvnJ3v/92PECs5DiCHwUivsT7wR+0zv/38wYxZJ3esUoCfh+GWIKVJlNBuwU+I5bgtUy3Vr4bwc8bH62cDymbNUyb25A1TIYsDvgDOBsVmTSOpWz5LervG5IoK0wFjSbnC9SjWmhKhiurVw3ob4WF3NeQz4OPGG48PAP7OmqZYdgb1zh5DUtVLbFTYtJMXgpT6A/XdilrXUUt1aOKs5rwMHAu/nnc1LNwAfJPrBn82US5LUnNQ+55WAhYsIMgg10gvn3xQRRNlln5fvQ0uantOAbwLPTOefnwD8Fjgc+GqbMkllNZnY4pWymKETTSZ6Ubv961Am9xHtGmsknLMt8PNi4gzIcsAiCcdPJv0NQ9W82furm/6s1YlpMVlZOOu9riSWvlzTxLGvEYtATiImk+xQYC6pzE4DvgLMlDtIZm8Rs833zB1E73IOaYXz1pSrcE5trbyUWP/eyXYidk500/ecIcQn4VlZOKvPk8DBwKkDOPduogd6e2JCyYotSyVVw4vEw0hyDX0ZnQscnXD8JsACwH+KiZMs9YHFbpim8QR+z8nCHmcB/IBY3HHqIF/nXKI/7tv4UIa6yyy5A5SIX4vyeRB4OOH4OrBlQVlSLUssKEvRDfObR+UO0K0snLvbWUTv2H7ER6ytciQxD/T4Fr6mJGngLko8vixbBFMfCrweH1xXgSycu9OtxDejHSluNvOTwD7A2sBVBV1DktScUxKP34Ry9M+mLj1xmoYKZeHcXZ4B9gI+BFzcpmteD2xIfPMb36ZrSpLe7XbgkYTjZyG+d+e0NLBKwvE9wCUFZZEAC+du8nOiV+yXma7/R2JL46G0ti1EktSccYnHb1dAhhSp7SL/BJ4uIIf0XxbOne9Coo95b/I/7T6JGFu3FHBy5iyS1G1Sp03sRt52jW0Tj/99ISmkqVg4d667iLnKW1NcH/NAPQnsDmxAbCKUJBXvGuDlhONnAtYrKEt/5gQ+nHjO74oIIk3NwrnzvEqMg1sR+HPmLP25mvjG+CXgqbxRJKkrpI5q27qQFP3biFh40ax/UIKtcup8Fs6d5ZfEGLgjcwdJdALRvnFU7iCS1OF+kXh8rsJ5j8Tju2HpiUrAwrkzXAmMJSZmlGXTU6o3gQOBFYhFKpKk1ruRtOddFidubLTTCKKVL4WFs9rCwrnaniRWXW9M9K51gn8BHyVmiN6TOYskdZoppI8jTV15PVhbkFafPAHcXVAW6V0snKvrYOIuwNm5gxTkCmJ83ZdJe5hFkjRjqX3OnygkxfRtkXj8rwpJIU2DhXP1/JEYL3c43TEP+WdE3/YJuYNIUodIXRKyBPF9uF1S+6pt01DbWDhXx23AusQGvrKNlyvaM8TkjZVxfbckDdbLwDmJ52xeRJBpWAeYO+H4x4jxq1JbWDiX3+PAF4BVgb9lzpLbHcQK2E8SvdCSpIE5I/H4dvU5p17Hu81qKwvncvspsDTw69xBSuZMYvrGwcDrmbNIUhVdBrydcPxKwGLFRPmvOrBZ4jnjCsghTZeFczldTPQxf5VYU61pO5zouzs9dxBJqphXiNF0KT5SRJCprAQsmHD808B1BWWRpsnCuVxuA7YDtqL7+pgH6ilgZ2Lm518zZ5GkKkldhrJNISkG/vpnkXbXXBo0C+dyeBE4gOhjtl9rYK4mVrR+Htd3S1IzUsfSbQTMWkSQXqmFc2p+adAsnPM7jmg3+H7uIB3iJGK+9UG5g0hSyb1C2id1ddJnLDfrA8AqCce/Ssz7l9rKwjmfC4C1gK8Az2fO0mneBI4gFqicmTmLJJVZ6qecny8kBWybePwlQKOIINKMWDi330PAZ4mPpFIfzFCae4jRddsQo+wkSe92fuLx6wPDC8ixVeLx4wrIIPXLwrl9JgHfAt4P/C5zlm5zAbE8ZU/ghbxRJKlUHgVuTTh+FmCTFmcYDayZcPxL+GmiMrFwbo9TgTHA0cCUvFG62onEG5ef5w4iSSXy28TjU1di92f3xOP/gj9LlYmFc7H+TvQx7wY8kjmLwgvA3kT/82WZs0hSGaROp2h14bx94vHjWnx9qWkWzsV4FNgVWAf7mMvqHmBz4GPE/GxJ6laPAv9KOH4BYL0WXXtu0to03sSbHsrIwrm13iamOSxD+kdfyuMcYn72t4jxRpLUjc5NPH7nFl13M9JqkfPwWRVlZOHcOn8mCuaDgMmZsyjd0cR/v5NyB5GkDC5MPH6zFl03dY33xS26rjQgFs6D9w9gS2AH7GOuuv8QM0o3xPXdkrrLTcC9CccvSjwrMhizApsmnuO2QGVl4TxwLxIPma1ODGJX57iKWC27M/Bk5iyS1C6p7RqpK7Lf6yPAnAnHX0P87JWysXAemGOBpXGsWac7nWjfOJiYwy1JnWxc4vHbDfJ6qW0aqe0kUstZOKe5EFgR+CY+nNAt3gAOJz6S/GPmLJJUpFuApxOOX53YUTBQKYXz28Bpg7iW1BIWzs0ZT/Qwbw3clTmL8hgP7ARsgL8HJHWmBnBy4jmpq7L7fJjYGNism4BnBngtqWUsnGdsInAAsW3uz5mzqByuJj512IN4mFCSOsn5icdvO8DrpBbcqf3XUiEsnKfvZGBZ4PtAT+YsKp9fEf3PP8sdRJJa6CbguYTj1wJGJV6jDnwm8RynaagULJz/16XEN4Ld8Y6iZuxV4MtE//OfMmeRpFZJues8FNgt8fU/CLwv4fjxwAOJ15AKYeH8joeIP/xb4JpspbkH+ASwPXBH5iySNFjnJR6f2naR2t5xZuLxUmEsnKMN40iij/nUvFFKb5HcAUpuHLAyMb7utaxJJGngLgeeTzh+Q2C2hONTx9D9JvF4qTDdXjifCiwFfBuYkjdKqS0K/J7YjHglURxq+g4nfl+dmDuIJA3AW6TNTK4RG3SbsSDRqtGs+4FHE46XCtWthfNEYB2iNcM12dM3E/Ad4F/EFr06cWfhdmIJzFz5opXe08CexAOmz2bOIkmpimrXSG3TcOmJSqVbC+fhwBeJ4e2atk8TD2N8j2l/BPd14oGNr7UzVMWsCHyDtI8wJakMLiNtY+q2wKxNHLdHYo4/JB4vFapbC+eZgU8RY3dOBebLmqZcVie+YZ5GtGjMyCjgR8A/GPgQ/E40CjieeFBwdyycJVXPG8BVCcePAjbq55j5gZUSXnM88QmnVBrdWjhP7bPAvcB+xFidbjU/8HPizcSmied+iPg47bfEQ5bdbE/i99OXcgeRpEE6O/H4rfv555snvt64xOOlwlk4h9HA0URrwkczZ8lhP+BBon1lMHYB7gOOAIYMNlTFbErcYf4F8SZEkqruVNLaNfornHdIvP64xOOlwlk4v9vixGrti4HVMmdph765w0cDI1r4ugcSb0L+r4WvWVYfAM4i2ltWzJxFklrpbeCKhOPnB1aZzj+bm7SWvueA6xOOl9rCwnnatgBuJtYpz5M5SxE+AFwCnENxxd4SxFrqG4C1C7pGTrMSbzjuJP0uiiRVRep0jenddd4i8XUuAxqJ50iFs3Cesb2JFoZv5g7SIvMTbwbuJL3XbKDWBP5GzIFeqk3XLNqXiNmi++UOIkkFuyDx+Ol90rhN4uv8IvH4bvNk7gDdqpsfhmvWSOAYYjzbgcBFeeMM2B7EHdKRma6/M7GW+mBiBvTbmXIMxgbAIcB6mXNIUrv8B/gnzS++WoiYnHHHVH9vOLBJwjUnYJtGf7YlJlpZx8EwYifHve24mF/w5q1ITI44myigH8wbp2ljgZ+QNgKoKEOBo4C9iPnP5+SN07QFeOfNkyR1m5OITyubtRXvLpxXI+2mTVVvULXT0bkDlMzpxA26wtmqkW4H4mP6HxFzK8tqReBPxBzOMhTNU1uEeAjzcqKVo6yGEQtgHsSiWVL3Sh1L997tgLsnnp/aVy292q4LWTgPTI24Y3ov6d8QijYrcBjxbv/jmbP0ZxPi4cGfUb4RbjsS/32/gwtMJHW3p4HbEo5/71bejyVe75LE46Up7bqQhfPgzA/8BriR9CeGi/AlYtPSQbmDJNobeAg4IHcQYF3gGuBMYMnMWSSpLMYlHn8S8HmiPW/2hPP+BLyeeC2pbSycW2MNYvbzqeSZHLEhcDWx5nmBDNdvhVmBI4G7ybOEZkFic+K1+PCfJL3XSYnHfw74NfCtxPPOSDxeaisL59bqW999IO3ZnLcoccf7SmD9NlyvHZYn+p/PApZt0zX3JDYeDnZzoiR1qn8T0zWK9BbxXI5UWhbOrTeUWDn9ILBrgdfpu0bZeqxbZQfgHqL/eXRB19iRuMP9C9I+SpSkbjSu4Ne/BphY8DWkQbFwLs7iwCnApUQrR6t8mnfuag9r4euW1d7Ev++eLXzNDxJ9dGcSd7glSf0retrF+QW/vjRoFs7F24x4ePBUYN5BvM5qxASK04Axg49VKfMRd4XvADYexOuMIO5g30b5J45IUtn8k1iIUhTH0Kn02lU4+zF49D+PB/ZPPG9u4GTgZso987gdVgT+Qgw6T5140bc+fe9Wh6qgEcRIxRJoQK0GtdLtYkodjzhfISmqKfUGwYKFpGjeEOLPRLNmpT3PsJTVmQW97vV09xrpRXIHqLi2fQ9u10+rCW26TtnNDnwf2An4Lv2/u94X+DYwZ8G5qmYnYi7o0cSoozdmcOymxNf6w23IVRVvAj25Q4Q69EyGKa/lDvJeV5BWHP21qCAVdA1pzyVcW1SQJr1JbDGdpcnj32LG33M63U+B9xfwuicW8JpVciawXO4QFda278G1RqNR2Iv3XDJP31/OAxyCUwve63Lg68QDalPbjljxvHS7A1XQE0RhfMp7/v4iwI/JM9quzMYR46Huz5wj9EyGSROprXM5tXk2yZ1GkqQZalerxnPEco41iIflFDYF7gKOI+4qLwtcAJyLRXOz3ke0slxBbKuaHTicKAwtmt9xE/ARYHvKUjRPrebjFpKk8mvXHef32oEYp7ZMYRevnlewF7wVJmBry9ReJO7I/yx3kGnqu+O87pXU5t4wdxpJkmYo122es4nJEAfTxv3iJWfR3BoWze84nnhzWs6iWZKkisn5+WiD+Eh9GWJUm6TWuJgYX7gP8HzmLJIkdYwyNBY+DOwGrEeMXJM0MA8Tfd1bAbdkziJJUscpQ+Hc5zri4cFdgEcyZ5Gq5BXgG8SnN+dmziJJUscqU+Hc5zRiusQPiHYOSdN3KjFT9YdU8XmBWj2m6E55PXcSSZL6VcbCGWLA/H5EQXBa5ixSGV0GfIhocypyBW5xanV4+UWYf0VqI1fOnUaSpH6VtXDu8yDRurE18I/MWaQyGA/sCmwO3Jo3yiDU6jDxWZh7BerrXgczL5w7kSRJ/Sp74dznQmK5xVeJubRSt3mbaMdYFvht5iyDU+8tmkcvTX2D62HoHLkTSZLUlKoUzn1+CixJ9D9L3eJk4sG/bxAFdHXV6vDSszDX8tQ3uAmGOL5cklQdVSucIe4470fMqT0/cxapSNcTo+V2pxMmzdTq8PKzMHoZ6mOvh2GjcyeSJClJFQvnPrcA2wJbAvdnziK10rPEQ39rE8tMqq+vPWPO5alvdIvtGZKkSqpy4dznEmJ9d/U/xpbgaDptm2Zfe8aoRamvf63tGZKkyuqEwrnPD4GliH5QqWrOAVYCvgVMzJyldfraM+ZchvoGN8OwOXMnkiRpwDqpcAZ4jOgHXY3YRCiV3b3EaLmPAXdmztJCtXfuNM+5PPUNb4GZ5s0dSpKkQem0wrnPLcB6xAzo+zJnkablWWK84nLEMpPOUiPuNM89hvrY62zPkCR1hE4tnPv0re8+CpicOYvU5xfEWMWf5g5SiFodJj4X0zM2vAWGOj1DktQZOr1w7nMg8cDVObmDqKtdDawIfBF4NW+UgvT1NI9cjPrYG6E+W+5EkiS1TLcUzgCPEn2kmwF/yxtFXeZeYEdgA+CuzFmK0zdybtRS1Df8h3OaJUkdp5sK5z6XA+sCewL/zpxFnW0ScCjRx3xW5izF+u/IucWoj/0bzDR37kSSJLVcNxbOfU4ElgYOwvnPar1Tid9f382co3h9d5rnWp76RrfBTPPlTiRJUiG6uXAGeB04AlgB+GPmLOoM/yDagXYDHs+cpXj13jvNo5ekvsGNPggoSepo3V4497kf2AnYmI6apas2eh74GrA60Q7U+f7b07wY9bHXw5ARuRNJklQoC+d3u5LY3rYnMWdXasYxRFvGTzLnaJ/6EHjxWRi5OPWNbne5iSSpK1g4T9uJwBjg+NxBVGrnASsD+wMvZU3STvU6THwGRi9NfYMbYOio3IkkSWoLC+fpexHYh1igcm7mLCqXO4CPANv1/nX36JueMcci1De6yQcBJUldxcK5f/cBHyVmQP8zbxRl9gKwH3GX+aK8UTKo9fY0j14m5jT7IKAkqctYODfvHOCDxANgr2XOovY7juhj/kHuIFn0Fc1zLdc7cs6eZklS97FwTvcTYCngZ5lzqD3+AqwJfIVo3+k+fUXzyEVjuckQ12hLkrqThfPAPA18GVifmMShzjMe2AXYFLgpc5Z8/tuesTT1DW+2PUOS1NUsnAfnWmL28yfphmUX3WEycCCwDHBa5iwZ1d59p3nDm2zPkCR1PQvn1jiTKLQOIbYRqppOIfqYjwIambPkVQNefhbmGkN9o1u90yxJEhbOrfQW8D2i//kPmbMozc3Ah4HPAY9lzpJfrQ4Tn+ud03wLDJsrdyJJkkrBwrn1/gN8muh/vi1zFs3Yc8BuwBrADZmzlEN9SNxpHrko9bE3+SCgJElTsXAuzrXAqsAewL8zZ9G7TSbWZC8BnJo3SonUh8BLz8CoJaM9Y5jtGZIkTc3CuXi/Ito3jssdRABcQKxT3x94NXOW8uhboz1qMepj/257hiRJ02Dh3B5vEHOAxwB/ypylW90IbAFsAzycOUu51IfEGu2Ri1Pf6HbXaEuSNB0Wzu11P/AJYDvgjrxRusZzwFeBtYBL80YpoanbMza4AYaOyp1IkqTSsnDO4zxgZaJdYGLeKB2tr03mp7mDlNJ/2zMWpb7B373TLElSP4otnBs9dPs43H4cAyyJ/c+tdgGwGvFg5suZs5RTfQi8+CyMXIz6Rv+0aJYkqQnFFs5vTIA3X4BajdiooGl4geh/XhPXdw/WvcQowG2AWzJnKa9a753mOZeivsFNtmdIktSkQgvn2ppnUlv0M/DCc9DzZvzA1vTcRKzv3h54JHOWqplE9DEvh8tnpq9WBxow4VmYY1HqG97sGm1JkhLUGo3iWykat+1O48GTYQgwYm5o1LCFY4aGAfsBBwPDM2cpu18QK7KfyB2kvGrxgc/rz8FbUHvfRtRWP92iWZKkRG0pnAEaT19E456D4dnbYWZg5nmh0cACeoaWAA4DPpU7SAldCxyK7S0zVhsCk16E1yfBXMtQW/rr1Bb7Qu5UkiRVUtsK5z6Nh35G475D4OUJMGImGDaq9yFCzcB6wJHA2rmDlMBTRE/4n3MHKbVaHaa8Dq++CsNr1MZ8l9r7D4TasNzJJEmqrLYXzgBMep7G/UfReOR4eHMSjBgJ9eEW0P3bC/gWsEjuIBlMJloyjgZez5ylvGp1aEyBV1+IDo1Fd6Q25nsw+5jcySRJqrw8hXOfVx+g566vw+MX2v/cvOHAQb2/usVZwL7Ak7mDlFctpte88Ww8KjnvqtQ/cCzMPTZ3MEmSOkbewrlX49/n0rj/MHjG/ucEywMH0tn9z9cC3wP+mjtIqdXqMGkCvP42jF6E2lLfoLbkPrlTSZLUcUpROPdp3H8kjQd/CK9NgNlmg6Gz2b7Rvy2I/ueVM+dopaeIhyJPzB2k1Gr1GPP46ssw80zUFtuL2gpHR9uTJElquVIVzkD0P9+9H41HToEpwOxzQm2oBXT/vkj0/47IHWSQjiP6uN/IHaS0ar3tTK88H/93wU2prXQ8jFg6by5Jkjpc+QrnPhNuoHHfoTQevxRmAmadp7dzo6R5y2Fe4NvAl3MHGYBxwHeAuzLnKLf6EHjjmXhbseBa1Jc5EBb4SO5UkiR1hfIWzr0aj51M475D4cXHYJY6zDwP9EzJHavsVgJ+BGyYO0gT7iQK5vNyBym12hB4+1V4+TUYOSe1ZQ6gtvQ3cqeSJKmrlL5wBqDnDRoP/pjGA0dHP+ccI2DIrLZv9O+jwHeBFXMHmYYXgEOA4zPnKLdaHXreglcmwjCoLbkPtTEHwXC3/kmS1G7VKJz7vP4wjbu/TeOJP0IPMGKu3rm1Ffp3yOMgYH/K0/98AlE0P5c5R4nVoNaA156HKVBbaPMomOdyB44kSblUq3Du1Xjmchr3HAjP3BpTjWdxfF0T5gd+DHwyY4argW8At2bMUH71IfDmc/BGD4xchNoHjqG28Cdyp5IkqetVsnDu03j0NzTu+x68+KTru5u3DnAosEEbr/kgMXP67DZes3pqdZjyBkx8BWafg9r7D6C21JehPmvuZJIkiYoXzgC8/TKNew6m8ciJ8OZbMPsoqM9kAd2//yNaOIpc3z2JmDF9ODFcUNNSq/WuyZ4QHRqL7UptuYNh1iVyJ5MkSVOpfuHc55V7ady9P43HL+hd3237RhNmAvYjlo202m96X/fxAl67Q0y1JvstqC20HrVlD4O518sdTJIkTUPnFM69Gk/+CR74Po2nb4fZajB8Hu8+928M8bBeKxppryXuZF/XgtfqXLU6TH4JXpsEIxemttxh1BbdNXcqSZI0Ax1XOPdpPHA0jQePgVcmwIgRveu77Rbox3bE+LqVB3Duf4je6V+2ME/nmXq83PDh1JbYg9pyh8HQOXInkyRJ/ejYwhmAN/9N4/4jaDx4Qoyvm3001IZ5B7p/XwB+ADRbzR0OHAG8WViiqqvVofE2vDYBeqC2+M4xXm72MbmTSZKkJnV24dznhb/RuP8wGk9eHv3Ps7m+uwlzE5MwvjaDY/5E9DHf3ZZElTRVH/NkqM2/DixzALX5t8wdTJIkJeqOwrlX44kzaNx7EEx4GEbMBkNH2L7Rv+WBY4HNp/p7dwJfBa7KEagyakNgypvRljFiLmrLH0Zt8b1yp5IkSQPUVYUzAI3JNB74AY3xP4XGmzBkptyJqmIb4u7zxUQbh/rTMxkaNWqL7EJt2UNg2OjciSRJ0iB0X+EsSZIkDUA9dwBJkiSpCiycJUmSpCZYOEuSJElNsHCWJEmSmmDhLEmSJDXBwlmSJElqgoWzJEmS1AQLZ0mSJKkJFs6SJElSEyycJUmSpCZYOEuSJElNsHCWJEmSmmDhLEmSJDXBwlmSJElqgoWzJEmS1AQLZ0mSJKkJFs6SJElSEyycJUmSpCZYOEuSJElN+H+lxKuX+rP4ygAAAABJRU5ErkJggg=='
@@ -1580,20 +1595,38 @@ function GetControlLayout(props)
             Image = logo,
           }
         )
+        
+        statusVerticalOffset = statusVerticalOffset + hiveHeaderSize[2] + btnGap[2]
+        
+        
         table.insert(
           graphics,
           {
-            Type = "Text",
-            Text = "STATUS:",
-            Font = "Roboto",
-            FontSize = 12,
-            FontStyle = "Regular",
-            HTextAlign = "Right",
-            Color = Colors.ControlLabel,
-            Position = {0, (0.5 * btnSize[2]) + (1 * btnGap[2]) + statusHeaderSize[2]},
-            Size = {3 * btnSize[1], btnSize[2]}
+            Type = "Header",
+            HTextAlign = "Center",
+            Text = "Setup",
+            IsBold = true,
+            CornerRadius = cornerRadius,
+            Position = {0, statusVerticalOffset},
+            Size = headerSize
           }
         )
+        
+        statusVerticalOffset = statusVerticalOffset + headerSize[2] +  btnGap[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "GroupBox",
+            HTextAlign = "Left",
+            CornerRadius = cornerRadius,
+            Fill = Colors.HiveGrey,
+            StrokeWidth = 1,
+            Position = {0, statusVerticalOffset},
+            Size = {headerSize[1], 2 * btnSize[2]}
+          }
+        )
+        
         table.insert(
           graphics,
           {
@@ -1604,10 +1637,90 @@ function GetControlLayout(props)
             FontStyle = "Regular",
             HTextAlign = "Right",
             Color = Colors.ControlLabel,
-            Position = {0, (1.5 * btnSize[2]) + (2 * btnGap[2]) + statusHeaderSize[2]},
-            Size = {3 * btnSize[1], btnSize[2]}
+            Position = {0, statusVerticalOffset + (btnSize[2] / 2)},
+            Size = {headerSize[1] /2,  btnSize[2]}
           }
         )
+        
+        layout["IPAddress"] = {
+          PrettyName = "System~IP Address",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          FontSize = 12,
+          StrokeWidth = 1,
+          Position = {headerSize[1]/2, statusVerticalOffset + (btnSize[2] / 2)},
+          Size = statusTextboxSize
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (2 * btnSize[2]) + btnGap[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Header",
+            HTextAlign = "Center",
+            Text = "Connection Status",
+            IsBold = true,
+            CornerRadius = cornerRadius,
+            Position = {0, statusVerticalOffset},
+            Size = headerSize
+          }
+        )
+        
+        statusVerticalOffset = statusVerticalOffset + headerSize[2] +  btnGap[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "GroupBox",
+            HTextAlign = "Left",
+            CornerRadius = cornerRadius,
+            Fill = Colors.HiveGrey,
+            StrokeWidth = 1,
+            Position = {0, statusVerticalOffset},
+            Size = {headerSize[1], 2 * btnSize[2]}
+          }
+        )
+        
+        layout["Status"] = {
+          PrettyName = "System~Status",
+          Style = "TextBox",
+          Position = {btnSize[1]*3, statusVerticalOffset + (btnSize[2] / 2)},
+          Size = {headerSize[1] - (6 * btnSize[1]), btnSize[2]}
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (2 * btnSize[2]) + btnGap[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Header",
+            HTextAlign = "Center",
+            Text = "System Status",
+            IsBold = true,
+            CornerRadius = cornerRadius,
+            Position = {0, statusVerticalOffset},
+            Size = headerSize
+          }
+        )
+        
+        statusVerticalOffset = statusVerticalOffset + headerSize[2] +  btnGap[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "GroupBox",
+            HTextAlign = "Left",
+            CornerRadius = cornerRadius,
+            Fill = Colors.HiveGrey,
+            StrokeWidth = 1,
+            Position = {0, statusVerticalOffset},
+            Size = statusGroupboxSize
+          }
+        )
+        
         table.insert(
           graphics,
           {
@@ -1618,10 +1731,430 @@ function GetControlLayout(props)
             FontStyle = "Regular",
             HTextAlign = "Right",
             Color = Colors.ControlLabel,
-            Position = {0, (2.5 * btnSize[2]) + (3 * btnGap[2]) + statusHeaderSize[2]},
+            Position = {0, statusVerticalOffset + (btnSize[2] / 2)},
+            Size = {headerSize[1] /2,  btnSize[2]}
+          }
+        )
+        layout["DeviceName"] = {
+          PrettyName = "System~Device Name",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          StrokeWidth = 1,
+          Position = {headerSize[1]/2, statusVerticalOffset + (btnSize[2] / 2)},
+          Size = statusTextboxSize
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (0.5 * btnSize[2]) + (2 * btnGap[2]) + statusTextboxSize[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = "MODEL:",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Right",
+            Color = Colors.ControlLabel,
+            Position = {0, statusVerticalOffset},
+            Size = {headerSize[1] /2,  btnSize[2]}
+          }
+        )
+        layout["Model"] = {
+          PrettyName = "System~Model",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          StrokeWidth = 1,
+          Position = {headerSize[1]/2, statusVerticalOffset},
+          Size = statusTextboxSize
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (2 *btnGap[2]) + statusTextboxSize[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = "BEE TYPE:",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Right",
+            Color = Colors.ControlLabel,
+            Position = {0, statusVerticalOffset},
+            Size = {headerSize[1] /2,  btnSize[2]}
+          }
+        )
+        layout["BeeType"] = {
+          PrettyName = "System~Bee Type",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          FontSize = 12,
+          StrokeWidth = 1,
+          Position = {headerSize[1]/2, statusVerticalOffset},
+          Size = statusTextboxSize
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (2 *btnGap[2]) + statusTextboxSize[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = "UNIVERSE:",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Right",
+            Color = Colors.ControlLabel,
+            Position = {0, statusVerticalOffset},
+            Size = {headerSize[1] /2,  btnSize[2]}
+          }
+        )
+        layout["Universe"] = {
+          PrettyName = "System~Universe",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          FontSize = 12,
+          StrokeWidth = 1,
+          Position = {headerSize[1]/2, statusVerticalOffset},
+          Size = statusTextboxSize
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (2 *btnGap[2]) + statusTextboxSize[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = "SOFTWARE VERSION:",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Right",
+            Color = Colors.ControlLabel,
+            Position = {0, statusVerticalOffset},
+            Size = {headerSize[1] /2,  btnSize[2]}
+          }
+        )
+        layout["Version"] = {
+          PrettyName = "System~Version",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          FontSize = 12,
+          StrokeWidth = 1,
+          Position = {headerSize[1]/2, statusVerticalOffset},
+          Size = statusTextboxSize
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (2 *btnGap[2]) + statusTextboxSize[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = "SERIAL NUMBER:",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Right",
+            Color = Colors.ControlLabel,
+            Position = {0, statusVerticalOffset},
+            Size = {headerSize[1] /2,  btnSize[2]}
+          }
+        )
+        layout["SerialNumber"] = {
+          PrettyName = "System~Serial Number",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          FontSize = 12,
+          StrokeWidth = 1,
+          Position = {headerSize[1]/2, statusVerticalOffset},
+          Size = statusTextboxSize
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (2 *btnGap[2]) + statusTextboxSize[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = "MAC ADDRESS:",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Right",
+            Color = Colors.ControlLabel,
+            Position = {0, statusVerticalOffset},
+            Size = {headerSize[1] /2,  btnSize[2]}
+          }
+        )
+        layout["MACAddress"] = {
+          PrettyName = "System~MAC Address",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          FontSize = 12,
+          StrokeWidth = 1,
+          Position = {headerSize[1]/2, statusVerticalOffset},
+          Size = statusTextboxSize
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (2 *btnGap[2]) + statusTextboxSize[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = "OUTPUT RESOLUTION:",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Right",
+            Color = Colors.ControlLabel,
+            Position = {0, statusVerticalOffset},
+            Size = {headerSize[1] /2,  btnSize[2]}
+          }
+        )
+        layout["OutputResolution"] = {
+          PrettyName = "System~Output Resolution",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          FontSize = 12,
+          StrokeWidth = 1,
+          Position = {headerSize[1]/2, statusVerticalOffset},
+          Size = statusTextboxSize
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (2 *btnGap[2]) + statusTextboxSize[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = "OUTPUT Hz:",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Right",
+            Color = Colors.ControlLabel,
+            Position = {0, statusVerticalOffset},
+            Size = {headerSize[1] /2,  btnSize[2]}
+          }
+        )
+        layout["OutputFramerate"] = {
+          PrettyName = "System~Output Framerate",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          FontSize = 12,
+          StrokeWidth = 1,
+          Position = {headerSize[1]/2, statusVerticalOffset},
+          Size = statusTextboxSize
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (2 *btnGap[2]) + statusTextboxSize[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = "ENGINE FPS:",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Right",
+            Color = Colors.ControlLabel,
+            Position = {0, statusVerticalOffset},
+            Size = {headerSize[1] /2,  btnSize[2]}
+          }
+        )
+        layout["EngineFPS"] = {
+          PrettyName = "System~Engine FPS",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          FontSize = 12,
+          StrokeWidth = 1,
+          Position = {headerSize[1]/2, statusVerticalOffset},
+          Size = statusTextboxSize
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (2 *btnGap[2]) + statusTextboxSize[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = "FILE COUNT:",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Right",
+            Color = Colors.ControlLabel,
+            Position = {0, statusVerticalOffset},
+            Size = {headerSize[1] /2,  btnSize[2]}
+          }
+        )
+        layout["FileCount"] = {
+          PrettyName = "System~File Count",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          FontSize = 12,
+          StrokeWidth = 1,
+          Position = {headerSize[1]/2, statusVerticalOffset},
+          Size = statusTextboxSize
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (2 *btnGap[2]) + statusTextboxSize[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = "FREE SPACE:",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Right",
+            Color = Colors.ControlLabel,
+            Position = {0, statusVerticalOffset},
+            Size = {headerSize[1] /2,  btnSize[2]}
+          }
+        )
+        layout["FreeSpace"] = {
+          PrettyName = "System~Free Storage Space",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          FontSize = 12,
+          StrokeWidth = 1,
+          Position = {headerSize[1]/2, statusVerticalOffset},
+          Size = statusTextboxSize
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (2 *btnGap[2]) + statusTextboxSize[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = "CPU POWER:",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Right",
+            Color = Colors.ControlLabel,
+            Position = {0, statusVerticalOffset},
+            Size = {headerSize[1] /2,  btnSize[2]}
+          }
+        )
+        layout["CpuPower"] = {
+          PrettyName = "System~CPU Power",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          FontSize = 12,
+          StrokeWidth = 1,
+          Position = {headerSize[1]/2, statusVerticalOffset},
+          Size = statusTextboxSize
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (2 *btnGap[2]) + statusTextboxSize[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = "SYNC STATUS:",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Right",
+            Color = Colors.ControlLabel,
+            Position = {0, statusVerticalOffset},
+            Size = {headerSize[1] /2,  btnSize[2]}
+          }
+        )
+        layout["SyncStatus"] = {
+          PrettyName = "System~Sync Status",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          FontSize = 12,
+          StrokeWidth = 1,
+          Position = {headerSize[1]/2, statusVerticalOffset},
+          Size = statusTextboxSize
+        }
+        
+        statusVerticalOffset = statusVerticalOffset +  (2 *btnGap[2]) + statusTextboxSize[2]
+        
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = "ACTIVITY:",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Right",
+            Color = Colors.ControlLabel,
+            Position = {0, statusVerticalOffset},
+            Size = {btnSize[1] * 2,  btnSize[2]}
+          }
+        )
+        layout["Activity"] = {
+          PrettyName = "System~Activity",
+          Style = "TextBox",
+          Color = Colors.ControlBackground,
+          TextColor = Colors.ControlText,
+          StrokeColor = Colors.ControlText,
+          FontSize = 12,
+          StrokeWidth = 1,
+          Position = {btnSize[1] * 2, statusVerticalOffset},
+          Size = {headerSize[1] - (3 * btnSize[1]), statusTextboxSize[2]}
+        }
+        
+        
+        --[[
+        table.insert(
+          graphics,
+          {
+            Type = "Text",
+            Text = "STATUS:",
+            Font = "Roboto",
+            FontSize = 12,
+            FontStyle = "Regular",
+            HTextAlign = "Right",
+            Color = Colors.ControlLabel,
+            Position = {0, (0.5 * btnSize[2]) + (1 * btnGap[2]) + hiveHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
         )
+        
+        
         table.insert(
           graphics,
           {
@@ -1632,7 +2165,7 @@ function GetControlLayout(props)
             FontStyle = "Regular",
             HTextAlign = "Right",
             Color = Colors.ControlLabel,
-            Position = {0, (3.5 * btnSize[2]) + (4 * btnGap[2]) + statusHeaderSize[2]},
+            Position = {0, (3.5 * btnSize[2]) + (4 * btnGap[2]) + hiveHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
         )
@@ -1646,7 +2179,7 @@ function GetControlLayout(props)
             FontStyle = "Regular",
             HTextAlign = "Right",
             Color = Colors.ControlLabel,
-            Position = {0, (4.5 * btnSize[2]) + (5 * btnGap[2]) + statusHeaderSize[2]},
+            Position = {0, (4.5 * btnSize[2]) + (5 * btnGap[2]) + hiveHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
         )
@@ -1660,7 +2193,7 @@ function GetControlLayout(props)
             FontStyle = "Regular",
             HTextAlign = "Right",
             Color = Colors.ControlLabel,
-            Position = {0, (5.5 * btnSize[2]) + (6 * btnGap[2]) + statusHeaderSize[2]},
+            Position = {0, (5.5 * btnSize[2]) + (6 * btnGap[2]) + hiveHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
         )
@@ -1674,7 +2207,7 @@ function GetControlLayout(props)
             FontStyle = "Regular",
             HTextAlign = "Right",
             Color = Colors.ControlLabel,
-            Position = {0, (6.5 * btnSize[2]) + (7 * btnGap[2]) + statusHeaderSize[2]},
+            Position = {0, (6.5 * btnSize[2]) + (7 * btnGap[2]) + hiveHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
         )
@@ -1688,7 +2221,7 @@ function GetControlLayout(props)
             FontStyle = "Regular",
             HTextAlign = "Right",
             Color = Colors.ControlLabel,
-            Position = {0, (7.5 * btnSize[2]) + (8 * btnGap[2]) + statusHeaderSize[2]},
+            Position = {0, (7.5 * btnSize[2]) + (8 * btnGap[2]) + hiveHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
         )
@@ -1702,7 +2235,7 @@ function GetControlLayout(props)
             FontStyle = "Regular",
             HTextAlign = "Right",
             Color = Colors.ControlLabel,
-            Position = {0, (8.5 * btnSize[2]) + (9 * btnGap[2]) + statusHeaderSize[2]},
+            Position = {0, (8.5 * btnSize[2]) + (9 * btnGap[2]) + hiveHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
         )
@@ -1716,7 +2249,7 @@ function GetControlLayout(props)
             FontStyle = "Regular",
             HTextAlign = "Right",
             Color = Colors.ControlLabel,
-            Position = {6 * btnSize[1], (1.5 * btnSize[2]) + (2 * btnGap[2]) + statusHeaderSize[2]},
+            Position = {6 * btnSize[1], (1.5 * btnSize[2]) + (2 * btnGap[2]) + hiveHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
         )
@@ -1730,7 +2263,7 @@ function GetControlLayout(props)
             FontStyle = "Regular",
             HTextAlign = "Right",
             Color = Colors.ControlLabel,
-            Position = {6 * btnSize[1], (2.5 * btnSize[2]) + (3 * btnGap[2]) + statusHeaderSize[2]},
+            Position = {6 * btnSize[1], (2.5 * btnSize[2]) + (3 * btnGap[2]) + hiveHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
         )
@@ -1744,7 +2277,7 @@ function GetControlLayout(props)
             FontStyle = "Regular",
             HTextAlign = "Right",
             Color = Colors.ControlLabel,
-            Position = {6 * btnSize[1], (3.5 * btnSize[2]) + (4 * btnGap[2]) + statusHeaderSize[2]},
+            Position = {6 * btnSize[1], (3.5 * btnSize[2]) + (4 * btnGap[2]) + hiveHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
         )
@@ -1758,7 +2291,7 @@ function GetControlLayout(props)
             FontStyle = "Regular",
             HTextAlign = "Right",
             Color = Colors.ControlLabel,
-            Position = {6 * btnSize[1], (4.5 * btnSize[2]) + (5 * btnGap[2]) + statusHeaderSize[2]},
+            Position = {6 * btnSize[1], (4.5 * btnSize[2]) + (5 * btnGap[2]) + hiveHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
         )
@@ -1772,7 +2305,7 @@ function GetControlLayout(props)
             FontStyle = "Regular",
             HTextAlign = "Right",
             Color = Colors.ControlLabel,
-            Position = {6 * btnSize[1], (5.5 * btnSize[2]) + (6 * btnGap[2]) + statusHeaderSize[2]},
+            Position = {6 * btnSize[1], (5.5 * btnSize[2]) + (6 * btnGap[2]) + hiveHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
         )
@@ -1786,7 +2319,7 @@ function GetControlLayout(props)
             FontStyle = "Regular",
             HTextAlign = "Right",
             Color = Colors.ControlLabel,
-            Position = {6 * btnSize[1], (6.5 * btnSize[2]) + (7 * btnGap[2]) + statusHeaderSize[2]},
+            Position = {6 * btnSize[1], (6.5 * btnSize[2]) + (7 * btnGap[2]) + hiveHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
         )
@@ -1800,39 +2333,14 @@ function GetControlLayout(props)
             FontStyle = "Regular",
             HTextAlign = "Right",
             Color = Colors.ControlLabel,
-            Position = {6 * btnSize[1], (7.5 * btnSize[2]) + (8 * btnGap[2]) + statusHeaderSize[2]},
+            Position = {6 * btnSize[1], (7.5 * btnSize[2]) + (8 * btnGap[2]) + hiveHeaderSize[2]},
             Size = {3 * btnSize[1], btnSize[2]}
           }
         )
         
-        layout["Status"] = {
-          PrettyName = "System~Status",
-          Style = "TextBox",
-          Position = {3 * btnSize[1], (0.5 * btnSize[2]) + (1 * btnGap[2]) + statusHeaderSize[2]},
-          Size = {9 * btnSize[1], btnSize[2]}
-        }
         
-        layout["IPAddress"] = {
-          PrettyName = "System~IP Address",
-          Style = "TextBox",
-          Color = Colors.ControlBackground,
-          TextColor = Colors.ControlText,
-          StrokeColor = Colors.ControlText,
-          FontSize = 12,
-          StrokeWidth = 1,
-          Position = {3 * btnSize[1], (1.5 * btnSize[2]) + (2 * btnGap[2]) + statusHeaderSize[2]},
-          Size = {3 * btnSize[1], btnSize[2]}
-        }
-        layout["DeviceName"] = {
-          PrettyName = "System~Device Name",
-          Style = "TextBox",
-          Color = Colors.ControlBackground,
-          TextColor = Colors.ControlText,
-          StrokeColor = Colors.ControlText,
-          StrokeWidth = 1,
-          Position = {3 * btnSize[1], (2.5 * btnSize[2]) + (3 * btnGap[2]) + statusHeaderSize[2]},
-          Size = {3 * btnSize[1], btnSize[2]}
-        }
+        
+        
         layout["Universe"] = {
           PrettyName = "System~Universe",
           Style = "TextBox",
@@ -1841,54 +2349,13 @@ function GetControlLayout(props)
           StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
-          Position = {3 * btnSize[1], (4.5 * btnSize[2]) + (5 * btnGap[2]) + statusHeaderSize[2]},
-          Size = {3 * btnSize[1], btnSize[2]}
-        }
-        layout["Version"] = {
-          PrettyName = "System~Version",
-          Style = "TextBox",
-          Color = Colors.ControlBackground,
-          TextColor = Colors.ControlText,
-          StrokeColor = Colors.ControlText,
-          FontSize = 12,
-          StrokeWidth = 1,
-          Position = {3 * btnSize[1], (3.5 * btnSize[2]) + (4 * btnGap[2]) + statusHeaderSize[2]},
+          Position = {3 * btnSize[1], (4.5 * btnSize[2]) + (5 * btnGap[2]) + hiveHeaderSize[2]},
           Size = {3 * btnSize[1], btnSize[2]}
         }
         
-        layout["OutputResolution"] = {
-          PrettyName = "System~Output Resolution",
-          Style = "TextBox",
-          Color = Colors.ControlBackground,
-          TextColor = Colors.ControlText,
-          StrokeColor = Colors.ControlText,
-          FontSize = 12,
-          StrokeWidth = 1,
-          Position = {3 * btnSize[1], (5.5 * btnSize[2]) + (6 * btnGap[2]) + statusHeaderSize[2]},
-          Size = {3 * btnSize[1], btnSize[2]}
-        }
-        layout["OutputFramerate"] = {
-          PrettyName = "System~Output Framerate",
-          Style = "TextBox",
-          Color = Colors.ControlBackground,
-          TextColor = Colors.ControlText,
-          StrokeColor = Colors.ControlText,
-          FontSize = 12,
-          StrokeWidth = 1,
-          Position = {3 * btnSize[1], (6.5 * btnSize[2]) + (7 * btnGap[2]) + statusHeaderSize[2]},
-          Size = {3 * btnSize[1], btnSize[2]}
-        }
-        layout["EngineFPS"] = {
-          PrettyName = "System~Engine FPS",
-          Style = "TextBox",
-          Color = Colors.ControlBackground,
-          TextColor = Colors.ControlText,
-          StrokeColor = Colors.ControlText,
-          FontSize = 12,
-          StrokeWidth = 1,
-          Position = {3 * btnSize[1], (7.5 * btnSize[2]) + (8 * btnGap[2]) + statusHeaderSize[2]},
-          Size = {3 * btnSize[1], btnSize[2]}
-        }
+        
+        
+        
         layout["Activity"] = {
           PrettyName = "System~Engine FPS",
           Style = "TextBox",
@@ -1897,7 +2364,7 @@ function GetControlLayout(props)
           StrokeColor = Colors.ControlText,
           FontSize = 8,
           StrokeWidth = 1,
-          Position = {3 * btnSize[1], (8.5 * btnSize[2]) + (9 * btnGap[2]) + statusHeaderSize[2]},
+          Position = {3 * btnSize[1], (8.5 * btnSize[2]) + (9 * btnGap[2]) + hiveHeaderSize[2]},
           Size = {9 * btnSize[1], btnSize[2]}
         }
         layout["Netmask"] = {
@@ -1908,20 +2375,10 @@ function GetControlLayout(props)
           StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
-          Position = {9 * btnSize[1], (1.5 * btnSize[2]) + (2 * btnGap[2]) + statusHeaderSize[2]},
+          Position = {9 * btnSize[1], (1.5 * btnSize[2]) + (2 * btnGap[2]) + hiveHeaderSize[2]},
           Size = {3 * btnSize[1], btnSize[2]}
         }
-        layout["SerialNumber"] = {
-          PrettyName = "System~Serial Number",
-          Style = "TextBox",
-          Color = Colors.ControlBackground,
-          TextColor = Colors.ControlText,
-          StrokeColor = Colors.ControlText,
-          FontSize = 12,
-          StrokeWidth = 1,
-          Position = {9 * btnSize[1], (2.5 * btnSize[2]) + (3 * btnGap[2]) + statusHeaderSize[2]},
-          Size = {3 * btnSize[1], btnSize[2]}
-        }
+        
         layout["BeeType"] = {
           PrettyName = "System~Bee Type",
           Style = "TextBox",
@@ -1930,53 +2387,15 @@ function GetControlLayout(props)
           StrokeColor = Colors.ControlText,
           FontSize = 12,
           StrokeWidth = 1,
-          Position = {9 * btnSize[1], (3.5 * btnSize[2]) + (4 * btnGap[2]) + statusHeaderSize[2]},
+          Position = {9 * btnSize[1], (3.5 * btnSize[2]) + (4 * btnGap[2]) + hiveHeaderSize[2]},
           Size = {3 * btnSize[1], btnSize[2]}
         }
-        layout["FileCount"] = {
-          PrettyName = "System~Media File Count",
-          Style = "TextBox",
-          Color = Colors.ControlBackground,
-          TextColor = Colors.ControlText,
-          StrokeColor = Colors.ControlText,
-          FontSize = 12,
-          StrokeWidth = 1,
-          Position = {9 * btnSize[1], (4.5 * btnSize[2]) + (5 * btnGap[2]) + statusHeaderSize[2]},
-          Size = {3 * btnSize[1], btnSize[2]}
-        }
-        layout["FreeSpace"] = {
-          PrettyName = "System~Free Storage Space",
-          Style = "TextBox",
-          Color = Colors.ControlBackground,
-          TextColor = Colors.ControlText,
-          StrokeColor = Colors.ControlText,
-          FontSize = 12,
-          StrokeWidth = 1,
-          Position = {9 * btnSize[1], (5.5 * btnSize[2]) + (6 * btnGap[2]) + statusHeaderSize[2]},
-          Size = {3 * btnSize[1], btnSize[2]}
-        }
-        layout["CpuPower"] = {
-          PrettyName = "System~CPU Power",
-          Style = "TextBox",
-          Color = Colors.ControlBackground,
-          TextColor = Colors.ControlText,
-          StrokeColor = Colors.ControlText,
-          FontSize = 12,
-          StrokeWidth = 1,
-          Position = {9 * btnSize[1], (6.5 * btnSize[2]) + (7 * btnGap[2]) + statusHeaderSize[2]},
-          Size = {3 * btnSize[1], btnSize[2]}
-        }
-        layout["SyncStatus"] = {
-          PrettyName = "System~Beesync Status",
-          Style = "TextBox",
-          Color = Colors.ControlBackground,
-          TextColor = Colors.ControlText,
-          StrokeColor = Colors.ControlText,
-          FontSize = 12,
-          StrokeWidth = 1,
-          Position = {9 * btnSize[1], (7.5 * btnSize[2]) + (8 * btnGap[2]) + statusHeaderSize[2]},
-          Size = {3 * btnSize[1], btnSize[2]}
-        }
+        
+        
+        
+        
+        
+        ]]
     elseif CurrentPage:sub(1, 6) == "Layer " then
         local i = tonumber(CurrentPage:match("Layer (%d+)"))
         
@@ -1986,14 +2405,14 @@ function GetControlLayout(props)
             Type = "GroupBox",
             Text = "Parameters",
             HTextAlign = "Left",
-            CornerRadius = 8,
+            CornerRadius = cornerRadius,
             Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {
-              playerGroupboxPosition[1],
-              playerGroupboxPosition[2]
+              layerGroupboxPosition[1],
+              layerGroupboxPosition[2]
             },
-            Size = playerGroupboxSize
+            Size = layerGroupboxSize
           }
         )
         table.insert(
@@ -2002,12 +2421,12 @@ function GetControlLayout(props)
             Type = "GroupBox",
             Text = "FX 1",
             HTextAlign = "Left",
-            CornerRadius = 8,
+            CornerRadius = cornerRadius,
             Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {
-              playerGroupboxPosition[1],
-              playerGroupboxSize[2] + 8
+              layerGroupboxPosition[1],
+              layerGroupboxSize[2] + 8
             },
             Size = fx1GroupboxSize
           }
@@ -2018,12 +2437,12 @@ function GetControlLayout(props)
             Type = "GroupBox",
             Text = "FX 2",
             HTextAlign = "Left",
-            CornerRadius = 8,
+            CornerRadius = cornerRadius,
             Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {
-              playerGroupboxPosition[1],
-              playerGroupboxSize[2] + 16 + fx1GroupboxSize[2]
+              layerGroupboxPosition[1],
+              layerGroupboxSize[2] + 16 + fx1GroupboxSize[2]
             },
             Size = fx2GroupboxSize
           }
@@ -2048,8 +2467,8 @@ function GetControlLayout(props)
                   HTextAlign = "Right",
                   Color = Colors.ControlLabel,
                   Position = {
-                    playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
-                    playerGroupboxPosition[2] + (row * btnSize[2])
+                    layerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
+                    layerGroupboxPosition[2] + (row * btnSize[2])
                   },
                   Size = {3 * btnSize[1], btnSize[2]}
                 }
@@ -2068,8 +2487,8 @@ function GetControlLayout(props)
                 FontSize = (v.Label == "File Select") and 8 or 12,
                 StrokeWidth = 1,
                 Position = {
-                  playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)) + (3 * btnSize[1]),
-                  playerGroupboxPosition[2] + (row * btnSize[2])
+                  layerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)) + (3 * btnSize[1]),
+                  layerGroupboxPosition[2] + (row * btnSize[2])
                 },
                 Size = {3 * btnSize[1], btnSize[2]}
               }
@@ -2100,8 +2519,8 @@ function GetControlLayout(props)
                   HTextAlign = "Right",
                   Color = Colors.ControlLabel,
                   Position = {
-                    playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
-                    playerGroupboxSize[2] + 8 + (row * btnSize[2])
+                    layerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
+                    layerGroupboxSize[2] + 8 + (row * btnSize[2])
                   },
                   Size = {3 * btnSize[1], btnSize[2]}
                 }
@@ -2115,8 +2534,8 @@ function GetControlLayout(props)
                 FontSize = 12,
                 StrokeWidth = 1,
                 Position = {
-                  playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)) + (3 * btnSize[1]),
-                  playerGroupboxSize[2] + 8 + (row * btnSize[2])
+                  layerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)) + (3 * btnSize[1]),
+                  layerGroupboxSize[2] + 8 + (row * btnSize[2])
                 },
                 Size = {3 * btnSize[1], btnSize[2]}
               }
@@ -2147,8 +2566,8 @@ function GetControlLayout(props)
                   HTextAlign = "Right",
                   Color = Colors.ControlLabel,
                   Position = {
-                    playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
-                    playerGroupboxSize[2] + 16 + fx1GroupboxSize[2] + (row * btnSize[2])
+                    layerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
+                    layerGroupboxSize[2] + 16 + fx1GroupboxSize[2] + (row * btnSize[2])
                   },
                   Size = {3 * btnSize[1], btnSize[2]}
                 }
@@ -2162,8 +2581,8 @@ function GetControlLayout(props)
                 FontSize = 12,
                 StrokeWidth = 1,
                 Position = {
-                  playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)) + (3 * btnSize[1]),
-                  playerGroupboxSize[2] + 16 + fx1GroupboxSize[2] + (row * btnSize[2])
+                  layerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)) + (3 * btnSize[1]),
+                  layerGroupboxSize[2] + 16 + fx1GroupboxSize[2] + (row * btnSize[2])
                 },
                 Size = {3 * btnSize[1], btnSize[2]}
               }
@@ -2187,7 +2606,7 @@ function GetControlLayout(props)
             Type = "GroupBox",
             Text = "Media List",
             HTextAlign = "Left",
-            CornerRadius = 8,
+            CornerRadius = cornerRadius,
             Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {0, 0},
@@ -2264,7 +2683,7 @@ function GetControlLayout(props)
             Type = "GroupBox",
             Text = "Enable Disable",
             HTextAlign = "Left",
-            CornerRadius = 8,
+            CornerRadius = cornerRadius,
             Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {0, 0},
@@ -2277,7 +2696,7 @@ function GetControlLayout(props)
             Type = "GroupBox",
             Text = "Playlist Functions",
             HTextAlign = "Left",
-            CornerRadius = 8,
+            CornerRadius = cornerRadius,
             Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {0, moduleEnableGroupboxSize[2] + 4},
@@ -2291,7 +2710,7 @@ function GetControlLayout(props)
             Type = "GroupBox",
             Text = "System",
             HTextAlign = "Left",
-            CornerRadius = 8,
+            CornerRadius = cornerRadius,
             Fill = Colors.HiveGrey,
             StrokeWidth = 1,
             Position = {0, moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2] + 8},
@@ -2683,7 +3102,7 @@ function GetControlLayout(props)
           Type = "GroupBox",
           Text = "",
           HTextAlign = "Left",
-          CornerRadius = 8,
+          CornerRadius = cornerRadius,
           Fill = Colors.HiveGrey,
           StrokeWidth = 1,
           Position = {0, 0},
@@ -4236,6 +4655,8 @@ function UpdateInfo()
             end
           end
           if deviceInfo then
+            Controls.Model.String = Properties.Model.Value
+            Controls.MACAddress.String = Properties["MAC Address"].Value
             Controls.DeviceName.String = deviceInfo.deviceName
             Controls.IPAddress.String = deviceInfo.ipAddress
             Controls.Netmask.String = deviceInfo.netMask
@@ -4632,7 +5053,7 @@ function CmdEnableTc2(x)
 end
 
 function CmdUpdateSettingsData(x)
-      LogDebug("Updating System Settings JSON data")
+  LogDebug("Updating System Settings JSON data")
   if CheckHiveJsonDataValidity(x, "hive buzz settings list") == false then
     LogError("Not sending invalid System Settings JSON data")
     return
@@ -4641,7 +5062,7 @@ function CmdUpdateSettingsData(x)
 end
 
 function CmdUpdateTimelineData(x)
-    LogDebug("Updating Timeline JSON data")
+  LogDebug("Updating Timeline JSON data")
   if CheckHiveJsonDataValidity(x, "hive buzz timeline") == false then
     LogError("Not sending invalid Timeline JSON data")
     return
@@ -4690,14 +5111,13 @@ function CheckHiveJsonDataValidity(jsonString, description)
   local status, result = pcall(rapidjson.decode, jsonString)
   if status then
     if result and result.description == description then
-      print("Valid " .. description .. " JSON data")
       return true
     else
-      print("Invalid " .. description .. " JSON data")
+      LogError("Invalid " .. description .. " JSON data")
       return false
     end
   else
-    print("Invalid " .. description .. " JSON data")
+    LogError("Invalid " .. description .. " JSON data")
     return false
   end
 end

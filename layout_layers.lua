@@ -6,14 +6,14 @@ table.insert(
     Type = "GroupBox",
     Text = "Parameters",
     HTextAlign = "Left",
-    CornerRadius = 8,
+    CornerRadius = cornerRadius,
     Fill = Colors.HiveGrey,
     StrokeWidth = 1,
     Position = {
-      playerGroupboxPosition[1],
-      playerGroupboxPosition[2]
+      layerGroupboxPosition[1],
+      layerGroupboxPosition[2]
     },
-    Size = playerGroupboxSize
+    Size = layerGroupboxSize
   }
 )
 table.insert(
@@ -22,12 +22,12 @@ table.insert(
     Type = "GroupBox",
     Text = "FX 1",
     HTextAlign = "Left",
-    CornerRadius = 8,
+    CornerRadius = cornerRadius,
     Fill = Colors.HiveGrey,
     StrokeWidth = 1,
     Position = {
-      playerGroupboxPosition[1],
-      playerGroupboxSize[2] + 8
+      layerGroupboxPosition[1],
+      layerGroupboxSize[2] + 8
     },
     Size = fx1GroupboxSize
   }
@@ -38,12 +38,12 @@ table.insert(
     Type = "GroupBox",
     Text = "FX 2",
     HTextAlign = "Left",
-    CornerRadius = 8,
+    CornerRadius = cornerRadius,
     Fill = Colors.HiveGrey,
     StrokeWidth = 1,
     Position = {
-      playerGroupboxPosition[1],
-      playerGroupboxSize[2] + 16 + fx1GroupboxSize[2]
+      layerGroupboxPosition[1],
+      layerGroupboxSize[2] + 16 + fx1GroupboxSize[2]
     },
     Size = fx2GroupboxSize
   }
@@ -68,8 +68,8 @@ for k, v in ipairs(control_list) do
           HTextAlign = "Right",
           Color = Colors.ControlLabel,
           Position = {
-            playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
-            playerGroupboxPosition[2] + (row * btnSize[2])
+            layerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
+            layerGroupboxPosition[2] + (row * btnSize[2])
           },
           Size = {3 * btnSize[1], btnSize[2]}
         }
@@ -88,8 +88,8 @@ for k, v in ipairs(control_list) do
         FontSize = (v.Label == "File Select") and 8 or 12,
         StrokeWidth = 1,
         Position = {
-          playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)) + (3 * btnSize[1]),
-          playerGroupboxPosition[2] + (row * btnSize[2])
+          layerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)) + (3 * btnSize[1]),
+          layerGroupboxPosition[2] + (row * btnSize[2])
         },
         Size = {3 * btnSize[1], btnSize[2]}
       }
@@ -120,8 +120,8 @@ for k, v in ipairs(control_list) do
           HTextAlign = "Right",
           Color = Colors.ControlLabel,
           Position = {
-            playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
-            playerGroupboxSize[2] + 8 + (row * btnSize[2])
+            layerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
+            layerGroupboxSize[2] + 8 + (row * btnSize[2])
           },
           Size = {3 * btnSize[1], btnSize[2]}
         }
@@ -135,8 +135,8 @@ for k, v in ipairs(control_list) do
         FontSize = 12,
         StrokeWidth = 1,
         Position = {
-          playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)) + (3 * btnSize[1]),
-          playerGroupboxSize[2] + 8 + (row * btnSize[2])
+          layerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)) + (3 * btnSize[1]),
+          layerGroupboxSize[2] + 8 + (row * btnSize[2])
         },
         Size = {3 * btnSize[1], btnSize[2]}
       }
@@ -167,8 +167,8 @@ for k, v in ipairs(control_list) do
           HTextAlign = "Right",
           Color = Colors.ControlLabel,
           Position = {
-            playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
-            playerGroupboxSize[2] + 16 + fx1GroupboxSize[2] + (row * btnSize[2])
+            layerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)),
+            layerGroupboxSize[2] + 16 + fx1GroupboxSize[2] + (row * btnSize[2])
           },
           Size = {3 * btnSize[1], btnSize[2]}
         }
@@ -182,8 +182,8 @@ for k, v in ipairs(control_list) do
         FontSize = 12,
         StrokeWidth = 1,
         Position = {
-          playerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)) + (3 * btnSize[1]),
-          playerGroupboxSize[2] + 16 + fx1GroupboxSize[2] + (row * btnSize[2])
+          layerGroupboxPosition[1] + ((6 * btnSize[1]) * (column - 1)) + (3 * btnSize[1]),
+          layerGroupboxSize[2] + 16 + fx1GroupboxSize[2] + (row * btnSize[2])
         },
         Size = {3 * btnSize[1], btnSize[2]}
       }

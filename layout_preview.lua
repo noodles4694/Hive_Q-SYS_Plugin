@@ -4,7 +4,7 @@ table.insert(
     Type = "GroupBox",
     Text = "",
     HTextAlign = "Left",
-    CornerRadius = 8,
+    CornerRadius = cornerRadius,
     Fill = Colors.HiveGrey,
     StrokeWidth = 1,
     Position = {0, 0},

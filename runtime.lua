@@ -479,6 +479,8 @@ function UpdateInfo()
             end
           end
           if deviceInfo then
+            Controls.Model.String = Properties.Model.Value
+            Controls.MACAddress.String = Properties["MAC Address"].Value
             Controls.DeviceName.String = deviceInfo.deviceName
             Controls.IPAddress.String = deviceInfo.ipAddress
             Controls.Netmask.String = deviceInfo.netMask

@@ -25,7 +25,29 @@ table.insert(
 table.insert(
   ctrls,
   {
+    Name = "Model",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
     Name = "Version",
+    ControlType = "Indicator",
+    IndicatorType = "Text",
+    PinStyle = "Output",
+    Count = 1,
+    UserPin = true
+  }
+)
+table.insert(
+  ctrls,
+  {
+    Name = "MACAddress",
     ControlType = "Indicator",
     IndicatorType = "Text",
     PinStyle = "Output",
