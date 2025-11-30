@@ -1,43 +1,64 @@
-table.insert(
-  graphics,
-  {
-    Type = "GroupBox",
-    Text = "Enable Disable",
-    HTextAlign = "Left",
-    CornerRadius = cornerRadius,
-    Fill = Colors.HiveGrey,
-    StrokeWidth = 1,
-    Position = {0, 0},
-    Size = moduleEnableGroupboxSize
-  }
-)
-table.insert(
-  graphics,
-  {
-    Type = "GroupBox",
-    Text = "Playlist Functions",
-    HTextAlign = "Left",
-    CornerRadius = cornerRadius,
-    Fill = Colors.HiveGrey,
-    StrokeWidth = 1,
-    Position = {0, moduleEnableGroupboxSize[2] + 4},
-    Size = modulePlaylistGroupboxSize
-  }
-)
+local moduleEnableGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), btnSize[2] + (2 * btnGap[2])}
+local modulePlaylistGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (5 * btnSize[2]) + (2 * btnGap[2])}
+local moduleSystemGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (1 * btnSize[2]) + (4 * btnGap[2])}
+
+local moduleVerticalOffset = 0
 
 table.insert(
   graphics,
   {
     Type = "GroupBox",
-    Text = "System",
     HTextAlign = "Left",
     CornerRadius = cornerRadius,
     Fill = Colors.HiveGrey,
     StrokeWidth = 1,
-    Position = {0, moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2] + 8},
-    Size = moduleSystemGroupboxSize
+    Position = {0, moduleVerticalOffset},
+    Size = {moduleEnableGroupboxSize[1], hiveHeaderSize[2]}
   }
 )
+local logo = '--[[ #encode "images\HiveLogo.png" ]]'
+table.insert(
+  graphics,
+  {
+    Type = "Image",
+    Position = {moduleEnableGroupboxSize[1] / 2 - 120, moduleVerticalOffset},
+    Size = {240, 100},
+    Image = logo,
+  }
+)
+
+moduleVerticalOffset = moduleVerticalOffset + hiveHeaderSize[2] + btnGap[2]
+
+table.insert(
+  graphics,
+  {
+    Type = "Header",
+    HTextAlign = "Center",
+    Text = "Enable / Disable Modules",
+    IsBold = true,
+    CornerRadius = cornerRadius,
+    Position = {0, moduleVerticalOffset},
+    Size = {moduleEnableGroupboxSize[1], headerSize[2]}
+  }
+)
+
+moduleVerticalOffset = moduleVerticalOffset + headerSize[2] + btnGap[2]
+
+table.insert(
+  graphics,
+  {
+    Type = "GroupBox",
+    HTextAlign = "Left",
+    CornerRadius = cornerRadius,
+    Fill = Colors.HiveGrey,
+    StrokeWidth = 1,
+    Position = {0, moduleVerticalOffset},
+    Size = moduleEnableGroupboxSize
+  }
+)
+
+
+
 
 layout["PlaylistEnable"] = {
   PrettyName = "Modules~Playlist Enable",
@@ -52,7 +73,7 @@ layout["PlaylistEnable"] = {
   Legend = "Playlist",
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {(2 * btnGap[1]), btnSize[2]},
+  Position = {(2 * btnGap[1]), btnGap[2] + moduleVerticalOffset},
   Size = {3 * btnSize[1], btnSize[2]}
 }
 
@@ -69,7 +90,7 @@ layout["L1TimecodeEnable"] = {
   Legend = "L1 TC Cuelist",
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {(3 * btnSize[1]) + (4 * btnGap[1]), btnSize[2]},
+  Position = {(3 * btnSize[1]) + (4 * btnGap[1]), btnGap[2] + moduleVerticalOffset},
   Size = {3 * btnSize[1], btnSize[2]}
 }
 
@@ -86,7 +107,7 @@ layout["L2TimecodeEnable"] = {
   Legend = "L2 TC Cuelist",
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {(6 * btnSize[1]) + (6 * btnGap[1]), btnSize[2]},
+  Position = {(6 * btnSize[1]) + (6 * btnGap[1]), btnGap[2] + moduleVerticalOffset},
   Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["TimelineEnable"] = {
@@ -102,7 +123,7 @@ layout["TimelineEnable"] = {
   Legend = "Timeline",
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {(9 * btnSize[1]) + (8 * btnGap[1]), btnSize[2]},
+  Position = {(9 * btnSize[1]) + (8 * btnGap[1]), btnGap[2] + moduleVerticalOffset},
   Size = {3 * btnSize[1], btnSize[2]}
 }
 layout["ScheduleEnable"] = {
@@ -118,9 +139,39 @@ layout["ScheduleEnable"] = {
   Legend = "Scheduler",
   FontSize = 12,
   StrokeWidth = 1,
-  Position = {(12 * btnSize[1]) + (10 * btnGap[1]), btnSize[2]},
+  Position = {(12 * btnSize[1]) + (10 * btnGap[1]), btnGap[2] + moduleVerticalOffset},
   Size = {3 * btnSize[1], btnSize[2]}
 }
+
+moduleVerticalOffset = moduleVerticalOffset + moduleEnableGroupboxSize[2] + btnGap[2]
+
+table.insert(
+  graphics,
+  {
+    Type = "Header",
+    HTextAlign = "Center",
+    Text = "Playlist Functions",
+    IsBold = true,
+    CornerRadius = cornerRadius,
+    Position = {0, moduleVerticalOffset},
+    Size = {moduleEnableGroupboxSize[1], headerSize[2]}
+  }
+)
+
+moduleVerticalOffset = moduleVerticalOffset + headerSize[2] + btnGap[2]
+
+table.insert(
+  graphics,
+  {
+    Type = "GroupBox",
+    HTextAlign = "Left",
+    CornerRadius = cornerRadius,
+    Fill = Colors.HiveGrey,
+    StrokeWidth = 1,
+    Position = {0, moduleVerticalOffset},
+    Size = modulePlaylistGroupboxSize
+  }
+)
 
 table.insert(
   graphics,
@@ -133,8 +184,8 @@ table.insert(
     HTextAlign = "Right",
     Color = Colors.ControlLabel,
     Position = {
-      (0 * btnSize[1]) + (1 * btnGap[1]),
-      (1 * btnGap[2]) + moduleEnableGroupboxSize[2] + (1 * btnSize[2])
+       (1 * btnGap[1]),
+      moduleVerticalOffset + (2 * btnGap[2])
     },
     Size = {3 * btnSize[1], btnSize[2]}
   }
@@ -150,8 +201,8 @@ table.insert(
     HTextAlign = "Right",
     Color = Colors.ControlLabel,
     Position = {
-      (0 * btnSize[1]) + (1 * btnGap[1]),
-      (2 * btnGap[2]) + moduleEnableGroupboxSize[2] + (2 * btnSize[2])
+       (1 * btnGap[1]),
+      (3 * btnGap[2]) + moduleVerticalOffset + (1 * btnSize[2])
     },
     Size = {3 * btnSize[1], btnSize[2]}
   }
@@ -167,8 +218,8 @@ table.insert(
     HTextAlign = "Right",
     Color = Colors.ControlLabel,
     Position = {
-      (0 * btnSize[1]) + (1 * btnGap[1]),
-      (3 * btnGap[2]) + moduleEnableGroupboxSize[2] + (3 * btnSize[2])
+      (1 * btnGap[1]),
+      (4 * btnGap[2]) + moduleVerticalOffset + (2 * btnSize[2])
     },
     Size = {3 * btnSize[1], btnSize[2]}
   }
@@ -184,8 +235,8 @@ table.insert(
     HTextAlign = "Right",
     Color = Colors.ControlLabel,
     Position = {
-      (0 * btnSize[1]) + (1 * btnGap[1]),
-      (4 * btnGap[2]) + moduleEnableGroupboxSize[2] + (4 * btnSize[2])
+      (1 * btnGap[1]),
+      (5 * btnGap[2]) + moduleVerticalOffset + (3 * btnSize[2])
     },
     Size = {3 * btnSize[1], btnSize[2]}
   }
@@ -201,7 +252,7 @@ layout["PlaylistRows"] = {
   StrokeWidth = 1,
   Position = {
     (3 * btnSize[1]) + (1 * btnGap[1]),
-    (1 * btnGap[2]) + moduleEnableGroupboxSize[2] + (1 * btnSize[2])
+    (2 * btnGap[2]) + moduleVerticalOffset 
   },
   Size = {3 * btnSize[1], btnSize[2]}
 }
@@ -216,7 +267,7 @@ layout["PlaylistCurrentRow"] = {
   StrokeWidth = 1,
   Position = {
     (3 * btnSize[1]) + (1 * btnGap[1]),
-    (2 * btnGap[2]) + moduleEnableGroupboxSize[2] + (2 * btnSize[2])
+    (3 * btnGap[2]) + moduleVerticalOffset + (1 * btnSize[2])
   },
   Size = {3 * btnSize[1], btnSize[2]}
 }
@@ -231,7 +282,7 @@ layout["L1TCRows"] = {
   StrokeWidth = 1,
   Position = {
     (3 * btnSize[1]) + (1 * btnGap[1]),
-    (3 * btnGap[2]) + moduleEnableGroupboxSize[2] + (3 * btnSize[2])
+    (4 * btnGap[2]) + moduleVerticalOffset + (2 * btnSize[2])
   },
   Size = {3 * btnSize[1], btnSize[2]}
 }
@@ -246,7 +297,7 @@ layout["L2TCRows"] = {
   StrokeWidth = 1,
   Position = {
     (3 * btnSize[1]) + (1 * btnGap[1]),
-    (4 * btnGap[2]) + moduleEnableGroupboxSize[2] + (4 * btnSize[2])
+    (5 * btnGap[2]) + moduleVerticalOffset + (3 * btnSize[2])
   },
   Size = {3 * btnSize[1], btnSize[2]}
 }
@@ -265,7 +316,7 @@ layout["PlaylistPlayPrevious"] = {
   StrokeWidth = 1,
   Position = {
     (9 * btnSize[1]) + (3 * btnGap[1]),
-    (1 * btnGap[2]) + moduleEnableGroupboxSize[2] + (1 * btnSize[2])
+    (1 * btnGap[2]) + moduleVerticalOffset + (1 * btnSize[2])
   },
   Size = {3 * btnSize[1], btnSize[2]}
 }
@@ -284,7 +335,7 @@ layout["PlaylistPlayNext"] = {
   StrokeWidth = 1,
   Position = {
     (12 * btnSize[1]) + (4 * btnGap[1]),
-    (1 * btnGap[2]) + moduleEnableGroupboxSize[2] + (1 * btnSize[2])
+    (1 * btnGap[2]) + moduleVerticalOffset + (1 * btnSize[2])
   },
   Size = {3 * btnSize[1], btnSize[2]}
 }
@@ -303,7 +354,7 @@ layout["PlaylistPlayFirst"] = {
   StrokeWidth = 1,
   Position = {
     (9 * btnSize[1]) + (3 * btnGap[1]),
-    (2 * btnGap[2]) + moduleEnableGroupboxSize[2] + (2 * btnSize[2])
+    (2 * btnGap[2]) + moduleVerticalOffset + (2 * btnSize[2])
   },
   Size = {3 * btnSize[1], btnSize[2]}
 }
@@ -322,7 +373,7 @@ layout["PlaylistPlayLast"] = {
   StrokeWidth = 1,
   Position = {
     (12 * btnSize[1]) + (4 * btnGap[1]),
-    (2 * btnGap[2]) + moduleEnableGroupboxSize[2] + (2 * btnSize[2])
+    (2 * btnGap[2]) + moduleVerticalOffset + (2 * btnSize[2])
   },
   Size = {3 * btnSize[1], btnSize[2]}
 }
@@ -341,7 +392,7 @@ layout["PlaylistPlayRow"] = {
   StrokeWidth = 1,
   Position = {
     (9 * btnSize[1]) + (3 * btnGap[1]),
-    (3 * btnGap[2]) + moduleEnableGroupboxSize[2] + (3 * btnSize[2])
+    (3 * btnGap[2]) + moduleVerticalOffset + (3 * btnSize[2])
   },
   Size = {3 * btnSize[1], btnSize[2]}
 }
@@ -356,10 +407,40 @@ layout["PlaylistPlayRowIndex"] = {
   StrokeWidth = 1,
   Position = {
     (12 * btnSize[1]) + (4 * btnGap[1]),
-    (3 * btnGap[2]) + moduleEnableGroupboxSize[2] + (3 * btnSize[2])
+    (3 * btnGap[2]) + moduleVerticalOffset + (3 * btnSize[2])
   },
   Size = {3 * btnSize[1], btnSize[2]}
 }
+
+moduleVerticalOffset = moduleVerticalOffset + modulePlaylistGroupboxSize[2] + btnGap[2]
+
+table.insert(
+  graphics,
+  {
+    Type = "Header",
+    HTextAlign = "Center",
+    Text = "PSystem Functions",
+    IsBold = true,
+    CornerRadius = cornerRadius,
+    Position = {0, moduleVerticalOffset},
+    Size = {moduleEnableGroupboxSize[1], headerSize[2]}
+  }
+)
+
+moduleVerticalOffset = moduleVerticalOffset + headerSize[2] + btnGap[2]
+
+table.insert(
+  graphics,
+  {
+    Type = "GroupBox",
+    HTextAlign = "Left",
+    CornerRadius = cornerRadius,
+    Fill = Colors.HiveGrey,
+    StrokeWidth = 1,
+    Position = {0, moduleVerticalOffset},
+    Size = moduleSystemGroupboxSize
+  }
+)
 
 layout["SystemRestart"] = {
   PrettyName = "System~Reboot Device",
@@ -374,8 +455,8 @@ layout["SystemRestart"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (2 * btnSize[1]) + (4 * btnGap[1]),
-    (6 * btnGap[2]) + moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2]
+    (1 * btnSize[1]) + (4 * btnGap[1]),
+    (2 * btnGap[2]) + moduleVerticalOffset
   },
   Size = {4 * btnSize[1], btnSize[2]}
 }
@@ -392,8 +473,8 @@ layout["SystemShutdown"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (6 * btnSize[1]) + (8 * btnGap[1]),
-    (6 * btnGap[2]) + moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2]
+    (5.25 * btnSize[1]) + (8 * btnGap[1]),
+    (2 * btnGap[2]) + moduleVerticalOffset
   },
   Size = {4 * btnSize[1], btnSize[2]}
 }
@@ -411,8 +492,8 @@ layout["SystemWake"] = {
   FontSize = 12,
   StrokeWidth = 1,
   Position = {
-    (10 * btnSize[1]) + (12 * btnGap[1]),
-    (6 * btnGap[2]) + moduleEnableGroupboxSize[2] + modulePlaylistGroupboxSize[2]
+    (9.5 * btnSize[1]) + (12 * btnGap[1]),
+    (2 * btnGap[2]) + moduleVerticalOffset
   },
   Size = {4 * btnSize[1], btnSize[2]}
 }

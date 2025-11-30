@@ -38,10 +38,6 @@ local previewGroupboxSize = {
   (2 * previewSize[2]) + 8
 }
 
-local moduleEnableGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (2 * btnSize[2]) + (2 * btnGap[2])}
-local modulePlaylistGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (6 * btnSize[2]) + (2 * btnGap[2])}
-local moduleSystemGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (2 * btnSize[2]) + (2 * btnGap[2])}
-
 
 if CurrentPage then
   if CurrentPage == "Status" then
