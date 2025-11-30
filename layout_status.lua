@@ -1,33 +1,6 @@
-
-local statusVerticalOffset = 0
 local statusTextboxSize = {headerSize[1]/2 - btnSize[1], btnSize[2]}
 local statusGroupboxSize = {12.5 * btnSize[1], (15 * statusTextboxSize[2]) + (28 * btnGap[2]) + btnSize[2]}
-
-table.insert(
-  graphics,
-  {
-    Type = "GroupBox",
-    HTextAlign = "Left",
-    CornerRadius = cornerRadius,
-    Fill = Colors.HiveGrey,
-    StrokeWidth = 1,
-    Position = {0, statusVerticalOffset},
-    Size = hiveHeaderSize
-  }
-)
-local logo = '--[[ #encode "images\HiveLogo.png" ]]'
-table.insert(
-  graphics,
-  {
-    Type = "Image",
-    Position = {80, 10},
-    Size = {240, 100},
-    Image = logo,
-  }
-)
-
-statusVerticalOffset = statusVerticalOffset + hiveHeaderSize[2] + btnGap[2]
-
+local statusVerticalOffset = hiveHeaderSize[2] + btnGap[2]
 
 table.insert(
   graphics,

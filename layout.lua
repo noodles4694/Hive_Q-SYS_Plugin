@@ -26,27 +26,13 @@ local layerItemCount = CountMatches(control_list, {Group = "Layer", Display = tr
 local FX1ItemCount = CountMatches(control_list, {Group = "FX1", Display = true})
 local FX2ItemCount = CountMatches(control_list, {Group = "FX2", Display = true})
 local cornerRadius = 0
-local columnSize = 12
-local fx1ColumnSize = 6
-local fx2ColumnSize = 6
+local columnSize = math.ceil(layerItemCount / 2)
 local btnSize = {32, 24}
 local btnGap = {4, 4}
 local hiveHeaderSize = {12.5 * btnSize[1], 120}
 local headerSize = {12.5 * btnSize[1], 20}
-local layerGroupboxPosition = {0, 0}
-local layerGroupboxSize = {
-  (((math.floor((layerItemCount / columnSize)) + 1) * 6) + 1) * btnSize[1],
-  (columnSize + 2) * btnSize[2]
-}
-local fx1GroupboxSize = {
-  (((math.floor((FX1ItemCount / fx1ColumnSize))) * 6) + 1) * btnSize[1],
-  (fx1ColumnSize + 2) * btnSize[2]
-}
-local fx2GroupboxSize = {
-  (((math.floor((FX2ItemCount / fx2ColumnSize))) * 6) + 1) * btnSize[1],
-  (fx2ColumnSize + 2) * btnSize[2]
-}
-local previewSize = {2.4 * btnSize[1], (1.35 * btnSize[1])}
+
+local previewSize = {90, 50}
 local previewGroupboxSize = {
   (layerCount * previewSize[1]) + (4 * layerCount) + 8 + (3 * btnSize[1]),
   (2 * previewSize[2]) + 8
@@ -58,6 +44,30 @@ local mediaListGroupboxSize = {
 local moduleEnableGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (2 * btnSize[2]) + (2 * btnGap[2])}
 local modulePlaylistGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (6 * btnSize[2]) + (2 * btnGap[2])}
 local moduleSystemGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (2 * btnSize[2]) + (2 * btnGap[2])}
+
+-- Add Hive header on every page
+table.insert(
+  graphics,
+  {
+    Type = "GroupBox",
+    HTextAlign = "Left",
+    CornerRadius = cornerRadius,
+    Fill = Colors.HiveGrey,
+    StrokeWidth = 1,
+    Position = {0, 0},
+    Size = hiveHeaderSize
+  }
+)
+local logo = '--[[ #encode "images\HiveLogo.png" ]]'
+table.insert(
+  graphics,
+  {
+    Type = "Image",
+    Position = {80, 10},
+    Size = {240, 100},
+    Image = logo,
+  }
+)
 
 if CurrentPage then
   if CurrentPage == "Status" then
