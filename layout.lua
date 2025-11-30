@@ -37,37 +37,11 @@ local previewGroupboxSize = {
   (layerCount * previewSize[1]) + (4 * layerCount) + 8 + (3 * btnSize[1]),
   (2 * previewSize[2]) + 8
 }
-local mediaListGroupboxSize = {
-  (layerCount * previewSize[1]) + (4 * layerCount) + 8 + (3 * btnSize[1]),
-  ((mediaItemCount + 1) * previewSize[2]) + 8
-}
+
 local moduleEnableGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (2 * btnSize[2]) + (2 * btnGap[2])}
 local modulePlaylistGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (6 * btnSize[2]) + (2 * btnGap[2])}
 local moduleSystemGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (2 * btnSize[2]) + (2 * btnGap[2])}
 
--- Add Hive header on every page
-table.insert(
-  graphics,
-  {
-    Type = "GroupBox",
-    HTextAlign = "Left",
-    CornerRadius = cornerRadius,
-    Fill = Colors.HiveGrey,
-    StrokeWidth = 1,
-    Position = {0, 0},
-    Size = hiveHeaderSize
-  }
-)
-local logo = '--[[ #encode "images\HiveLogo.png" ]]'
-table.insert(
-  graphics,
-  {
-    Type = "Image",
-    Position = {80, 10},
-    Size = {240, 100},
-    Image = logo,
-  }
-)
 
 if CurrentPage then
   if CurrentPage == "Status" then

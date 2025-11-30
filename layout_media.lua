@@ -1,13 +1,43 @@
+local mediaVerticalOffset = hiveHeaderSize[2]
+local mediaListGroupboxSize = {math.max(hiveHeaderSize[1],
+  (layerCount * previewSize[1]) + (4 * layerCount) + 8 + (3 * btnSize[1])),
+  ((mediaItemCount + 1) * previewSize[2]) + 8
+}
+
+
 table.insert(
   graphics,
   {
     Type = "GroupBox",
-    Text = "Media List",
     HTextAlign = "Left",
     CornerRadius = cornerRadius,
     Fill = Colors.HiveGrey,
     StrokeWidth = 1,
     Position = {0, 0},
+    Size = {mediaListGroupboxSize[1], hiveHeaderSize[2]}
+  }
+)
+local logo = '--[[ #encode "images\HiveLogo.png" ]]'
+table.insert(
+  graphics,
+  {
+    Type = "Image",
+    Position = {mediaListGroupboxSize[1] / 2 - 120, 10},
+    Size = {240, 100},
+    Image = logo,
+  }
+)
+
+
+table.insert(
+  graphics,
+  {
+    Type = "GroupBox",
+    HTextAlign = "Left",
+    CornerRadius = cornerRadius,
+    Fill = Colors.HiveGrey,
+    StrokeWidth = 1,
+    Position = {0, mediaVerticalOffset},
     Size = mediaListGroupboxSize
   }
 )
@@ -21,7 +51,7 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Right",
     Color = Colors.ControlLabel,
-    Position = {0, (1 * btnSize[2])},
+    Position = {0, (1 * btnSize[2]) + mediaVerticalOffset},
     Size = {2 * btnSize[1], btnSize[2]}
   }
 )
@@ -37,7 +67,7 @@ for i = 1, layerCount do
       FontStyle = "Regular",
       HTextAlign = "Centre",
       Color = Colors.ControlLabel,
-      Position = {((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8, 8},
+      Position = {((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8, 8 + mediaVerticalOffset},
       Size = previewSize
     }
   )
@@ -54,7 +84,7 @@ for i = 1, layerCount do
       StrokeWidth = 0,
       Position = {
         4,
-        (2 * btnSize[2]) + ((p - 1) * previewSize[2])
+        (2 * btnSize[2]) + ((p - 1) * previewSize[2]) + mediaVerticalOffset
       },
       Size = {3 * btnSize[1], previewSize[2]}
     }
@@ -68,7 +98,7 @@ for i = 1, layerCount do
       ButtonVisualStyle = "Flat",
       Position = {
         ((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8,
-        (2 * btnSize[2]) + ((p - 1) * previewSize[2])
+        (2 * btnSize[2]) + ((p - 1) * previewSize[2]) + mediaVerticalOffset
       },
       Size = previewSize
     }
