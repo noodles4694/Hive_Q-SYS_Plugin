@@ -1,3 +1,34 @@
+local previewGroupboxSize = {
+  math.max((layerCount * previewSize[1]) + (4 * layerCount) + 8 + (3 * btnSize[1]),hiveHeaderSize[1]),
+  (2 * previewSize[2]) + 8
+}
+
+local previewVerticalOffset = 0
+
+table.insert(
+  graphics,
+  {
+    Type = "GroupBox",
+    HTextAlign = "Left",
+    CornerRadius = cornerRadius,
+    Fill = Colors.HiveGrey,
+    StrokeWidth = 1,
+    Position = {0, previewVerticalOffset},
+    Size = {previewGroupboxSize[1], hiveHeaderSize[2]}
+  }
+)
+local logo = '--[[ #encode "images\HiveLogo.png" ]]'
+table.insert(
+  graphics,
+  {
+    Type = "Image",
+    Position = {previewGroupboxSize[1] / 2 - 120, 10,previewVerticalOffset},
+    Size = {240, 100},
+    Image = logo,
+  }
+)
+previewVerticalOffset = previewVerticalOffset + hiveHeaderSize[2]
+
 table.insert(
   graphics,
   {
@@ -7,7 +38,7 @@ table.insert(
     CornerRadius = cornerRadius,
     Fill = Colors.HiveGrey,
     StrokeWidth = 1,
-    Position = {0, 0},
+    Position = {0, previewVerticalOffset},
     Size = previewGroupboxSize
   }
 )
@@ -22,7 +53,7 @@ table.insert(
     FontStyle = "Regular",
     HTextAlign = "Centre",
     Color = Colors.ControlLabel,
-    Position = {8, 8},
+    Position = {8, previewVerticalOffset + 8},
     Size = previewSize
   }
 )
@@ -37,7 +68,7 @@ layout["OutputPreview"] = {
   ButtonVisualStyle = "Flat",
   Position = {
     8,
-    (2 * btnSize[2])
+    previewVerticalOffset + (2 * btnSize[2])
   },
   Size = previewSize,
   CornerRadius = 0,
@@ -56,7 +87,7 @@ for i = 1, layerCount do
       FontStyle = "Regular",
       HTextAlign = "Centre",
       Color = Colors.ControlLabel,
-      Position = {((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8, 8},
+      Position = {((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8, previewVerticalOffset + 8},
       Size = previewSize
     }
   )
@@ -70,7 +101,7 @@ for i = 1, layerCount do
     ButtonVisualStyle = "Flat",
     Position = {
       ((i - 1) * previewSize[1]) + (3 * btnSize[1]) + 8,
-      (2 * btnSize[2])
+      previewVerticalOffset + (2 * btnSize[2])
     },
     Size = previewSize,
     CornerRadius = 0,

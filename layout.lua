@@ -31,12 +31,8 @@ local btnSize = {32, 24}
 local btnGap = {4, 4}
 local hiveHeaderSize = {12.5 * btnSize[1], 120}
 local headerSize = {12.5 * btnSize[1], 20}
-
 local previewSize = {90, 50}
-local previewGroupboxSize = {
-  (layerCount * previewSize[1]) + (4 * layerCount) + 8 + (3 * btnSize[1]),
-  (2 * previewSize[2]) + 8
-}
+
 
 
 if CurrentPage then
