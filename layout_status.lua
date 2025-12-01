@@ -1,6 +1,6 @@
-local statusTextboxSize = {headerSize[1]/2 - btnSize[1], btnSize[2]}
-local statusGroupboxSize = {12.5 * btnSize[1], (15 * statusTextboxSize[2]) + (28 * btnGap[2]) + btnSize[2]}
-local statusVerticalOffset = hiveHeaderSize[2] + btnGap[2]
+statusTextboxSize = {headerSize[1]/2 - btnSize[1], btnSize[2]}
+statusGroupboxSize = {12.5 * btnSize[1], (15 * statusTextboxSize[2]) + (28 * btnGap[2]) + btnSize[2]}
+statusVerticalOffset = hiveHeaderSize[2] + btnGap[2]
 
 table.insert(
   graphics,

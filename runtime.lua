@@ -244,6 +244,7 @@ function ProcessDoubleUpdate(path, value)
           selectedFile[tonumber(layer)] = value
           UpdateSelectedFileInfo(value, layer)
         elseif parameter == "FOLDER SELECT" then
+          selectedFolder = value
           Controls.FolderSelectIndex[layer].Value = value
           for k, v in pairs(folderList) do
             if v == value then
@@ -359,29 +360,7 @@ function ProcessJSONUpdate(path, value)
     end
     UpdateInfo()
   elseif path == "/Media List" then
-    local fileChoiceList = {}
-    fileList = {}
-    fileListNames = {}
-    fileMetadataList = {}
-    ClearMediaThumbs()
-    for _, file in ipairs(value.files) do
-      fileList[file.name] = file.fileIndex - 1
-      fileListNames[file.fileIndex - 1] = file.name
-      table.insert(fileChoiceList, file.name)
-      fileMetadataList[file.name] = file
-      for i = 1, layerCount do
-        if Controls[string.format("MediaName%s", file.fileIndex)][i] then
-          Controls[string.format("MediaName%s", file.fileIndex)][i].String = file.name
-        end
-      end
-      GetFileThumbnail(file.fileIndex, file.name)
-    end
-    for i = 1, layerCount do
-      Controls.FileSelect[i].Choices = fileChoiceList
-      UpdateSelectedFileInfo(selectedFile[i], i)
-    end
-    -- let's update the system info as storage and num files might have changed
-    UpdateInfo()
+    UpdateMediaList(value)
   elseif path == "/Output Mapping" then
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
       Controls.MappingJSON.String = rapidjson.encode(value)
@@ -451,6 +430,41 @@ function ProcessJSONUpdate(path, value)
   end
 end
 
+function UpdateMediaList(mediaJSON)
+  GetPatchDouble(
+    "/LAYER 1/FOLDER SELECT/Value",
+    function(path, value)
+      selectedFolder = value
+
+      local fileChoiceList = {}
+      fileList = {}
+      fileListNames = {}
+      fileMetadataList = {}
+      ClearMediaThumbs()
+      for _, file in ipairs(mediaJSON.files) do
+        fileList[file.name] = file.fileIndex - 1
+        fileListNames[file.fileIndex - 1] = file.name
+        table.insert(fileChoiceList, file.name)
+        fileMetadataList[file.name] = file
+        for i = 1, layerCount do
+          if Controls[string.format("MediaName%s", file.fileIndex)][i] then
+            Controls[string.format("MediaName%s", file.fileIndex)][i].String = file.name
+          end
+        end
+        if file.fileIndex <= mediaItemCount then
+          GetFileThumbnail(file.fileIndex, file.name)
+        end
+      end
+      for i = 1, layerCount do
+        Controls.FileSelect[i].Choices = fileChoiceList
+        UpdateSelectedFileInfo(selectedFile[i], i)
+      end
+      -- let's update the system info as storage and num files might have changed
+      UpdateInfo()
+    end
+  )
+end
+
 -- Request and update the device information from the Hive player
 function UpdateInfo()
   if wsConnected ~= true then
@@ -507,6 +521,15 @@ function GetFileThumbnail(index, filename)
     return
   end
   if index <= mediaItemCount then
+    -- For folders other than default media folder (index 0 ), prepend folder name to filename
+    if selectedFolder ~= 0 then
+      for k, v in pairs(folderList) do
+        if v == selectedFolder then
+          filename = k .. "/" .. filename
+          break
+        end
+      end
+    end
     LogDebug("Requesting thumbnail for media index " .. tostring(index) .. ", file: " .. filename)
     HttpClient.Download {
       Url = string.format("http://%s/Thumbs/%s", ipAddress, filename:gsub("%.%w+", ".jpg")),
@@ -526,6 +549,8 @@ function GetFileThumbnail(index, filename)
           for i = 1, layerCount do
             Controls[string.format("MediaThumbnail%s", index)][i].Style = rapidjson.encode(iconStyle)
           end
+        else
+          LogError("Failed to get thumbnail for media index " .. tostring(index) .. ": HTTP " .. tostring(code))
         end
       end
     }
@@ -558,6 +583,15 @@ function UpdatePreviewThumbnail(layer, filename)
       Controls.OutputPreview.Style = iconStyleBlankString
     end
   else
+        -- For folders other than default media folder (index 0 ), prepend folder name to filename
+    if selectedFolder ~= 0 then
+      for k, v in pairs(folderList) do
+        if v == selectedFolder then
+          filename = k .. "/" .. filename
+          break
+        end
+      end
+    end
     HttpClient.Download {
       Url = string.format("http://%s/Thumbs/%s", ipAddress, filename:gsub("%.%w+", ".jpg")),
       Headers = {},

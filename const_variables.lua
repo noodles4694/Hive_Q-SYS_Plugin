@@ -1,10 +1,10 @@
 -- This file contains constant variables used throughout the project
 -- These variables should not be changed during runtime
-local layerCount = 2
-local maxMediaItems = 255
+layerCount = 2
+maxMediaItems = 255
 
 --create a table of colors to be used in the UI
-local Colors = {
+Colors = {
   HiveYellow = {255, 215, 0},
   HiveGrey = {18, 22, 26},
   White = {255, 255, 255},
@@ -20,7 +20,7 @@ local Colors = {
 }
 
 -- Define a list of controls with their properties
-local control_list = {
+control_list = {
   [1] = {
     Name = "FileSelect",
     Label = "File Select",

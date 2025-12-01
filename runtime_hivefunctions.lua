@@ -7,17 +7,17 @@ rapidjson = require("rapidjson")
 ws = WebSocket.New()
 
 -- Variables to manage WebSocket connection and callbacks
-local wsConnected = false
-local sequenceNo = 0
-local pendingCallbacks = {}
-local pendingRawCallbacks = {}
-local refreshViewMap = {}
-local handlers = {}
-local connectionCallback = nil
-local pingTimer = Timer.New()
-local ipTarget = nil
-local shouldConnect = false
-local dataBuffer = "" -- Buffer to hold incoming data
+wsConnected = false
+sequenceNo = 0
+pendingCallbacks = {}
+pendingRawCallbacks = {}
+refreshViewMap = {}
+handlers = {}
+connectionCallback = nil
+pingTimer = Timer.New()
+ipTarget = nil
+shouldConnect = false
+dataBuffer = "" -- Buffer to hold incoming data
 
 -- Connect to the Hive WebSocket server
 function Connect(ip, statusCallback)

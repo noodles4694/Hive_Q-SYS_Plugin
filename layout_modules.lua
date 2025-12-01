@@ -1,8 +1,8 @@
-local moduleEnableGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), btnSize[2] + (2 * btnGap[2])}
-local modulePlaylistGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (5 * btnSize[2]) + (2 * btnGap[2])}
-local moduleSystemGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (1 * btnSize[2]) + (4 * btnGap[2])}
+moduleEnableGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), btnSize[2] + (2 * btnGap[2])}
+modulePlaylistGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (5 * btnSize[2]) + (2 * btnGap[2])}
+moduleSystemGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (1 * btnSize[2]) + (4 * btnGap[2])}
 
-local moduleVerticalOffset = 0
+moduleVerticalOffset = 0
 
 table.insert(
   graphics,

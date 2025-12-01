@@ -1,10 +1,10 @@
-local i = tonumber(CurrentPage:match("Layer (%d+)"))
-local fxColumnSize = math.ceil(FX1ItemCount / 2)
-local layerGroupboxSize = {
+layerNo = tonumber(CurrentPage:match("Layer (%d+)"))
+fxColumnSize = math.ceil(FX1ItemCount / 2)
+layerGroupboxSize = {
   headerSize[1],
  ( (columnSize + 1) * (btnSize[2] + btnGap[2])) + btnGap[2]
 }
-local fxGroupboxSize = {
+fxGroupboxSize = {
   headerSize[1],
   (fxColumnSize + 2) * btnSize[2] + btnGap[2]
 }
@@ -66,7 +66,7 @@ table.insert(
   graphics,
   {
     Type = "Text",
-    Text = string.format("Layer %s Preview", i),
+    Text = string.format("Layer %s Preview", layerNo),
     Font = "Roboto",
     FontSize = 12,
     FontStyle = "Regular",
@@ -77,8 +77,8 @@ table.insert(
   }
 )
 
-layout[string.format("LayerPreview %s", i)] = {
-  PrettyName = string.format("Layer %s~Preview", i),
+layout[string.format("LayerPreview %s", layerNo)] = {
+  PrettyName = string.format("Layer %s~Preview", layerNo),
   UnlinkOffColor = true,
   OffColor = Colors.Transparent,
   Color = Colors.Black,
@@ -112,8 +112,8 @@ table.insert(
   }
 )
 
-layout["FolderSelect " .. i] = {
-  PrettyName = "Layer " .. i .. "~Folder Select",
+layout["FolderSelect " .. layerNo] = {
+  PrettyName = "Layer " .. layerNo .. "~Folder Select",
   Style = "ComboBox",
   Color = Colors.ControlBackground,
   TextColor = Colors.ControlText,
@@ -145,8 +145,8 @@ table.insert(
   }
 )
 
-layout["FileSelect " .. i] = {
-  PrettyName = "Layer " .. i .. "~File Select",
+layout["FileSelect " .. layerNo] = {
+  PrettyName = "Layer " .. layerNo .. "~File Select",
   Style = "ComboBox",
   Color = Colors.ControlBackground,
   TextColor = Colors.ControlText,
@@ -178,8 +178,8 @@ table.insert(
   }
 )
 
-layout["TimeElapsed " .. i] = {
-  PrettyName = "Layer " .. i .. "~Time Elapsed",
+layout["TimeElapsed " .. layerNo] = {
+  PrettyName = "Layer " .. layerNo .. "~Time Elapsed",
   Color = Colors.ControlBackground,
   TextColor = Colors.ControlText,
   StrokeColor = Colors.ControlText,
@@ -210,8 +210,8 @@ table.insert(
   }
 )
 
-layout["Duration " .. i] = {
-  PrettyName = "Layer " .. i .. "~Duration",
+layout["Duration " .. layerNo] = {
+  PrettyName = "Layer " .. layerNo .. "~Duration",
   Color = Colors.ControlBackground,
   TextColor = Colors.ControlText,
   StrokeColor = Colors.ControlText,
@@ -242,8 +242,8 @@ table.insert(
   }
 )
 
-layout["Seek " .. i] = {
-  PrettyName = "Layer " .. i .. "~Seek",
+layout["Seek " .. layerNo] = {
+  PrettyName = "Layer " .. layerNo .. "~Seek",
   Style = "Fader",
   Color = Colors.ControlBackground,
   TextColor = Colors.ControlText,
@@ -393,8 +393,8 @@ for k, v in ipairs(control_list) do
       if v.Style == "Text Field" and v.ControlUnit == "Percent" then
         controlCol = Colors.ControlBackgroundLight
       end
-      layout[v.Name .. " " .. i] = {
-        PrettyName = "Layer " .. i .. "~" .. v.Label,
+      layout[v.Name .. " " .. layerNo] = {
+        PrettyName = "Layer " .. layerNo .. "~" .. v.Label,
         Style = v.Style,
         Color = controlCol,
         TextColor = Colors.ControlText,
@@ -408,8 +408,8 @@ for k, v in ipairs(control_list) do
         Size = {3 * btnSize[1], btnSize[2]}
       }
     else
-      layout[v.Name .. " " .. i] = {
-        PrettyName = "Layer " .. i .. "~" .. v.Label,
+      layout[v.Name .. " " .. layerNo] = {
+        PrettyName = "Layer " .. layerNo .. "~" .. v.Label,
         Style = "None",
         Position = {
           0,
@@ -452,8 +452,8 @@ for k, v in ipairs(control_list) do
       if v.Style == "Text Field" and v.ControlUnit == "Percent" then
         controlCol = Colors.ControlBackgroundLight
       end
-      layout[v.Name .. " " .. i] = {
-        PrettyName = "Layer " .. i .. "~" .. v.Label,
+      layout[v.Name .. " " .. layerNo] = {
+        PrettyName = "Layer " .. layerNo .. "~" .. v.Label,
         Style = v.Style,
         Color = controlCol,
         TextColor = Colors.ControlText,
@@ -467,8 +467,8 @@ for k, v in ipairs(control_list) do
         Size = {3 * btnSize[1], btnSize[2]}
       }
     else
-      layout[v.Name .. " " .. i] = {
-        PrettyName = "Layer " .. i .. "~" .. v.Label,
+      layout[v.Name .. " " .. layerNo] = {
+        PrettyName = "Layer " .. layerNo .. "~" .. v.Label,
         Style = "None",
         Position = {
           0,
@@ -511,8 +511,8 @@ for k, v in ipairs(control_list) do
       if v.Style == "Text Field" and v.ControlUnit == "Percent" then
         controlCol = Colors.ControlBackgroundLight
       end
-      layout[v.Name .. " " .. i] = {
-        PrettyName = "Layer " .. i .. "~" .. v.Label,
+      layout[v.Name .. " " .. layerNo] = {
+        PrettyName = "Layer " .. layerNo .. "~" .. v.Label,
         Style = v.Style,
         Color = controlCol,
         TextColor = Colors.ControlText,
@@ -526,8 +526,8 @@ for k, v in ipairs(control_list) do
         Size = {3 * btnSize[1], btnSize[2]}
       }
     else
-      layout[v.Name .. " " .. i] = {
-        PrettyName = "Layer " .. i .. "~" .. v.Label,
+      layout[v.Name .. " " .. layerNo] = {
+        PrettyName = "Layer " .. layerNo .. "~" .. v.Label,
         Style = "None",
         Position = {
           0,

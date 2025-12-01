@@ -20,18 +20,18 @@ local function CountMatches(tbl, conditions)
 end
 
 -- common variables used by each page layout
-local CurrentPage = PageNames[props["page_index"].Value]
-local mediaItemCount = props["Media List Count"].Value
-local layerItemCount = CountMatches(control_list, {Group = "Layer", Display = true})
-local FX1ItemCount = CountMatches(control_list, {Group = "FX1", Display = true})
-local FX2ItemCount = CountMatches(control_list, {Group = "FX2", Display = true})
-local cornerRadius = 0
-local columnSize = math.ceil(layerItemCount / 2)
-local btnSize = {32, 24}
-local btnGap = {4, 4}
-local hiveHeaderSize = {12.5 * btnSize[1], 120}
-local headerSize = {12.5 * btnSize[1], 20}
-local previewSize = {90, 50}
+CurrentPage = PageNames[props["page_index"].Value]
+mediaItemCount = props["Media List Count"].Value
+layerItemCount = CountMatches(control_list, {Group = "Layer", Display = true})
+FX1ItemCount = CountMatches(control_list, {Group = "FX1", Display = true})
+FX2ItemCount = CountMatches(control_list, {Group = "FX2", Display = true})
+cornerRadius = 0
+columnSize = math.ceil(layerItemCount / 2)
+btnSize = {32, 24}
+btnGap = {4, 4}
+hiveHeaderSize = {12.5 * btnSize[1], 120}
+headerSize = {12.5 * btnSize[1], 20}
+previewSize = {90, 50}
 
 
 

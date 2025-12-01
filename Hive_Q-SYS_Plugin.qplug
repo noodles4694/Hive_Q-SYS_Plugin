@@ -2,7 +2,7 @@
 PluginInfo = {
   Name = "Hive~Beeblade",
   Version = "1.0",
-  BuildVersion = "0.0.0.786",
+  BuildVersion = "0.0.0.802",
   Id = "c88de492-bccb-49bb-9927-852367b9eb16",
   Author = "Carrier Labs & Hive Media Control",
   Description = "Plugin to control Hive Beeblade, Beebox and Nexus devices" ,
@@ -10,11 +10,11 @@ PluginInfo = {
 }
 -- This file contains constant variables used throughout the project
 -- These variables should not be changed during runtime
-local layerCount = 2
-local maxMediaItems = 255
+layerCount = 2
+maxMediaItems = 255
 
 --create a table of colors to be used in the UI
-local Colors = {
+Colors = {
   HiveYellow = {255, 215, 0},
   HiveGrey = {18, 22, 26},
   White = {255, 255, 255},
@@ -30,7 +30,7 @@ local Colors = {
 }
 
 -- Define a list of controls with their properties
-local control_list = {
+control_list = {
   [1] = {
     Name = "FileSelect",
     Label = "File Select",
@@ -1528,26 +1528,26 @@ function GetControlLayout(props)
   end
   
   -- common variables used by each page layout
-  local CurrentPage = PageNames[props["page_index"].Value]
-  local mediaItemCount = props["Media List Count"].Value
-  local layerItemCount = CountMatches(control_list, {Group = "Layer", Display = true})
-  local FX1ItemCount = CountMatches(control_list, {Group = "FX1", Display = true})
-  local FX2ItemCount = CountMatches(control_list, {Group = "FX2", Display = true})
-  local cornerRadius = 0
-  local columnSize = math.ceil(layerItemCount / 2)
-  local btnSize = {32, 24}
-  local btnGap = {4, 4}
-  local hiveHeaderSize = {12.5 * btnSize[1], 120}
-  local headerSize = {12.5 * btnSize[1], 20}
-  local previewSize = {90, 50}
+  CurrentPage = PageNames[props["page_index"].Value]
+  mediaItemCount = props["Media List Count"].Value
+  layerItemCount = CountMatches(control_list, {Group = "Layer", Display = true})
+  FX1ItemCount = CountMatches(control_list, {Group = "FX1", Display = true})
+  FX2ItemCount = CountMatches(control_list, {Group = "FX2", Display = true})
+  cornerRadius = 0
+  columnSize = math.ceil(layerItemCount / 2)
+  btnSize = {32, 24}
+  btnGap = {4, 4}
+  hiveHeaderSize = {12.5 * btnSize[1], 120}
+  headerSize = {12.5 * btnSize[1], 20}
+  previewSize = {90, 50}
   
   
   
   if CurrentPage then
     if CurrentPage == "Status" then
-        local statusTextboxSize = {headerSize[1]/2 - btnSize[1], btnSize[2]}
-        local statusGroupboxSize = {12.5 * btnSize[1], (15 * statusTextboxSize[2]) + (28 * btnGap[2]) + btnSize[2]}
-        local statusVerticalOffset = hiveHeaderSize[2] + btnGap[2]
+        statusTextboxSize = {headerSize[1]/2 - btnSize[1], btnSize[2]}
+        statusGroupboxSize = {12.5 * btnSize[1], (15 * statusTextboxSize[2]) + (28 * btnGap[2]) + btnSize[2]}
+        statusVerticalOffset = hiveHeaderSize[2] + btnGap[2]
         
         table.insert(
           graphics,
@@ -2370,13 +2370,13 @@ function GetControlLayout(props)
         
         ]]
     elseif CurrentPage:sub(1, 6) == "Layer " then
-        local i = tonumber(CurrentPage:match("Layer (%d+)"))
-        local fxColumnSize = math.ceil(FX1ItemCount / 2)
-        local layerGroupboxSize = {
+        layerNo = tonumber(CurrentPage:match("Layer (%d+)"))
+        fxColumnSize = math.ceil(FX1ItemCount / 2)
+        layerGroupboxSize = {
           headerSize[1],
          ( (columnSize + 1) * (btnSize[2] + btnGap[2])) + btnGap[2]
         }
-        local fxGroupboxSize = {
+        fxGroupboxSize = {
           headerSize[1],
           (fxColumnSize + 2) * btnSize[2] + btnGap[2]
         }
@@ -2438,7 +2438,7 @@ function GetControlLayout(props)
           graphics,
           {
             Type = "Text",
-            Text = string.format("Layer %s Preview", i),
+            Text = string.format("Layer %s Preview", layerNo),
             Font = "Roboto",
             FontSize = 12,
             FontStyle = "Regular",
@@ -2449,8 +2449,8 @@ function GetControlLayout(props)
           }
         )
         
-        layout[string.format("LayerPreview %s", i)] = {
-          PrettyName = string.format("Layer %s~Preview", i),
+        layout[string.format("LayerPreview %s", layerNo)] = {
+          PrettyName = string.format("Layer %s~Preview", layerNo),
           UnlinkOffColor = true,
           OffColor = Colors.Transparent,
           Color = Colors.Black,
@@ -2484,8 +2484,8 @@ function GetControlLayout(props)
           }
         )
         
-        layout["FolderSelect " .. i] = {
-          PrettyName = "Layer " .. i .. "~Folder Select",
+        layout["FolderSelect " .. layerNo] = {
+          PrettyName = "Layer " .. layerNo .. "~Folder Select",
           Style = "ComboBox",
           Color = Colors.ControlBackground,
           TextColor = Colors.ControlText,
@@ -2517,8 +2517,8 @@ function GetControlLayout(props)
           }
         )
         
-        layout["FileSelect " .. i] = {
-          PrettyName = "Layer " .. i .. "~File Select",
+        layout["FileSelect " .. layerNo] = {
+          PrettyName = "Layer " .. layerNo .. "~File Select",
           Style = "ComboBox",
           Color = Colors.ControlBackground,
           TextColor = Colors.ControlText,
@@ -2550,8 +2550,8 @@ function GetControlLayout(props)
           }
         )
         
-        layout["TimeElapsed " .. i] = {
-          PrettyName = "Layer " .. i .. "~Time Elapsed",
+        layout["TimeElapsed " .. layerNo] = {
+          PrettyName = "Layer " .. layerNo .. "~Time Elapsed",
           Color = Colors.ControlBackground,
           TextColor = Colors.ControlText,
           StrokeColor = Colors.ControlText,
@@ -2582,8 +2582,8 @@ function GetControlLayout(props)
           }
         )
         
-        layout["Duration " .. i] = {
-          PrettyName = "Layer " .. i .. "~Duration",
+        layout["Duration " .. layerNo] = {
+          PrettyName = "Layer " .. layerNo .. "~Duration",
           Color = Colors.ControlBackground,
           TextColor = Colors.ControlText,
           StrokeColor = Colors.ControlText,
@@ -2614,8 +2614,8 @@ function GetControlLayout(props)
           }
         )
         
-        layout["Seek " .. i] = {
-          PrettyName = "Layer " .. i .. "~Seek",
+        layout["Seek " .. layerNo] = {
+          PrettyName = "Layer " .. layerNo .. "~Seek",
           Style = "Fader",
           Color = Colors.ControlBackground,
           TextColor = Colors.ControlText,
@@ -2765,8 +2765,8 @@ function GetControlLayout(props)
               if v.Style == "Text Field" and v.ControlUnit == "Percent" then
                 controlCol = Colors.ControlBackgroundLight
               end
-              layout[v.Name .. " " .. i] = {
-                PrettyName = "Layer " .. i .. "~" .. v.Label,
+              layout[v.Name .. " " .. layerNo] = {
+                PrettyName = "Layer " .. layerNo .. "~" .. v.Label,
                 Style = v.Style,
                 Color = controlCol,
                 TextColor = Colors.ControlText,
@@ -2780,8 +2780,8 @@ function GetControlLayout(props)
                 Size = {3 * btnSize[1], btnSize[2]}
               }
             else
-              layout[v.Name .. " " .. i] = {
-                PrettyName = "Layer " .. i .. "~" .. v.Label,
+              layout[v.Name .. " " .. layerNo] = {
+                PrettyName = "Layer " .. layerNo .. "~" .. v.Label,
                 Style = "None",
                 Position = {
                   0,
@@ -2824,8 +2824,8 @@ function GetControlLayout(props)
               if v.Style == "Text Field" and v.ControlUnit == "Percent" then
                 controlCol = Colors.ControlBackgroundLight
               end
-              layout[v.Name .. " " .. i] = {
-                PrettyName = "Layer " .. i .. "~" .. v.Label,
+              layout[v.Name .. " " .. layerNo] = {
+                PrettyName = "Layer " .. layerNo .. "~" .. v.Label,
                 Style = v.Style,
                 Color = controlCol,
                 TextColor = Colors.ControlText,
@@ -2839,8 +2839,8 @@ function GetControlLayout(props)
                 Size = {3 * btnSize[1], btnSize[2]}
               }
             else
-              layout[v.Name .. " " .. i] = {
-                PrettyName = "Layer " .. i .. "~" .. v.Label,
+              layout[v.Name .. " " .. layerNo] = {
+                PrettyName = "Layer " .. layerNo .. "~" .. v.Label,
                 Style = "None",
                 Position = {
                   0,
@@ -2883,8 +2883,8 @@ function GetControlLayout(props)
               if v.Style == "Text Field" and v.ControlUnit == "Percent" then
                 controlCol = Colors.ControlBackgroundLight
               end
-              layout[v.Name .. " " .. i] = {
-                PrettyName = "Layer " .. i .. "~" .. v.Label,
+              layout[v.Name .. " " .. layerNo] = {
+                PrettyName = "Layer " .. layerNo .. "~" .. v.Label,
                 Style = v.Style,
                 Color = controlCol,
                 TextColor = Colors.ControlText,
@@ -2898,8 +2898,8 @@ function GetControlLayout(props)
                 Size = {3 * btnSize[1], btnSize[2]}
               }
             else
-              layout[v.Name .. " " .. i] = {
-                PrettyName = "Layer " .. i .. "~" .. v.Label,
+              layout[v.Name .. " " .. layerNo] = {
+                PrettyName = "Layer " .. layerNo .. "~" .. v.Label,
                 Style = "None",
                 Position = {
                   0,
@@ -2912,8 +2912,8 @@ function GetControlLayout(props)
         end
         
     elseif CurrentPage == "Media" then
-        local mediaVerticalOffset = hiveHeaderSize[2]
-        local mediaListGroupboxSize = {math.max(hiveHeaderSize[1],
+        mediaVerticalOffset = hiveHeaderSize[2]
+        mediaListGroupboxSize = {math.max(hiveHeaderSize[1],
           (layerCount * previewSize[1]) + (4 * layerCount) + 8 + (3 * btnSize[1])),
           ((mediaItemCount + 1) * previewSize[2]) + 8
         }
@@ -3019,11 +3019,11 @@ function GetControlLayout(props)
           end
         end
     elseif CurrentPage == "Modules" then
-        local moduleEnableGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), btnSize[2] + (2 * btnGap[2])}
-        local modulePlaylistGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (5 * btnSize[2]) + (2 * btnGap[2])}
-        local moduleSystemGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (1 * btnSize[2]) + (4 * btnGap[2])}
+        moduleEnableGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), btnSize[2] + (2 * btnGap[2])}
+        modulePlaylistGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (5 * btnSize[2]) + (2 * btnGap[2])}
+        moduleSystemGroupboxSize = {(16 * btnSize[1]) + (4 * btnGap[1]), (1 * btnSize[2]) + (4 * btnGap[2])}
         
-        local moduleVerticalOffset = 0
+        moduleVerticalOffset = 0
         
         table.insert(
           graphics,
@@ -3519,12 +3519,12 @@ function GetControlLayout(props)
           Size = {4 * btnSize[1], btnSize[2]}
         }
     elseif CurrentPage == "Preview" then
-      local previewGroupboxSize = {
+      previewGroupboxSize = {
         math.max((layerCount * previewSize[1]) + (4 * layerCount) + 8 + (3 * btnSize[1]),hiveHeaderSize[1]),
         (2 * previewSize[2]) + 8
       }
       
-      local previewVerticalOffset = 0
+      previewVerticalOffset = 0
       
       table.insert(
         graphics,
@@ -3754,18 +3754,19 @@ if Controls then
 -- This script is automatically loaded by the main script to define and initialize runtime variables
 
 ---- These variables can be changed during runtime
-local fileList = {}
-local fileListNames = {}
-local selectedFile = {}
-local fileMetadataList = {}
-local playMode = {}
-local seekTimerList = {}
-local seekLastValue = {}
-local playlistRowCount = 0
-local playlistActiveRow = 1
-local deiceSettings = nil
-local engineFps = 0
-local deviceInfo = nil
+fileList = {}
+fileListNames = {}
+selectedFile = {}
+selectedFolder = 0
+fileMetadataList = {}
+playMode = {}
+seekTimerList = {}
+seekLastValue = {}
+playlistRowCount = 0
+playlistActiveRow = 1
+deiceSettings = nil
+engineFps = 0
+deviceInfo = nil
 
 for i = 1, layerCount do
   playMode[i] = "In Frame"
@@ -3774,21 +3775,21 @@ for i = 1, layerCount do
   seekTimerList[i] = Timer.New()
 end
 
-local mediaItemCount = Properties["Media List Count"].Value
+mediaItemCount = Properties["Media List Count"].Value
 
-local folderList = {
+folderList = {
   ["MEDIA"] = 0
 }
 
-local folderChoices = {}
+folderChoices = {}
 for k, v in pairs(folderList) do
   table.insert(folderChoices, k)
 end
 
-local lutList = {
+lutList = {
   ["NONE"] = 0
 }
-local lutChoices = {}
+lutChoices = {}
 for k, v in pairs(lutList) do
   table.insert(lutChoices, k)
 end
@@ -3797,7 +3798,7 @@ end
 -- is the easiest way to maintain order but still allow them to be edited if required
 
 -- Play Mode
-local playModeKeys = {
+playModeKeys = {
   "In Frame",
   "Out Frame",
   "Loop Forward",
@@ -3821,7 +3822,7 @@ local playModeKeys = {
   "Bounce with re-trigger on intensity"
 }
 
-local playModeValues = {
+playModeValues = {
   0,
   1,
   2,
@@ -3846,7 +3847,7 @@ local playModeValues = {
 }
 
 -- Transition Mode
-local transitionModeKeys = {
+transitionModeKeys = {
   "Alpha",
   "Additive",
   "Multiply",
@@ -3881,7 +3882,7 @@ local transitionModeKeys = {
   "Glitch"
 }
 
-local transitionModeValues = {
+transitionModeValues = {
   0,
   1,
   2,
@@ -3917,7 +3918,7 @@ local transitionModeValues = {
 }
 
 -- Framing Mode
-local framingModeKeys = {
+framingModeKeys = {
   "Letterbox",
   "Crop",
   "Stretch",
@@ -3925,7 +3926,7 @@ local framingModeKeys = {
   "Centered"
 }
 
-local framingModeValues = {
+framingModeValues = {
   0,
   1,
   2,
@@ -3934,7 +3935,7 @@ local framingModeValues = {
 }
 
 -- Blend Mode
-local blendModeKeys = {
+blendModeKeys = {
   "Alpha",
   "Additive",
   "Multiply",
@@ -3945,7 +3946,7 @@ local blendModeKeys = {
   "Triangle Wipe"
 }
 
-local blendModeValues = {
+blendModeValues = {
   0,
   1,
   2,
@@ -3957,7 +3958,7 @@ local blendModeValues = {
 }
 
 -- FX
-local fxKeys = {
+fxKeys = {
   "NONE",
   "OLD TV",
   "SEPIA",
@@ -4001,7 +4002,7 @@ local fxKeys = {
   "Effect 40"
 }
 
-local fxValues = {
+fxValues = {
   0,
   1,
   2,
@@ -4046,7 +4047,7 @@ local fxValues = {
 }
 
 -- Q-SYS standard status states
-local StatusState = {
+StatusState = {
   OK = 0,
   COMPROMISED = 1,
   FAULT = 2,
@@ -4057,7 +4058,7 @@ local StatusState = {
 
 ticker = 1
 
-local ipAddress = Properties["IP Address"].Value
+ipAddress = Properties["IP Address"].Value
 
 -- Utility functions to get key from value and vice versa in the ENUM tables
 function GetTableKey(tblKeys, tblValues, value)
@@ -4260,17 +4261,17 @@ rapidjson = require("rapidjson")
 ws = WebSocket.New()
 
 -- Variables to manage WebSocket connection and callbacks
-local wsConnected = false
-local sequenceNo = 0
-local pendingCallbacks = {}
-local pendingRawCallbacks = {}
-local refreshViewMap = {}
-local handlers = {}
-local connectionCallback = nil
-local pingTimer = Timer.New()
-local ipTarget = nil
-local shouldConnect = false
-local dataBuffer = "" -- Buffer to hold incoming data
+wsConnected = false
+sequenceNo = 0
+pendingCallbacks = {}
+pendingRawCallbacks = {}
+refreshViewMap = {}
+handlers = {}
+connectionCallback = nil
+pingTimer = Timer.New()
+ipTarget = nil
+shouldConnect = false
+dataBuffer = "" -- Buffer to hold incoming data
 
 -- Connect to the Hive WebSocket server
 function Connect(ip, statusCallback)
@@ -4874,6 +4875,7 @@ function ProcessDoubleUpdate(path, value)
           selectedFile[tonumber(layer)] = value
           UpdateSelectedFileInfo(value, layer)
         elseif parameter == "FOLDER SELECT" then
+          selectedFolder = value
           Controls.FolderSelectIndex[layer].Value = value
           for k, v in pairs(folderList) do
             if v == value then
@@ -4989,29 +4991,7 @@ function ProcessJSONUpdate(path, value)
     end
     UpdateInfo()
   elseif path == "/Media List" then
-    local fileChoiceList = {}
-    fileList = {}
-    fileListNames = {}
-    fileMetadataList = {}
-    ClearMediaThumbs()
-    for _, file in ipairs(value.files) do
-      fileList[file.name] = file.fileIndex - 1
-      fileListNames[file.fileIndex - 1] = file.name
-      table.insert(fileChoiceList, file.name)
-      fileMetadataList[file.name] = file
-      for i = 1, layerCount do
-        if Controls[string.format("MediaName%s", file.fileIndex)][i] then
-          Controls[string.format("MediaName%s", file.fileIndex)][i].String = file.name
-        end
-      end
-      GetFileThumbnail(file.fileIndex, file.name)
-    end
-    for i = 1, layerCount do
-      Controls.FileSelect[i].Choices = fileChoiceList
-      UpdateSelectedFileInfo(selectedFile[i], i)
-    end
-    -- let's update the system info as storage and num files might have changed
-    UpdateInfo()
+    UpdateMediaList(value)
   elseif path == "/Output Mapping" then
     if (Properties["Enable JSON Data Pins (WARNING)"].Value == "Enabled") then
       Controls.MappingJSON.String = rapidjson.encode(value)
@@ -5081,6 +5061,41 @@ function ProcessJSONUpdate(path, value)
   end
 end
 
+function UpdateMediaList(mediaJSON)
+  GetPatchDouble(
+    "/LAYER 1/FOLDER SELECT/Value",
+    function(path, value)
+      selectedFolder = value
+
+      local fileChoiceList = {}
+      fileList = {}
+      fileListNames = {}
+      fileMetadataList = {}
+      ClearMediaThumbs()
+      for _, file in ipairs(mediaJSON.files) do
+        fileList[file.name] = file.fileIndex - 1
+        fileListNames[file.fileIndex - 1] = file.name
+        table.insert(fileChoiceList, file.name)
+        fileMetadataList[file.name] = file
+        for i = 1, layerCount do
+          if Controls[string.format("MediaName%s", file.fileIndex)][i] then
+            Controls[string.format("MediaName%s", file.fileIndex)][i].String = file.name
+          end
+        end
+        if file.fileIndex <= mediaItemCount then
+          GetFileThumbnail(file.fileIndex, file.name)
+        end
+      end
+      for i = 1, layerCount do
+        Controls.FileSelect[i].Choices = fileChoiceList
+        UpdateSelectedFileInfo(selectedFile[i], i)
+      end
+      -- let's update the system info as storage and num files might have changed
+      UpdateInfo()
+    end
+  )
+end
+
 -- Request and update the device information from the Hive player
 function UpdateInfo()
   if wsConnected ~= true then
@@ -5137,6 +5152,15 @@ function GetFileThumbnail(index, filename)
     return
   end
   if index <= mediaItemCount then
+    -- For folders other than default media folder (index 0 ), prepend folder name to filename
+    if selectedFolder ~= 0 then
+      for k, v in pairs(folderList) do
+        if v == selectedFolder then
+          filename = k .. "/" .. filename
+          break
+        end
+      end
+    end
     LogDebug("Requesting thumbnail for media index " .. tostring(index) .. ", file: " .. filename)
     HttpClient.Download {
       Url = string.format("http://%s/Thumbs/%s", ipAddress, filename:gsub("%.%w+", ".jpg")),
@@ -5156,6 +5180,8 @@ function GetFileThumbnail(index, filename)
           for i = 1, layerCount do
             Controls[string.format("MediaThumbnail%s", index)][i].Style = rapidjson.encode(iconStyle)
           end
+        else
+          LogError("Failed to get thumbnail for media index " .. tostring(index) .. ": HTTP " .. tostring(code))
         end
       end
     }
@@ -5188,6 +5214,15 @@ function UpdatePreviewThumbnail(layer, filename)
       Controls.OutputPreview.Style = iconStyleBlankString
     end
   else
+        -- For folders other than default media folder (index 0 ), prepend folder name to filename
+    if selectedFolder ~= 0 then
+      for k, v in pairs(folderList) do
+        if v == selectedFolder then
+          filename = k .. "/" .. filename
+          break
+        end
+      end
+    end
     HttpClient.Download {
       Url = string.format("http://%s/Thumbs/%s", ipAddress, filename:gsub("%.%w+", ".jpg")),
       Headers = {},

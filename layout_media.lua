@@ -1,5 +1,5 @@
-local mediaVerticalOffset = hiveHeaderSize[2]
-local mediaListGroupboxSize = {math.max(hiveHeaderSize[1],
+mediaVerticalOffset = hiveHeaderSize[2]
+mediaListGroupboxSize = {math.max(hiveHeaderSize[1],
   (layerCount * previewSize[1]) + (4 * layerCount) + 8 + (3 * btnSize[1])),
   ((mediaItemCount + 1) * previewSize[2]) + 8
 }

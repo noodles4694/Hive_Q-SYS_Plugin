@@ -1,9 +1,9 @@
-local previewGroupboxSize = {
+previewGroupboxSize = {
   math.max((layerCount * previewSize[1]) + (4 * layerCount) + 8 + (3 * btnSize[1]),hiveHeaderSize[1]),
   (2 * previewSize[2]) + 8
 }
 
-local previewVerticalOffset = 0
+previewVerticalOffset = 0
 
 table.insert(
   graphics,

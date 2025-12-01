@@ -1,18 +1,19 @@
 -- This script is automatically loaded by the main script to define and initialize runtime variables
 
 ---- These variables can be changed during runtime
-local fileList = {}
-local fileListNames = {}
-local selectedFile = {}
-local fileMetadataList = {}
-local playMode = {}
-local seekTimerList = {}
-local seekLastValue = {}
-local playlistRowCount = 0
-local playlistActiveRow = 1
-local deiceSettings = nil
-local engineFps = 0
-local deviceInfo = nil
+fileList = {}
+fileListNames = {}
+selectedFile = {}
+selectedFolder = 0
+fileMetadataList = {}
+playMode = {}
+seekTimerList = {}
+seekLastValue = {}
+playlistRowCount = 0
+playlistActiveRow = 1
+deiceSettings = nil
+engineFps = 0
+deviceInfo = nil
 
 for i = 1, layerCount do
   playMode[i] = "In Frame"
@@ -21,21 +22,21 @@ for i = 1, layerCount do
   seekTimerList[i] = Timer.New()
 end
 
-local mediaItemCount = Properties["Media List Count"].Value
+mediaItemCount = Properties["Media List Count"].Value
 
-local folderList = {
+folderList = {
   ["MEDIA"] = 0
 }
 
-local folderChoices = {}
+folderChoices = {}
 for k, v in pairs(folderList) do
   table.insert(folderChoices, k)
 end
 
-local lutList = {
+lutList = {
   ["NONE"] = 0
 }
-local lutChoices = {}
+lutChoices = {}
 for k, v in pairs(lutList) do
   table.insert(lutChoices, k)
 end
@@ -44,7 +45,7 @@ end
 -- is the easiest way to maintain order but still allow them to be edited if required
 
 -- Play Mode
-local playModeKeys = {
+playModeKeys = {
   "In Frame",
   "Out Frame",
   "Loop Forward",
@@ -68,7 +69,7 @@ local playModeKeys = {
   "Bounce with re-trigger on intensity"
 }
 
-local playModeValues = {
+playModeValues = {
   0,
   1,
   2,
@@ -93,7 +94,7 @@ local playModeValues = {
 }
 
 -- Transition Mode
-local transitionModeKeys = {
+transitionModeKeys = {
   "Alpha",
   "Additive",
   "Multiply",
@@ -128,7 +129,7 @@ local transitionModeKeys = {
   "Glitch"
 }
 
-local transitionModeValues = {
+transitionModeValues = {
   0,
   1,
   2,
@@ -164,7 +165,7 @@ local transitionModeValues = {
 }
 
 -- Framing Mode
-local framingModeKeys = {
+framingModeKeys = {
   "Letterbox",
   "Crop",
   "Stretch",
@@ -172,7 +173,7 @@ local framingModeKeys = {
   "Centered"
 }
 
-local framingModeValues = {
+framingModeValues = {
   0,
   1,
   2,
@@ -181,7 +182,7 @@ local framingModeValues = {
 }
 
 -- Blend Mode
-local blendModeKeys = {
+blendModeKeys = {
   "Alpha",
   "Additive",
   "Multiply",
@@ -192,7 +193,7 @@ local blendModeKeys = {
   "Triangle Wipe"
 }
 
-local blendModeValues = {
+blendModeValues = {
   0,
   1,
   2,
@@ -204,7 +205,7 @@ local blendModeValues = {
 }
 
 -- FX
-local fxKeys = {
+fxKeys = {
   "NONE",
   "OLD TV",
   "SEPIA",
@@ -248,7 +249,7 @@ local fxKeys = {
   "Effect 40"
 }
 
-local fxValues = {
+fxValues = {
   0,
   1,
   2,
@@ -293,7 +294,7 @@ local fxValues = {
 }
 
 -- Q-SYS standard status states
-local StatusState = {
+StatusState = {
   OK = 0,
   COMPROMISED = 1,
   FAULT = 2,
@@ -304,7 +305,7 @@ local StatusState = {
 
 ticker = 1
 
-local ipAddress = Properties["IP Address"].Value
+ipAddress = Properties["IP Address"].Value
 
 -- Utility functions to get key from value and vice versa in the ENUM tables
 function GetTableKey(tblKeys, tblValues, value)
